@@ -1,0 +1,34 @@
+{
+  "common": {
+    "language": {
+      "label": "ភាសា",
+      "en": "អង់គ្លេស",
+      "km": "ខ្មែរ",
+      "vi": "វៀតណាម"
+    },
+    "theme": {
+      "light": "ភ្លឺ",
+      "dark": "ងងឹត",
+      "switchMode": "ម៉ូដបច្ចុប្បន្ន {{mode}}។ ចុចដើម្បីប្ដូរទៅ {{nextMode}}។"
+    },
+    "field": {
+      "firstName": "នាមខ្លួន",
+      "lastName": "នាមត្រកូល",
+      "phone": "លេខទូរស័ព្ទ"
+    }
+  },
+  "home": {
+    "kicker": "សាកល្បង Theme និង Language",
+    "title": "ប្ដូរ dark mode និងភាសា",
+    "description": "ប្រើប៊ូតុងខាងក្រោមដើម្បីពិនិត្យ light/dark mode ហើយសាកប្ដូររវាង English, Khmer និង Vietnamese។"
+  },
+  "about": {
+    "kicker": "អំពី",
+    "title": "Starter តូចមួយដែលអាចពង្រីកបន្ថែមបាន។",
+    "description": "TanStack Start ផ្តល់ routing មាន type safety, server functions និង modern defaults។ អ្នកអាចប្រើវាជាគ្រឹះស្អាតមួយ ហើយបន្ថែម routes, styling និង add-ons របស់អ្នកបន្ត។"
+  },
+  "profile": {
+    "title": "មើល Profile សាកល្បង",
+    "description": "នេះជាឧទាហរណ៍ namespace សម្រាប់ profile ដើម្បីឱ្យអ្នកអាចសាក translation តាម page បានលឿន។"
+  }
+}

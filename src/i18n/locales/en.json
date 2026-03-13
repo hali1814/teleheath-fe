@@ -1,0 +1,37 @@
+{
+  "common": {
+    "language": {
+      "label": "Language",
+      "en": "English",
+      "km": "Khmer",
+      "vi": "Vietnamese"
+    },
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "switchMode": "Theme mode: {{mode}}. Click to switch to {{nextMode}} mode."
+    },
+    "field": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone number"
+    }
+  },
+  "home": {
+    "kicker": "Theme and Language Test",
+    "title": "Toggle dark mode and switch language",
+    "description": "Use the controls below to verify light and dark mode, then switch between English, Khmer, and Vietnamese."
+  },
+  "about": {
+    "kicker": "About",
+    "title": "A small starter with room to grow.",
+    "description": "TanStack Start gives you type-safe routing, server functions, and modern defaults. Use this as a clean foundation, then layer in your own routes, styling, and add-ons."
+  },
+  "profile": {
+    "title": "Profile Preview",
+    "description": "This is a sample profile namespace so you can test page-level translations quickly."
+  },
+  "haohoa": {
+    "title": "Haohoa"
+  }
+}

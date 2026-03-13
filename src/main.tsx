@@ -1,5 +1,8 @@
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { ThemeProvider } from 'next-themes'
+
+import './i18n'
 import { routeTree } from './routeTree.gen'
 
 const router = createRouter({
@@ -18,5 +21,14 @@ const rootElement = document.getElementById('app')!
 
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
-  root.render(<RouterProvider router={router} />)
+  root.render(
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem={false}
+      storageKey="theme"
+    >
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  )
 }

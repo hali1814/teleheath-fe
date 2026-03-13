@@ -1,0 +1,34 @@
+{
+  "common": {
+    "language": {
+      "label": "Ngon ngu",
+      "en": "Tieng Anh",
+      "km": "Tieng Khmer",
+      "vi": "Tieng Viet"
+    },
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "switchMode": "Che do hien tai: {{mode}}. Bam de chuyen sang {{nextMode}}."
+    },
+    "field": {
+      "firstName": "Ten",
+      "lastName": "Ho",
+      "phone": "So dien thoai"
+    }
+  },
+  "home": {
+    "kicker": "Test Theme va Ngon Ngu",
+    "title": "Chuyen dark mode va doi ngon ngu",
+    "description": "Dung cac nut ben duoi de kiem tra light/dark mode, sau do thu chuyen qua lai giua English, Khmer va Vietnamese."
+  },
+  "about": {
+    "kicker": "Gioi thieu",
+    "title": "Mot starter nho gon de mo rong tiep.",
+    "description": "TanStack Start cung cap routing an toan ve type, server functions va cac mac dinh hien dai. Ban co the dung no lam nen tang sach se, sau do bo sung route, styling va add-ons cua rieng minh."
+  },
+  "profile": {
+    "title": "Xem truoc Profile",
+    "description": "Day la namespace mau cho profile de ban test translation theo tung page nhanh hon."
+  }
+}
