@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build and generated outputs
+dist/
+dist-ssr/
+.tanstack/
+.output/
+.vinxi/
+.nitro/
+.wrangler/
+__unconfig*
+src/routeTree.gen.ts
+
+# Logs and reports
+*.log
+coverage/
+.nyc_output/
+npm-debug.log*
+yarn-error.log
+pnpm-debug.log*
+
+# Environment and local-only files
+.env
+.env.local
+.env.*.local
+*.local
+*.pem
+todos.json
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~

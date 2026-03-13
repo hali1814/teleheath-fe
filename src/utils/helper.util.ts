@@ -1,0 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const cleanParams = (params: Record<string, any>) => {
+  if (!params) return params;
+  return Object.fromEntries(
+    Object.entries(params).filter(([_, value]) => {
+      // Keep 0 and false as they are valid values
+      if (value === 0 || value === false) return true;
+      // Remove other falsy values
+      return (
+        value !== undefined &&
+        value !== null &&
+        value !== "" &&
+        !Number.isNaN(value)
+      );
+    })
+  );
+};
+
+export const isVideo = (media: string) => {
+  return [".mp4", ".webm", ".ogg", ".mov", ".avi"].some((ext) =>
+    media.toLowerCase().endsWith(ext)
+  );
+};
