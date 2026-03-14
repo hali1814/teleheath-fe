@@ -1,0 +1,10 @@
+Always read this file before analyzing, changing, or generating code in this repository.
+
+Project rules:
+
+1. This is a React.js + Vite project. Prefer patterns, libraries, and code structure that fit a React app bootstrapped with Vite.
+2. This project uses `shadcn/ui`. Reuse existing `shadcn/ui` components and styling conventions before introducing custom UI patterns.
+3. All design tokens and color variables must be declared in `src/styles.css`.
+4. When adding new theme colors for Tailwind usage, define the CSS variables in `src/styles.css` and expose them in `@theme inline` so Tailwind utilities can use them.
+5. This project uses TanStack Router. Follow TanStack Router conventions for routing, links, route files, and route composition.
+6. This project uses `pnpm`. Prefer `pnpm` for install, script execution, and dependency management. Do not use `npm` or `yarn` unless explicitly requested.
