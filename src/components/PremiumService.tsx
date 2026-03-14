@@ -26,7 +26,7 @@ export default function PremiumService() {
         </Badge>
 
         <div>
-          <span className="text-white text-[22px] font-semibold leading-snug">
+          <span className="text-white text-2xl font-semibold leading-snug">
             Complete Care Journey
           </span>
         </div>
@@ -37,10 +37,16 @@ export default function PremiumService() {
               <div className="flex items-center justify-center w-6 h-6 rounded-full bg-white/25">
                 <img src="/icons/check.svg" alt="check" className="w-2 h-2" />
               </div>
-              <span className="text-[12px] text-white/90">{item}</span>
+              <span className="text-sm text-white/90">{item}</span>
             </div>
           ))}
         </div>
+
+        <h2 className="text-2xl font-semibold leading-[30px]">
+          Complete Care Journey
+        </h2>
+
+        <p className="text-sm ">Book Appointments</p>
 
         <div className="flex items-center justify-between">
           <button className="px-[12px] py-[10px] rounded-[6px] bg-white text-[#E1444E] text-sm font-semibold shadow-sm hover:bg-white/90 transition-colors">

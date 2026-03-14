@@ -41,11 +41,17 @@ function App() {
             {t('profile:description')}
           </p>
           <div className="grid gap-2 text-sm text-(--sea-ink)">
-            <p>{t('common:field.firstName')}: Hao</p>
+            <p className="text-3xl">{t('common:field.firstName')}: Hao</p>
             <p>{t('common:field.lastName')}: Nguyen</p>
             <p>{t('common:field.phone')}: 012 345 678</p>
           </div>
         </div>
+
+        <h2 className="text-2xl font-semibold leading-[30px]">
+          Complete Care Journey
+        </h2>
+
+        <p className="text-sm ">Book Appointments</p>
       </section>
       <MenuItem
         icon="/icons/call-doctor.png"
