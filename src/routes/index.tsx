@@ -11,6 +11,7 @@ import HospitalCard from '#/components/HospitalCard'
 import HospitalList from '#/components/HospitalList'
 import PackageCard from '#/components/PackageCard'
 import PackageList from '#/components/PackageList'
+import { Icon } from '#/components/icon'
 
 export const Route = createFileRoute('/')({ component: App })
 
@@ -19,7 +20,7 @@ function App() {
 
   return (
     <main className="flex flex-col gap-4 min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-12 ">
-      <section className="island-shell rise-in w-full max-w-xl rounded-[2rem] p-[16px] text-center sm:p-10 bg bg-[#F8F6F6]">
+      <section className="bg-red-400 ">
         <p className="island-kicker mb-3">{t('home:kicker')}</p>
         <h1 className="display-title mb-4 text-4xl font-bold text-(--sea-ink) sm:text-5xl">
           {t('home:title')}
@@ -47,9 +48,12 @@ function App() {
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold leading-[30px]">
-          Complete Care Journey
-        </h2>
+        <div className="mt-6 flex items-center justify-center gap-2">
+          <Icon name="home_test" className="w-56 h-56 text-red-500" />
+          <h2 className="text-2xl font-semibold leading-[30px]">
+            Complete Care Journey
+          </h2>
+        </div>
 
         <p className="text-sm ">Book Appointments</p>
       </section>

@@ -1,4 +1,5 @@
 import { Badge } from './ui/badge'
+import { Button } from './ui/button'
 
 const benefits = [
   'Book Appointments',
@@ -49,9 +50,13 @@ export default function PremiumService() {
         <p className="text-sm ">Book Appointments</p>
 
         <div className="flex items-center justify-between">
-          <button className="px-[12px] py-[10px] rounded-[6px] bg-white text-[#E1444E] text-sm font-semibold shadow-sm hover:bg-white/90 transition-colors">
+          {/* <button className="px-[12px] py-[10px] rounded-[6px] bg-white text-[#E1444E] text-sm font-semibold shadow-sm hover:bg-white/90 transition-colors">
             BOOK NOW!
-          </button>
+          </button> */}
+
+          <Button className="px-[12px]  rounded-[6px] bg-white text-[#E1444E] text-sm font-semibold shadow-sm hover:bg-white/90 transition-colors">
+            BOOK NOW!
+          </Button>
 
           <div className="flex items-center">
             <span className="w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center">
