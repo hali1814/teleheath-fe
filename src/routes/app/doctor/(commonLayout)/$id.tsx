@@ -1,3 +1,4 @@
+import DoctorInformation from '#/sections/doctor/DoctorInformation'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/app/doctor/(commonLayout)/$id')({
@@ -5,5 +6,9 @@ export const Route = createFileRoute('/app/doctor/(commonLayout)/$id')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/app/hospital/:id"!</div>
+  return (
+    <div className="flex flex-col gap-[16px] p-[16px]">
+      <DoctorInformation />
+    </div>
+  )
 }
