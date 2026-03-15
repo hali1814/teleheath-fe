@@ -1,7 +1,7 @@
 import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
-import { Link } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 
 export default function Header({
   isHome = false,
@@ -10,6 +10,8 @@ export default function Header({
   isHome?: boolean
   title?: string
 }) {
+  const router = useRouter()
+
   return (
     <header className="sticky top-0 z-50 h-[62px] px-[16px] py-[20px] border-b border-[#FFE8E6] bg-background">
       {isHome ? (
@@ -31,16 +33,23 @@ export default function Header({
         </div>
       ) : (
         <div className="flex items-center justify-between">
-          <Link to="/app/home" className="flex items-center gap-[16px]">
-            <Icon
-              name="arrow_left"
-              className="w-[12px] h-[24px]"
-              color="#808080"
-            />
+          <div className="flex items-center gap-[16px]">
+            <div
+              onClick={() => router.history.back()}
+              className="flex items-center gap-[16px] bg-transparent border-0 p-0 cursor-pointer"
+              aria-label="Go back"
+            >
+              <Icon
+                name="arrow_left"
+                className="w-[12px] h-[24px]"
+                color="#808080"
+              />
+            </div>
             <Text size="lg_16" className="font-medium">
               {title}
             </Text>
-          </Link>
+          </div>
+
           <Link to="/app/home">
             <Icon
               name="circle_home"

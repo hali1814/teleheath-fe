@@ -1,3 +1,4 @@
+import BottomNavigation from '#/components/BottomNavigation'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/app/profile/(commonLayout)')({
@@ -6,9 +7,9 @@ export const Route = createFileRoute('/app/profile/(commonLayout)')({
 
 function RouteComponent() {
   return (
-    <div>
-      commonLayout
+    <div className="pb-[100px]">
       <Outlet />
+      <BottomNavigation />
     </div>
   )
 }

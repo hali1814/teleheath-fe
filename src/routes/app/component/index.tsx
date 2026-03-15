@@ -9,6 +9,8 @@ import { PackageCard, PackageList } from '#/sections/package'
 import { DoctorCard, DoctorLists } from '#/sections/doctor'
 import BottomNavigation from '#/components/BottomNavigation'
 import Header from '#/sections/home/Header'
+import Avatar from '#/sections/profile/Avatar'
+import CardNavigate from '#/sections/common/CardNavigate'
 
 export const Route = createFileRoute('/app/component/')({
   component: RouteComponent,
@@ -60,6 +62,8 @@ function RouteComponent() {
         ]}
       />
       <BottomNavigation />
+      <Avatar initials="SC" onCameraClick={() => {}} />
+      <CardNavigate title="Language" icon="language" onClick={() => {}} />
     </div>
   )
 }

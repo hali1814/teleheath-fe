@@ -13,6 +13,11 @@ type TextSize =
   | '3xl_22'
   | '4xl_24'
   | '5xl_28'
+  | '6xl_32'
+  | '7xl_36'
+  | '8xl_40'
+  | '9xl_44'
+  | '10xl_48'
 
 const colorClasses: Record<TextColor, string> = {
   primary: 'text-text-primary',
@@ -31,6 +36,11 @@ const sizeClasses: Record<TextSize, string> = {
   '3xl_22': 'text-3xl',
   '4xl_24': 'text-4xl',
   '5xl_28': 'text-5xl',
+  '6xl_32': 'text-6xl',
+  '7xl_36': 'text-7xl',
+  '8xl_40': 'text-8xl',
+  '9xl_44': 'text-9xl',
+  '10xl_48': 'text-10xl',
 }
 
 interface TextProps {

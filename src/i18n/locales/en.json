@@ -29,7 +29,16 @@
   },
   "profile": {
     "title": "Profile Preview",
-    "description": "This is a sample profile namespace so you can test page-level translations quickly."
+    "description": "This is a sample profile namespace so you can test page-level translations quickly.",
+    "editProfile": "Edit Profile",
+    "personalInformation": "Personal Information",
+    "dateOfBirth": "Date of Birth",
+    "gender": "Gender",
+    "phoneNumber": "Phone Number",
+    "email": "Email",
+    "address": "Address",
+    "medicalProfiles": "Medical Profiles",
+    "language": "Language"
   },
   "haohoa": {
     "title": "Haohoa"

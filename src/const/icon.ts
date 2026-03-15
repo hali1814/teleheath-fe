@@ -17,6 +17,10 @@ import CircleHomeIcon from '#/assets/icons/common/circle-home.svg?react'
 import CalendarIcon from '#/assets/icons/premium-service/calendar.svg?react'
 import CarCheck from '#/assets/icons/premium-service/car-check.svg?react'
 import SupporterIcon from '#/assets/icons/premium-service/supporter.svg?react'
+import CameraIcon from '#/assets/icons/profile/camera.svg?react'
+import LanguageIcon from '#/assets/icons/profile/language.svg?react'
+import PencilIcon from '#/assets/icons/profile/pencil.svg?react'
+import ClipboardIcon from '#/assets/icons/profile/clipboard.svg?react'
 import type { SVGProps, FC } from 'react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
@@ -41,6 +45,10 @@ const ICONS_TEMPLATE = {
   calendar: CalendarIcon,
   car_check: CarCheck,
   supporter: SupporterIcon,
+  camera: CameraIcon,
+  language: LanguageIcon,
+  pencil: PencilIcon,
+  clipboard: ClipboardIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

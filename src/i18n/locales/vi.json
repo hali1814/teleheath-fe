@@ -28,7 +28,16 @@
     "description": "TanStack Start cung cap routing an toan ve type, server functions va cac mac dinh hien dai. Ban co the dung no lam nen tang sach se, sau do bo sung route, styling va add-ons cua rieng minh."
   },
   "profile": {
-    "title": "Xem truoc Profile",
-    "description": "Day la namespace mau cho profile de ban test translation theo tung page nhanh hon."
+    "title": "Xem trước Profile",
+    "description": "Đây là namespace mẫu cho profile để bạn test translation theo từng page nhanh hơn.",
+    "editProfile": "Chỉnh sửa hồ sơ",
+    "personalInformation": "Thông tin cá nhân",
+    "dateOfBirth": "Ngày sinh",
+    "gender": "Giới tính",
+    "phoneNumber": "Số điện thoại",
+    "email": "Email",
+    "address": "Địa chỉ",
+    "medicalProfiles": "Hồ sơ y tế",
+    "language": "Ngôn ngữ"
   }
 }

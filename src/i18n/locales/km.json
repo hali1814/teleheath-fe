@@ -29,6 +29,15 @@
   },
   "profile": {
     "title": "មើល Profile សាកល្បង",
-    "description": "នេះជាឧទាហរណ៍ namespace សម្រាប់ profile ដើម្បីឱ្យអ្នកអាចសាក translation តាម page បានលឿន។"
+    "description": "នេះជាឧទាហរណ៍ namespace សម្រាប់ profile ដើម្បីឱ្យអ្នកអាចសាក translation តាម page បានលឿន។",
+    "editProfile": "កែសម្រួលប្រវត្តិរូប",
+    "personalInformation": "ព័ត៌មានផ្ទាល់ខ្លួន",
+    "dateOfBirth": "ថ្ងៃកំណើត",
+    "gender": "ភេទ",
+    "phoneNumber": "លេខទូរស័ព្ទ",
+    "email": "អ៉ីមែល",
+    "address": "អាសយដ្ឋាន",
+    "medicalProfiles": "ប្រវត្តិរូបវេជ្ជសាស្ត្រ",
+    "language": "ភាសា"
   }
 }
