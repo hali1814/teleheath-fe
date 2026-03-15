@@ -11,6 +11,12 @@ import AppointmentIcon from '#/assets/icons/bottom-navigation/appointment.svg?re
 import HistoryIcon from '#/assets/icons/bottom-navigation/history.svg?react'
 import ProfileIcon from '#/assets/icons/bottom-navigation/profile.svg?react'
 import BookIcon from '#/assets/icons/bottom-navigation/book.svg?react'
+import NotificationIcon from '#/assets/icons/common/notification.svg?react'
+import ArrowLeftIcon from '#/assets/icons/common/arrow-left.svg?react'
+import CircleHomeIcon from '#/assets/icons/common/circle-home.svg?react'
+import CalendarIcon from '#/assets/icons/premium-service/calendar.svg?react'
+import CarCheck from '#/assets/icons/premium-service/car-check.svg?react'
+import SupporterIcon from '#/assets/icons/premium-service/supporter.svg?react'
 import type { SVGProps, FC } from 'react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
@@ -29,6 +35,12 @@ const ICONS_TEMPLATE = {
   history: HistoryIcon,
   profile: ProfileIcon,
   book: BookIcon,
+  notification: NotificationIcon,
+  arrow_left: ArrowLeftIcon,
+  circle_home: CircleHomeIcon,
+  calendar: CalendarIcon,
+  car_check: CarCheck,
+  supporter: SupporterIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

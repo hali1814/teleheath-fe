@@ -68,20 +68,24 @@ export default function PremiumService() {
 
           <div className="flex items-center">
             <span className="w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center">
-              <img
-                src="/icons/medical_services.svg"
-                alt="Medical services"
-                className="w-[10px] h-[10px] object-contain"
+              <Icon
+                name="calendar"
+                color="white"
+                className="w-[10px] h-[10px]"
               />
             </span>
-            <span className="w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center -ml-3 z-20">
-              <span className="text-lg leading-none text-white">🗓</span>
+            <span className="w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center -ml-2 z-20">
+              <Icon
+                name="car_check"
+                color="white"
+                className="w-[10px] h-[10px]"
+              />
             </span>
-            <span className="w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center -ml-3 z-20">
-              <img
-                src="/icons/call-doctor.svg"
-                alt="Call doctor"
-                className="w-[10px] h-[10px] object-contain"
+            <span className="w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center -ml-2 z-20">
+              <Icon
+                name="supporter"
+                color="white"
+                className="w-[10px] h-[10px]"
               />
             </span>
           </div>

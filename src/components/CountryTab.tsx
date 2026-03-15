@@ -1,40 +1,62 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '#/components/ui/tabs'
+import type { ReactNode } from 'react'
 import { useState } from 'react'
 import LocationBadge from './LocationBadge'
 
-export default function CountryTab() {
-  const [activeCountry, setActiveCountry] = useState<'vietnam' | 'cambodia'>(
-    'vietnam',
+export interface CountryTabItem {
+  /** Giá trị duy nhất của tab (dùng cho value/onValueChange) */
+  value: string
+  /** Nhãn hiển thị trên tab (truyền vào LocationBadge) */
+  label: string
+  /** Nội dung hiển thị khi tab được chọn */
+  content?: ReactNode
+  /** Tab có bị disabled không (không thể chọn) */
+  disabled?: boolean
+}
+
+export interface CountryTabProps {
+  /** Danh sách tab (số lượng tùy ý) */
+  tabs: CountryTabItem[]
+  /** Tab được chọn mặc định (nếu không truyền sẽ lấy tab đầu tiên) */
+  defaultValue?: string
+}
+
+export default function CountryTab({ tabs, defaultValue }: CountryTabProps) {
+  const firstValue = tabs[0]?.value
+  const [activeValue, setActiveValue] = useState<string>(
+    defaultValue ?? firstValue ?? '',
   )
+
+  if (tabs.length === 0) return null
+
   return (
-    <Tabs defaultValue={activeCountry} className="w-full h-[45px]!">
+    <Tabs
+      value={activeValue}
+      onValueChange={setActiveValue}
+      className="w-full h-[45px]!"
+    >
       <TabsList className="w-full h-[45px]! p-[4px] flex items-center justify-center rounded-[30px] gap-[10px] bg-secondary/5">
-        <TabsTrigger
-          value="vietnam"
-          className="rounded-[30px] h-[37px]!"
-          onClick={() => setActiveCountry('vietnam')}
-        >
-          <LocationBadge
-            location="Vietnam"
-            disabled={!(activeCountry === 'vietnam')}
-            className="font-medium leading-normal"
-          />
-        </TabsTrigger>
-        <TabsTrigger
-          value="cambodia"
-          className="rounded-[30px] h-[37px]!"
-          onClick={() => setActiveCountry('cambodia')}
-          disabled
-        >
-          <LocationBadge
-            location="Cambodia"
-            disabled={!(activeCountry === 'cambodia')}
-            className="font-medium leading-normal"
-          />
-        </TabsTrigger>
+        {tabs.map((tab) => (
+          <TabsTrigger
+            key={tab.value}
+            value={tab.value}
+            className="rounded-[30px] h-[37px]!"
+            onClick={() => setActiveValue(tab.value)}
+            disabled={tab.disabled}
+          >
+            <LocationBadge
+              location={tab.label}
+              disabled={activeValue !== tab.value}
+              className="font-medium leading-normal"
+            />
+          </TabsTrigger>
+        ))}
       </TabsList>
-      <TabsContent value="vietnam">Vietnam content</TabsContent>
-      <TabsContent value="cambodia">Cambodia content</TabsContent>
+      {tabs.map((tab) => (
+        <TabsContent key={tab.value} value={tab.value}>
+          {tab.content}
+        </TabsContent>
+      ))}
     </Tabs>
   )
 }

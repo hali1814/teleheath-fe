@@ -2,13 +2,7 @@ import type { ImgHTMLAttributes } from 'react'
 
 import { cn } from '#/lib/utils'
 
-type AspectRatio =
-  | '361/180'
-  | '16/9'
-  | '4/3'
-  | '1/1'
-  | '3/4'
-  | '9/16'
+type AspectRatio = '361/180' | '16/9' | '4/3' | '1/1' | '3/4' | '9/16'
 
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   className?: string

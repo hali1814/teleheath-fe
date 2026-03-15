@@ -1,3 +1,4 @@
+import Header from '#/sections/home/Header'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/app/hospital/(commonLayout)')({
@@ -7,8 +8,10 @@ export const Route = createFileRoute('/app/hospital/(commonLayout)')({
 function RouteComponent() {
   return (
     <div>
-      commonLayout
-      <Outlet />
+      <Header title="Hospitals" />
+      <div className="flex flex-col gap-[16px] p-[16px]">
+        <Outlet />
+      </div>
     </div>
   )
 }
