@@ -14,6 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppHomeRouteRouteImport } from './routes/app/home/route'
 import { Route as AppHomeIndexRouteImport } from './routes/app/home/index'
+import { Route as AppComponentIndexRouteImport } from './routes/app/component/index'
 import { Route as AppSearchcommonLayoutRouteRouteImport } from './routes/app/search/(commonLayout)/route'
 import { Route as AppProfileeditLayoutRouteRouteImport } from './routes/app/profile/(editLayout)/route'
 import { Route as AppProfilecommonLayoutRouteRouteImport } from './routes/app/profile/(commonLayout)/route'
@@ -55,6 +56,11 @@ const AppHomeIndexRoute = AppHomeIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppHomeRouteRoute,
+} as any)
+const AppComponentIndexRoute = AppComponentIndexRouteImport.update({
+  id: '/component/',
+  path: '/component/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppSearchcommonLayoutRouteRoute =
   AppSearchcommonLayoutRouteRouteImport.update({
@@ -162,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/app/notification': typeof AppNotificationcommonLayoutRouteRouteWithChildren
   '/app/profile': typeof AppProfileeditLayoutRouteRouteWithChildren
   '/app/search': typeof AppSearchcommonLayoutRouteRouteWithChildren
+  '/app/component/': typeof AppComponentIndexRoute
   '/app/home/': typeof AppHomeIndexRoute
   '/app/doctor/$id': typeof AppDoctorcommonLayoutIdRoute
   '/app/hospital/$id': typeof AppHospitalcommonLayoutIdRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppIndexRoute
   '/app/profile': typeof AppProfilecommonLayoutIndexRoute
+  '/app/component': typeof AppComponentIndexRoute
   '/app/home': typeof AppHomeIndexRoute
   '/app/doctor/$id': typeof AppDoctorcommonLayoutIdRoute
   '/app/hospital/$id': typeof AppHospitalcommonLayoutIdRoute
@@ -201,6 +209,7 @@ export interface FileRoutesById {
   '/app/profile/(commonLayout)': typeof AppProfilecommonLayoutRouteRouteWithChildren
   '/app/profile/(editLayout)': typeof AppProfileeditLayoutRouteRouteWithChildren
   '/app/search/(commonLayout)': typeof AppSearchcommonLayoutRouteRouteWithChildren
+  '/app/component/': typeof AppComponentIndexRoute
   '/app/home/': typeof AppHomeIndexRoute
   '/app/doctor/(commonLayout)/$id': typeof AppDoctorcommonLayoutIdRoute
   '/app/hospital/(commonLayout)/$id': typeof AppHospitalcommonLayoutIdRoute
@@ -225,6 +234,7 @@ export interface FileRouteTypes {
     | '/app/notification'
     | '/app/profile'
     | '/app/search'
+    | '/app/component/'
     | '/app/home/'
     | '/app/doctor/$id'
     | '/app/hospital/$id'
@@ -241,6 +251,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/app/profile'
+    | '/app/component'
     | '/app/home'
     | '/app/doctor/$id'
     | '/app/hospital/$id'
@@ -263,6 +274,7 @@ export interface FileRouteTypes {
     | '/app/profile/(commonLayout)'
     | '/app/profile/(editLayout)'
     | '/app/search/(commonLayout)'
+    | '/app/component/'
     | '/app/home/'
     | '/app/doctor/(commonLayout)/$id'
     | '/app/hospital/(commonLayout)/$id'
@@ -317,6 +329,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/home/'
       preLoaderRoute: typeof AppHomeIndexRouteImport
       parentRoute: typeof AppHomeRouteRoute
+    }
+    '/app/component/': {
+      id: '/app/component/'
+      path: '/component'
+      fullPath: '/app/component/'
+      preLoaderRoute: typeof AppComponentIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/app/search/(commonLayout)': {
       id: '/app/search/(commonLayout)'
@@ -543,6 +562,7 @@ interface AppRouteRouteChildren {
   AppProfilecommonLayoutRouteRoute: typeof AppProfilecommonLayoutRouteRouteWithChildren
   AppProfileeditLayoutRouteRoute: typeof AppProfileeditLayoutRouteRouteWithChildren
   AppSearchcommonLayoutRouteRoute: typeof AppSearchcommonLayoutRouteRouteWithChildren
+  AppComponentIndexRoute: typeof AppComponentIndexRoute
   AppPackagecommonLayoutIdRoute: typeof AppPackagecommonLayoutIdRoute
   AppPackagecommonLayoutIndexRoute: typeof AppPackagecommonLayoutIndexRoute
 }
@@ -559,6 +579,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
     AppProfilecommonLayoutRouteRouteWithChildren,
   AppProfileeditLayoutRouteRoute: AppProfileeditLayoutRouteRouteWithChildren,
   AppSearchcommonLayoutRouteRoute: AppSearchcommonLayoutRouteRouteWithChildren,
+  AppComponentIndexRoute: AppComponentIndexRoute,
   AppPackagecommonLayoutIdRoute: AppPackagecommonLayoutIdRoute,
   AppPackagecommonLayoutIndexRoute: AppPackagecommonLayoutIndexRoute,
 }

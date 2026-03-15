@@ -1,37 +1,59 @@
 import { cn } from '#/lib/utils'
+import { Icon } from '#/components/icon'
+import type { IconName } from './icon'
+import Text from './text'
 
 interface MenuItemProps {
-  icon: string
+  icon: IconName
   title: string
   variant?: 'default' | 'outline'
+  iconColor?: string
+  backgroundColor?: string
+  borderColor?: string
 }
 
 export default function MenuItem({
   icon,
   title,
   variant = 'default',
+  iconColor,
+  backgroundColor,
+  borderColor,
 }: MenuItemProps) {
-  const bgColor = variant === 'default' ? 'bg-primary' : ''
-  const borderColor =
-    variant === 'outline' ? 'border-[1.25px] border-primary' : ''
+  const defaultBgClass = variant === 'default' ? 'bg-primary' : ''
+  const defaultBorderClass =
+    variant === 'outline'
+      ? 'border-[1.25px] border-[#F6D6D6] shadow-[0px_1px_6px_rgba(0,0,0,0.12)]'
+      : ''
+
+  const bgClass = backgroundColor ? '' : defaultBgClass
+  const borderClass = borderColor ? '' : defaultBorderClass
+
+  const primaryColor = '#E22A36'
+  const resolvedIconColor =
+    iconColor ?? (variant === 'default' ? 'white' : primaryColor)
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center gap-[8px]">
       <div
         className={cn(
           'w-[56px] h-[56px] rounded-[16px] flex items-center justify-center',
-          bgColor,
-          borderColor,
+          bgClass,
+          borderClass,
         )}
+        style={{
+          backgroundColor: backgroundColor,
+          borderColor: borderColor,
+        }}
       >
-        <img
-          src={icon}
-          alt={title}
-          width={28}
-          height={28}
-          className="object-contain"
+        <Icon
+          name={icon}
+          className="w-[28px] h-[28px]"
+          color={resolvedIconColor}
         />
       </div>
-      <p className="text-sm font-medium text-center text-black">{title}</p>
+      <Text size="sm_12" className="font-medium text-center">
+        {title}
+      </Text>
     </div>
   )
 }
