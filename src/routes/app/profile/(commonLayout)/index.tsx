@@ -5,6 +5,7 @@ import { Button } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
 import CardNavigate from '#/sections/common/CardNavigate'
 import Avatar from '#/sections/profile/Avatar'
+import effectPng from '#/assets/images/profile/effect.png'
 
 import { createFileRoute } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +20,7 @@ function RouteComponent() {
     <div>
       {/* header */}
       <div className="flex h-[220px] items-end gap-[10px] relative">
-        <Image src="/src/assets/images/profile/effect.png" alt="avatar" />
+        <Image src={effectPng} alt="avatar" />
 
         <div className="absolute  top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
           <Avatar initials="SC" onCameraClick={() => {}} />

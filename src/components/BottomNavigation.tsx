@@ -2,9 +2,10 @@ import { Icon, type IconName } from './icon'
 import Text from './text'
 import { cn } from '#/lib/utils'
 import { useState } from 'react'
+import footerPng from '#/assets/images/home/footer.png'
 
 export default function BottomNavigation() {
-  const [isActive, setIsActive] = useState(false)
+  const [isActive] = useState(false)
 
   const NavItem = ({
     icon,
@@ -35,7 +36,7 @@ export default function BottomNavigation() {
     <div
       className="fixed bottom-0 left-0 right-0 shadow-lg py-[14px]"
       style={{
-        backgroundImage: "url('/src/assets/images/home/footer.png')",
+        backgroundImage: `url(${footerPng})`,
         backgroundSize: '100% 100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
