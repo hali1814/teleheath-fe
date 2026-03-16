@@ -7,8 +7,10 @@ import CardNavigate from '#/sections/common/CardNavigate'
 import Avatar from '#/sections/profile/Avatar'
 import effectPng from '#/assets/images/profile/effect.png'
 
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { useState } from 'react'
+import { BottomSheetTranslate } from '#/sections/profile/BottomSheetTranslate'
 
 export const Route = createFileRoute('/app/profile/(commonLayout)/')({
   component: RouteComponent,
@@ -16,6 +18,9 @@ export const Route = createFileRoute('/app/profile/(commonLayout)/')({
 
 function RouteComponent() {
   const { t } = useTranslation('profile')
+  const navigate = useNavigate()
+  const [openBottomSheet, setOpenBottomSheet] = useState(false)
+
   return (
     <div>
       {/* header */}
@@ -37,7 +42,10 @@ function RouteComponent() {
       </Text>
 
       <div className="flex justify-center">
-        <Button className="w-[200px] mt-2 bg-secondary">
+        <Button
+          className="w-[200px] mt-2 bg-secondary"
+          onClick={() => navigate({ to: '/app/profile/edit' })}
+        >
           <Icon name="pencil" className="size-4" />
           {t('editProfile')}
         </Button>
@@ -75,9 +83,14 @@ function RouteComponent() {
           <CardNavigate
             title={t('language')}
             icon="language"
-            onClick={() => {}}
+            onClick={() => setOpenBottomSheet(true)}
           />
         </div>
+
+        <BottomSheetTranslate
+          open={openBottomSheet}
+          onClose={() => setOpenBottomSheet(false)}
+        />
       </div>
     </div>
   )

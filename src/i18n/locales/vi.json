@@ -4,7 +4,7 @@
       "label": "Ngon ngu",
       "en": "Tieng Anh",
       "km": "Tieng Khmer",
-      "vi": "Tieng Viet"
+      "vi": "Tieng Việt"
     },
     "theme": {
       "light": "Light",
@@ -15,6 +15,10 @@
       "firstName": "Ten",
       "lastName": "Ho",
       "phone": "So dien thoai"
+    },
+    "actions": {
+      "cancel": "Hủy",
+      "done": "Xong"
     }
   },
   "home": {
@@ -38,6 +42,18 @@
     "email": "Email",
     "address": "Địa chỉ",
     "medicalProfiles": "Hồ sơ y tế",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "pleaseSelectLanguage": "Vui lòng chọn ngôn ngữ",
+    "profileInformation": "Thông tin hồ sơ",
+    "uploadPhoto": "Tải ảnh lên",
+    "fullName": "Họ và tên",
+    "genderMale": "Nam",
+    "genderFemale": "Nữ",
+    "country": "Quốc gia",
+    "city": "Tỉnh/Thành phố",
+    "district": "Quận/Huyện",
+    "precinct": "Phường/Xã",
+    "street": "Số nhà, tên đường, khu phố",
+    "save": "Lưu"
   }
 }

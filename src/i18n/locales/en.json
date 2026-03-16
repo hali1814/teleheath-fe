@@ -15,6 +15,10 @@
       "firstName": "First name",
       "lastName": "Last name",
       "phone": "Phone number"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "done": "Done"
     }
   },
   "home": {
@@ -38,7 +42,19 @@
     "email": "Email",
     "address": "Address",
     "medicalProfiles": "Medical Profiles",
-    "language": "Language"
+    "language": "Language",
+    "pleaseSelectLanguage": "Please select language",
+    "profileInformation": "Profile Information",
+    "uploadPhoto": "Upload Photo",
+    "fullName": "Full Name",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "country": "Country",
+    "city": "Province/ City",
+    "district": "District",
+    "precinct": "Precinct",
+    "street": "Street block, Street name, Home No.",
+    "save": "Save"
   },
   "haohoa": {
     "title": "Haohoa"

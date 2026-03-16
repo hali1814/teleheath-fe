@@ -15,6 +15,10 @@
       "firstName": "នាមខ្លួន",
       "lastName": "នាមត្រកូល",
       "phone": "លេខទូរស័ព្ទ"
+    },
+    "actions": {
+      "cancel": "បោះបង់",
+      "done": "រួចរាល់"
     }
   },
   "home": {
@@ -38,6 +42,18 @@
     "email": "អ៉ីមែល",
     "address": "អាសយដ្ឋាន",
     "medicalProfiles": "ប្រវត្តិរូបវេជ្ជសាស្ត្រ",
-    "language": "ភាសា"
+    "language": "ភាសា",
+    "pleaseSelectLanguage": "សូមជ្រើសរើសភាសា",
+    "profileInformation": "ព័ត៌មានប្រវត្តិរូប",
+    "uploadPhoto": "អាប់ឡូដរូបថត",
+    "fullName": "ឈ្មោះពេញ",
+    "genderMale": "ប្រុស",
+    "genderFemale": "ស្រី",
+    "country": "ប្រទេស",
+    "city": "រាជធានី/ខេត្ត",
+    "district": "ស្រុក/ខណ្ឌ",
+    "precinct": "ឃុំ/សង្កាត់",
+    "street": "ផ្លូវ, លេខផ្ទះ, ភូមិ",
+    "save": "រក្សាទុក"
   }
 }
