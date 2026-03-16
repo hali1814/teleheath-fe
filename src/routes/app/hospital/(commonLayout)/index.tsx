@@ -10,7 +10,7 @@ export const Route = createFileRoute('/app/hospital/(commonLayout)/')({
 
 function RouteComponent() {
   return (
-    <>
+    <div className="flex flex-col gap-[16px] p-[16px]">
       <SearchBar placeholder="Search for hospitals" />
       <CountryList />
       {hospitals.map((hospital) => (
@@ -22,6 +22,6 @@ function RouteComponent() {
           showBadge={true}
         />
       ))}
-    </>
+    </div>
   )
 }

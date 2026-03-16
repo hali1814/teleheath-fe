@@ -21,6 +21,23 @@ import CameraIcon from '#/assets/icons/profile/camera.svg?react'
 import LanguageIcon from '#/assets/icons/profile/language.svg?react'
 import PencilIcon from '#/assets/icons/profile/pencil.svg?react'
 import ClipboardIcon from '#/assets/icons/profile/clipboard.svg?react'
+import PlumpWebIcon from '#/assets/icons/common/plump-web.svg?react'
+import CallOutlineIcon from '#/assets/icons/common/call-outline.svg?react'
+import MailIcon from '#/assets/icons/common/mail.svg?react'
+import MapMarkerOutlineIcon from '#/assets/icons/common/map-marker-outline.svg?react'
+import MapOutlineIcon from '#/assets/icons/common/map-outline.svg?react'
+import ClockOutlineIcon from '#/assets/icons/common/clock-outline.svg?react'
+import ArrowDownIcon from '#/assets/icons/common/arrow-down.svg?react'
+import ArrowUpIcon from '#/assets/icons/common/arrow-up.svg?react'
+import FilterIcon from '#/assets/icons/common/filter.svg?react'
+import EyeOutlineIcon from '#/assets/icons/common/eye-outline.svg?react'
+import HospitalIcon from '#/assets/icons/common/hospital.svg?react'
+import CloseIcon from '#/assets/icons/common/close.svg?react'
+import WorkHistoryOutlineIcon from '#/assets/icons/common/work-history-outline.svg?react'
+import MoneyIcon from '#/assets/icons/common/money.svg?react'
+import GraduateCapIcon from '#/assets/icons/common/graduate-cap.svg?react'
+import SealCheckIcon from '#/assets/icons/common/seal-check.svg?react'
+import LicenseIcon from '#/assets/icons/common/license.svg?react'
 import type { SVGProps, FC } from 'react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
@@ -49,6 +66,23 @@ const ICONS_TEMPLATE = {
   language: LanguageIcon,
   pencil: PencilIcon,
   clipboard: ClipboardIcon,
+  plump_web: PlumpWebIcon,
+  call_outline: CallOutlineIcon,
+  mail: MailIcon,
+  map_marker_outline: MapMarkerOutlineIcon,
+  map_outline: MapOutlineIcon,
+  clock_outline: ClockOutlineIcon,
+  arrow_down: ArrowDownIcon,
+  arrow_up: ArrowUpIcon,
+  filter: FilterIcon,
+  eye_outline: EyeOutlineIcon,
+  hospital: HospitalIcon,
+  close: CloseIcon,
+  work_history_outline: WorkHistoryOutlineIcon,
+  money: MoneyIcon,
+  graduate_cap: GraduateCapIcon,
+  seal_check: SealCheckIcon,
+  license: LicenseIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

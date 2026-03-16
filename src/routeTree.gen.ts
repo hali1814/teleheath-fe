@@ -18,6 +18,7 @@ import { Route as AppComponentIndexRouteImport } from './routes/app/component/in
 import { Route as AppSearchcommonLayoutRouteRouteImport } from './routes/app/search/(commonLayout)/route'
 import { Route as AppProfileeditLayoutRouteRouteImport } from './routes/app/profile/(editLayout)/route'
 import { Route as AppProfilecommonLayoutRouteRouteImport } from './routes/app/profile/(commonLayout)/route'
+import { Route as AppPackagecommonLayoutRouteRouteImport } from './routes/app/package/(commonLayout)/route'
 import { Route as AppNotificationcommonLayoutRouteRouteImport } from './routes/app/notification/(commonLayout)/route'
 import { Route as AppHospitalcommonLayoutRouteRouteImport } from './routes/app/hospital/(commonLayout)/route'
 import { Route as AppDoctorcommonLayoutRouteRouteImport } from './routes/app/doctor/(commonLayout)/route'
@@ -80,6 +81,12 @@ const AppProfilecommonLayoutRouteRoute =
     path: '/profile',
     getParentRoute: () => AppRouteRoute,
   } as any)
+const AppPackagecommonLayoutRouteRoute =
+  AppPackagecommonLayoutRouteRouteImport.update({
+    id: '/package/(commonLayout)',
+    path: '/package',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
 const AppNotificationcommonLayoutRouteRoute =
   AppNotificationcommonLayoutRouteRouteImport.update({
     id: '/notification/(commonLayout)',
@@ -112,9 +119,9 @@ const AppProfilecommonLayoutIndexRoute =
   } as any)
 const AppPackagecommonLayoutIndexRoute =
   AppPackagecommonLayoutIndexRouteImport.update({
-    id: '/package/(commonLayout)/',
-    path: '/package/',
-    getParentRoute: () => AppRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppPackagecommonLayoutRouteRoute,
   } as any)
 const AppNotificationcommonLayoutIndexRoute =
   AppNotificationcommonLayoutIndexRouteImport.update({
@@ -142,9 +149,9 @@ const AppProfileeditLayoutEditRoute =
   } as any)
 const AppPackagecommonLayoutIdRoute =
   AppPackagecommonLayoutIdRouteImport.update({
-    id: '/package/(commonLayout)/$id',
-    path: '/package/$id',
-    getParentRoute: () => AppRouteRoute,
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AppPackagecommonLayoutRouteRoute,
   } as any)
 const AppHospitalcommonLayoutIdRoute =
   AppHospitalcommonLayoutIdRouteImport.update({
@@ -166,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/app/doctor': typeof AppDoctorcommonLayoutRouteRouteWithChildren
   '/app/hospital': typeof AppHospitalcommonLayoutRouteRouteWithChildren
   '/app/notification': typeof AppNotificationcommonLayoutRouteRouteWithChildren
+  '/app/package': typeof AppPackagecommonLayoutRouteRouteWithChildren
   '/app/profile': typeof AppProfileeditLayoutRouteRouteWithChildren
   '/app/search': typeof AppSearchcommonLayoutRouteRouteWithChildren
   '/app/component/': typeof AppComponentIndexRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/app/doctor/(commonLayout)': typeof AppDoctorcommonLayoutRouteRouteWithChildren
   '/app/hospital/(commonLayout)': typeof AppHospitalcommonLayoutRouteRouteWithChildren
   '/app/notification/(commonLayout)': typeof AppNotificationcommonLayoutRouteRouteWithChildren
+  '/app/package/(commonLayout)': typeof AppPackagecommonLayoutRouteRouteWithChildren
   '/app/profile/(commonLayout)': typeof AppProfilecommonLayoutRouteRouteWithChildren
   '/app/profile/(editLayout)': typeof AppProfileeditLayoutRouteRouteWithChildren
   '/app/search/(commonLayout)': typeof AppSearchcommonLayoutRouteRouteWithChildren
@@ -232,6 +241,7 @@ export interface FileRouteTypes {
     | '/app/doctor'
     | '/app/hospital'
     | '/app/notification'
+    | '/app/package'
     | '/app/profile'
     | '/app/search'
     | '/app/component/'
@@ -271,6 +281,7 @@ export interface FileRouteTypes {
     | '/app/doctor/(commonLayout)'
     | '/app/hospital/(commonLayout)'
     | '/app/notification/(commonLayout)'
+    | '/app/package/(commonLayout)'
     | '/app/profile/(commonLayout)'
     | '/app/profile/(editLayout)'
     | '/app/search/(commonLayout)'
@@ -358,6 +369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProfilecommonLayoutRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/package/(commonLayout)': {
+      id: '/app/package/(commonLayout)'
+      path: '/package'
+      fullPath: '/app/package'
+      preLoaderRoute: typeof AppPackagecommonLayoutRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/notification/(commonLayout)': {
       id: '/app/notification/(commonLayout)'
       path: '/notification'
@@ -395,10 +413,10 @@ declare module '@tanstack/react-router' {
     }
     '/app/package/(commonLayout)/': {
       id: '/app/package/(commonLayout)/'
-      path: '/package'
+      path: '/'
       fullPath: '/app/package/'
       preLoaderRoute: typeof AppPackagecommonLayoutIndexRouteImport
-      parentRoute: typeof AppRouteRoute
+      parentRoute: typeof AppPackagecommonLayoutRouteRoute
     }
     '/app/notification/(commonLayout)/': {
       id: '/app/notification/(commonLayout)/'
@@ -430,10 +448,10 @@ declare module '@tanstack/react-router' {
     }
     '/app/package/(commonLayout)/$id': {
       id: '/app/package/(commonLayout)/$id'
-      path: '/package/$id'
+      path: '/$id'
       fullPath: '/app/package/$id'
       preLoaderRoute: typeof AppPackagecommonLayoutIdRouteImport
-      parentRoute: typeof AppRouteRoute
+      parentRoute: typeof AppPackagecommonLayoutRouteRoute
     }
     '/app/hospital/(commonLayout)/$id': {
       id: '/app/hospital/(commonLayout)/$id'
@@ -511,6 +529,22 @@ const AppNotificationcommonLayoutRouteRouteWithChildren =
     AppNotificationcommonLayoutRouteRouteChildren,
   )
 
+interface AppPackagecommonLayoutRouteRouteChildren {
+  AppPackagecommonLayoutIdRoute: typeof AppPackagecommonLayoutIdRoute
+  AppPackagecommonLayoutIndexRoute: typeof AppPackagecommonLayoutIndexRoute
+}
+
+const AppPackagecommonLayoutRouteRouteChildren: AppPackagecommonLayoutRouteRouteChildren =
+  {
+    AppPackagecommonLayoutIdRoute: AppPackagecommonLayoutIdRoute,
+    AppPackagecommonLayoutIndexRoute: AppPackagecommonLayoutIndexRoute,
+  }
+
+const AppPackagecommonLayoutRouteRouteWithChildren =
+  AppPackagecommonLayoutRouteRoute._addFileChildren(
+    AppPackagecommonLayoutRouteRouteChildren,
+  )
+
 interface AppProfilecommonLayoutRouteRouteChildren {
   AppProfilecommonLayoutIndexRoute: typeof AppProfilecommonLayoutIndexRoute
 }
@@ -559,12 +593,11 @@ interface AppRouteRouteChildren {
   AppDoctorcommonLayoutRouteRoute: typeof AppDoctorcommonLayoutRouteRouteWithChildren
   AppHospitalcommonLayoutRouteRoute: typeof AppHospitalcommonLayoutRouteRouteWithChildren
   AppNotificationcommonLayoutRouteRoute: typeof AppNotificationcommonLayoutRouteRouteWithChildren
+  AppPackagecommonLayoutRouteRoute: typeof AppPackagecommonLayoutRouteRouteWithChildren
   AppProfilecommonLayoutRouteRoute: typeof AppProfilecommonLayoutRouteRouteWithChildren
   AppProfileeditLayoutRouteRoute: typeof AppProfileeditLayoutRouteRouteWithChildren
   AppSearchcommonLayoutRouteRoute: typeof AppSearchcommonLayoutRouteRouteWithChildren
   AppComponentIndexRoute: typeof AppComponentIndexRoute
-  AppPackagecommonLayoutIdRoute: typeof AppPackagecommonLayoutIdRoute
-  AppPackagecommonLayoutIndexRoute: typeof AppPackagecommonLayoutIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -575,13 +608,13 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
     AppHospitalcommonLayoutRouteRouteWithChildren,
   AppNotificationcommonLayoutRouteRoute:
     AppNotificationcommonLayoutRouteRouteWithChildren,
+  AppPackagecommonLayoutRouteRoute:
+    AppPackagecommonLayoutRouteRouteWithChildren,
   AppProfilecommonLayoutRouteRoute:
     AppProfilecommonLayoutRouteRouteWithChildren,
   AppProfileeditLayoutRouteRoute: AppProfileeditLayoutRouteRouteWithChildren,
   AppSearchcommonLayoutRouteRoute: AppSearchcommonLayoutRouteRouteWithChildren,
   AppComponentIndexRoute: AppComponentIndexRoute,
-  AppPackagecommonLayoutIdRoute: AppPackagecommonLayoutIdRoute,
-  AppPackagecommonLayoutIndexRoute: AppPackagecommonLayoutIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

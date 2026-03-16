@@ -9,9 +9,7 @@ function RouteComponent() {
   return (
     <div>
       <Header title="Hospitals" />
-      <div className="flex flex-col gap-[16px] p-[16px]">
-        <Outlet />
-      </div>
+      <Outlet />
     </div>
   )
 }
