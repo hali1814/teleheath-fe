@@ -40,6 +40,12 @@ import SealCheckIcon from '#/assets/icons/common/seal-check.svg?react'
 import LicenseIcon from '#/assets/icons/common/license.svg?react'
 import ArrowRightIcon from '#/assets/icons/common/arrow_right.svg?react'
 import type { SVGProps, FC } from 'react'
+//upload_camera
+import UploadCameraIcon from '#/assets/icons/profile/upload-camera.svg?react'
+//calender
+import CalendarProfileIcon from '#/assets/icons/profile/calendar.svg?react'
+//common - dropdown
+import DropdownIcon from '#/assets/icons/common/dropdown.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -85,6 +91,9 @@ const ICONS_TEMPLATE = {
   seal_check: SealCheckIcon,
   license: LicenseIcon,
   arrow_right: ArrowRightIcon,
+  upload_camera: UploadCameraIcon,
+  calendar_profile: CalendarProfileIcon,
+  dropdown: DropdownIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

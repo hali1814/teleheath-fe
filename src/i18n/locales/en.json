@@ -19,6 +19,23 @@
     "actions": {
       "cancel": "Cancel",
       "done": "Done"
+    },
+    "countries": {
+      "vietnam": "Vietnam",
+      "cambodia": "Cambodia"
+    },
+    "relationships": {
+      "self": "Self",
+      "father": "Father",
+      "mother": "Mother",
+      "husband": "Husband",
+      "wife": "Wife",
+      "child": "Child",
+      "grandfather": "Grandfather",
+      "grandmother": "Grandmother",
+      "sibling": "Sibling",
+      "relative": "Relative",
+      "friend": "Friend"
     }
   },
   "home": {
@@ -54,7 +71,8 @@
     "district": "District",
     "precinct": "Precinct",
     "street": "Street block, Street name, Home No.",
-    "save": "Save"
+    "save": "Save",
+    "relationship": "Relationship"
   },
   "haohoa": {
     "title": "Haohoa"

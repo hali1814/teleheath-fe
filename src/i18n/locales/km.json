@@ -19,6 +19,23 @@
     "actions": {
       "cancel": "បោះបង់",
       "done": "រួចរាល់"
+    },
+    "countries": {
+      "vietnam": "វៀតណាម",
+      "cambodia": "កម្ពុជា"
+    },
+    "relationships": {
+      "self": "ខ្លួនឯង",
+      "father": "ឪពុក",
+      "mother": "ម្តាយ",
+      "husband": "ប្ដី",
+      "wife": "ប្រពន្ធ",
+      "child": "កូន",
+      "grandfather": "ជីតា",
+      "grandmother": "យាយ/ជីដូន",
+      "sibling": "បងប្អូន",
+      "relative": "សាច់ញាតិ",
+      "friend": "មិត្ត"
     }
   },
   "home": {
@@ -54,6 +71,7 @@
     "district": "ស្រុក/ខណ្ឌ",
     "precinct": "ឃុំ/សង្កាត់",
     "street": "ផ្លូវ, លេខផ្ទះ, ភូមិ",
-    "save": "រក្សាទុក"
+    "save": "រក្សាទុក",
+    "relationship": "ទំនាក់ទំនង"
   }
 }

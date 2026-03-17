@@ -19,6 +19,23 @@
     "actions": {
       "cancel": "Hủy",
       "done": "Xong"
+    },
+    "countries": {
+      "vietnam": "Việt Nam",
+      "cambodia": "Campuchia"
+    },
+    "relationships": {
+      "self": "Bản thân",
+      "father": "Cha",
+      "mother": "Mẹ",
+      "husband": "Chồng",
+      "wife": "Vợ",
+      "child": "Con",
+      "grandfather": "Ông",
+      "grandmother": "Bà",
+      "sibling": "Anh/Chị/Em",
+      "relative": "Người thân",
+      "friend": "Bạn bè"
     }
   },
   "home": {
@@ -54,6 +71,7 @@
     "district": "Quận/Huyện",
     "precinct": "Phường/Xã",
     "street": "Số nhà, tên đường, khu phố",
-    "save": "Lưu"
+    "save": "Lưu",
+    "relationship": "Mối quan hệ"
   }
 }

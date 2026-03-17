@@ -1,0 +1,125 @@
+import dayjs from 'dayjs'
+import { useMemo, useState } from 'react'
+
+import { Icon } from '#/components/icon'
+import Text from '#/components/text'
+import { Button } from '#/components/ui/button'
+import { Calendar } from '#/components/ui/calendar'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '#/components/ui/dialog'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '#/components/ui/input-group'
+import { cn } from '#/lib/utils'
+import type { TextInputProps } from '#/types/input'
+
+export interface DateInputBaseProps extends Omit<
+  TextInputProps,
+  'type' | 'onChange' | 'value' | 'defaultValue'
+> {
+  value?: string
+  defaultValue?: string
+  onValueChange?: (value: string) => void
+}
+
+export default function DateInputBase({
+  label = '',
+  isRequired = false,
+  value,
+  defaultValue,
+  onValueChange,
+  className,
+  disabled,
+  placeholder = 'DD-MM-YYYY',
+  ...props
+}: DateInputBaseProps) {
+  const isControlled = value !== undefined
+  const [internalValue, setInternalValue] = useState<string>(defaultValue ?? '')
+  const [open, setOpen] = useState(false)
+
+  const currentValue = isControlled ? (value ?? '') : internalValue
+
+  const selectedDate = useMemo(() => {
+    if (!currentValue) return undefined
+    const parsed = dayjs(currentValue, ['YYYY-MM-DD', 'DD-MM-YYYY'], true)
+    return parsed.isValid() ? parsed.toDate() : undefined
+  }, [currentValue])
+
+  const displayValue = useMemo(() => {
+    if (!selectedDate) return ''
+    return dayjs(selectedDate).format('DD-MM-YYYY')
+  }, [selectedDate])
+
+  const commitValue = (nextIso: string) => {
+    if (!isControlled) setInternalValue(nextIso)
+    onValueChange?.(nextIso)
+  }
+
+  return (
+    <div className={cn('flex flex-col gap-1', className)}>
+      {label ? (
+        <Text size="base_14" className="text-text-secondary font-normal">
+          {label}
+          {isRequired ? <span className="text-primary ml-1">*</span> : null}
+        </Text>
+      ) : null}
+
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => setOpen(true)}
+        className="w-full"
+      >
+        <InputGroup className="h-[45px] bg-white border-dust-red-1 border">
+          <InputGroupInput
+            {...props}
+            disabled={disabled}
+            readOnly
+            value={displayValue}
+            placeholder={placeholder}
+            className="h-[45px]"
+          />
+          <InputGroupAddon align="inline-end" className="cursor-pointer">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              className="shadow-none"
+              aria-label="Open calendar"
+              tabIndex={-1}
+            >
+              <Icon name="calendar_profile" />
+            </Button>
+          </InputGroupAddon>
+        </InputGroup>
+      </button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent
+          showCloseButton={false}
+          className="w-fit max-w-[calc(100vw-32px)] border-0 bg-transparent p-0 shadow-none"
+        >
+          <DialogTitle className="sr-only">Select date</DialogTitle>
+          <DialogDescription className="sr-only">Select date</DialogDescription>
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={(date) => {
+              if (!date) return
+              commitValue(dayjs(date).format('YYYY-MM-DD'))
+              setOpen(false)
+            }}
+            className="rounded-lg bg-white"
+            captionLayout="dropdown"
+          />
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
