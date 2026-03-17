@@ -1,2 +1,7 @@
 export { default as HospitalCard } from './HospitalCard'
 export { default as HospitalList } from './HospitalList'
+export { default as AboutHospital } from './AboutHospital'
+export { default as GalleryImage } from './GalleryImage'
+export { default as SpecialtyList } from './SpecialtyList'
+export { default as BranchList } from './BranchList'
+export { default as HospitalDetailHeader } from './HospitalDetailHeader'

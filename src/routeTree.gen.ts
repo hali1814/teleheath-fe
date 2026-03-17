@@ -13,8 +13,12 @@ import { Route as AppRouteRouteImport } from './routes/app/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppHomeRouteRouteImport } from './routes/app/home/route'
+import { Route as AppBookOfflineRouteRouteImport } from './routes/app/book-offline/route'
+import { Route as AppBookAppointmentRouteRouteImport } from './routes/app/book-appointment/route'
 import { Route as AppHomeIndexRouteImport } from './routes/app/home/index'
 import { Route as AppComponentIndexRouteImport } from './routes/app/component/index'
+import { Route as AppBookOfflineIndexRouteImport } from './routes/app/book-offline/index'
+import { Route as AppBookAppointmentIndexRouteImport } from './routes/app/book-appointment/index'
 import { Route as AppSearchcommonLayoutRouteRouteImport } from './routes/app/search/(commonLayout)/route'
 import { Route as AppProfileeditLayoutRouteRouteImport } from './routes/app/profile/(editLayout)/route'
 import { Route as AppProfilecommonLayoutRouteRouteImport } from './routes/app/profile/(commonLayout)/route'
@@ -53,6 +57,16 @@ const AppHomeRouteRoute = AppHomeRouteRouteImport.update({
   path: '/home',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppBookOfflineRouteRoute = AppBookOfflineRouteRouteImport.update({
+  id: '/book-offline',
+  path: '/book-offline',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppBookAppointmentRouteRoute = AppBookAppointmentRouteRouteImport.update({
+  id: '/book-appointment',
+  path: '/book-appointment',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppHomeIndexRoute = AppHomeIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -62,6 +76,16 @@ const AppComponentIndexRoute = AppComponentIndexRouteImport.update({
   id: '/component/',
   path: '/component/',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const AppBookOfflineIndexRoute = AppBookOfflineIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppBookOfflineRouteRoute,
+} as any)
+const AppBookAppointmentIndexRoute = AppBookAppointmentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppBookAppointmentRouteRoute,
 } as any)
 const AppSearchcommonLayoutRouteRoute =
   AppSearchcommonLayoutRouteRouteImport.update({
@@ -168,6 +192,8 @@ const AppDoctorcommonLayoutIdRoute = AppDoctorcommonLayoutIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
+  '/app/book-appointment': typeof AppBookAppointmentRouteRouteWithChildren
+  '/app/book-offline': typeof AppBookOfflineRouteRouteWithChildren
   '/app/home': typeof AppHomeRouteRouteWithChildren
   '/app/': typeof AppIndexRoute
   '/app/doctor': typeof AppDoctorcommonLayoutRouteRouteWithChildren
@@ -176,6 +202,8 @@ export interface FileRoutesByFullPath {
   '/app/package': typeof AppPackagecommonLayoutRouteRouteWithChildren
   '/app/profile': typeof AppProfileeditLayoutRouteRouteWithChildren
   '/app/search': typeof AppSearchcommonLayoutRouteRouteWithChildren
+  '/app/book-appointment/': typeof AppBookAppointmentIndexRoute
+  '/app/book-offline/': typeof AppBookOfflineIndexRoute
   '/app/component/': typeof AppComponentIndexRoute
   '/app/home/': typeof AppHomeIndexRoute
   '/app/doctor/$id': typeof AppDoctorcommonLayoutIdRoute
@@ -193,6 +221,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppIndexRoute
   '/app/profile': typeof AppProfilecommonLayoutIndexRoute
+  '/app/book-appointment': typeof AppBookAppointmentIndexRoute
+  '/app/book-offline': typeof AppBookOfflineIndexRoute
   '/app/component': typeof AppComponentIndexRoute
   '/app/home': typeof AppHomeIndexRoute
   '/app/doctor/$id': typeof AppDoctorcommonLayoutIdRoute
@@ -209,6 +239,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteRouteWithChildren
+  '/app/book-appointment': typeof AppBookAppointmentRouteRouteWithChildren
+  '/app/book-offline': typeof AppBookOfflineRouteRouteWithChildren
   '/app/home': typeof AppHomeRouteRouteWithChildren
   '/app/': typeof AppIndexRoute
   '/app/doctor/(commonLayout)': typeof AppDoctorcommonLayoutRouteRouteWithChildren
@@ -218,6 +250,8 @@ export interface FileRoutesById {
   '/app/profile/(commonLayout)': typeof AppProfilecommonLayoutRouteRouteWithChildren
   '/app/profile/(editLayout)': typeof AppProfileeditLayoutRouteRouteWithChildren
   '/app/search/(commonLayout)': typeof AppSearchcommonLayoutRouteRouteWithChildren
+  '/app/book-appointment/': typeof AppBookAppointmentIndexRoute
+  '/app/book-offline/': typeof AppBookOfflineIndexRoute
   '/app/component/': typeof AppComponentIndexRoute
   '/app/home/': typeof AppHomeIndexRoute
   '/app/doctor/(commonLayout)/$id': typeof AppDoctorcommonLayoutIdRoute
@@ -236,6 +270,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/app/book-appointment'
+    | '/app/book-offline'
     | '/app/home'
     | '/app/'
     | '/app/doctor'
@@ -244,6 +280,8 @@ export interface FileRouteTypes {
     | '/app/package'
     | '/app/profile'
     | '/app/search'
+    | '/app/book-appointment/'
+    | '/app/book-offline/'
     | '/app/component/'
     | '/app/home/'
     | '/app/doctor/$id'
@@ -261,6 +299,8 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/app/profile'
+    | '/app/book-appointment'
+    | '/app/book-offline'
     | '/app/component'
     | '/app/home'
     | '/app/doctor/$id'
@@ -276,6 +316,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/app/book-appointment'
+    | '/app/book-offline'
     | '/app/home'
     | '/app/'
     | '/app/doctor/(commonLayout)'
@@ -285,6 +327,8 @@ export interface FileRouteTypes {
     | '/app/profile/(commonLayout)'
     | '/app/profile/(editLayout)'
     | '/app/search/(commonLayout)'
+    | '/app/book-appointment/'
+    | '/app/book-offline/'
     | '/app/component/'
     | '/app/home/'
     | '/app/doctor/(commonLayout)/$id'
@@ -334,6 +378,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHomeRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/book-offline': {
+      id: '/app/book-offline'
+      path: '/book-offline'
+      fullPath: '/app/book-offline'
+      preLoaderRoute: typeof AppBookOfflineRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/book-appointment': {
+      id: '/app/book-appointment'
+      path: '/book-appointment'
+      fullPath: '/app/book-appointment'
+      preLoaderRoute: typeof AppBookAppointmentRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/home/': {
       id: '/app/home/'
       path: '/'
@@ -347,6 +405,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/component/'
       preLoaderRoute: typeof AppComponentIndexRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/app/book-offline/': {
+      id: '/app/book-offline/'
+      path: '/'
+      fullPath: '/app/book-offline/'
+      preLoaderRoute: typeof AppBookOfflineIndexRouteImport
+      parentRoute: typeof AppBookOfflineRouteRoute
+    }
+    '/app/book-appointment/': {
+      id: '/app/book-appointment/'
+      path: '/'
+      fullPath: '/app/book-appointment/'
+      preLoaderRoute: typeof AppBookAppointmentIndexRouteImport
+      parentRoute: typeof AppBookAppointmentRouteRoute
     }
     '/app/search/(commonLayout)': {
       id: '/app/search/(commonLayout)'
@@ -470,6 +542,31 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AppBookAppointmentRouteRouteChildren {
+  AppBookAppointmentIndexRoute: typeof AppBookAppointmentIndexRoute
+}
+
+const AppBookAppointmentRouteRouteChildren: AppBookAppointmentRouteRouteChildren =
+  {
+    AppBookAppointmentIndexRoute: AppBookAppointmentIndexRoute,
+  }
+
+const AppBookAppointmentRouteRouteWithChildren =
+  AppBookAppointmentRouteRoute._addFileChildren(
+    AppBookAppointmentRouteRouteChildren,
+  )
+
+interface AppBookOfflineRouteRouteChildren {
+  AppBookOfflineIndexRoute: typeof AppBookOfflineIndexRoute
+}
+
+const AppBookOfflineRouteRouteChildren: AppBookOfflineRouteRouteChildren = {
+  AppBookOfflineIndexRoute: AppBookOfflineIndexRoute,
+}
+
+const AppBookOfflineRouteRouteWithChildren =
+  AppBookOfflineRouteRoute._addFileChildren(AppBookOfflineRouteRouteChildren)
+
 interface AppHomeRouteRouteChildren {
   AppHomeIndexRoute: typeof AppHomeIndexRoute
 }
@@ -588,6 +685,8 @@ const AppSearchcommonLayoutRouteRouteWithChildren =
   )
 
 interface AppRouteRouteChildren {
+  AppBookAppointmentRouteRoute: typeof AppBookAppointmentRouteRouteWithChildren
+  AppBookOfflineRouteRoute: typeof AppBookOfflineRouteRouteWithChildren
   AppHomeRouteRoute: typeof AppHomeRouteRouteWithChildren
   AppIndexRoute: typeof AppIndexRoute
   AppDoctorcommonLayoutRouteRoute: typeof AppDoctorcommonLayoutRouteRouteWithChildren
@@ -601,6 +700,8 @@ interface AppRouteRouteChildren {
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppBookAppointmentRouteRoute: AppBookAppointmentRouteRouteWithChildren,
+  AppBookOfflineRouteRoute: AppBookOfflineRouteRouteWithChildren,
   AppHomeRouteRoute: AppHomeRouteRouteWithChildren,
   AppIndexRoute: AppIndexRoute,
   AppDoctorcommonLayoutRouteRoute: AppDoctorcommonLayoutRouteRouteWithChildren,

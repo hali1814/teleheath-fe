@@ -30,11 +30,7 @@ export default function CountryTab({ tabs, defaultValue }: CountryTabProps) {
   if (tabs.length === 0) return null
 
   return (
-    <Tabs
-      value={activeValue}
-      onValueChange={setActiveValue}
-      className="w-full h-[45px]!"
-    >
+    <Tabs value={activeValue} onValueChange={setActiveValue} className="w-full">
       <TabsList className="w-full h-[45px]! p-[4px] flex items-center justify-center rounded-[30px] gap-[10px] bg-secondary/5">
         {tabs.map((tab) => (
           <TabsTrigger

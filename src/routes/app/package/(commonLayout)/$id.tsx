@@ -1,6 +1,5 @@
+import { PackageInformation, BranchPopUp } from '#/sections/package'
 import Image from '#/components/image'
-import BranchPopUp from '#/sections/package/BranchPopUp'
-import PackageInformation from '#/sections/package/PackageInformation'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/app/package/(commonLayout)/$id')({

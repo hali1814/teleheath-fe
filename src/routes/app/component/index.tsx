@@ -11,6 +11,7 @@ import BottomNavigation from '#/components/BottomNavigation'
 import Header from '#/sections/home/Header'
 import Avatar from '#/sections/profile/Avatar'
 import CardNavigate from '#/sections/common/CardNavigate'
+import NotificationCard from '#/sections/notification/NotificationCard'
 
 export const Route = createFileRoute('/app/component/')({
   component: RouteComponent,
@@ -63,6 +64,7 @@ function RouteComponent() {
       />
       <BottomNavigation />
       <Avatar initials="SC" onCameraClick={() => {}} />
+      <NotificationCard />
       <CardNavigate title="Language" icon="language" onClick={() => {}} />
     </div>
   )

@@ -38,6 +38,7 @@ import MoneyIcon from '#/assets/icons/common/money.svg?react'
 import GraduateCapIcon from '#/assets/icons/common/graduate-cap.svg?react'
 import SealCheckIcon from '#/assets/icons/common/seal-check.svg?react'
 import LicenseIcon from '#/assets/icons/common/license.svg?react'
+import ArrowRightIcon from '#/assets/icons/common/arrow_right.svg?react'
 import type { SVGProps, FC } from 'react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
@@ -83,6 +84,7 @@ const ICONS_TEMPLATE = {
   graduate_cap: GraduateCapIcon,
   seal_check: SealCheckIcon,
   license: LicenseIcon,
+  arrow_right: ArrowRightIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

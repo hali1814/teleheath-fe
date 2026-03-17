@@ -1,2 +1,5 @@
 export { default as PackageCard } from './PackageCard'
 export { default as PackageList } from './PackageList'
+export { default as PackageInformation } from './PackageInformation'
+export { default as ModalFilterPackage } from './ModalFilterPackage'
+export { default as BranchPopUp } from './BranchPopUp'
