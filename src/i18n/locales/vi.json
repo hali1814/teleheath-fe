@@ -52,6 +52,7 @@
     "title": "Xem trước Profile",
     "description": "Đây là namespace mẫu cho profile để bạn test translation theo từng page nhanh hơn.",
     "editProfile": "Chỉnh sửa hồ sơ",
+    "patientInformation": "Thông tin bệnh nhân",
     "personalInformation": "Thông tin cá nhân",
     "dateOfBirth": "Ngày sinh",
     "gender": "Giới tính",
@@ -72,6 +73,15 @@
     "precinct": "Phường/Xã",
     "street": "Số nhà, tên đường, khu phố",
     "save": "Lưu",
-    "relationship": "Mối quan hệ"
+    "relationship": "Mối quan hệ",
+    "emptyMedicalProfilesTitle": "Chưa có hồ sơ bệnh nhân",
+    "emptyMedicalProfilesDescription": "Thêm hồ sơ của bạn hoặc người thân để bắt đầu đặt lịch hẹn và quản lý hồ sơ y tế dễ dàng.",
+    "emptyMedicalProfilesManageFamilyTitle": "Quản lý gia đình",
+    "emptyMedicalProfilesManageFamilySubtitle": "Lưu trữ hồ sơ của mọi người ở một nơi",
+    "emptyMedicalProfilesFasterBookingTitle": "Đặt lịch nhanh hơn",
+    "emptyMedicalProfilesFasterBookingSubtitle": "Dùng hồ sơ đã lưu để đặt lịch chỉ 1 lần chạm",
+    "emptyMedicalProfilesAddNewProfile": "Thêm hồ sơ mới",
+    "viewDetails": "Xem chi tiết",
+    "edit": "Chỉnh sửa"
   }
 }

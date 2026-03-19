@@ -52,6 +52,7 @@
     "title": "មើល Profile សាកល្បង",
     "description": "នេះជាឧទាហរណ៍ namespace សម្រាប់ profile ដើម្បីឱ្យអ្នកអាចសាក translation តាម page បានលឿន។",
     "editProfile": "កែសម្រួលប្រវត្តិរូប",
+    "patientInformation": "ព័ត៌មានអ្នកជំងឺ",
     "personalInformation": "ព័ត៌មានផ្ទាល់ខ្លួន",
     "dateOfBirth": "ថ្ងៃកំណើត",
     "gender": "ភេទ",
@@ -72,6 +73,15 @@
     "precinct": "ឃុំ/សង្កាត់",
     "street": "ផ្លូវ, លេខផ្ទះ, ភូមិ",
     "save": "រក្សាទុក",
-    "relationship": "ទំនាក់ទំនង"
+    "relationship": "ទំនាក់ទំនង",
+    "emptyMedicalProfilesTitle": "មិនទាន់មានប្រវត្តិអ្នកជំងឺ",
+    "emptyMedicalProfilesDescription": "បន្ថែមប្រវត្តិរូបរបស់អ្នក ឬសមាជិកគ្រួសារ ដើម្បីចាប់ផ្តើមកក់ការណាត់ជួប និងគ្រប់គ្រងកំណត់ត្រាវេជ្ជសាស្ត្រងាយស្រួល។",
+    "emptyMedicalProfilesManageFamilyTitle": "គ្រប់គ្រងគ្រួសារ",
+    "emptyMedicalProfilesManageFamilySubtitle": "រក្សាទុកកំណត់ត្រារបស់មនុស្សគ្រប់គ្នានៅកន្លែងតែមួយ",
+    "emptyMedicalProfilesFasterBookingTitle": "កក់លឿនជាងមុន",
+    "emptyMedicalProfilesFasterBookingSubtitle": "ប្រើប្រវត្តិរូបដែលបានរក្សាទុកសម្រាប់ការកក់ 1 ចុច",
+    "emptyMedicalProfilesAddNewProfile": "បន្ថែមប្រវត្តិរូបថ្មី",
+    "viewDetails": "មើលព័ត៌មានលម្អិត",
+    "edit": "កែសម្រួល"
   }
 }

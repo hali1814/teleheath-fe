@@ -77,7 +77,7 @@ function RouteComponent() {
           <CardNavigate
             title={t('medicalProfiles')}
             icon="clipboard"
-            onClick={() => {}}
+            onClick={() => navigate({ to: '/app/profile/medical-profiles' })}
           />
 
           <CardNavigate

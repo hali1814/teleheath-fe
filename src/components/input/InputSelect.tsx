@@ -53,7 +53,11 @@ export default function InputSelect({
         <SelectContent position="popper" className="rounded-[8px]">
           <SelectGroup>
             {options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
+              <SelectItem
+                key={option.value}
+                value={option.value}
+                className="text-base"
+              >
                 {option.label}
               </SelectItem>
             ))}

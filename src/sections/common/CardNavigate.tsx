@@ -9,6 +9,7 @@ interface CardNavigateProps {
   icon: IconName
   onClick?: () => void
   className?: string
+  hideArrow?: boolean
 }
 
 export default function CardNavigate({
@@ -17,6 +18,7 @@ export default function CardNavigate({
   icon,
   onClick,
   className,
+  hideArrow = false,
 }: CardNavigateProps) {
   return (
     <Card
@@ -49,10 +51,12 @@ export default function CardNavigate({
           </div>
         </div>
 
-        <Icon
-          name="arrow_left"
-          className="size-4 rotate-180 text-text-tertiary"
-        />
+        {!hideArrow ? (
+          <Icon
+            name="arrow_left"
+            className="size-4 rotate-180 text-text-tertiary"
+          />
+        ) : null}
       </div>
     </Card>
   )

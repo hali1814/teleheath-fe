@@ -52,6 +52,7 @@
     "title": "Profile Preview",
     "description": "This is a sample profile namespace so you can test page-level translations quickly.",
     "editProfile": "Edit Profile",
+    "patientInformation": "Patient Information",
     "personalInformation": "Personal Information",
     "dateOfBirth": "Date of Birth",
     "gender": "Gender",
@@ -72,7 +73,16 @@
     "precinct": "Precinct",
     "street": "Street block, Street name, Home No.",
     "save": "Save",
-    "relationship": "Relationship"
+    "relationship": "Relationship",
+    "emptyMedicalProfilesTitle": "No Patient Profiles Yet",
+    "emptyMedicalProfilesDescription": "Add your profile or a family member to start booking appointments and managing medical records easily.",
+    "emptyMedicalProfilesManageFamilyTitle": "Manage your family",
+    "emptyMedicalProfilesManageFamilySubtitle": "Keep everyone's records in one place",
+    "emptyMedicalProfilesFasterBookingTitle": "Faster Booking",
+    "emptyMedicalProfilesFasterBookingSubtitle": "Use saved profiles for 1-click booking",
+    "emptyMedicalProfilesAddNewProfile": "Add New Profile",
+    "viewDetails": "View Details",
+    "edit": "Edit"
   },
   "haohoa": {
     "title": "Haohoa"

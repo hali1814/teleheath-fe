@@ -46,7 +46,16 @@ import UploadCameraIcon from '#/assets/icons/profile/upload-camera.svg?react'
 import CalendarProfileIcon from '#/assets/icons/profile/calendar.svg?react'
 //common - dropdown
 import DropdownIcon from '#/assets/icons/common/dropdown.svg?react'
-
+//profile-search
+import ProfileSearchIcon from '#/assets/icons/profile/search.svg?react'
+// family
+import FamilyIcon from '#/assets/icons/profile/family.svg?react'
+//express
+import ExpressIcon from '#/assets/icons/profile/express.svg?react'
+//medical-profile-search
+import MedicalProfileSearchIcon from '#/assets/icons/profile/medical-profile-search.svg?react'
+//add-profile
+import AddProfileIcon from '#/assets/icons/profile/add-profile.svg?react'
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
 const ICONS_TEMPLATE = {
@@ -94,6 +103,11 @@ const ICONS_TEMPLATE = {
   upload_camera: UploadCameraIcon,
   calendar_profile: CalendarProfileIcon,
   dropdown: DropdownIcon,
+  profile_search: ProfileSearchIcon,
+  family: FamilyIcon,
+  express: ExpressIcon,
+  medical_profile_search: MedicalProfileSearchIcon,
+  add_profile: AddProfileIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

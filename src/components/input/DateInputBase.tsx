@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react'
 
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
-import { Button } from '#/components/ui/button'
 import { Calendar } from '#/components/ui/calendar'
 import {
   Dialog,
@@ -70,10 +69,21 @@ export default function DateInputBase({
         </Text>
       ) : null}
 
-      <button
-        type="button"
-        disabled={disabled}
-        onClick={() => setOpen(true)}
+      <div
+        role="button"
+        aria-disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
+        onClick={() => {
+          if (disabled) return
+          setOpen(true)
+        }}
+        onKeyDown={(e) => {
+          if (disabled) return
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setOpen(true)
+          }
+        }}
         className="w-full"
       >
         <InputGroup className="h-[45px] bg-white border-dust-red-1 border">
@@ -83,22 +93,16 @@ export default function DateInputBase({
             readOnly
             value={displayValue}
             placeholder={placeholder}
-            className="h-[45px]"
+            className="h-[45px] text-base"
           />
           <InputGroupAddon align="inline-end" className="cursor-pointer">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              className="shadow-none"
-              aria-label="Open calendar"
-              tabIndex={-1}
-            >
-              <Icon name="calendar_profile" />
-            </Button>
+            <Icon
+              name="calendar_profile"
+              className="size-5 text-text-secondary"
+            />
           </InputGroupAddon>
         </InputGroup>
-      </button>
+      </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent

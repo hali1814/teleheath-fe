@@ -17,7 +17,7 @@ export default function TextInputBase({
       )}
       <Input
         {...props}
-        className=" bg-white border-dust-red-1 border h-[45px]"
+        className=" bg-white border-dust-red-1 border h-[45px] text-base"
       />
     </div>
   )
