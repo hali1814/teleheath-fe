@@ -1,6 +1,6 @@
 import CountryTab from '#/components/CountryTab'
 import MenuItem from '#/components/MenuItem'
-import PremiumService from '#/components/PremiumService'
+// import PremiumService from '#/components/PremiumService'
 import { createFileRoute } from '@tanstack/react-router'
 import { hospitals, packages, doctors } from '#/mockData'
 import SearchBar from '#/components/SearchBar'
@@ -24,7 +24,7 @@ function RouteComponent() {
       <Header isHome />
       <MenuItem icon="call_doctor" title="Call Doctor" variant="outline" />
       <SearchBar />
-      <PremiumService />
+      {/* <PremiumService /> */}
       <CountryTab
         tabs={[
           {
