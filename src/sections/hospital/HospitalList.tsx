@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { HospitalCard } from '#/sections/hospital'
 import Text from '#/components/text'
+import { useTranslation } from 'react-i18next'
 
 interface Hospital {
   id: string
@@ -18,6 +19,8 @@ export default function HospitalList({
   href: string
   hospitals: Hospital[]
 }) {
+  const { t } = useTranslation(['common'])
+
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -26,7 +29,7 @@ export default function HospitalList({
         </Text>
         <Link to={href}>
           <Text size="sm_12" className="text-dust-red-8">
-            View all
+            {t('actions.viewAll')}
           </Text>
         </Link>
       </div>

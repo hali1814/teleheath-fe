@@ -3,7 +3,13 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import { Avatar, AvatarImage } from '#/components/ui/avatar'
 
-export default function HospitalDetailHeader() {
+export default function HospitalDetailHeader({
+  name,
+  website,
+}: {
+  name: string
+  website: string
+}) {
   return (
     <div className="relative w-full mb-[55px]">
       <Image
@@ -18,12 +24,12 @@ export default function HospitalDetailHeader() {
           </Avatar>
           <div className="flex flex-col gap-[12px]">
             <Text size="2xl_20" className="font-semibold leading-normal">
-              Tam Anh Hospital
+              {name}
             </Text>
             <div className="flex items-center gap-[6px]">
               <Icon name="plump_web" className="w-[16px] h-[16px]" />
               <Text className="text-muted-foreground leading-normal font-normal">
-                tamanhhospital.vn
+                {website}
               </Text>
             </div>
           </div>

@@ -4,23 +4,25 @@ import type { IconName } from './icon'
 import Text from './text'
 
 interface MenuItemProps {
+  className?: string
   icon: IconName
   title: string
-  variant?: 'default' | 'outline'
+  variant?: 'solid' | 'outline'
   iconColor?: string
   backgroundColor?: string
   borderColor?: string
 }
 
 export default function MenuItem({
+  className,
   icon,
   title,
-  variant = 'default',
+  variant = 'solid',
   iconColor,
   backgroundColor,
   borderColor,
 }: MenuItemProps) {
-  const defaultBgClass = variant === 'default' ? 'bg-primary' : ''
+  const defaultBgClass = variant === 'solid' ? 'bg-primary' : ''
   const defaultBorderClass =
     variant === 'outline'
       ? 'border-[1.25px] border-[#F6D6D6] shadow-[0px_1px_6px_rgba(0,0,0,0.12)]'
@@ -31,9 +33,14 @@ export default function MenuItem({
 
   const primaryColor = '#E22A36'
   const resolvedIconColor =
-    iconColor ?? (variant === 'default' ? 'white' : primaryColor)
+    iconColor ?? (variant === 'solid' ? 'white' : primaryColor)
   return (
-    <div className="flex flex-col items-center justify-center gap-[8px]">
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center gap-[8px]',
+        className,
+      )}
+    >
       <div
         className={cn(
           'w-[56px] h-[56px] rounded-[16px] flex items-center justify-center',

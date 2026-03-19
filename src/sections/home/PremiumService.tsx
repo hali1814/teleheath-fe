@@ -1,15 +1,21 @@
-import { Icon } from './icon'
-import Text from './text'
-import { Badge } from './ui/badge'
-import { Button } from './ui/button'
-
-const benefits = [
-  'Book Appointments',
-  'Door-to-Door Transport',
-  'Support Staff',
-]
+import { Icon, type IconName } from '#/components/icon'
+import Text from '#/components/text'
+import { Badge } from '#/components/ui/badge'
+import { Button } from '#/components/ui/button'
+import { cn } from '#/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 export default function PremiumService() {
+  const { t } = useTranslation(['home'])
+
+  const benefits = [
+    t('premiumService.benefits.bookAppointments'),
+    t('premiumService.benefits.doorToDoorTransport'),
+    t('premiumService.benefits.supportStaff'),
+  ]
+
+  const benefitIcons = ['calendar', 'car_check', 'supporter']
+
   return (
     <div className="p-[20px] relative rounded-[16px] w-full bg-linear-to-r from-[#E1444E] to-[#F9B8A8]">
       <div className="relative flex flex-col justify-between gap-3">
@@ -27,7 +33,7 @@ export default function PremiumService() {
             size="xs_10"
             className="font-semibold tracking-[0.48px] leading-none text-white uppercase"
           >
-            Premium Service
+            {t('premiumService.tag')}
           </Text>
         </Badge>
 
@@ -36,7 +42,7 @@ export default function PremiumService() {
             size="2xl_20"
             className="font-semibold leading-normal text-white"
           >
-            Complete Care Journey
+            {t('premiumService.title')}
           </Text>
         </div>
 
@@ -62,32 +68,28 @@ export default function PremiumService() {
               size="sm_12"
               className="font-semibold leading-none text-[#F5222D] uppercase"
             >
-              BOOK NOW!
+              {t('premiumService.bookNow')}
             </Text>
           </Button>
 
           <div className="flex items-center">
-            <span className="w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center">
-              <Icon
-                name="calendar"
-                color="white"
-                className="w-[10px] h-[10px]"
-              />
-            </span>
-            <span className="w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center -ml-2 z-20">
-              <Icon
-                name="car_check"
-                color="white"
-                className="w-[10px] h-[10px]"
-              />
-            </span>
-            <span className="w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center -ml-2 z-20">
-              <Icon
-                name="supporter"
-                color="white"
-                className="w-[10px] h-[10px]"
-              />
-            </span>
+            {benefitIcons.map((icon, index) => (
+              <span
+                key={icon}
+                className={cn(
+                  'w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center',
+                  {
+                    '-ml-2': index > 0,
+                  },
+                )}
+              >
+                <Icon
+                  name={icon as IconName}
+                  color="white"
+                  className="w-[10px] h-[10px]"
+                />
+              </span>
+            ))}
           </div>
         </div>
       </div>

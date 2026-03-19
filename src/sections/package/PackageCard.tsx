@@ -5,6 +5,8 @@ import { formatPrice } from '#/utils/price.util'
 import Text from '#/components/text'
 import { Icon } from '#/components/icon'
 import Image from '#/components/image'
+import { useTranslation } from 'react-i18next'
+import { Link } from '@tanstack/react-router'
 
 export default function PackageCard({
   className,
@@ -19,8 +21,12 @@ export default function PackageCard({
   price: number
   thumbnail: string
 }) {
+  const { t } = useTranslation(['common'])
+
   return (
-    <div
+    <Link
+      to="/app/package/$id"
+      params={{ id: '1' }}
       className={cn(
         className,
         'w-full flex items-center gap-4 rounded-[12px] p-[16px] bg-white',
@@ -50,10 +56,10 @@ export default function PackageCard({
             className="w-[16px] h-[16px]"
           />
           <Text size="sm_12" className="font-medium leading-[1.3] text-primary">
-            Book Appointment
+            {t('actions.bookAppointment')}
           </Text>
         </Button>
       </div>
-    </div>
+    </Link>
   )
 }

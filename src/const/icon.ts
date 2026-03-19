@@ -56,6 +56,9 @@ import ExpressIcon from '#/assets/icons/profile/express.svg?react'
 import MedicalProfileSearchIcon from '#/assets/icons/profile/medical-profile-search.svg?react'
 //add-profile
 import AddProfileIcon from '#/assets/icons/profile/add-profile.svg?react'
+import ChatAiIcon from '#/assets/icons/common/chat-ai.svg?react'
+import CheckCircleOutlineIcon from '#/assets/icons/common/check-circle-outline.svg?react'
+
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
 const ICONS_TEMPLATE = {
@@ -108,6 +111,8 @@ const ICONS_TEMPLATE = {
   express: ExpressIcon,
   medical_profile_search: MedicalProfileSearchIcon,
   add_profile: AddProfileIcon,
+  chat_ai: ChatAiIcon,
+  check_circle_outline: CheckCircleOutlineIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE
