@@ -46,6 +46,8 @@ import UploadCameraIcon from '#/assets/icons/profile/upload-camera.svg?react'
 import CalendarProfileIcon from '#/assets/icons/profile/calendar.svg?react'
 //common - dropdown
 import DropdownIcon from '#/assets/icons/common/dropdown.svg?react'
+import ChatAiIcon from '#/assets/icons/common/chat-ai.svg?react'
+import CheckCircleOutlineIcon from '#/assets/icons/common/check-circle-outline.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -94,6 +96,8 @@ const ICONS_TEMPLATE = {
   upload_camera: UploadCameraIcon,
   calendar_profile: CalendarProfileIcon,
   dropdown: DropdownIcon,
+  chat_ai: ChatAiIcon,
+  check_circle_outline: CheckCircleOutlineIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

@@ -1,9 +1,11 @@
 import { cn } from '#/lib/utils'
 import { Icon } from '#/components/icon'
 import LocationBadge from '#/components/LocationBadge'
-import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
+import { Avatar, AvatarImage } from '#/components/ui/avatar'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
+import { useTranslation } from 'react-i18next'
+import { Link } from '@tanstack/react-router'
 
 export default function DoctorCard({
   className,
@@ -22,9 +24,12 @@ export default function DoctorCard({
   experience?: string
   variant?: 'vertical' | 'horizontal'
 }) {
+  const { t } = useTranslation(['common'])
   if (variant === 'horizontal') {
     return (
-      <div
+      <Link
+        to="/app/doctor/$id"
+        params={{ id: '1' }}
         className={cn(
           'w-full flex flex-row items-center gap-[16px] shrink-0 rounded-[12px] border-none bg-white p-[16px]',
           className,
@@ -68,16 +73,18 @@ export default function DoctorCard({
               size="sm_12"
               className="font-medium leading-[1.3] text-primary"
             >
-              Book Appointment
+              {t('actions.bookAppointment')}
             </Text>
           </Button>
         </div>
-      </div>
+      </Link>
     )
   }
 
   return (
-    <div
+    <Link
+      to="/app/doctor/$id"
+      params={{ id: '1' }}
       className={cn(
         'w-full flex flex-col items-center gap-[16px] shrink-0 rounded-[12px] border-none bg-white p-[16px]',
         className,
@@ -111,10 +118,10 @@ export default function DoctorCard({
             className="w-[16px] h-[16px]"
           />
           <Text size="sm_12" className="font-medium leading-[1.3] text-primary">
-            Book Appointment
+            {t('actions.bookAppointment')}
           </Text>
         </Button>
       </div>
-    </div>
+    </Link>
   )
 }

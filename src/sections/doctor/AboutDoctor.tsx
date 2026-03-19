@@ -2,14 +2,15 @@ import Text from '#/components/text'
 import { cn } from '#/lib/utils'
 import { useState } from 'react'
 import ExpandViewButton from '../common/ExpandViewButton'
+import { useTranslation } from 'react-i18next'
 
-export default function AboutDoctor() {
+export default function AboutDoctor({ about }: { about: string }) {
   const [expanded, setExpanded] = useState(false)
-
+  const { t } = useTranslation(['doctor', 'common'])
   return (
     <div className="flex flex-col gap-[16px] py-[12px]">
       <Text size="lg_16" className="font-semibold leading-[1.2]">
-        About
+        {t('about')}
       </Text>
       <div className="relative">
         <Text
@@ -18,11 +19,7 @@ export default function AboutDoctor() {
             expanded ? '' : 'line-clamp-6',
           )}
         >
-          Dr. Nguyen Duc Anh is a highly dedicated specialist in Obstetrics and
-          Gynecology, with extensive experience in providing comprehensive
-          healthcare for women. Known for his clinical expertise and empathetic
-          approach, he specializes in managing high-risk pregnancies,
-          gynecological disorders, and minimally invasive surgeries.
+          {about}
         </Text>
         {!expanded && (
           <div className="flex justify-center absolute -bottom-1 left-0 right-0 h-[32px] bg-[linear-gradient(180deg,#FFFFFF00_0%,#FBFAFA_52.7%,#FAF9F9_88%,#F8F6F6_100%)]">

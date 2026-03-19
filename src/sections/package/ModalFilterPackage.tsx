@@ -8,6 +8,7 @@ import Text from '#/components/text'
 import { Icon } from '#/components/icon'
 import InputSelect from '#/components/input/InputSelect'
 import { Button } from '#/components/ui/button'
+import { useTranslation } from 'react-i18next'
 
 export default function ModalFilterPackage({
   open,
@@ -16,6 +17,7 @@ export default function ModalFilterPackage({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
+  const { t } = useTranslation(['package', 'common'])
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -29,7 +31,7 @@ export default function ModalFilterPackage({
               <DialogTitle></DialogTitle>
             </div>
             <Text size="lg_16" className="font-semibold leading-[1.2]">
-              Filter
+              {t('filter.title')}
             </Text>
             <Icon
               name="close"
@@ -41,9 +43,9 @@ export default function ModalFilterPackage({
         </DialogHeader>
         <div className="flex flex-col gap-[12px]">
           <div className="flex flex-col gap-[8px]">
-            <Text>Country</Text>
+            <Text>{t('filter.country')}</Text>
             <InputSelect
-              placeholder="Country"
+              placeholder={t('filter.country')}
               options={[
                 { label: 'Vietnam', value: 'vietnam' },
                 { label: 'Cambodia', value: 'cambodia' },
@@ -51,9 +53,9 @@ export default function ModalFilterPackage({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Hospital</Text>
+            <Text>{t('filter.hospital')}</Text>
             <InputSelect
-              placeholder="Hospital"
+              placeholder={t('filter.hospital')}
               options={[
                 { label: 'Hospital 1', value: 'hospital-1' },
                 { label: 'Hospital 2', value: 'hospital-2' },
@@ -61,9 +63,9 @@ export default function ModalFilterPackage({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Price Range</Text>
+            <Text>{t('filter.priceRange')}</Text>
             <InputSelect
-              placeholder="Price Range"
+              placeholder={t('filter.priceRange')}
               options={[
                 { label: 'Under 100$', value: '0-100' },
                 { label: '100 - 300$', value: '100-300' },
@@ -76,11 +78,13 @@ export default function ModalFilterPackage({
         <div className="flex justify-between items-center gap-[8px] pt-[10px]">
           <Button variant="ghost" className="p-0">
             <Text className="text-[#A8071A] leading-normal font-medium">
-              Clear all filters
+              {t('common:actions.clearAllFilters')}
             </Text>
           </Button>
           <Button className="h-[45px] px-[32px] py-[12px] rounded-[40px]">
-            <Text className="leading-normal font-medium text-white">Apply</Text>
+            <Text className="leading-normal font-medium text-white">
+              {t('common:actions.apply')}
+            </Text>
           </Button>
         </div>
       </DialogContent>

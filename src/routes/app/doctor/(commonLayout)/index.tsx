@@ -5,6 +5,7 @@ import { doctors } from '#/mockData'
 import { DoctorCard, ModalFilterDoctor } from '#/sections/doctor'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/app/doctor/(commonLayout)/')({
   component: RouteComponent,
@@ -12,11 +13,12 @@ export const Route = createFileRoute('/app/doctor/(commonLayout)/')({
 
 function RouteComponent() {
   const [open, setOpen] = useState(false)
+  const { t } = useTranslation(['doctor', 'common'])
   return (
     <>
       <div className="flex flex-col gap-[16px] p-[16px]">
         <div className="flex items-center gap-[10px]">
-          <SearchBar placeholder="Search for doctors" />
+          <SearchBar placeholder={t('searchPlaceholder')} />
           <div className="relative" onClick={() => setOpen(true)}>
             <Icon name="filter" className="text-icon" />
             <Badge className="w-[16px] h-[16px] rounded-full absolute -top-2 -right-2 p-0">

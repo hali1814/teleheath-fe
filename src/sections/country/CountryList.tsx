@@ -2,8 +2,11 @@ import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 export default function CountryList() {
+  const { t } = useTranslation(['common'])
+
   const CountryItem = ({
     label,
     isActive,
@@ -30,9 +33,9 @@ export default function CountryList() {
 
   return (
     <div className="flex items-center gap-[8px]">
-      <CountryItem label="All" isActive={true} />
-      <CountryItem label="Vietnam" isActive={false} />
-      <CountryItem label="Cambodia" isActive={false} />
+      <CountryItem label={t('common:countries.all')} isActive={true} />
+      <CountryItem label={t('common:countries.vietnam')} isActive={false} />
+      <CountryItem label={t('common:countries.cambodia')} isActive={false} />
     </div>
   )
 }

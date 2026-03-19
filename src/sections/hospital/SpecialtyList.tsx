@@ -4,6 +4,7 @@ import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
 import { useState } from 'react'
 import ExpandViewButton from '../common/ExpandViewButton'
+import { useTranslation } from 'react-i18next'
 
 const SpecialtyItem = ({ name, icon }: { name: string; icon: IconName }) => {
   return (
@@ -16,27 +17,30 @@ const SpecialtyItem = ({ name, icon }: { name: string; icon: IconName }) => {
   )
 }
 
-export default function SpecialtyList() {
+export default function SpecialtyList({
+  specialties,
+}: {
+  specialties: string[]
+}) {
   const [expanded, setExpanded] = useState(false)
+  const { t } = useTranslation(['hospital', 'common'])
+
   return (
     <div className="flex flex-col gap-[16px] py-[12px]">
       <Text size="lg_16" className="font-semibold leading-[1.2]">
-        Specialties
+        {t('specialties')}
       </Text>
       <div className="relative">
         <div
           className={cn(
             'flex flex-wrap gap-[16px] overflow-hidden',
-            expanded ? '' : 'h-[170px]',
+            expanded ? '' : 'max-h-[170px]',
           )}
         >
-          {Array.from({ length: 10 }).map((_, index) => (
-            <SpecialtyItem
-              key={index}
-              name={`Specialty ${index + 1}`}
-              icon="appointment"
-            />
-          ))}
+          {specialties.length > 0 &&
+            specialties.map((specialty, index) => (
+              <SpecialtyItem key={index} name={specialty} icon="appointment" />
+            ))}
         </div>
         {!expanded && (
           <div className="flex justify-center absolute -bottom-1 left-0 right-0 h-[32px] bg-[linear-gradient(180deg,#FFFFFF00_0%,#FBFAFA_52.7%,#FAF9F9_88%,#F8F6F6_100%)]">

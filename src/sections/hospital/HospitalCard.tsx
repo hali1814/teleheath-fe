@@ -5,6 +5,8 @@ import LocationBadge from '#/components/LocationBadge'
 import { Button } from '#/components/ui/button'
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
+import { useTranslation } from 'react-i18next'
+import { Link } from '@tanstack/react-router'
 
 export default function HospitalCard({
   className,
@@ -23,14 +25,18 @@ export default function HospitalCard({
   variantButton?: 'outline' | 'solid'
   showBadge?: boolean
 }) {
+  const { t } = useTranslation(['common'])
   const imgHeight = size === 'sm' ? 'h-[96px]' : 'h-[180px]'
   const textSize = size === 'sm' ? 'sm_12' : 'lg_16'
   const gap = size === 'sm' ? 'gap-[8px]' : 'gap-[10px]'
   const bgColor = variantButton === 'solid' ? 'bg-primary' : 'bg-dust-red-1'
   const textColor = variantButton === 'solid' ? 'text-white' : 'text-primary'
   const iconColor = variantButton === 'solid' ? 'white' : 'var(--primary)'
+
   return (
-    <div
+    <Link
+      to="/app/hospital/$id"
+      params={{ id: '1' }}
       className={cn(
         'w-full flex flex-col shrink-0 rounded-[12px] border-none bg-white',
         className,
@@ -69,10 +75,10 @@ export default function HospitalCard({
             size="sm_12"
             className={cn('font-medium leading-[1.3]', textColor)}
           >
-            Book Appointment
+            {t('actions.bookAppointment')}
           </Text>
         </Button>
       </div>
-    </div>
+    </Link>
   )
 }

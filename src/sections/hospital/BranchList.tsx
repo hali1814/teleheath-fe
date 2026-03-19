@@ -3,18 +3,23 @@ import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-const BranchCard = ({
-  name,
-  address,
-  phone,
-  email,
-}: {
+interface Branch {
   name: string
   address: string
   phone: string
   email: string
-}) => {
+  working_hours: {
+    mon_sat: string
+    sun: string
+    emergency: string
+  }
+}
+
+const BranchCard = ({ name, address, phone, email, working_hours }: Branch) => {
+  const { t } = useTranslation(['hospital', 'common'])
+
   return (
     <div className="flex flex-col gap-[16px] px-[16px] py-[20px] rounded-[12px] bg-white">
       <div className="flex items-center justify-between">
@@ -28,7 +33,7 @@ const BranchCard = ({
             size="sm_12"
             className="font-medium leading-[1.3] text-dust-red-8"
           >
-            Map
+            {t('operatingHours.map')}
           </Text>
         </div>
       </div>
@@ -56,7 +61,7 @@ const BranchCard = ({
       <div className="flex items-center gap-[8px]">
         <Icon
           name="map_marker_outline"
-          className="w-[24px] h-[16px] text-dust-red-8"
+          className="w-[16px] h-[16px] text-dust-red-8"
         />
         <Text
           size="sm_12"
@@ -71,17 +76,19 @@ const BranchCard = ({
             name="clock_outline"
             className="w-[16px] h-[16px] text-dust-red-8"
           />
-          <Text className="font-medium leading-normal">Operating Hours</Text>
+          <Text className="font-medium leading-normal">
+            {t('operatingHours.title')}
+          </Text>
         </div>
         <div className="flex justify-between items-center">
           <Text
             size="sm_12"
             className="font-normal leading-[1.3] text-muted-foreground"
           >
-            Monday - Friday
+            {t('operatingHours.mon_sat')}
           </Text>
           <Text size="sm_12" className="font-medium leading-[1.3]">
-            8:00 - 17:00
+            {working_hours.mon_sat}
           </Text>
         </div>
         <div className="flex justify-between items-center">
@@ -89,13 +96,13 @@ const BranchCard = ({
             size="sm_12"
             className="font-normal leading-[1.3] text-muted-foreground"
           >
-            Sun
+            {t('operatingHours.sun')}
           </Text>
           <Text
             size="sm_12"
             className="font-medium leading-[1.3] uppercase text-dust-red-8"
           >
-            Closed
+            {working_hours.sun}
           </Text>
         </div>
         <div className="flex justify-between items-center">
@@ -103,10 +110,10 @@ const BranchCard = ({
             size="sm_12"
             className="font-normal leading-[1.3] text-muted-foreground"
           >
-            Emergency
+            {t('operatingHours.emergency')}
           </Text>
           <Text size="sm_12" className="font-medium leading-[1.3]">
-            24/7
+            {working_hours.emergency}
           </Text>
         </div>
       </div>
@@ -116,23 +123,25 @@ const BranchCard = ({
 
 const LIMIT_BRANCH = 3
 
-export default function BranchList() {
+export default function BranchList({ branches }: { branches: Branch[] }) {
   const [expanded, setExpanded] = useState(false)
-  const limitBranch = expanded ? 6 : LIMIT_BRANCH
+  const limitBranch = expanded ? branches.length : LIMIT_BRANCH
+  const { t } = useTranslation(['hospital', 'common'])
 
   return (
     <div className="flex flex-col gap-[16px] py-[12px]">
       <Text size="lg_16" className="font-semibold leading-[1.2]">
-        Our Branches
+        {t('ourBranches')}
       </Text>
       <div className="flex flex-col gap-[16px]">
-        {Array.from({ length: limitBranch }).map((_, index) => (
+        {branches.slice(0, limitBranch).map((branch, index) => (
           <BranchCard
             key={index}
-            name={`Tam Anh Hospital, Ho Chi Minh City`}
-            address={`2B Pho Quang Street, Ward 2, Tan Binh District, Ho Chi Minh City, Vietnam`}
-            phone={`0287 102 6789 - 093 180 6858`}
-            email={`cskh@tahospital.vn`}
+            name={branch.name}
+            address={branch.address}
+            phone={branch.phone}
+            email={branch.email}
+            working_hours={branch.working_hours}
           />
         ))}
         {!expanded && (
@@ -150,7 +159,7 @@ export default function BranchList() {
           className="w-[20px] h-[20px]"
         />
         <Text className="font-medium leading-normal text-white">
-          Book Appointment
+          {t('common:actions.bookAppointment')}
         </Text>
       </Button>
     </div>

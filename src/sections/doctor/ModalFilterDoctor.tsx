@@ -8,6 +8,7 @@ import Text from '#/components/text'
 import { Icon } from '#/components/icon'
 import InputSelect from '#/components/input/InputSelect'
 import { Button } from '#/components/ui/button'
+import { useTranslation } from 'react-i18next'
 
 export default function ModalFilterDoctor({
   open,
@@ -16,6 +17,7 @@ export default function ModalFilterDoctor({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
+  const { t } = useTranslation(['doctor', 'common'])
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -29,7 +31,7 @@ export default function ModalFilterDoctor({
               <DialogTitle></DialogTitle>
             </div>
             <Text size="lg_16" className="font-semibold leading-[1.2]">
-              Filter
+              {t('filter.title')}
             </Text>
             <Icon
               name="close"
@@ -41,9 +43,9 @@ export default function ModalFilterDoctor({
         </DialogHeader>
         <div className="flex flex-col gap-[12px]">
           <div className="flex flex-col gap-[8px]">
-            <Text>Country</Text>
+            <Text>{t('filter.country')}</Text>
             <InputSelect
-              placeholder="Country"
+              placeholder={t('filter.country')}
               options={[
                 { label: 'Vietnam', value: 'vietnam' },
                 { label: 'Cambodia', value: 'cambodia' },
@@ -51,9 +53,9 @@ export default function ModalFilterDoctor({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Specialty</Text>
+            <Text>{t('filter.specialty')}</Text>
             <InputSelect
-              placeholder="Specialty"
+              placeholder={t('filter.specialty')}
               options={[
                 { label: 'Specialty 1', value: 'specialty-1' },
                 { label: 'Specialty 2', value: 'specialty-2' },
@@ -61,9 +63,9 @@ export default function ModalFilterDoctor({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Gender</Text>
+            <Text>{t('filter.gender')}</Text>
             <InputSelect
-              placeholder="Gender"
+              placeholder={t('filter.gender')}
               options={[
                 { label: 'Male', value: 'male' },
                 { label: 'Female', value: 'female' },
@@ -71,9 +73,9 @@ export default function ModalFilterDoctor({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Experience Years</Text>
+            <Text>{t('filter.experienceYears')}</Text>
             <InputSelect
-              placeholder="Experience Years"
+              placeholder={t('filter.experienceYears')}
               options={[
                 { label: 'Under 5 years', value: 'under-5' },
                 { label: '5 - 10 years', value: '5-10' },
@@ -83,9 +85,9 @@ export default function ModalFilterDoctor({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Consultation Type</Text>
+            <Text>{t('filter.consultationType')}</Text>
             <InputSelect
-              placeholder="Consultation Type"
+              placeholder={t('filter.consultationType')}
               options={[
                 { label: 'In-person', value: 'in-person' },
                 { label: 'Online consultation', value: 'online' },
@@ -93,9 +95,9 @@ export default function ModalFilterDoctor({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Price Range</Text>
+            <Text>{t('filter.priceRange')}</Text>
             <InputSelect
-              placeholder="Price Range"
+              placeholder={t('filter.priceRange')}
               options={[
                 { label: 'Under 100$', value: '0-100' },
                 { label: '100 - 300$', value: '100-300' },
@@ -108,11 +110,13 @@ export default function ModalFilterDoctor({
         <div className="flex justify-between items-center gap-[8px] pt-[10px]">
           <Button variant="ghost" className="p-0">
             <Text className="text-[#A8071A] leading-normal font-medium">
-              Clear all filters
+              {t('common:actions.clearAllFilters')}
             </Text>
           </Button>
           <Button className="h-[45px] px-[32px] py-[12px] rounded-[40px]">
-            <Text className="leading-normal font-medium text-white">Apply</Text>
+            <Text className="leading-normal font-medium text-white">
+              {t('common:actions.apply')}
+            </Text>
           </Button>
         </div>
       </DialogContent>

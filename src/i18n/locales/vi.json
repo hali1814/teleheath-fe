@@ -18,9 +18,19 @@
     },
     "actions": {
       "cancel": "Hủy",
-      "done": "Xong"
+      "done": "Xong",
+      "viewAll": "Xem tất cả",
+      "bookAppointment": "Đặt lịch",
+      "viewLess": "Ẩn bớt",
+      "viewMore": "Xem thêm",
+      "close": "Đóng",
+      "clearAllFilters": "Xóa tất cả lọc",
+      "apply": "Áp dụng",
+      "onlineConsultation": "Tư vấn online",
+      "bookingOffline": "Đặt lịch offline"
     },
     "countries": {
+      "all": "Tất cả",
       "vietnam": "Việt Nam",
       "cambodia": "Campuchia"
     },
@@ -36,12 +46,38 @@
       "sibling": "Anh/Chị/Em",
       "relative": "Người thân",
       "friend": "Bạn bè"
+    },
+    "bottomNavigation": {
+      "home": "Trang chủ",
+      "appointments": "Lịch hẹn",
+      "book": "Đặt lịch",
+      "history": "Lịch sử",
+      "profile": "Hồ sơ"
     }
   },
   "home": {
     "kicker": "Test Theme va Ngon Ngu",
     "title": "Chuyen dark mode va doi ngon ngu",
-    "description": "Dung cac nut ben duoi de kiem tra light/dark mode, sau do thu chuyen qua lai giua English, Khmer va Vietnamese."
+    "description": "Dung cac nut ben duoi de kiem tra light/dark mode, sau do thu chuyen qua lai giua English, Khmer va Vietnamese.",
+    "searchPlaceholder": "Tìm kiếm bác sĩ, bệnh viện, gói dịch vụ",
+    "menu": {
+      "bookingOffline": "Đặt lịch offline",
+      "onlineDoctor": "Bác sĩ online",
+      "aiChatbot": "Trò chuyện AI"
+    },
+    "premiumService": {
+      "tag": "Dịch vụ cao cấp",
+      "title": "Chuyển đổi đường đi chăm sóc",
+      "benefits": {
+        "bookAppointments": "Đặt lịch",
+        "doorToDoorTransport": "Vận chuyển cửa đến cửa",
+        "supportStaff": "Nhân viên hỗ trợ"
+      },
+      "bookNow": "Đặt lịch ngay!"
+    },
+    "topHospitals": "Bệnh viện hàng đầu",
+    "specializedPackages": "Gói dịch vụ chuyên sâu",
+    "featuredDoctors": "Bác sĩ nổi tiếng"
   },
   "about": {
     "kicker": "Gioi thieu",
@@ -73,5 +109,54 @@
     "street": "Số nhà, tên đường, khu phố",
     "save": "Lưu",
     "relationship": "Mối quan hệ"
+  },
+  "hospital": {
+    "title": "Bệnh viện",
+    "searchPlaceholder": "Tìm kiếm bệnh viện",
+    "detailTitle": "Chi tiết bệnh viện",
+    "gallery": "Hình ảnh",
+    "aboutUs": "Về chúng tôi",
+    "specialties": "Chuyên khoa",
+    "ourBranches": "Chi nhánh",
+    "operatingHours": {
+      "title": "Giờ hoạt động",
+      "mon_sat": "Thứ Hai - Thứ Sáu",
+      "sun": "Chủ Nhật",
+      "emergency": "Khẩn cấp",
+      "map": "Bản đồ"
+    }
+  },
+  "package": {
+    "title": "Gói dịch vụ",
+    "searchPlaceholder": "Tìm kiếm gói dịch vụ",
+    "detailTitle": "Chi tiết gói dịch vụ",
+    "whatIsIncluded": "Những gì được bao gồm",
+    "branch": "chi nhánh",
+    "filter": {
+      "title": "Lọc",
+      "country": "Quốc gia",
+      "hospital": "Bệnh viện",
+      "priceRange": "Khoảng giá"
+    }
+  },
+  "doctor": {
+    "title": "Bác sĩ",
+    "searchPlaceholder": "Tìm kiếm bác sĩ",
+    "detailTitle": "Chi tiết bác sĩ",
+    "consultationFee": "Giá tư vấn",
+    "about": "Về chúng tôi",
+    "perVisit": "lần thăm khám",
+    "currentLocation": "Vị trí hiện tại",
+    "educationCertifications": "Học vấn & Chứng chỉ",
+    "filter": {
+      "title": "Lọc",
+      "country": "Quốc gia",
+      "specialty": "Chuyên khoa",
+      "gender": "Giới tính",
+      "experienceYears": "Số năm kinh nghiệm",
+      "consultationType": "Loại tư vấn",
+      "priceRange": "Khoảng giá"
+    },
+    "experienceYears": "{{years}} năm kinh nghiệm"
   }
 }

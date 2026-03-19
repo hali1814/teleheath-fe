@@ -18,9 +18,19 @@
     },
     "actions": {
       "cancel": "Cancel",
-      "done": "Done"
+      "done": "Done",
+      "viewAll": "View all",
+      "bookAppointment": "Book Appointment",
+      "viewLess": "View less",
+      "viewMore": "View more",
+      "close": "Close",
+      "clearAllFilters": "Clear all filters",
+      "apply": "Apply",
+      "onlineConsultation": "Online consultation",
+      "bookingOffline": "Booking offline"
     },
     "countries": {
+      "all": "All",
       "vietnam": "Vietnam",
       "cambodia": "Cambodia"
     },
@@ -36,12 +46,38 @@
       "sibling": "Sibling",
       "relative": "Relative",
       "friend": "Friend"
+    },
+    "bottomNavigation": {
+      "home": "Home",
+      "appointments": "Appointments",
+      "book": "Book",
+      "history": "History",
+      "profile": "Profile"
     }
   },
   "home": {
     "kicker": "Theme and Language Test",
     "title": "Toggle dark mode and switch language",
-    "description": "Use the controls below to verify light and dark mode, then switch between English, Khmer, and Vietnamese."
+    "description": "Use the controls below to verify light and dark mode, then switch between English, Khmer, and Vietnamese.",
+    "searchPlaceholder": "Search for doctors, hospitals, packages",
+    "menu": {
+      "bookingOffline": "Booking Offline",
+      "onlineDoctor": "Online Doctor",
+      "aiChatbot": "AI Chatbot"
+    },
+    "premiumService": {
+      "tag": "Premium Service",
+      "title": "Complete Care Journey",
+      "benefits": {
+        "bookAppointments": "Book Appointments",
+        "doorToDoorTransport": "Door-to-Door Transport",
+        "supportStaff": "Support Staff"
+      },
+      "bookNow": "BOOK NOW!"
+    },
+    "topHospitals": "Top Hospitals",
+    "specializedPackages": "Specialized Packages",
+    "featuredDoctors": "Featured Doctors"
   },
   "about": {
     "kicker": "About",
@@ -74,7 +110,53 @@
     "save": "Save",
     "relationship": "Relationship"
   },
-  "haohoa": {
-    "title": "Haohoa"
+  "hospital": {
+    "title": "Hospitals",
+    "searchPlaceholder": "Search for hospitals",
+    "detailTitle": "Hospital Details",
+    "gallery": "Gallery",
+    "aboutUs": "About Us",
+    "specialties": "Specialties",
+    "ourBranches": "Our Branch",
+    "operatingHours": {
+      "title": "Operating Hours",
+      "mon_sat": "Monday - Friday",
+      "sun": "Sunday",
+      "emergency": "Emergency",
+      "map": "Map"
+    }
+  },
+  "package": {
+    "title": "Packages",
+    "searchPlaceholder": "Search for packages",
+    "detailTitle": "Package Details",
+    "whatIsIncluded": "What's included",
+    "branch": "branch",
+    "filter": {
+      "title": "Filter",
+      "country": "Country",
+      "hospital": "Hospital",
+      "priceRange": "Price Range"
+    }
+  },
+  "doctor": {
+    "title": "Doctors",
+    "searchPlaceholder": "Search for doctors",
+    "detailTitle": "Doctor Details",
+    "consultationFee": "Consultation Fee",
+    "perVisit": "per visit",
+    "about": "About",
+    "currentLocation": "Current Location",
+    "educationCertifications": "Education & Certifications",
+    "filter": {
+      "title": "Filter",
+      "country": "Country",
+      "specialty": "Specialty",
+      "gender": "Gender",
+      "experienceYears": "Experience Years",
+      "consultationType": "Consultation Type",
+      "priceRange": "Price Range"
+    },
+    "experienceYears": "{{years}} Years Experience"
   }
 }

@@ -18,9 +18,19 @@
     },
     "actions": {
       "cancel": "បោះបង់",
-      "done": "រួចរាល់"
+      "done": "រួចរាល់",
+      "viewAll": "សាកល្បងទាំងអស់",
+      "bookAppointment": "ការជ្រើសរើសចំណាំ",
+      "viewLess": "សាកល្បងតិចជាង",
+      "viewMore": "សាកល្បងច្រើនជាង",
+      "close": "បិទ",
+      "clearAllFilters": "សង្គ្រោះចងការជ្រើសរើសចំណាំ",
+      "apply": "បញ្ចូល",
+      "onlineConsultation": "ការជ្រើសរើសចំណាំ",
+      "bookingOffline": "ការជ្រើសរើសចំណាំ"
     },
     "countries": {
+      "all": "ទាំងអស់",
       "vietnam": "វៀតណាម",
       "cambodia": "កម្ពុជា"
     },
@@ -36,12 +46,38 @@
       "sibling": "បងប្អូន",
       "relative": "សាច់ញាតិ",
       "friend": "មិត្ត"
+    },
+    "bottomNavigation": {
+      "home": "ផ្ទះម៉ាស៊ីន",
+      "appointments": "ការជ្រើសរើសចំណាំ",
+      "book": "ការជ្រើសរើសចំណាំ",
+      "history": "ការជ្រើសរើសចំណាំ",
+      "profile": "ការជ្រើសរើសចំណាំ"
     }
   },
   "home": {
     "kicker": "សាកល្បង Theme និង Language",
     "title": "ប្ដូរ dark mode និងភាសា",
-    "description": "ប្រើប៊ូតុងខាងក្រោមដើម្បីពិនិត្យ light/dark mode ហើយសាកប្ដូររវាង English, Khmer និង Vietnamese។"
+    "description": "ប្រើប៊ូតុងខាងក្រោមដើម្បីពិនិត្យ light/dark mode ហើយសាកប្ដូររវាង English, Khmer និង Vietnamese។",
+    "searchPlaceholder": "ស្វែងរកអ្នកឆ្លាស់ប្រជាជន, កម្ពុជា, ការជ្រើសរើសចំណាំ",
+    "menu": {
+      "bookingOffline": "ការជ្រើសរើសចំណាំ",
+      "onlineDoctor": "អ្នកឆ្លាស់ប្រជាជន",
+      "aiChatbot": "ការជ្រើសរើសចំណាំ"
+    },
+    "premiumService": {
+      "tag": "ការជ្រើសរើសចំណាំ",
+      "title": "ការជ្រើសរើសចំណាំ",
+      "benefits": {
+        "bookAppointments": "ការជ្រើសរើសចំណាំ",
+        "doorToDoorTransport": "ការជ្រើសរើសចំណាំ",
+        "supportStaff": "ការជ្រើសរើសចំណាំ"
+      },
+      "bookNow": "ការជ្រើសរើសចំណាំ"
+    },
+    "topHospitals": "កម្ពុជា",
+    "specializedPackages": "ការជ្រើសរើសចំណាំ",
+    "featuredDoctors": "ការជ្រើសរើសចំណាំ"
   },
   "about": {
     "kicker": "អំពី",
@@ -73,5 +109,54 @@
     "street": "ផ្លូវ, លេខផ្ទះ, ភូមិ",
     "save": "រក្សាទុក",
     "relationship": "ទំនាក់ទំនង"
+  },
+  "hospital": {
+    "title": "កម្ពុជា",
+    "searchPlaceholder": "ស្វែងរកកម្ពុជា",
+    "detailTitle": "ព័ត៌មានប្រវត្តិរូប",
+    "gallery": "រូបភាព",
+    "aboutUs": "អំពីយើង",
+    "specialties": "ការជ្រើសរើសចំណាំ",
+    "ourBranches": "ការជ្រើសរើសចំណាំ",
+    "operatingHours": {
+      "title": "វិនាទុក",
+      "mon_sat": "ថ្ងៃចូលរួន - ថ្ងៃចាស់",
+      "sun": "ថ្ងៃអាទិត្យ",
+      "emergency": "ការជ្រើសរើសចំណាំ",
+      "map": "ការជ្រើសរើសចំណាំ"
+    }
+  },
+  "package": {
+    "title": "ការជ្រើសរើសចំណាំ",
+    "searchPlaceholder": "ស្វែងរកការជ្រើសរើសចំណាំ",
+    "detailTitle": "ព័ត៌មានប្រវត្តិរូបការជ្រើសរើសចំណាំ",
+    "whatIsIncluded": "នានារូបភាពការជ្រើសរើសចំណាំ",
+    "branch": "ការជ្រើសរើសចំណាំ",
+    "filter": {
+      "title": "ចងការជ្រើសរើសចំណាំ",
+      "country": "ទីតារណីការិយាល័យ",
+      "hospital": "កម្ពុជា",
+      "priceRange": "ចន្លោះតម្លៃ"
+    }
+  },
+  "doctor": {
+    "title": "អ្នកឆ្លាស់ប្រជាជន",
+    "searchPlaceholder": "ស្វែងរកអ្នកឆ្លាស់ប្រជាជន",
+    "detailTitle": "ព័ត៌មានប្រវត្តិរូបអ្នកឆ្លាស់ប្រជាជន",
+    "consultationFee": "តម្លៃការជ្រើសរើសចំណាំ",
+    "perVisit": "ការជ្រើសរើសចំណាំ",
+    "about": "អំពី",
+    "currentLocation": "ទីតារណីការិយាល័យចុងក្រោយ",
+    "educationCertifications": "ការជ្រើសរើសចំណាំ",
+    "filter": {
+      "title": "ចងការជ្រើសរើសចំណាំ",
+      "country": "ទីតារណីការិយាល័យ",
+      "specialty": "ការជ្រើសរើសចំណាំ",
+      "gender": "ភេទ",
+      "experienceYears": "ឆ្នាំសិក្សា",
+      "consultationType": "ប្រភពការជ្រើសរើសចំណាំ",
+      "priceRange": "ចន្លោះតម្លៃ"
+    },
+    "experienceYears": "{{years}} ឆ្នាំសិក្សា"
   }
 }

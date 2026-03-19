@@ -48,7 +48,7 @@ function RouteComponent() {
 
   const { t } = useTranslation(['profile', 'common'])
   return (
-    <div className="pb-20 px-4">
+    <div className="pt-4 pb-20 px-4">
       <div className="mt-6 flex flex-col items-center justify-center">
         <UploadAvatar />
         <Text
