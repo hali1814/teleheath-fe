@@ -1,7 +1,6 @@
 import { Icon, type IconName } from './icon'
 import Text from './text'
 import { cn } from '#/lib/utils'
-import { useState } from 'react'
 import footerPng from '#/assets/images/home/footer.png'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from '@tanstack/react-router'
