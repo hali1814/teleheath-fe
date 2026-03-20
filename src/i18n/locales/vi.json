@@ -168,5 +168,27 @@
       "priceRange": "Khoảng giá"
     },
     "experienceYears": "{{years}} năm kinh nghiệm"
+  },
+  "book-appointment": {
+    "title": "Đặt lịch",
+    "banner": {
+      "title": "Kiểm tra sức khỏe nhanh",
+      "description": "Tư vấn ưu tiên"
+    },
+    "description": "Chọn cách đặt lịch phù hợp với bạn.",
+    "bookingOffline": {
+      "title": "Đặt lịch offline",
+      "bookByHospital": "Đặt lịch bệnh viện",
+      "bookByHospitalDescription": "Tìm kiếm dịch vụ tại bệnh viện gần bạn",
+      "bookByMedicalPackage": "Đặt lịch gói dịch vụ",
+      "bookByMedicalPackageDescription": "Chọn gói dịch vụ chăm sóc sức khỏe",
+      "bookByDoctor": "Đặt lịch bác sĩ",
+      "bookByDoctorDescription": "Chọn bác sĩ mà bạn tin tưởng"
+    },
+    "onlineDoctor": {
+      "title": "Đặt lịch online",
+      "bookByDoctor": "Đặt lịch bác sĩ online",
+      "bookByDoctorDescription": "Tư vấn online qua video call"
+    }
   }
 }

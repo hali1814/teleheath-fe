@@ -16,6 +16,7 @@ export default function HospitalCard({
   size = 'sm',
   variantButton = 'outline',
   showBadge = false,
+  hideBookAppointment = false,
 }: {
   className?: string
   name: string
@@ -24,6 +25,7 @@ export default function HospitalCard({
   size?: 'sm' | 'md'
   variantButton?: 'outline' | 'solid'
   showBadge?: boolean
+  hideBookAppointment?: boolean
 }) {
   const { t } = useTranslation(['common'])
   const imgHeight = size === 'sm' ? 'h-[96px]' : 'h-[180px]'
@@ -65,19 +67,21 @@ export default function HospitalCard({
             textSize="xs_10"
           />
         </div>
-        <Button className={cn('w-full h-[32px]', bgColor)}>
-          <Icon
-            name="book_appointment"
-            color={iconColor}
-            className="w-[16px] h-[16px]"
-          />
-          <Text
-            size="sm_12"
-            className={cn('font-medium leading-[1.3]', textColor)}
-          >
-            {t('actions.bookAppointment')}
-          </Text>
-        </Button>
+        {!hideBookAppointment && (
+          <Button className={cn('w-full h-[32px]', bgColor)}>
+            <Icon
+              name="book_appointment"
+              color={iconColor}
+              className="w-[16px] h-[16px]"
+            />
+            <Text
+              size="sm_12"
+              className={cn('font-medium leading-[1.3]', textColor)}
+            >
+              {t('actions.bookAppointment')}
+            </Text>
+          </Button>
+        )}
       </div>
     </Link>
   )

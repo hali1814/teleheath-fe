@@ -50,7 +50,7 @@ export default function DetailProfileModal({
         aria-describedby={undefined}
       >
         <DialogTitle className="font-semibold text-text-primary text-lg">
-          {t('profile:patientInformation')}
+          {t('profileInformation')}
         </DialogTitle>
 
         <div className="mt-4 flex flex-col items-center text-center">

@@ -3,6 +3,7 @@ import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import { cn } from '#/lib/utils'
+import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 export default function PremiumService() {
@@ -63,13 +64,15 @@ export default function PremiumService() {
         </div>
 
         <div className="flex items-center justify-between">
-          <Button className="px-[12px] rounded-[6px] bg-white">
-            <Text
-              size="sm_12"
-              className="font-semibold leading-none text-[#F5222D] uppercase"
-            >
-              {t('premiumService.bookNow')}
-            </Text>
+          <Button className="px-[12px] rounded-[6px] bg-white" asChild>
+            <Link to="/app/book-appointment">
+              <Text
+                size="sm_12"
+                className="font-semibold leading-none text-[#F5222D] uppercase"
+              >
+                {t('premiumService.bookNow')}
+              </Text>
+            </Link>
           </Button>
 
           <div className="flex items-center">

@@ -2,11 +2,13 @@ import { cn } from '#/lib/utils'
 import { Icon } from '#/components/icon'
 import type { IconName } from './icon'
 import Text from './text'
+import { Link } from '@tanstack/react-router'
 
 interface MenuItemProps {
   className?: string
   icon: IconName
   title: string
+  href?: string
   variant?: 'solid' | 'outline'
   iconColor?: string
   backgroundColor?: string
@@ -17,6 +19,7 @@ export default function MenuItem({
   className,
   icon,
   title,
+  href,
   variant = 'solid',
   iconColor,
   backgroundColor,
@@ -35,7 +38,8 @@ export default function MenuItem({
   const resolvedIconColor =
     iconColor ?? (variant === 'solid' ? 'white' : primaryColor)
   return (
-    <div
+    <Link
+      to={href}
       className={cn(
         'flex flex-col items-center justify-center gap-[8px]',
         className,
@@ -61,6 +65,6 @@ export default function MenuItem({
       <Text size="sm_12" className="font-medium text-center">
         {title}
       </Text>
-    </div>
+    </Link>
   )
 }

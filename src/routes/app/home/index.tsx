@@ -5,7 +5,7 @@ import { DoctorLists } from '#/sections/doctor'
 import { MenuList, PremiumService } from '#/sections/home'
 import { HospitalList } from '#/sections/hospital'
 import { PackageList } from '#/sections/package'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/app/home/')({
@@ -14,10 +14,14 @@ export const Route = createFileRoute('/app/home/')({
 
 function RouteComponent() {
   const { t } = useTranslation(['home', 'common'])
+  const router = useRouter()
 
   return (
     <>
-      <SearchBar placeholder={t('searchPlaceholder')} />
+      <SearchBar
+        placeholder={t('searchPlaceholder')}
+        onClick={() => router.navigate({ to: '/app/search' })}
+      />
       <MenuList />
       <PremiumService />
       <CountryTab

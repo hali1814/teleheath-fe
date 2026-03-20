@@ -6,8 +6,7 @@ export const Route = createFileRoute('/app/search/(commonLayout)')({
 
 function RouteComponent() {
   return (
-    <div>
-      commonLayout
+    <div className="min-h-screen">
       <Outlet />
     </div>
   )

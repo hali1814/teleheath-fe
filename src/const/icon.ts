@@ -58,6 +58,11 @@ import MedicalProfileSearchIcon from '#/assets/icons/profile/medical-profile-sea
 import AddProfileIcon from '#/assets/icons/profile/add-profile.svg?react'
 import ChatAiIcon from '#/assets/icons/common/chat-ai.svg?react'
 import CheckCircleOutlineIcon from '#/assets/icons/common/check-circle-outline.svg?react'
+import MedicalWebServiceSolidIcon from '#/assets/icons/common/medical-web-service-solid.svg?react'
+import UserDoctorSolidIcon from '#/assets/icons/common/user-doctor-solid.svg?react'
+import HistoryFillIcon from '#/assets/icons/common/history-fill.svg?react'
+import Arrow45DegIcon from '#/assets/icons/common/arrow-45deg.svg?react'
+import EmptySearchIcon from '#/assets/icons/common/empty-search-icon.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -113,6 +118,11 @@ const ICONS_TEMPLATE = {
   add_profile: AddProfileIcon,
   chat_ai: ChatAiIcon,
   check_circle_outline: CheckCircleOutlineIcon,
+  medical_web_service_solid: MedicalWebServiceSolidIcon,
+  user_doctor_solid: UserDoctorSolidIcon,
+  history_fill: HistoryFillIcon,
+  arrow_45deg: Arrow45DegIcon,
+  empty_search: EmptySearchIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

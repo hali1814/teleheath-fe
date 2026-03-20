@@ -168,5 +168,27 @@
       "priceRange": "ចន្លោះតម្លៃ"
     },
     "experienceYears": "{{years}} ឆ្នាំសិក្សា"
+  },
+  "book-appointment": {
+    "title": "ការជ្រើសរើសចំណាំ",
+    "banner": {
+      "title": "ការជ្រើសរើសចំណាំ",
+      "description": "ការជ្រើសរើសចំណាំ"
+    },
+    "description": "ការជ្រើសរើសចំណាំ",
+    "bookingOffline": {
+      "title": "ការជ្រើសរើសចំណាំ",
+      "bookByHospital": "ការជ្រើសរើសចំណាំ",
+      "bookByHospitalDescription": "ការជ្រើសរើសចំណាំ",
+      "bookByMedicalPackage": "ការជ្រើសរើសចំណាំ",
+      "bookByMedicalPackageDescription": "ការជ្រើសរើសចំណាំ",
+      "bookByDoctor": "ការជ្រើសរើសចំណាំ",
+      "bookByDoctorDescription": "ការជ្រើសរើសចំណាំ"
+    },
+    "onlineDoctor": {
+      "title": "ការជ្រើសរើសចំណាំ",
+      "bookByDoctor": "ការជ្រើសរើសចំណាំ",
+      "bookByDoctorDescription": "ការជ្រើសរើសចំណាំ"
+    }
   }
 }

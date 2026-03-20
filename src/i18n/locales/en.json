@@ -168,5 +168,27 @@
       "priceRange": "Price Range"
     },
     "experienceYears": "{{years}} Years Experience"
+  },
+  "book-appointment": {
+    "title": "Book Appointment",
+    "banner": {
+      "title": "Quick Health Check",
+      "description": "Priority Consultations"
+    },
+    "description": "Select your preferred way to schedule a visit.",
+    "bookingOffline": {
+      "title": "Booking offline",
+      "bookByHospital": "Booking by Hospital",
+      "bookByHospitalDescription": "Find care at your preferred facility near you",
+      "bookByMedicalPackage": "Book by Medical Package",
+      "bookByMedicalPackageDescription": "Select a health checkup plan",
+      "bookByDoctor": "Book by Doctor",
+      "bookByDoctorDescription": "Choose a specialist you trust for your needs"
+    },
+    "onlineDoctor": {
+      "title": "Online Doctor",
+      "bookByDoctor": "Online Doctor",
+      "bookByDoctorDescription": "Online consultation via video call"
+    }
   }
 }

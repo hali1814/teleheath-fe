@@ -15,6 +15,8 @@ export default function DoctorCard({
   specialization,
   experience,
   variant = 'vertical',
+  hideBookAppointment = false,
+  sizeAvatar = 'md',
 }: {
   className?: string
   avatar: string
@@ -23,8 +25,12 @@ export default function DoctorCard({
   specialization: string
   experience?: string
   variant?: 'vertical' | 'horizontal'
+  hideBookAppointment?: boolean
+  sizeAvatar?: 'sm' | 'md'
 }) {
   const { t } = useTranslation(['common'])
+  const avatarSize =
+    sizeAvatar === 'sm' ? 'w-[63px] h-[63px]' : 'w-[86px] h-[86px]'
   if (variant === 'horizontal') {
     return (
       <Link
@@ -35,11 +41,8 @@ export default function DoctorCard({
           className,
         )}
       >
-        <Avatar className="w-[86px] h-[86px] border border-dust-red-1">
+        <Avatar className={cn(avatarSize, 'border border-dust-red-1')}>
           <AvatarImage src={avatar} alt="doctor-card" />
-          {/* <AvatarFallback>
-                  <Icon name="call_doctor" className="w-[24px] h-[24px]" />
-                </AvatarFallback> */}
         </Avatar>
         <div className="w-full flex flex-col items-start gap-[8px]">
           <Text size="base_14" className="font-semibold leading-[1.2]">
@@ -63,19 +66,21 @@ export default function DoctorCard({
               {experience} • {location}
             </Text>
           </div>
-          <Button className="w-full h-[32px] bg-dust-red-1">
-            <Icon
-              name="book_appointment"
-              color="var(--primary)"
-              className="w-[16px] h-[16px]"
-            />
-            <Text
-              size="sm_12"
-              className="font-medium leading-[1.3] text-primary"
-            >
-              {t('actions.bookAppointment')}
-            </Text>
-          </Button>
+          {!hideBookAppointment && (
+            <Button className="w-full h-[32px] bg-dust-red-1">
+              <Icon
+                name="book_appointment"
+                color="var(--primary)"
+                className="w-[16px] h-[16px]"
+              />
+              <Text
+                size="sm_12"
+                className="font-medium leading-[1.3] text-primary"
+              >
+                {t('actions.bookAppointment')}
+              </Text>
+            </Button>
+          )}
         </div>
       </Link>
     )
@@ -90,7 +95,7 @@ export default function DoctorCard({
         className,
       )}
     >
-      <Avatar className="w-[86px] h-[86px] border border-dust-red-1">
+      <Avatar className={cn(avatarSize, 'border border-dust-red-1')}>
         <AvatarImage src={avatar} alt="doctor-card" />
         {/* <AvatarFallback>
           <Icon name="call_doctor" className="w-[24px] h-[24px]" />
@@ -111,16 +116,21 @@ export default function DoctorCard({
         >
           {specialization}
         </Text>
-        <Button className="w-full h-[32px] bg-dust-red-1">
-          <Icon
-            name="book_appointment"
-            color="var(--primary)"
-            className="w-[16px] h-[16px]"
-          />
-          <Text size="sm_12" className="font-medium leading-[1.3] text-primary">
-            {t('actions.bookAppointment')}
-          </Text>
-        </Button>
+        {!hideBookAppointment && (
+          <Button className="w-full h-[32px] bg-dust-red-1">
+            <Icon
+              name="book_appointment"
+              color="var(--primary)"
+              className="w-[16px] h-[16px]"
+            />
+            <Text
+              size="sm_12"
+              className="font-medium leading-[1.3] text-primary"
+            >
+              {t('actions.bookAppointment')}
+            </Text>
+          </Button>
+        )}
       </div>
     </Link>
   )

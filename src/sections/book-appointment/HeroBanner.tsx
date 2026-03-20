@@ -1,8 +1,10 @@
 import Image from '#/components/image'
 import HeroBannerImage from '#/assets/images/book-appointment/hero-banner.png'
 import Text from '#/components/text'
+import { useTranslation } from 'react-i18next'
 
 export default function HeroBanner() {
+  const { t } = useTranslation(['book-appointment'])
   return (
     <>
       <div className="relative">
@@ -21,18 +23,18 @@ export default function HeroBanner() {
             size="sm_12"
             className="font-medium tracking-[0.03em] text-white uppercase"
           >
-            Quick Health Check
+            {t('banner.title')}
           </Text>
           <Text
             size="xl_18"
             className="font-semibold leading-normal text-white"
           >
-            Priority Consultations
+            {t('banner.description')}
           </Text>
         </div>
       </div>
       <Text className="leading-normal text-muted-foreground">
-        Select your preferred way to schedule a visit.
+        {t('description')}
       </Text>
     </>
   )

@@ -5,6 +5,7 @@ export const doctors = [
     name: 'Dr. Nguyen Duc Anh',
     location: 'Vietnam',
     specialization: 'Obstetrics and Gynecology',
+    experience: '10 years',
   },
   {
     id: '2',
@@ -12,6 +13,7 @@ export const doctors = [
     name: 'Dr. Nguyen Duc Anh',
     location: 'Vietnam',
     specialization: 'Obstetrics and Gynecology',
+    experience: '10 years',
   },
   {
     id: '3',
@@ -19,5 +21,6 @@ export const doctors = [
     name: 'Dr. Nguyen Duc Anh',
     location: 'Vietnam',
     specialization: 'Obstetrics and Gynecology',
+    experience: '10 years',
   },
 ]
