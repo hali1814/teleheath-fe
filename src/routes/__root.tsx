@@ -13,7 +13,7 @@ function RootComponent() {
   return (
     <>
       <Outlet />
-      <Toaster />
+      <Toaster position="top-center" />
       <TanStackDevtools
         config={{
           position: 'bottom-right',
