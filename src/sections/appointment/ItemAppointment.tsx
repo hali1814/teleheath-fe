@@ -4,6 +4,7 @@ import { Button } from '#/components/ui/button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ConfirmCancelAppointmentModal from './ConfirmCancelAppointmentModal'
+import { useRouter } from '@tanstack/react-router'
 
 export type AppointmentItemType =
   | 'video_cancel'
@@ -22,7 +23,7 @@ export interface ItemAppointmentProps {
   className?: string
 }
 
-function ActionButton({
+export function ActionButton({
   text,
   iconName,
   disabled = false,
@@ -91,7 +92,7 @@ export default function ItemAppointment({
 }: ItemAppointmentProps) {
   const { t } = useTranslation(['appointment'])
   const [openCancelModal, setOpenCancelModal] = useState(false)
-
+  const router = useRouter()
   const isVideo = type.startsWith('video')
   const showDate = !isVideo
   const canCancel = type === 'video_cancel' || type === 'in_person_cancel'
@@ -99,6 +100,9 @@ export default function ItemAppointment({
   return (
     <div
       className={`w-full rounded-[12px] bg-white p-4 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] ${className ?? ''}`}
+      onClick={() =>
+        router.navigate({ to: '/app/appointments/$id', params: { id: '1' } })
+      }
     >
       <div className="flex items-center gap-3">
         <div className="flex size-[65px] items-center justify-center rounded-[60px] bg-[#53B6B5]">

@@ -66,7 +66,17 @@ import EmptySearchIcon from '#/assets/icons/common/empty-search-icon.svg?react'
 import AddRecordIcon from '#/assets/icons/appointment/add-record.svg?react'
 import LocationBlueIcon from '#/assets/icons/appointment/location-blue.svg?react'
 import MapBlueIcon from '#/assets/icons/appointment/map-blue.svg?react'
+import AppointmentMoneyIcon from '#/assets/icons/appointment/money.svg?react'
 import RecordIcon from '#/assets/icons/appointment/record.svg?react'
+import AppointmentUserIcon from '#/assets/icons/appointment/user.svg?react'
+import AppointmentDocumentIcon from '#/assets/icons/appointment/document.svg?react'
+import AppointmentNoticeIcon from '#/assets/icons/appointment/notice.svg?react'
+import AppointmentMedicalIcon from '#/assets/icons/appointment/medical.svg?react'
+import AppointmentCheckIcon from '#/assets/icons/appointment/check.svg?react'
+import AppointmentLocationIcon from '#/assets/icons/appointment/location.svg?react'
+import AppointmentHospitalIcon from '#/assets/icons/appointment/hospital.svg?react'
+import AppointmentCarIcon from '#/assets/icons/appointment/car.svg?react'
+import AppointmentUserSpIcon from '#/assets/icons/appointment/user-sp.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -130,7 +140,17 @@ const ICONS_TEMPLATE = {
   add_record: AddRecordIcon,
   location_blue: LocationBlueIcon,
   map_blue: MapBlueIcon,
+  money_appointment: AppointmentMoneyIcon,
   record: RecordIcon,
+  user_appointment: AppointmentUserIcon,
+  document_appointment: AppointmentDocumentIcon,
+  notice_appointment: AppointmentNoticeIcon,
+  medical_appointment: AppointmentMedicalIcon,
+  check_appointment: AppointmentCheckIcon,
+  location_appointment: AppointmentLocationIcon,
+  hospital_appointment: AppointmentHospitalIcon,
+  car_appointment: AppointmentCarIcon,
+  user_sp_appointment: AppointmentUserSpIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

@@ -115,7 +115,7 @@ function RouteComponent() {
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: (index) => (rows[index]?.kind === 'title' ? 36 : 177),
+    estimateSize: (index) => (rows[index]?.kind === 'title' ? 36 : 162),
     overscan: 6,
   })
 

@@ -243,6 +243,7 @@
     "paymentMethod": "Payment method",
     "paid": "Paid",
     "noAppointmentYet": "No appointment yet.",
+    "patientNote": "Patient note:",
     "no": "No",
     "yes": "Yes"
   }
