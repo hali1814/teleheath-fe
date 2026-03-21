@@ -4,11 +4,20 @@ import { ThemeProvider } from 'next-themes'
 
 import './i18n'
 import { routeTree } from './routeTree.gen'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
   scrollRestoration: true,
+})
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+    },
+  },
 })
 
 declare module '@tanstack/react-router' {
@@ -28,7 +37,9 @@ if (!rootElement.innerHTML) {
       enableSystem={false}
       storageKey="theme"
     >
-      <RouterProvider router={router} />
-    </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </ThemeProvider>,
   )
 }

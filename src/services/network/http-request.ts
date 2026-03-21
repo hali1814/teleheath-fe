@@ -6,20 +6,8 @@ export interface HttpCommonResponse<T> {
   data: T
   success: boolean
   message: string
-  error: {
-    code: string
-    details: {
-      message: string
-    }
-  }
   timestamp: string
-  statusCode: number
-  meta?: {
-    current_page: number
-    per_page: number
-    total: number
-    last_page: number
-  }
+  status: number
 }
 
 export const http = {

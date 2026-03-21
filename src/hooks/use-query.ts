@@ -8,6 +8,7 @@ import {
 import { useCallback, useEffect, useRef } from 'react'
 // import { showToast } from '@shared/utils'
 import { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 /**
  * -------------------------------------------------------------------------
@@ -97,7 +98,7 @@ export const useQuery = <TResponse, TTransformed = TResponse, TRequest = void>({
         const errorObj = queryResult.error as QueryError
         onError?.(errorObj)
         if (isShowError) {
-          // showToast.error('Lỗi', errorObj?.message ?? 'Có lỗi xảy ra')
+          toast.error(errorObj?.message ?? 'Có lỗi xảy ra')
         }
         onSettled?.(undefined, errorObj)
       }

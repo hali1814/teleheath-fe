@@ -5,6 +5,7 @@ import { DoctorLists } from '#/sections/doctor'
 import { MenuList, PremiumService } from '#/sections/home'
 import { HospitalList } from '#/sections/hospital'
 import { PackageList } from '#/sections/package'
+import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
@@ -15,6 +16,15 @@ export const Route = createFileRoute('/app/home/')({
 function RouteComponent() {
   const { t } = useTranslation(['home', 'common'])
   const router = useRouter()
+
+  const { data: hospitalsData } = useGetListHospitalsQuery({
+    params: {
+      page: 1,
+      pageSize: 10,
+    },
+  })
+
+  console.log(hospitalsData)
 
   return (
     <>

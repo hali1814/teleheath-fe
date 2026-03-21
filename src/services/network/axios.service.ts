@@ -6,7 +6,7 @@ import axios, {
 } from 'axios'
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://portal.wztek.com.vn/api',
+  baseURL: 'http://103.173.226.3:8080/api',
   timeout: 60000,
   headers: {
     'Content-Type': 'application/json',

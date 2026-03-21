@@ -63,6 +63,10 @@ import UserDoctorSolidIcon from '#/assets/icons/common/user-doctor-solid.svg?rea
 import HistoryFillIcon from '#/assets/icons/common/history-fill.svg?react'
 import Arrow45DegIcon from '#/assets/icons/common/arrow-45deg.svg?react'
 import EmptySearchIcon from '#/assets/icons/common/empty-search-icon.svg?react'
+import AddRecordIcon from '#/assets/icons/appointment/add-record.svg?react'
+import LocationBlueIcon from '#/assets/icons/appointment/location-blue.svg?react'
+import MapBlueIcon from '#/assets/icons/appointment/map-blue.svg?react'
+import RecordIcon from '#/assets/icons/appointment/record.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -123,6 +127,10 @@ const ICONS_TEMPLATE = {
   history_fill: HistoryFillIcon,
   arrow_45deg: Arrow45DegIcon,
   empty_search: EmptySearchIcon,
+  add_record: AddRecordIcon,
+  location_blue: LocationBlueIcon,
+  map_blue: MapBlueIcon,
+  record: RecordIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

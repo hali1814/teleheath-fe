@@ -6,9 +6,11 @@ import { Link, useRouter } from '@tanstack/react-router'
 export default function Header({
   isHome = false,
   title = 'Telehealth',
+  isCenter = false,
 }: {
   isHome?: boolean
   title?: string
+  isCenter?: boolean
 }) {
   const router = useRouter()
 
@@ -30,6 +32,12 @@ export default function Header({
             className="w-[28px] h-[28px]"
             color="#B3B3B3"
           />
+        </div>
+      ) : isCenter ? (
+        <div className="flex h-full items-center justify-center">
+          <Text size="lg_16" className="font-medium text-text-primary">
+            {title}
+          </Text>
         </div>
       ) : (
         <div className="flex items-center justify-between">
