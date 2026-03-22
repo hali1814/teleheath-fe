@@ -3,7 +3,7 @@ import HeroBanner from '#/sections/book-appointment/HeroBanner'
 import OnlineDoctor from '#/sections/book-appointment/OnlineDoctor'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/app/book-appointment/')({
+export const Route = createFileRoute('/app/book-appointment/(commonLayout)/')({
   component: RouteComponent,
 })
 

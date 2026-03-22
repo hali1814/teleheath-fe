@@ -17,8 +17,12 @@ export default function LocationBadge({
 
   return (
     <div className="flex items-center gap-[4px]">
-      <Icon name="map_marker" color={textColor} className="w-[14px] h-[14px]" />
-      <Text size={textSize} className={cn(textColor, className)}>
+      <Icon
+        name="map_marker"
+        color={textColor}
+        className="w-[12px] h-[12px] text-primary"
+      />
+      <Text size={textSize} className={cn(textColor, className, 'flex-1')}>
         {location}
       </Text>
     </div>

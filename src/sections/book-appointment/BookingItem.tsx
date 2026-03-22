@@ -1,17 +1,23 @@
 import { Icon, type IconName } from '#/components/icon'
 import Text from '#/components/text'
+import { Link } from '@tanstack/react-router'
 
 export default function BookingItem({
   title,
   description,
   icon,
+  href,
 }: {
   title: string
   description: string
   icon: IconName
+  href: string
 }) {
   return (
-    <div className="w-full flex items-center gap-[12px] p-[16px] rounded-[12px] bg-white">
+    <Link
+      to={href}
+      className="w-full flex items-center gap-[12px] p-[16px] rounded-[12px] bg-white"
+    >
       <div className="w-[40px] h-[40px] rounded-[8px] bg-secondary/10 flex items-center justify-center">
         <Icon name={icon} className="w-[20px] h-[20px] text-primary" />
       </div>
@@ -22,6 +28,6 @@ export default function BookingItem({
         </Text>
       </div>
       <Icon name="arrow_right" className="w-[8px] h-[14px] text-[#CCCCCC]" />
-    </div>
+    </Link>
   )
 }

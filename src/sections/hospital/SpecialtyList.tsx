@@ -1,21 +1,9 @@
-import { Icon, type IconName } from '#/components/icon'
 import Text from '#/components/text'
-import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
 import { useState } from 'react'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useTranslation } from 'react-i18next'
-
-const SpecialtyItem = ({ name, icon }: { name: string; icon: IconName }) => {
-  return (
-    <Badge className="h-[32px] flex gap-[8px] px-[16px] rounded-[12px] bg-[#FFEBE9]">
-      <Icon name={icon} className="w-[12px] h-[12px]" color="var(--primary)" />
-      <Text size="sm_12" className="font-medium text-primary">
-        {name}
-      </Text>
-    </Badge>
-  )
-}
+import { SpecialtyChip } from './SpecialtyChip'
 
 export default function SpecialtyList({
   specialties,
@@ -39,7 +27,7 @@ export default function SpecialtyList({
         >
           {specialties.length > 0 &&
             specialties.map((specialty, index) => (
-              <SpecialtyItem key={index} name={specialty} icon="appointment" />
+              <SpecialtyChip key={index} name={specialty} icon="appointment" />
             ))}
         </div>
         {!expanded && (

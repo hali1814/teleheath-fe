@@ -1,3 +1,5 @@
+import { NotificationList } from '#/sections/notification'
+import { notificationsMock } from '#/mockData/notifications'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/app/notification/(commonLayout)/')({
@@ -5,5 +7,9 @@ export const Route = createFileRoute('/app/notification/(commonLayout)/')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/app/hospital/"!</div>
+  return (
+    <div>
+      <NotificationList notifications={notificationsMock} />
+    </div>
+  )
 }

@@ -42,6 +42,7 @@ export default function BookingOffline() {
           title={item.title}
           description={item.description}
           icon={item.icon}
+          href="/app/book-appointment/hospital"
         />
       ))}
     </>

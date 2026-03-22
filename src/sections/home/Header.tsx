@@ -27,11 +27,13 @@ export default function Header({
               {title}
             </Text>
           </Link>
-          <Icon
-            name="notification"
-            className="w-[28px] h-[28px]"
-            color="#B3B3B3"
-          />
+          <Link to="/app/notification">
+            <Icon
+              name="notification"
+              className="w-[28px] h-[28px]"
+              color="#B3B3B3"
+            />
+          </Link>
         </div>
       ) : isCenter ? (
         <div className="flex h-full items-center justify-center">

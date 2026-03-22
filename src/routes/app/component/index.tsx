@@ -64,7 +64,13 @@ function RouteComponent() {
       />
       <BottomNavigation />
       <Avatar initials="SC" onCameraClick={() => {}} />
-      <NotificationCard />
+      <NotificationCard
+        color="orange"
+        icon="bell_check"
+        title="Appointment Completed"
+        description="Your appointment on 20/03/2026 at 10:00 AM is confirmed. Thank you for using Telehealth."
+        time={new Date()}
+      />
       <CardNavigate title="Language" icon="language" onClick={() => {}} />
     </div>
   )

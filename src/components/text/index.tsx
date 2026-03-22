@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode } from 'react'
+import type { CSSProperties, ElementType, ReactNode } from 'react'
 
 import { cn } from '#/lib/utils'
 
@@ -49,6 +49,7 @@ interface TextProps {
   className?: string
   color?: TextColor
   size?: TextSize
+  style?: CSSProperties
 }
 
 export default function Text({
@@ -57,10 +58,12 @@ export default function Text({
   className,
   color = 'primary',
   size = 'base_14',
+  style,
 }: TextProps) {
   return (
     <Component
       className={cn(colorClasses[color], sizeClasses[size], className)}
+      style={style}
     >
       {children}
     </Component>

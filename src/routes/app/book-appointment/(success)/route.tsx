@@ -1,14 +1,12 @@
-import { Header } from '#/sections/home'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/app/notification/(commonLayout)')({
+export const Route = createFileRoute('/app/book-appointment/(success)')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
   return (
     <div>
-      <Header title="Notification" />
       <Outlet />
     </div>
   )

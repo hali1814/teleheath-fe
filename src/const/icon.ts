@@ -77,6 +77,20 @@ import AppointmentLocationIcon from '#/assets/icons/appointment/location.svg?rea
 import AppointmentHospitalIcon from '#/assets/icons/appointment/hospital.svg?react'
 import AppointmentCarIcon from '#/assets/icons/appointment/car.svg?react'
 import AppointmentUserSpIcon from '#/assets/icons/appointment/user-sp.svg?react'
+import CircleSolidIcon from '#/assets/icons/common/circle-solid.svg?react'
+import BellCheckIcon from '#/assets/icons/common/bell-check.svg?react'
+import SendCancelFilledIcon from '#/assets/icons/common/send-cancel-filled.svg?react'
+import CheckCircleSolidIcon from '#/assets/icons/common/check-circle-solid.svg?react'
+import VideoSolidIcon from '#/assets/icons/common/video-solid.svg?react'
+import NotificationActiveIcon from '#/assets/icons/common/notification-active.svg?react'
+import DoubleCheckIcon from '#/assets/icons/common/double-check.svg?react'
+import PolygonIcon from '#/assets/icons/common/polygon.svg?react'
+import UploadIcon from '#/assets/icons/common/upload.svg?react'
+import FileIcon from '#/assets/icons/common/file.svg?react'
+import UserOutlineIcon from '#/assets/icons/common/user-outline.svg?react'
+import BookingSuccessIcon from '#/assets/icons/common/booking-success.svg?react'
+import CopyIcon from '#/assets/icons/common/copy.svg?react'
+import WarningIcon from '#/assets/icons/common/warning.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -151,6 +165,20 @@ const ICONS_TEMPLATE = {
   hospital_appointment: AppointmentHospitalIcon,
   car_appointment: AppointmentCarIcon,
   user_sp_appointment: AppointmentUserSpIcon,
+  circle_solid: CircleSolidIcon,
+  bell_check: BellCheckIcon,
+  send_cancel_filled: SendCancelFilledIcon,
+  check_circle_solid: CheckCircleSolidIcon,
+  video_solid: VideoSolidIcon,
+  notification_active: NotificationActiveIcon,
+  double_check: DoubleCheckIcon,
+  polygon: PolygonIcon,
+  upload: UploadIcon,
+  file: FileIcon,
+  user_outline: UserOutlineIcon,
+  booking_success: BookingSuccessIcon,
+  copy: CopyIcon,
+  warning: WarningIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE
