@@ -4,6 +4,7 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Dialog, DialogContent, DialogTitle } from '#/components/ui/dialog'
+import type { ListFamilyResponse } from '#/services/query/profile/list-family'
 
 export interface DetailProfileModalProfile {
   avatarSrc?: string
@@ -19,7 +20,7 @@ export interface DetailProfileModalProfile {
 export interface DetailProfileModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  profile: DetailProfileModalProfile
+  profile: ListFamilyResponse
   onEdit?: () => void
 }
 
@@ -41,7 +42,9 @@ export default function DetailProfileModal({
   const { t } = useTranslation(['profile', 'common'])
   const ageText = getAgeText(profile.dateOfBirth)
   const genderText =
-    profile.genderLabel ?? t('profile:genderMale', { defaultValue: 'Male' })
+    profile.gender === 'MALE'
+      ? t('profile:genderMale', { defaultValue: 'Male' })
+      : t('profile:genderFemale', { defaultValue: 'Female' })
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -55,9 +58,9 @@ export default function DetailProfileModal({
 
         <div className="mt-4 flex flex-col items-center text-center">
           <div className="size-[90px] overflow-hidden rounded-full bg-[#E5E5E5]">
-            {profile.avatarSrc ? (
+            {profile.avatarUrl ? (
               <Image
-                src={profile.avatarSrc}
+                src={profile.avatarUrl}
                 alt={profile.name}
                 className="h-full w-full object-cover"
               />
@@ -83,7 +86,7 @@ export default function DetailProfileModal({
               size="xs_10"
               className="font-medium text-[#D43129] leading-none"
             >
-              {profile.patientIdLabel}
+              {profile.patientCode}
             </Text>
           </div>
         </div>
@@ -123,7 +126,7 @@ export default function DetailProfileModal({
                 size="base_14"
                 className="flex-1 wrap-break-word font-normal text-[#333333] text-right"
               >
-                No. 123, Preah Monivong Blvd, Phnom Penh, Cambodia
+                {profile.address ?? '--'}
               </Text>
             </div>
           </div>

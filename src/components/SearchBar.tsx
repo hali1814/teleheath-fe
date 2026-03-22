@@ -5,11 +5,13 @@ export default function SearchBar({
   placeholder = 'Search',
   onSearch,
   onClick,
+  onClear,
 }: {
   value?: string
   placeholder?: string
   onSearch?: (query: string) => void
   onClick?: () => void
+  onClear?: () => void
 }) {
   return (
     <div
@@ -24,7 +26,9 @@ export default function SearchBar({
         onChange={(e) => onSearch?.(e.target.value)}
       />
       {value && (
-        <Icon name="close" className="w-[10px] h-[10px] text-[#CCCCCC]" />
+        <button onClick={() => onClear?.()}>
+          <Icon name="close" className="w-[10px] h-[10px] text-[#CCCCCC]" />
+        </button>
       )}
     </div>
   )

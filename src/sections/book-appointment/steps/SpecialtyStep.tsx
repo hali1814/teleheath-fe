@@ -1,11 +1,20 @@
 import SearchBar from '#/components/SearchBar'
 import Text from '#/components/text'
-import { specialties } from '#/mockData'
+import { ALL_PAGINATION } from '#/const/pagination'
 import { SpecialtyChip } from '#/sections/hospital/SpecialtyChip'
+import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
 import { useBookingStore } from '#/stores/booking-store'
 
 export function SpecialtyStep() {
-  const { specialty, setData } = useBookingStore()
+  const { specialtyId, setData } = useBookingStore()
+
+  const {
+    data: { data: { content: specialties } } = {
+      data: { content: [] },
+    },
+  } = useGetListSpecialtyQuery({
+    params: ALL_PAGINATION,
+  })
 
   return (
     <div className="flex flex-col gap-[16px]">
@@ -14,17 +23,18 @@ export function SpecialtyStep() {
         Select Specialty
       </Text>
       <div className="flex flex-wrap gap-2">
-        {specialties.map((item) => (
-          <SpecialtyChip
-            key={item.name}
-            name={item.name}
-            icon={item.icon}
-            size="md"
-            clickable
-            selected={specialty === item.name}
-            onClick={() => setData({ specialty: item.name })}
-          />
-        ))}
+        {specialties &&
+          specialties.map((item) => (
+            <SpecialtyChip
+              key={item.id}
+              name={item.name}
+              icon={item.iconUrl}
+              size="md"
+              clickable
+              selected={specialtyId === item.id}
+              onClick={() => setData({ specialtyId: item.id })}
+            />
+          ))}
       </div>
     </div>
   )

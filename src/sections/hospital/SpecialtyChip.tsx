@@ -1,4 +1,4 @@
-import { Icon, type IconName } from '#/components/icon'
+import Image from '#/components/image'
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
@@ -12,7 +12,7 @@ export const SpecialtyChip = ({
   onClick,
 }: {
   name: string
-  icon: IconName
+  icon: string
   size?: 'sm' | 'md'
   clickable?: boolean
   selected?: boolean
@@ -43,7 +43,7 @@ export const SpecialtyChip = ({
       )}
       onClick={handleClick}
     >
-      <Icon name={icon} className={cn('w-[12px] h-[12px]', textColor)} />
+      <Image src={icon} alt={name} className="w-[12px] h-[12px]" />
       <Text size={textSize} className={cn(textStyle, textColor)}>
         {name}
       </Text>

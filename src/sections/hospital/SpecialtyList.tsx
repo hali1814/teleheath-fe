@@ -4,11 +4,12 @@ import { useState } from 'react'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useTranslation } from 'react-i18next'
 import { SpecialtyChip } from './SpecialtyChip'
+import type { Specialty } from '#/services/query/hospital/hospital-detail'
 
 export default function SpecialtyList({
   specialties,
 }: {
-  specialties: string[]
+  specialties: Specialty[]
 }) {
   const [expanded, setExpanded] = useState(false)
   const { t } = useTranslation(['hospital', 'common'])
@@ -27,7 +28,11 @@ export default function SpecialtyList({
         >
           {specialties.length > 0 &&
             specialties.map((specialty, index) => (
-              <SpecialtyChip key={index} name={specialty} icon="appointment" />
+              <SpecialtyChip
+                key={index}
+                name={specialty.name}
+                icon={specialty.iconUrl}
+              />
             ))}
         </div>
         {!expanded && (

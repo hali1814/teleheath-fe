@@ -8,7 +8,7 @@ interface Package {
   name: string
   location: string
   price: number
-  thumbnail: string
+  imageUrl: string
 }
 
 export default function PackageList({

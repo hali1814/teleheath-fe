@@ -2,16 +2,26 @@ import SearchBar from '#/components/SearchBar'
 import { useBookingStore } from '#/stores/booking-store'
 import { PatientProfileList } from '../PatientProfileList'
 import { MedicalRecords } from '../MedicalRecords'
+import { useGetListFamilyQuery } from '#/services/query/profile/list-family'
 
 export function PatientStep() {
-  const { patient, setData } = useBookingStore()
+  const { patientId, setData } = useBookingStore()
+
+  const { data: { data: family } = { data: [] } } = useGetListFamilyQuery({
+    params: {},
+  })
 
   return (
     <div className="flex flex-col gap-[16px]">
       <SearchBar placeholder="Search patient profile" />
       <PatientProfileList
-        selected={patient}
-        onClick={(patientID) => setData({ patient: patientID })}
+        profiles={family}
+        selected={patientId}
+        onClick={(profile) =>
+          setData({
+            patientId: profile.id,
+          })
+        }
       />
       <MedicalRecords />
     </div>

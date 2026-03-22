@@ -21,7 +21,7 @@ export default function DoctorCurrentLocation({
           <div className="flex items-start gap-[8px]">
             <Icon
               name="map_marker"
-              className="w-[16px] h-[16px] text-dust-red-8"
+              className="w-[16px] h-[16px] text-primary"
             />
             <Text
               size="sm_12"

@@ -1,13 +1,15 @@
 export interface IPagingRequest {
-  page: number;
-  pageSize: number;
-  sortBy?: string;
-  sortDir?: "asc" | "desc";
+  page: number
+  size: number
+  sortBy?: string
+  sortDir?: 'asc' | 'desc'
 }
 
-// export interface IPagingResponse<T> {
-//   data: T[];
-//   total: number;
-//   page: number;
-//   limit: number;
-// }
+export interface IPagingResponse<T> {
+  content: T[]
+  page: number
+  size: number
+  totalElements: number
+  totalPages: number
+  last: boolean
+}

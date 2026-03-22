@@ -9,6 +9,7 @@ import DetailProfileModal, {
   type DetailProfileModalProfile,
 } from '../profile/DetailProfileModal'
 import ProfileFormModal from '../profile/ProfileFormModal'
+import type { ListFamilyResponse } from '#/services/query/profile/list-family'
 
 const PatientProfileItem = ({
   profile,
@@ -16,7 +17,7 @@ const PatientProfileItem = ({
   onClick,
   onViewDetails,
 }: {
-  profile: (typeof patientProfiles)[0]
+  profile: ListFamilyResponse
   selected?: boolean
   onClick?: () => void
   onViewDetails?: () => void
@@ -32,7 +33,7 @@ const PatientProfileItem = ({
             )}
           >
             <AvatarImage
-              src={profile.avatar}
+              src={profile.avatarUrl ?? ''}
               alt={profile.name}
               className="w-[68px] h-[68px]"
             />
@@ -67,18 +68,20 @@ const PatientProfileItem = ({
 export function PatientProfileList({
   selected,
   onClick,
+  profiles,
 }: {
-  selected?: string
-  onClick?: (patientID: string) => void
+  selected?: number
+  onClick?: (profile: ListFamilyResponse) => void
+  profiles: ListFamilyResponse[]
 }) {
   const [open, setOpen] = useState(false)
   const [openAddNewProfileModal, setOpenAddNewProfileModal] = useState(false)
-  const [profile, setProfile] = useState<DetailProfileModalProfile | null>(null)
+  const [profile, setProfile] = useState<ListFamilyResponse | null>(null)
 
-  const handleViewDetails = (patientID: string) => {
-    setProfile(
-      patientProfiles.find((profile) => profile.patientID === patientID),
-    )
+  const handleViewDetails = (patientID: number) => {
+    const profile = profiles?.find((profile) => profile.id === patientID)
+    if (!profile) return
+    setProfile(profile)
     setOpen(true)
   }
 
@@ -88,17 +91,18 @@ export function PatientProfileList({
         <Text size="lg_16" className="font-semibold leading-[1.2]">
           Patient Profile
         </Text>
-        {patientProfiles.length > 0 ? (
+        {profiles && profiles.length > 0 ? (
           <div className="flex gap-[16px] overflow-x-auto no-scrollbar py-[10px]">
-            {patientProfiles.map((profile) => (
-              <PatientProfileItem
-                key={profile.patientID}
-                profile={profile}
-                selected={selected === profile.patientID}
-                onClick={() => onClick?.(profile.patientID)}
-                onViewDetails={() => handleViewDetails(profile.patientID)}
-              />
-            ))}
+            {profiles.length > 0 &&
+              profiles.map((profile) => (
+                <PatientProfileItem
+                  key={profile.id}
+                  profile={profile}
+                  selected={selected === profile.id}
+                  onClick={() => onClick?.(profile)}
+                  onViewDetails={() => handleViewDetails(profile.id)}
+                />
+              ))}
           </div>
         ) : (
           <EmptyPatientProfiles />

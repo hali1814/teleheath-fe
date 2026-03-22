@@ -1,6 +1,10 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
+import type { AppLanguage } from '#/i18n'
+import { cn } from '#/lib/utils'
+import { useGetListBranchesQuery } from '#/services/query/hospital/list-branches'
+import { formatWorkingHours, isClosedLabel } from '#/utils/working-hours.util'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,14 +15,15 @@ interface Branch {
   phone: string
   email: string
   working_hours: {
-    mon_sat: string
-    sun: string
-    emergency: string
-  }
+    day: string
+    open: boolean
+    openTime: string | null
+    closeTime: string | null
+  }[]
 }
 
 const BranchCard = ({ name, address, phone, email, working_hours }: Branch) => {
-  const { t } = useTranslation(['hospital', 'common'])
+  const { t, i18n } = useTranslation(['hospital', 'common'])
 
   return (
     <div className="flex flex-col gap-[16px] px-[16px] py-[20px] rounded-[12px] bg-white">
@@ -80,7 +85,7 @@ const BranchCard = ({ name, address, phone, email, working_hours }: Branch) => {
             {t('operatingHours.title')}
           </Text>
         </div>
-        <div className="flex justify-between items-center">
+        {/* <div className="flex justify-between items-center">
           <Text
             size="sm_12"
             className="font-normal leading-[1.3] text-muted-foreground"
@@ -88,7 +93,7 @@ const BranchCard = ({ name, address, phone, email, working_hours }: Branch) => {
             {t('operatingHours.mon_sat')}
           </Text>
           <Text size="sm_12" className="font-medium leading-[1.3]">
-            {working_hours.mon_sat}
+            {parsed_working_hours.mon_sat}
           </Text>
         </div>
         <div className="flex justify-between items-center">
@@ -102,7 +107,7 @@ const BranchCard = ({ name, address, phone, email, working_hours }: Branch) => {
             size="sm_12"
             className="font-medium leading-[1.3] uppercase text-dust-red-8"
           >
-            {working_hours.sun}
+            {parsed_working_hours.sun}
           </Text>
         </div>
         <div className="flex justify-between items-center">
@@ -113,9 +118,31 @@ const BranchCard = ({ name, address, phone, email, working_hours }: Branch) => {
             {t('operatingHours.emergency')}
           </Text>
           <Text size="sm_12" className="font-medium leading-[1.3]">
-            {working_hours.emergency}
+            {parsed_working_hours.emergency}
           </Text>
-        </div>
+        </div> */}
+        {Object.entries(
+          formatWorkingHours(working_hours, i18n.language as AppLanguage),
+        ).map(([label, value], index) => (
+          <div key={index} className="flex justify-between items-center">
+            <Text
+              size="sm_12"
+              className="font-normal leading-[1.3] text-muted-foreground"
+            >
+              {label}
+            </Text>
+            <Text
+              size="sm_12"
+              className={cn(
+                'font-medium leading-[1.3]',
+                isClosedLabel(value, i18n.language as AppLanguage) &&
+                  'text-dust-red-8',
+              )}
+            >
+              {value}
+            </Text>
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -123,10 +150,17 @@ const BranchCard = ({ name, address, phone, email, working_hours }: Branch) => {
 
 const LIMIT_BRANCH = 3
 
-export default function BranchList({ branches }: { branches: Branch[] }) {
+export default function BranchList({ hospitalId }: { hospitalId: string }) {
   const [expanded, setExpanded] = useState(false)
-  const limitBranch = expanded ? branches.length : LIMIT_BRANCH
   const { t } = useTranslation(['hospital', 'common'])
+
+  const { data: { data: branches } = { data: [] } } = useGetListBranchesQuery({
+    params: {
+      hospitalId,
+    },
+  })
+
+  const limitBranch = expanded ? branches.length : LIMIT_BRANCH
 
   return (
     <div className="flex flex-col gap-[16px] py-[12px]">
@@ -137,11 +171,11 @@ export default function BranchList({ branches }: { branches: Branch[] }) {
         {branches.slice(0, limitBranch).map((branch, index) => (
           <BranchCard
             key={index}
-            name={branch.name}
+            name={branch.nameVi}
             address={branch.address}
-            phone={branch.phone}
+            phone={branch.hotline}
             email={branch.email}
-            working_hours={branch.working_hours}
+            working_hours={branch.workingHours}
           />
         ))}
         {!expanded && (
@@ -152,16 +186,6 @@ export default function BranchList({ branches }: { branches: Branch[] }) {
           />
         )}
       </div>
-      <Button className="w-full h-[45px] bg-primary rounded-[40px] gap-[10px]">
-        <Icon
-          name="book_appointment"
-          color="white"
-          className="w-[20px] h-[20px]"
-        />
-        <Text className="font-medium leading-normal text-white">
-          {t('common:actions.bookAppointment')}
-        </Text>
-      </Button>
     </div>
   )
 }

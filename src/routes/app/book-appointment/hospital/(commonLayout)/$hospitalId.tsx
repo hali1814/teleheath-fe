@@ -8,9 +8,10 @@ import {
   PatientStep,
 } from '#/sections/book-appointment/steps'
 import { ReviewStep } from '#/sections/book-appointment/steps/ReviewStep'
+import type { BookingState } from '#/stores/booking-store'
 
 export const Route = createFileRoute(
-  '/app/book-appointment/(hospitalLayout)/hospital',
+  '/app/book-appointment/hospital/(commonLayout)/$hospitalId',
 )({
   component: RouteComponent,
 })
@@ -19,32 +20,33 @@ const steps = [
   {
     title: 'Select consultation type',
     component: ConsultationStep,
-    validate: (s: any) => !!s.consultationType,
+    validate: (s: BookingState) => !!s.consultationTierId,
   },
   {
     title: 'Select specialty',
     component: SpecialtyStep,
-    validate: (s: any) => !!s.specialty,
+    validate: (s: BookingState) => !!s.specialtyId,
   },
   {
     title: 'Select location',
     component: LocationStep,
-    validate: (s: any) => !!s.location,
+    validate: (s: BookingState) => !!s.branchId,
   },
   {
     title: 'Select schedule',
     component: ScheduleStep,
-    validate: (s: any) => !!s.appointmentDate && !!s.schedules?.length,
+    validate: (s: BookingState) =>
+      !!s.appointmentDate && !!s.startTime && !!s.endTime,
   },
   {
     title: 'Select Patient & Medical Records',
     component: PatientStep,
-    validate: (s: any) => !!s.patient,
+    validate: (s: BookingState) => !!s.patientId,
   },
   {
     title: 'Review & Payment',
     component: ReviewStep,
-    validate: (s: any) => true,
+    validate: (s: BookingState) => true,
   },
 ]
 

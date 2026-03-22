@@ -52,7 +52,7 @@ export default function Suggestions({
   onSelect,
 }: {
   query: string
-  items: { text: string }[]
+  items: { type: string; text: string; id: string }[]
   onSelect: (text: string) => void
 }) {
   return (

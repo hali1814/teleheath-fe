@@ -6,12 +6,12 @@ export default function InformationDetail({
   name,
   price,
   location,
-  introduction,
+  description,
 }: {
   name: string
   price: number
   location: string
-  introduction: string
+  description: string
 }) {
   return (
     <>
@@ -32,7 +32,7 @@ export default function InformationDetail({
         />
       </div>
       <Text size="base_14" className="leading-normal text-text-tertiary">
-        {introduction}
+        {description}
       </Text>
     </>
   )

@@ -10,18 +10,20 @@ import { Link } from '@tanstack/react-router'
 
 export default function PackageCard({
   className,
+  id,
   name,
   location,
   price,
-  thumbnail,
+  imageUrl,
   hideBookAppointment = false,
   sizeThumbnail = 'md',
 }: {
   className?: string
+  id: string
   name: string
   location: string
   price: number
-  thumbnail: string
+  imageUrl: string
   hideBookAppointment?: boolean
   sizeThumbnail?: 'sm' | 'md'
 }) {
@@ -33,15 +35,15 @@ export default function PackageCard({
   return (
     <Link
       to="/app/package/$id"
-      params={{ id: '1' }}
+      params={{ id }}
       className={cn(
         className,
         'w-full flex items-center gap-4 rounded-[12px] p-[16px] bg-white',
       )}
     >
       <Image
-        src={thumbnail}
-        alt="package-card"
+        src={imageUrl}
+        alt={name}
         className={cn(thumbnailSize, 'rounded-[8px] border border-dust-red-1')}
       />
       <div className="w-full flex flex-col gap-2">

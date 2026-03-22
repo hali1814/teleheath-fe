@@ -1,12 +1,18 @@
 import CountryTab from '#/components/CountryTab'
 import SearchBar from '#/components/SearchBar'
-import { doctors, hospitals, packages } from '#/mockData'
+import {
+  SPECIALIZED_PACKAGE_PAGINATION,
+  TOP_HOSPITAL_PAGINATION,
+} from '#/const/pagination'
+import { doctors } from '#/mockData'
 import { DoctorLists } from '#/sections/doctor'
 import { MenuList, PremiumService } from '#/sections/home'
 import { HospitalList } from '#/sections/hospital'
 import { PackageList } from '#/sections/package'
 import { useGetProfileQuery } from '#/services/query/profile/getProfile'
 import { useProfileStore } from '#/stores/profile'
+import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
+import { useGetListPackagesQuery } from '#/services/query/package/list-packages'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
@@ -30,6 +36,22 @@ function RouteComponent() {
     gcTime: 1000 * 60 * 30,
   })
 
+  const {
+    data: { data: { content: hospitalsData } = { content: [] } } = {
+      data: { content: [] },
+    },
+  } = useGetListHospitalsQuery({
+    params: TOP_HOSPITAL_PAGINATION,
+  })
+
+  const {
+    data: { data: { content: packagesData } = { content: [] } } = {
+      data: { content: [] },
+    },
+  } = useGetListPackagesQuery({
+    params: SPECIALIZED_PACKAGE_PAGINATION,
+  })
+
   return (
     <>
       <SearchBar
@@ -45,21 +67,27 @@ function RouteComponent() {
             label: t('common:countries.vietnam'),
             content: (
               <div className="flex flex-col gap-[20px] mb-[100px]">
-                <HospitalList
-                  title={t('topHospitals')}
-                  href="/app/hospital"
-                  hospitals={hospitals}
-                />
-                <PackageList
-                  title={t('specializedPackages')}
-                  href="/app/package"
-                  packages={packages}
-                />
-                <DoctorLists
-                  title={t('featuredDoctors')}
-                  href="/app/doctor"
-                  doctors={doctors}
-                />
+                {hospitalsData.length > 0 && (
+                  <HospitalList
+                    title={t('topHospitals')}
+                    href="/app/hospital"
+                    hospitals={hospitalsData}
+                  />
+                )}
+                {packagesData.length > 0 && (
+                  <PackageList
+                    title={t('specializedPackages')}
+                    href="/app/package"
+                    packages={packagesData}
+                  />
+                )}
+                {doctors.length > 0 && (
+                  <DoctorLists
+                    title={t('featuredDoctors')}
+                    href="/app/doctor"
+                    doctors={doctors}
+                  />
+                )}
               </div>
             ),
           },

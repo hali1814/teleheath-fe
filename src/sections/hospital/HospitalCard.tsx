@@ -10,6 +10,7 @@ import { Link } from '@tanstack/react-router'
 
 export default function HospitalCard({
   className,
+  id,
   name,
   location,
   thumbnail,
@@ -19,9 +20,10 @@ export default function HospitalCard({
   hideBookAppointment = false,
 }: {
   className?: string
+  id: string
   name: string
   location: string
-  thumbnail: string
+  thumbnail?: string | null
   size?: 'sm' | 'md'
   variantButton?: 'outline' | 'solid'
   showBadge?: boolean
@@ -38,14 +40,14 @@ export default function HospitalCard({
   return (
     <Link
       to="/app/hospital/$id"
-      params={{ id: '1' }}
+      params={{ id }}
       className={cn(
         'w-full flex flex-col shrink-0 rounded-[12px] border-none bg-white',
         className,
       )}
     >
       <Image
-        src={thumbnail}
+        src={thumbnail ?? ''}
         alt="hospital-card"
         className={cn('w-full rounded-tl-[12px] rounded-tr-[12px]', imgHeight)}
       />
@@ -68,18 +70,23 @@ export default function HospitalCard({
           />
         </div>
         {!hideBookAppointment && (
-          <Button className={cn('w-full h-[32px]', bgColor)}>
-            <Icon
-              name="book_appointment"
-              color={iconColor}
-              className="w-[16px] h-[16px]"
-            />
-            <Text
-              size="sm_12"
-              className={cn('font-medium leading-[1.3]', textColor)}
+          <Button className={cn('w-full h-[32px]', bgColor)} asChild>
+            <Link
+              to="/app/book-appointment/hospital/$hospitalId"
+              params={{ hospitalId: id }}
             >
-              {t('actions.bookAppointment')}
-            </Text>
+              <Icon
+                name="book_appointment"
+                color={iconColor}
+                className="w-[16px] h-[16px]"
+              />
+              <Text
+                size="sm_12"
+                className={cn('font-medium leading-[1.3]', textColor)}
+              >
+                {t('actions.bookAppointment')}
+              </Text>
+            </Link>
           </Button>
         )}
       </div>

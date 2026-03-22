@@ -7,6 +7,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import ModalFilterPackage from '#/sections/package/ModalFilterPackage'
 import { useTranslation } from 'react-i18next'
+import { useGetListPackagesQuery } from '#/services/query/package/list-packages'
 
 export const Route = createFileRoute('/app/package/(commonLayout)/')({
   component: RouteComponent,
@@ -15,6 +16,14 @@ export const Route = createFileRoute('/app/package/(commonLayout)/')({
 function RouteComponent() {
   const [open, setOpen] = useState(false)
   const { t } = useTranslation(['package'])
+
+  const { data: { data: packagesData } = { data: [] } } =
+    useGetListPackagesQuery({
+      params: {
+        page: 1,
+        pageSize: 10,
+      },
+    })
 
   return (
     <>
@@ -28,7 +37,7 @@ function RouteComponent() {
             </Badge>
           </div>
         </div>
-        {packages.map((p) => (
+        {packagesData.map((p) => (
           <PackageCard key={p.id} {...p} />
         ))}
       </div>

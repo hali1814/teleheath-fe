@@ -28,7 +28,6 @@ import { Route as AppNotificationcommonLayoutRouteRouteImport } from './routes/a
 import { Route as AppHospitalcommonLayoutRouteRouteImport } from './routes/app/hospital/(commonLayout)/route'
 import { Route as AppDoctorcommonLayoutRouteRouteImport } from './routes/app/doctor/(commonLayout)/route'
 import { Route as AppBookAppointmentsuccessRouteRouteImport } from './routes/app/book-appointment/(success)/route'
-import { Route as AppBookAppointmenthospitalLayoutRouteRouteImport } from './routes/app/book-appointment/(hospitalLayout)/route'
 import { Route as AppBookAppointmentcommonLayoutRouteRouteImport } from './routes/app/book-appointment/(commonLayout)/route'
 import { Route as AppAppointmentsdetailLayoutRouteRouteImport } from './routes/app/appointments/(detailLayout)/route'
 import { Route as AppAppointmentscommonLayoutRouteRouteImport } from './routes/app/appointments/(commonLayout)/route'
@@ -46,8 +45,9 @@ import { Route as AppPackagecommonLayoutIdRouteImport } from './routes/app/packa
 import { Route as AppHospitalcommonLayoutIdRouteImport } from './routes/app/hospital/(commonLayout)/$id'
 import { Route as AppDoctorcommonLayoutIdRouteImport } from './routes/app/doctor/(commonLayout)/$id'
 import { Route as AppBookAppointmentsuccessSuccessRouteImport } from './routes/app/book-appointment/(success)/success'
-import { Route as AppBookAppointmenthospitalLayoutHospitalRouteImport } from './routes/app/book-appointment/(hospitalLayout)/hospital'
 import { Route as AppAppointmentsdetailLayoutIdRouteImport } from './routes/app/appointments/(detailLayout)/$id'
+import { Route as AppBookAppointmentHospitalcommonLayoutRouteRouteImport } from './routes/app/book-appointment/hospital/(commonLayout)/route'
+import { Route as AppBookAppointmentHospitalcommonLayoutHospitalIdRouteImport } from './routes/app/book-appointment/hospital/(commonLayout)/$hospitalId'
 
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/app',
@@ -152,12 +152,6 @@ const AppBookAppointmentsuccessRouteRoute =
     path: '/book-appointment',
     getParentRoute: () => AppRouteRoute,
   } as any)
-const AppBookAppointmenthospitalLayoutRouteRoute =
-  AppBookAppointmenthospitalLayoutRouteRouteImport.update({
-    id: '/book-appointment/(hospitalLayout)',
-    path: '/book-appointment',
-    getParentRoute: () => AppRouteRoute,
-  } as any)
 const AppBookAppointmentcommonLayoutRouteRoute =
   AppBookAppointmentcommonLayoutRouteRouteImport.update({
     id: '/book-appointment/(commonLayout)',
@@ -259,17 +253,23 @@ const AppBookAppointmentsuccessSuccessRoute =
     path: '/success',
     getParentRoute: () => AppBookAppointmentsuccessRouteRoute,
   } as any)
-const AppBookAppointmenthospitalLayoutHospitalRoute =
-  AppBookAppointmenthospitalLayoutHospitalRouteImport.update({
-    id: '/hospital',
-    path: '/hospital',
-    getParentRoute: () => AppBookAppointmenthospitalLayoutRouteRoute,
-  } as any)
 const AppAppointmentsdetailLayoutIdRoute =
   AppAppointmentsdetailLayoutIdRouteImport.update({
     id: '/$id',
     path: '/$id',
     getParentRoute: () => AppAppointmentsdetailLayoutRouteRoute,
+  } as any)
+const AppBookAppointmentHospitalcommonLayoutRouteRoute =
+  AppBookAppointmentHospitalcommonLayoutRouteRouteImport.update({
+    id: '/book-appointment/hospital/(commonLayout)',
+    path: '/book-appointment/hospital',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppBookAppointmentHospitalcommonLayoutHospitalIdRoute =
+  AppBookAppointmentHospitalcommonLayoutHospitalIdRouteImport.update({
+    id: '/$hospitalId',
+    path: '/$hospitalId',
+    getParentRoute: () => AppBookAppointmentHospitalcommonLayoutRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -292,8 +292,8 @@ export interface FileRoutesByFullPath {
   '/app/entry/': typeof AppEntryIndexRoute
   '/app/history/': typeof AppHistoryIndexRoute
   '/app/home/': typeof AppHomeIndexRoute
+  '/app/book-appointment/hospital': typeof AppBookAppointmentHospitalcommonLayoutRouteRouteWithChildren
   '/app/appointments/$id': typeof AppAppointmentsdetailLayoutIdRoute
-  '/app/book-appointment/hospital': typeof AppBookAppointmenthospitalLayoutHospitalRoute
   '/app/book-appointment/success': typeof AppBookAppointmentsuccessSuccessRoute
   '/app/doctor/$id': typeof AppDoctorcommonLayoutIdRoute
   '/app/hospital/$id': typeof AppHospitalcommonLayoutIdRoute
@@ -308,6 +308,7 @@ export interface FileRoutesByFullPath {
   '/app/package/': typeof AppPackagecommonLayoutIndexRoute
   '/app/profile/': typeof AppProfilecommonLayoutIndexRoute
   '/app/search/': typeof AppSearchcommonLayoutIndexRoute
+  '/app/book-appointment/hospital/$hospitalId': typeof AppBookAppointmentHospitalcommonLayoutHospitalIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -320,8 +321,8 @@ export interface FileRoutesByTo {
   '/app/entry': typeof AppEntryIndexRoute
   '/app/history': typeof AppHistoryIndexRoute
   '/app/home': typeof AppHomeIndexRoute
+  '/app/book-appointment/hospital': typeof AppBookAppointmentHospitalcommonLayoutRouteRouteWithChildren
   '/app/appointments/$id': typeof AppAppointmentsdetailLayoutIdRoute
-  '/app/book-appointment/hospital': typeof AppBookAppointmenthospitalLayoutHospitalRoute
   '/app/book-appointment/success': typeof AppBookAppointmentsuccessSuccessRoute
   '/app/doctor/$id': typeof AppDoctorcommonLayoutIdRoute
   '/app/hospital/$id': typeof AppHospitalcommonLayoutIdRoute
@@ -333,6 +334,7 @@ export interface FileRoutesByTo {
   '/app/notification': typeof AppNotificationcommonLayoutIndexRoute
   '/app/package': typeof AppPackagecommonLayoutIndexRoute
   '/app/search': typeof AppSearchcommonLayoutIndexRoute
+  '/app/book-appointment/hospital/$hospitalId': typeof AppBookAppointmentHospitalcommonLayoutHospitalIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -345,7 +347,6 @@ export interface FileRoutesById {
   '/app/appointments/(commonLayout)': typeof AppAppointmentscommonLayoutRouteRouteWithChildren
   '/app/appointments/(detailLayout)': typeof AppAppointmentsdetailLayoutRouteRouteWithChildren
   '/app/book-appointment/(commonLayout)': typeof AppBookAppointmentcommonLayoutRouteRouteWithChildren
-  '/app/book-appointment/(hospitalLayout)': typeof AppBookAppointmenthospitalLayoutRouteRouteWithChildren
   '/app/book-appointment/(success)': typeof AppBookAppointmentsuccessRouteRouteWithChildren
   '/app/doctor/(commonLayout)': typeof AppDoctorcommonLayoutRouteRouteWithChildren
   '/app/hospital/(commonLayout)': typeof AppHospitalcommonLayoutRouteRouteWithChildren
@@ -359,8 +360,8 @@ export interface FileRoutesById {
   '/app/entry/': typeof AppEntryIndexRoute
   '/app/history/': typeof AppHistoryIndexRoute
   '/app/home/': typeof AppHomeIndexRoute
+  '/app/book-appointment/hospital/(commonLayout)': typeof AppBookAppointmentHospitalcommonLayoutRouteRouteWithChildren
   '/app/appointments/(detailLayout)/$id': typeof AppAppointmentsdetailLayoutIdRoute
-  '/app/book-appointment/(hospitalLayout)/hospital': typeof AppBookAppointmenthospitalLayoutHospitalRoute
   '/app/book-appointment/(success)/success': typeof AppBookAppointmentsuccessSuccessRoute
   '/app/doctor/(commonLayout)/$id': typeof AppDoctorcommonLayoutIdRoute
   '/app/hospital/(commonLayout)/$id': typeof AppHospitalcommonLayoutIdRoute
@@ -375,6 +376,7 @@ export interface FileRoutesById {
   '/app/package/(commonLayout)/': typeof AppPackagecommonLayoutIndexRoute
   '/app/profile/(commonLayout)/': typeof AppProfilecommonLayoutIndexRoute
   '/app/search/(commonLayout)/': typeof AppSearchcommonLayoutIndexRoute
+  '/app/book-appointment/hospital/(commonLayout)/$hospitalId': typeof AppBookAppointmentHospitalcommonLayoutHospitalIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -398,8 +400,8 @@ export interface FileRouteTypes {
     | '/app/entry/'
     | '/app/history/'
     | '/app/home/'
-    | '/app/appointments/$id'
     | '/app/book-appointment/hospital'
+    | '/app/appointments/$id'
     | '/app/book-appointment/success'
     | '/app/doctor/$id'
     | '/app/hospital/$id'
@@ -414,6 +416,7 @@ export interface FileRouteTypes {
     | '/app/package/'
     | '/app/profile/'
     | '/app/search/'
+    | '/app/book-appointment/hospital/$hospitalId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -426,8 +429,8 @@ export interface FileRouteTypes {
     | '/app/entry'
     | '/app/history'
     | '/app/home'
-    | '/app/appointments/$id'
     | '/app/book-appointment/hospital'
+    | '/app/appointments/$id'
     | '/app/book-appointment/success'
     | '/app/doctor/$id'
     | '/app/hospital/$id'
@@ -439,6 +442,7 @@ export interface FileRouteTypes {
     | '/app/notification'
     | '/app/package'
     | '/app/search'
+    | '/app/book-appointment/hospital/$hospitalId'
   id:
     | '__root__'
     | '/'
@@ -450,7 +454,6 @@ export interface FileRouteTypes {
     | '/app/appointments/(commonLayout)'
     | '/app/appointments/(detailLayout)'
     | '/app/book-appointment/(commonLayout)'
-    | '/app/book-appointment/(hospitalLayout)'
     | '/app/book-appointment/(success)'
     | '/app/doctor/(commonLayout)'
     | '/app/hospital/(commonLayout)'
@@ -464,8 +467,8 @@ export interface FileRouteTypes {
     | '/app/entry/'
     | '/app/history/'
     | '/app/home/'
+    | '/app/book-appointment/hospital/(commonLayout)'
     | '/app/appointments/(detailLayout)/$id'
-    | '/app/book-appointment/(hospitalLayout)/hospital'
     | '/app/book-appointment/(success)/success'
     | '/app/doctor/(commonLayout)/$id'
     | '/app/hospital/(commonLayout)/$id'
@@ -480,6 +483,7 @@ export interface FileRouteTypes {
     | '/app/package/(commonLayout)/'
     | '/app/profile/(commonLayout)/'
     | '/app/search/(commonLayout)/'
+    | '/app/book-appointment/hospital/(commonLayout)/$hospitalId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -622,13 +626,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBookAppointmentsuccessRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/app/book-appointment/(hospitalLayout)': {
-      id: '/app/book-appointment/(hospitalLayout)'
-      path: '/book-appointment'
-      fullPath: '/app/book-appointment'
-      preLoaderRoute: typeof AppBookAppointmenthospitalLayoutRouteRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
     '/app/book-appointment/(commonLayout)': {
       id: '/app/book-appointment/(commonLayout)'
       path: '/book-appointment'
@@ -748,19 +745,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBookAppointmentsuccessSuccessRouteImport
       parentRoute: typeof AppBookAppointmentsuccessRouteRoute
     }
-    '/app/book-appointment/(hospitalLayout)/hospital': {
-      id: '/app/book-appointment/(hospitalLayout)/hospital'
-      path: '/hospital'
-      fullPath: '/app/book-appointment/hospital'
-      preLoaderRoute: typeof AppBookAppointmenthospitalLayoutHospitalRouteImport
-      parentRoute: typeof AppBookAppointmenthospitalLayoutRouteRoute
-    }
     '/app/appointments/(detailLayout)/$id': {
       id: '/app/appointments/(detailLayout)/$id'
       path: '/$id'
       fullPath: '/app/appointments/$id'
       preLoaderRoute: typeof AppAppointmentsdetailLayoutIdRouteImport
       parentRoute: typeof AppAppointmentsdetailLayoutRouteRoute
+    }
+    '/app/book-appointment/hospital/(commonLayout)': {
+      id: '/app/book-appointment/hospital/(commonLayout)'
+      path: '/book-appointment/hospital'
+      fullPath: '/app/book-appointment/hospital'
+      preLoaderRoute: typeof AppBookAppointmentHospitalcommonLayoutRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/book-appointment/hospital/(commonLayout)/$hospitalId': {
+      id: '/app/book-appointment/hospital/(commonLayout)/$hospitalId'
+      path: '/$hospitalId'
+      fullPath: '/app/book-appointment/hospital/$hospitalId'
+      preLoaderRoute: typeof AppBookAppointmentHospitalcommonLayoutHospitalIdRouteImport
+      parentRoute: typeof AppBookAppointmentHospitalcommonLayoutRouteRoute
     }
   }
 }
@@ -842,21 +846,6 @@ const AppBookAppointmentcommonLayoutRouteRouteChildren: AppBookAppointmentcommon
 const AppBookAppointmentcommonLayoutRouteRouteWithChildren =
   AppBookAppointmentcommonLayoutRouteRoute._addFileChildren(
     AppBookAppointmentcommonLayoutRouteRouteChildren,
-  )
-
-interface AppBookAppointmenthospitalLayoutRouteRouteChildren {
-  AppBookAppointmenthospitalLayoutHospitalRoute: typeof AppBookAppointmenthospitalLayoutHospitalRoute
-}
-
-const AppBookAppointmenthospitalLayoutRouteRouteChildren: AppBookAppointmenthospitalLayoutRouteRouteChildren =
-  {
-    AppBookAppointmenthospitalLayoutHospitalRoute:
-      AppBookAppointmenthospitalLayoutHospitalRoute,
-  }
-
-const AppBookAppointmenthospitalLayoutRouteRouteWithChildren =
-  AppBookAppointmenthospitalLayoutRouteRoute._addFileChildren(
-    AppBookAppointmenthospitalLayoutRouteRouteChildren,
   )
 
 interface AppBookAppointmentsuccessRouteRouteChildren {
@@ -982,6 +971,21 @@ const AppSearchcommonLayoutRouteRouteWithChildren =
     AppSearchcommonLayoutRouteRouteChildren,
   )
 
+interface AppBookAppointmentHospitalcommonLayoutRouteRouteChildren {
+  AppBookAppointmentHospitalcommonLayoutHospitalIdRoute: typeof AppBookAppointmentHospitalcommonLayoutHospitalIdRoute
+}
+
+const AppBookAppointmentHospitalcommonLayoutRouteRouteChildren: AppBookAppointmentHospitalcommonLayoutRouteRouteChildren =
+  {
+    AppBookAppointmentHospitalcommonLayoutHospitalIdRoute:
+      AppBookAppointmentHospitalcommonLayoutHospitalIdRoute,
+  }
+
+const AppBookAppointmentHospitalcommonLayoutRouteRouteWithChildren =
+  AppBookAppointmentHospitalcommonLayoutRouteRoute._addFileChildren(
+    AppBookAppointmentHospitalcommonLayoutRouteRouteChildren,
+  )
+
 interface AppRouteRouteChildren {
   AppBookOfflineRouteRoute: typeof AppBookOfflineRouteRouteWithChildren
   AppHistoryRouteRoute: typeof AppHistoryRouteRouteWithChildren
@@ -990,7 +994,6 @@ interface AppRouteRouteChildren {
   AppAppointmentscommonLayoutRouteRoute: typeof AppAppointmentscommonLayoutRouteRouteWithChildren
   AppAppointmentsdetailLayoutRouteRoute: typeof AppAppointmentsdetailLayoutRouteRouteWithChildren
   AppBookAppointmentcommonLayoutRouteRoute: typeof AppBookAppointmentcommonLayoutRouteRouteWithChildren
-  AppBookAppointmenthospitalLayoutRouteRoute: typeof AppBookAppointmenthospitalLayoutRouteRouteWithChildren
   AppBookAppointmentsuccessRouteRoute: typeof AppBookAppointmentsuccessRouteRouteWithChildren
   AppDoctorcommonLayoutRouteRoute: typeof AppDoctorcommonLayoutRouteRouteWithChildren
   AppHospitalcommonLayoutRouteRoute: typeof AppHospitalcommonLayoutRouteRouteWithChildren
@@ -1001,6 +1004,7 @@ interface AppRouteRouteChildren {
   AppSearchcommonLayoutRouteRoute: typeof AppSearchcommonLayoutRouteRouteWithChildren
   AppComponentIndexRoute: typeof AppComponentIndexRoute
   AppEntryIndexRoute: typeof AppEntryIndexRoute
+  AppBookAppointmentHospitalcommonLayoutRouteRoute: typeof AppBookAppointmentHospitalcommonLayoutRouteRouteWithChildren
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -1014,8 +1018,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
     AppAppointmentsdetailLayoutRouteRouteWithChildren,
   AppBookAppointmentcommonLayoutRouteRoute:
     AppBookAppointmentcommonLayoutRouteRouteWithChildren,
-  AppBookAppointmenthospitalLayoutRouteRoute:
-    AppBookAppointmenthospitalLayoutRouteRouteWithChildren,
   AppBookAppointmentsuccessRouteRoute:
     AppBookAppointmentsuccessRouteRouteWithChildren,
   AppDoctorcommonLayoutRouteRoute: AppDoctorcommonLayoutRouteRouteWithChildren,
@@ -1031,6 +1033,8 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppSearchcommonLayoutRouteRoute: AppSearchcommonLayoutRouteRouteWithChildren,
   AppComponentIndexRoute: AppComponentIndexRoute,
   AppEntryIndexRoute: AppEntryIndexRoute,
+  AppBookAppointmentHospitalcommonLayoutRouteRoute:
+    AppBookAppointmentHospitalcommonLayoutRouteRouteWithChildren,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

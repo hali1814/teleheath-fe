@@ -4,16 +4,18 @@ import Text from '#/components/text'
 import { Avatar, AvatarImage } from '#/components/ui/avatar'
 
 export default function HospitalDetailHeader({
+  thumbnail,
   name,
   website,
 }: {
+  thumbnail: string
   name: string
   website: string
 }) {
   return (
     <div className="relative w-full mb-[55px]">
       <Image
-        src="/thumbnail.png"
+        src={thumbnail}
         alt="hospital-detail-header"
         className="w-full h-[192px]"
       />

@@ -1,7 +1,6 @@
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
-import { slotTimesMorning } from '#/mockData'
 
 const SlotTimeChip = ({
   time,
@@ -17,7 +16,7 @@ const SlotTimeChip = ({
   return (
     <Badge
       className={cn(
-        'h-[38px] flex items-center justify-center gap-[8px] rounded-[7px] border-[0.5px] border-primary bg-dust-red-1 px-[16px] py-[12px]',
+        'h-[38px] w-full min-w-0 flex items-center justify-center gap-[8px] rounded-[7px] border-[0.5px] border-primary bg-dust-red-1 px-[8px] py-[12px]',
         selected && 'bg-primary border-primary',
         disabled && 'cursor-not-allowed bg-[#F2F2F2] border-[#CCCCCC]',
       )}
@@ -26,7 +25,7 @@ const SlotTimeChip = ({
       <Text
         size="sm_12"
         className={cn(
-          'font-normal leading-[1.3]',
+          'font-normal leading-[1.3] text-center truncate w-full',
           selected ? 'text-white' : 'text-primary',
           disabled && 'text-[#CCCCCC]',
         )}
@@ -39,12 +38,21 @@ const SlotTimeChip = ({
 
 export function SlotTimeList({
   title,
-  selectedTimes,
-  setSelectedTimes,
+  selectedTime,
+  setSelectedTime,
+  slotTimes,
 }: {
   title: string
-  selectedTimes: string[]
-  setSelectedTimes: (times: string[]) => void
+  selectedTime: { startTime: string | null; endTime: string | null }
+  setSelectedTime: (time: {
+    startTime: string | null
+    endTime: string | null
+  }) => void
+  slotTimes: {
+    startTime: string
+    endTime: string
+    status?: 'AVAILABLE' | 'FULL'
+  }[]
 }) {
   return (
     <div className="flex flex-col gap-[14px] pt-[8px]">
@@ -54,18 +62,31 @@ export function SlotTimeList({
       >
         {title}
       </Text>
-      <div className="flex flex-wrap justify-between gap-[14px]">
-        {slotTimesMorning.map((item) => (
+      <div className="grid grid-cols-3 gap-[14px]">
+        {slotTimes.map((item) => (
           <SlotTimeChip
-            key={item.time}
-            time={item.time}
-            selected={selectedTimes.includes(item.time)}
-            disabled={item.disabled}
+            key={`${item.startTime}-${item.endTime}`}
+            time={`${item.startTime} - ${item.endTime}`}
+            disabled={item.status === 'FULL'}
+            selected={
+              selectedTime.startTime !== null &&
+              selectedTime.endTime !== null &&
+              selectedTime.startTime === item.startTime &&
+              selectedTime.endTime === item.endTime
+            }
             onClick={() => {
-              if (selectedTimes.includes(item.time)) {
-                setSelectedTimes(selectedTimes.filter((t) => t !== item.time))
+              if (
+                selectedTime.startTime !== null &&
+                selectedTime.endTime !== null &&
+                selectedTime.startTime === item.startTime &&
+                selectedTime.endTime === item.endTime
+              ) {
+                setSelectedTime({ startTime: null, endTime: null })
               } else {
-                setSelectedTimes([...selectedTimes, item.time])
+                setSelectedTime({
+                  startTime: item.startTime,
+                  endTime: item.endTime,
+                })
               }
             }}
           />

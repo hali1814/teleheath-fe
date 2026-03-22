@@ -5,8 +5,10 @@ import { useTranslation } from 'react-i18next'
 
 export default function SearchInput({
   onSearch,
+  value,
 }: {
   onSearch: (query: string) => void
+  value?: string
 }) {
   const router = useRouter()
   const { t } = useTranslation(['home', 'common'])
@@ -20,8 +22,10 @@ export default function SearchInput({
         />
       </div>
       <SearchBar
+        value={value}
         placeholder={t('home:searchPlaceholder')}
         onSearch={onSearch}
+        onClear={() => onSearch('')}
       />
     </div>
   )

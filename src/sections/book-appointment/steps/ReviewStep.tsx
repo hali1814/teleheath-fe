@@ -1,15 +1,14 @@
 import { Icon, type IconName } from '#/components/icon'
+import Image from '#/components/image'
 import Text from '#/components/text'
 import { Avatar, AvatarImage } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import { Checkbox } from '#/components/ui/checkbox'
-import icon from '#/const/icon'
 import { cn } from '#/lib/utils'
 import { consultationTypes } from '#/mockData'
+import { useGetListServiceQuery } from '#/services/query/services/list-service'
 import { formatPrice } from '#/utils/price.util'
 import { useState } from 'react'
-
-const serviceIcons = ['car_check', 'supporter']
 
 const ServiceItem = ({
   icon,
@@ -17,7 +16,7 @@ const ServiceItem = ({
   selected,
   onClick,
 }: {
-  icon: IconName
+  icon: string
   title: string
   selected: boolean
   onClick: () => void
@@ -30,11 +29,12 @@ const ServiceItem = ({
           selected ? 'bg-[#D331311A]' : 'bg-[#F2F2F2]',
         )}
       >
-        <Icon
-          name={icon}
+        <Image
+          src={icon}
+          alt={title}
           className={cn(
             'w-[20px] h-[20px] text-primary',
-            selected ? 'text-primary' : 'text-[#999999]',
+            selected ? '' : 'opacity-50',
           )}
         />
       </div>
@@ -71,9 +71,11 @@ const PaymentMethodItem = ({
       )}
       onClick={onClick}
     >
-      <Avatar>
-        <AvatarImage src={logo} className="w-[32px] h-[32px]" />
-      </Avatar>
+      <Image
+        src={logo}
+        alt={title}
+        className="w-[32px] h-[32px] rounded-full"
+      />
       <Text className="flex-1 font-medium leading-normal text-[#333333]">
         {title}
       </Text>
@@ -89,8 +91,35 @@ const PaymentMethodItem = ({
   )
 }
 
+const paymentMethods = [
+  {
+    id: 1,
+    name: 'KHQR',
+    logo: '/payment-method/khqr.png',
+  },
+  {
+    id: 2,
+    name: 'EMoney',
+    logo: '/payment-method/e-money.png',
+  },
+  {
+    id: 3,
+    name: 'ABA Bank',
+    logo: '/payment-method/aba-bank.png',
+  },
+]
+
 export function ReviewStep() {
-  const [selectedServices, setSelectedServices] = useState<string[]>([])
+  const [selectedServices, setSelectedServices] = useState<number[]>([])
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<number>(1)
+
+  const { data: { data: services } = { data: [] } } = useGetListServiceQuery({
+    params: {
+      page: 1,
+      size: 0,
+    },
+  })
+
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center px-[30px] py-[16px] rounded-[48px] bg-[#ED26300D] border-2 border-[#ED263033]">
@@ -102,9 +131,9 @@ export function ReviewStep() {
             Tam Anh Hospital
           </Text>
         </div>
-        {serviceIcons.map((icon, index) => (
+        {services.map((service, index) => (
           <span
-            key={icon}
+            key={service.id}
             className={cn(
               'w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2 border-white/30 flex items-center justify-center',
               {
@@ -112,9 +141,9 @@ export function ReviewStep() {
               },
             )}
           >
-            <Icon
-              name={icon as IconName}
-              color="white"
+            <Image
+              src={service.iconUrl}
+              alt={service.name}
               className="w-[10px] h-[10px]"
             />
           </span>
@@ -130,17 +159,19 @@ export function ReviewStep() {
             Choose the additional service you want to purchase.
           </Text>
         </div>
-        {serviceIcons.map((icon) => (
+        {services.map((service) => (
           <ServiceItem
-            key={icon}
-            icon={icon as IconName}
-            title={icon}
-            selected={selectedServices.includes(icon)}
+            key={service.id}
+            icon={service.iconUrl}
+            title={service.name}
+            selected={selectedServices.includes(service.id)}
             onClick={() => {
-              if (selectedServices.includes(icon)) {
-                setSelectedServices(selectedServices.filter((s) => s !== icon))
+              if (selectedServices.includes(service.id)) {
+                setSelectedServices(
+                  selectedServices.filter((s) => s !== service.id),
+                )
               } else {
-                setSelectedServices([...selectedServices, icon])
+                setSelectedServices([...selectedServices, service.id])
               }
             }}
           />
@@ -333,12 +364,15 @@ export function ReviewStep() {
         <Text size="lg_16" className="font-semibold leading-[1.2]">
           Payment Methods
         </Text>
-        <PaymentMethodItem
-          logo="/doctor.png"
-          title="KHQR"
-          selected={true}
-          onClick={() => {}}
-        />
+        {paymentMethods.map((paymentMethod) => (
+          <PaymentMethodItem
+            key={paymentMethod.id}
+            logo={paymentMethod.logo}
+            title={paymentMethod.name}
+            selected={selectedPaymentMethod === paymentMethod.id}
+            onClick={() => setSelectedPaymentMethod(paymentMethod.id)}
+          />
+        ))}
       </div>
     </div>
   )

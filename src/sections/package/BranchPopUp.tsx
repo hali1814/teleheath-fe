@@ -9,6 +9,8 @@ import {
 import { useState } from 'react'
 import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
+import type { AppLanguage } from '#/i18n'
 
 const BranchItem = ({ name, address }: { name: string; address: string }) => {
   return (
@@ -38,12 +40,16 @@ export default function BranchPopUp({
   name: string
   branchCount: number
   branches: {
-    name: string
+    hospitalId: string
+    nameVi: string
+    nameKh: string | null
+    nameEn: string
     address: string
   }[]
 }) {
   const [open, setOpen] = useState(false)
-  const { t } = useTranslation(['package', 'common'])
+  const { t, i18n } = useTranslation(['package', 'common'])
+
   return (
     <>
       <div
@@ -88,7 +94,12 @@ export default function BranchPopUp({
           {branches.map((branch, index) => (
             <BranchItem
               key={index}
-              name={branch.name}
+              name={getLocalizedTextByLang(
+                branch.nameVi,
+                branch.nameKh,
+                branch.nameEn,
+                i18n.language as AppLanguage,
+              )}
               address={branch.address}
             />
           ))}

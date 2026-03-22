@@ -2,13 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { HospitalCard } from '#/sections/hospital'
 import Text from '#/components/text'
 import { useTranslation } from 'react-i18next'
-
-interface Hospital {
-  id: string
-  name: string
-  location: string
-  thumbnail: string
-}
+import type { ListHospitalsResponse } from '#/services/query/hospital/list-hospitals'
 
 export default function HospitalList({
   title,
@@ -17,7 +11,7 @@ export default function HospitalList({
 }: {
   title: string
   href: string
-  hospitals: Hospital[]
+  hospitals: ListHospitalsResponse[]
 }) {
   const { t } = useTranslation(['common'])
 
@@ -35,7 +29,14 @@ export default function HospitalList({
       </div>
       <div className="w-full flex gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {hospitals.map((hospital) => (
-          <HospitalCard key={hospital.id} {...hospital} className="w-[192px]" />
+          <HospitalCard
+            key={hospital.hospitalId}
+            id={hospital.hospitalId}
+            name={hospital.nameVi}
+            location={hospital.address}
+            thumbnail={hospital.thumbnailUrl}
+            className="w-[192px]"
+          />
         ))}
       </div>
     </div>
