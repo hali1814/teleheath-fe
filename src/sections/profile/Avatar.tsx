@@ -15,7 +15,7 @@ export interface AvatarProps {
 export default function Avatar({
   src,
   alt = 'Avatar',
-  initials = 'SC',
+  initials = '?',
   onCameraClick,
 }: AvatarProps) {
   const hasImage = Boolean(src)

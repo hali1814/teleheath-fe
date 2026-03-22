@@ -11,6 +11,8 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { BottomSheetTranslate } from '#/sections/profile/BottomSheetTranslate'
+import { useProfileStore } from '#/stores/profile'
+import { formatDate, getInitialsFromName } from '#/utils'
 
 export const Route = createFileRoute('/app/profile/(commonLayout)/')({
   component: RouteComponent,
@@ -20,6 +22,7 @@ function RouteComponent() {
   const { t } = useTranslation('profile')
   const navigate = useNavigate()
   const [openBottomSheet, setOpenBottomSheet] = useState(false)
+  const user = useProfileStore((s) => s.profile)
 
   return (
     <div>
@@ -28,17 +31,22 @@ function RouteComponent() {
         <Image src={effectPng} alt="avatar" />
 
         <div className="absolute  top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
-          <Avatar initials="SC" onCameraClick={() => {}} />
+          <Avatar
+            src={user?.avatarUrl}
+            alt={user?.name ?? ''}
+            initials={getInitialsFromName(user?.name)}
+            onCameraClick={() => {}}
+          />
         </div>
         <Text
           size="4xl_24"
           className="font-semibold text-text-primary absolute left-1/2 -translate-x-1/2  -translate-y-1/2 bottom-[-15px]"
         >
-          Sokra Chum
+          {user?.name}
         </Text>
       </div>
       <Text size="lg_16" className="text-primary font-medium mt-2 text-center">
-        Patient ID: #MED-88290
+        Patient ID: #{user?.patientCode}
       </Text>
 
       <div className="flex justify-center">
@@ -62,14 +70,19 @@ function RouteComponent() {
               {t('personalInformation')}
             </Text>
 
-            <InfoRow label={t('dateOfBirth')} value="May 12, 1989" />
-            <InfoRow label={t('gender')} value="Male" />
-            <InfoRow label={t('phoneNumber')} value="+855 96 789 0123" />
-            <InfoRow label={t('email')} value="sokrachum@gmail.com" />
             <InfoRow
-              label={t('address')}
-              value="No. 123, Preah Monivong Blvd, Phnom Penh, Cambodia"
+              label={t('dateOfBirth')}
+              value={formatDate(user?.dateOfBirth ?? '')}
             />
+            <InfoRow
+              label={t('gender')}
+              value={
+                user?.gender === 'MALE' ? t('genderMale') : t('genderFemale')
+              }
+            />
+            <InfoRow label={t('phoneNumber')} value={user?.phone ?? ''} />
+            <InfoRow label={t('email')} value={user?.email ?? ''} />
+            <InfoRow label={t('address')} value={user?.address ?? ''} />
           </CardContent>
         </Card>
 

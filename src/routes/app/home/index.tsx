@@ -5,7 +5,8 @@ import { DoctorLists } from '#/sections/doctor'
 import { MenuList, PremiumService } from '#/sections/home'
 import { HospitalList } from '#/sections/hospital'
 import { PackageList } from '#/sections/package'
-import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
+import { useGetProfileQuery } from '#/services/query/profile/getProfile'
+import { useProfileStore } from '#/stores/profile'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
@@ -17,14 +18,17 @@ function RouteComponent() {
   const { t } = useTranslation(['home', 'common'])
   const router = useRouter()
 
-  const { data: hospitalsData } = useGetListHospitalsQuery({
-    params: {
-      page: 1,
-      pageSize: 10,
+  useGetProfileQuery({
+    params: {},
+    onSuccess: (data) => {
+      if (data.success) {
+        console.log(data.data)
+        useProfileStore.getState().setProfile(data.data)
+      }
     },
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 30,
   })
-
-  console.log(hospitalsData)
 
   return (
     <>

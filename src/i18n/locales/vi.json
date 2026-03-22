@@ -16,6 +16,7 @@
       "lastName": "Ho",
       "phone": "So dien thoai"
     },
+    "noData": "Không có dữ liệu",
     "actions": {
       "cancel": "Hủy",
       "done": "Xong",
@@ -109,6 +110,9 @@
     "pleaseSelectLanguage": "Vui lòng chọn ngôn ngữ",
     "profileInformation": "Thông tin hồ sơ",
     "uploadPhoto": "Tải ảnh lên",
+    "choosePhotoSource": "Chọn ảnh",
+    "photoFromCamera": "Máy ảnh",
+    "photoFromLibrary": "Thư viện ảnh",
     "fullName": "Họ và tên",
     "genderMale": "Nam",
     "genderFemale": "Nữ",

@@ -3,7 +3,7 @@ import { Button } from '#/components/ui/button'
 import { cn } from '#/lib/utils'
 import type { TextInputProps } from '#/types/input'
 
-export type GenderValue = 'male' | 'female'
+export type GenderValue = 'MALE' | 'FEMALE'
 
 export interface GenderInputBaseProps extends Omit<
   TextInputProps,
@@ -22,7 +22,7 @@ export default function GenderInputBase({
   label = '',
   isRequired = false,
   value,
-  defaultValue = 'male',
+  defaultValue = 'MALE',
   onValueChange,
   className,
   disabled,
@@ -48,10 +48,10 @@ export default function GenderInputBase({
           type="button"
           variant="ghost"
           disabled={disabled}
-          onClick={() => onValueChange?.('male')}
+          onClick={() => onValueChange?.('MALE')}
           className={cn(
             'h-[37px] flex-1 rounded-[8px] shadow-[0px_1px_2px_rgba(0,0,0,0.05)]',
-            currentValue === 'male'
+            currentValue === 'MALE'
               ? 'bg-white hover:bg-white'
               : 'bg-transparent shadow-none hover:bg-transparent',
           )}
@@ -60,7 +60,7 @@ export default function GenderInputBase({
             size="base_14"
             className={cn(
               'w-full text-center font-normal',
-              currentValue === 'male' ? 'text-badge' : 'text-[#64748B]',
+              currentValue === 'MALE' ? 'text-badge' : 'text-[#64748B]',
             )}
           >
             {labels.male}
@@ -71,10 +71,10 @@ export default function GenderInputBase({
           type="button"
           variant="ghost"
           disabled={disabled}
-          onClick={() => onValueChange?.('female')}
+          onClick={() => onValueChange?.('FEMALE')}
           className={cn(
             'h-[37px] flex-1 rounded-[8px] shadow-[0px_1px_2px_rgba(0,0,0,0.05)]',
-            currentValue === 'female'
+            currentValue === 'FEMALE'
               ? 'bg-white hover:bg-white'
               : 'bg-transparent shadow-none hover:bg-transparent',
           )}
@@ -83,7 +83,7 @@ export default function GenderInputBase({
             size="base_14"
             className={cn(
               'w-full text-center font-normal',
-              currentValue === 'female' ? 'text-badge' : 'text-[#64748B]',
+              currentValue === 'FEMALE' ? 'text-badge' : 'text-[#64748B]',
             )}
           >
             {labels.female}

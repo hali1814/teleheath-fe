@@ -18,6 +18,8 @@ export default function InputSelect({
   value,
   defaultValue,
   onValueChange,
+  disabled = false,
+  emptyMessage,
 }: {
   className?: string
   label?: string
@@ -27,6 +29,9 @@ export default function InputSelect({
   value?: string
   defaultValue?: string
   onValueChange?: (value: string) => void
+  disabled?: boolean
+  /** Hiển thị trong dropdown khi `options` rỗng (vd. API không trả bản ghi). */
+  emptyMessage?: string
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -41,6 +46,7 @@ export default function InputSelect({
         value={value}
         defaultValue={defaultValue}
         onValueChange={onValueChange}
+        disabled={disabled}
       >
         <SelectTrigger
           className={cn(
@@ -52,15 +58,26 @@ export default function InputSelect({
         </SelectTrigger>
         <SelectContent position="popper" className="rounded-[8px]">
           <SelectGroup>
-            {options.map((option) => (
-              <SelectItem
-                key={option.value}
-                value={option.value}
-                className="text-base"
-              >
-                {option.label}
-              </SelectItem>
-            ))}
+            {options.length === 0 && emptyMessage ? (
+              <div className="px-3 py-3 text-center">
+                <Text
+                  size="base_14"
+                  className="text-muted-foreground font-normal"
+                >
+                  {emptyMessage}
+                </Text>
+              </div>
+            ) : (
+              options.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className="text-base"
+                >
+                  {option.label}
+                </SelectItem>
+              ))
+            )}
           </SelectGroup>
         </SelectContent>
       </Select>

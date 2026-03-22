@@ -7,6 +7,8 @@ interface InputSelectProps<TFieldValues extends FieldValues>
   extends RHFTextInputProps<TFieldValues> {
   placeholder: string
   options: { label: string; value: string }[]
+  disabled?: boolean
+  emptyMessage?: string
 }
 
 export default function InputSelect<TFieldValues extends FieldValues>({

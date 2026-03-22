@@ -16,6 +16,7 @@
       "lastName": "នាមត្រកូល",
       "phone": "លេខទូរស័ព្ទ"
     },
+    "noData": "គ្មានទិន្នន័យ",
     "actions": {
       "cancel": "បោះបង់",
       "done": "រួចរាល់",
@@ -109,6 +110,9 @@
     "pleaseSelectLanguage": "សូមជ្រើសរើសភាសា",
     "profileInformation": "ព័ត៌មានប្រវត្តិរូប",
     "uploadPhoto": "អាប់ឡូដរូបថត",
+    "choosePhotoSource": "ជ្រើសរើសរូបថត",
+    "photoFromCamera": "កាមេរ៉ា",
+    "photoFromLibrary": "បណ្ណាល័យរូបភាព",
     "fullName": "ឈ្មោះពេញ",
     "genderMale": "ប្រុស",
     "genderFemale": "ស្រី",

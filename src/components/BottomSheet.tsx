@@ -20,7 +20,13 @@ export function BottomSheet({
 }: BottomSheetProps) {
   return (
     <div className="flex flex-wrap gap-2">
-      <Sheet open={open} onOpenChange={onClose} modal>
+      <Sheet
+        open={open}
+        onOpenChange={(next) => {
+          if (!next) onClose()
+        }}
+        modal
+      >
         <SheetContent
           side={'bottom'}
           showCloseButton={false}

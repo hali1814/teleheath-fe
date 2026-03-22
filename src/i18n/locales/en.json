@@ -16,6 +16,7 @@
       "lastName": "Last name",
       "phone": "Phone number"
     },
+    "noData": "No data",
     "actions": {
       "cancel": "Cancel",
       "done": "Done",
@@ -109,6 +110,9 @@
     "pleaseSelectLanguage": "Please select language",
     "profileInformation": "Profile Information",
     "uploadPhoto": "Upload Photo",
+    "choosePhotoSource": "Choose photo",
+    "photoFromCamera": "Camera",
+    "photoFromLibrary": "Photo library",
     "fullName": "Full Name",
     "genderMale": "Male",
     "genderFemale": "Female",

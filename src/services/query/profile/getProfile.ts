@@ -1,0 +1,46 @@
+import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
+import { http, type HttpCommonResponse } from '#/services/network/http-request'
+
+export interface GetProfileRequest {}
+
+export interface PatientProfileResponse {
+  id: number
+  camId: string
+  name: string
+  phone: string
+  email: string
+  dateOfBirth: string
+  gender: string
+  address: string | null
+  avatarUrl: string | null
+  nationality: string | null
+  idCard: string | null
+  patientCode: string | null
+  relationship: string
+  patientStatus: string
+  owner: boolean
+}
+
+const getProfile = async (_params: GetProfileRequest, signal: AbortSignal) => {
+  const response = await http.get<PatientProfileResponse>(
+    '/patients/me',
+    {},
+    {
+      signal,
+    },
+  )
+  return response
+}
+
+export const useGetProfileQuery = (
+  options: UseQueryOptions<
+    HttpCommonResponse<PatientProfileResponse>,
+    GetProfileRequest
+  >,
+) => {
+  return useQuery({
+    queryKey: ['patients', 'me', options.params],
+    queryFn: ({ signal }) => getProfile(options.params, signal),
+    ...options,
+  })
+}

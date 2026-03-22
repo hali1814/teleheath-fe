@@ -1,0 +1,76 @@
+---
+description: Chuẩn implement API layer (GET query vs POST mutation) theo list-hospitals và authCamID
+globs: src/services/query/**/*.ts
+alwaysApply: false
+---
+
+# API query layer — 2 pattern (Telehealth FE)
+
+Khi user gửi **screenshot/spec API** (Postman, Swagger…), implement theo **một trong hai case** dưới đây. Tham chiếu:
+
+- **GET (có query params, trả list/object)** → `src/services/query/hospital/list-hospitals.ts`
+- **POST/PUT/PATCH (body JSON, action)** → `src/services/query/auth/authCamID.ts`
+
+## Chung
+
+- **HTTP**: `http` từ `#/services/network/http-request`, kiểu bọc `HttpCommonResponse<T>` từ cùng file.
+- **Import alias**: dùng `#/...` (không `@/` trừ khi file hiện tại đã thống nhất `@/`).
+- **Response API**: backend thường trả `{ data, success, message, timestamp, status }` → generic `T` là **phần `data`** (mảng hoặc object), ví dụ `HttpCommonResponse<ListHospitalsResponse[]>` hoặc `HttpCommonResponse<AuthCamIDResponse>`.
+- **Types**: đặt `interface`/`type` rõ ràng (request/response), **không** dùng literal JSON làm type; export nếu tái sử dụng.
+- **File**: đặt dưới `src/services/query/<domain>/<feature>.ts` (vd `hospital/list-hospitals.ts`, `auth/authCamID.ts`).
+
+---
+
+## Case 1 — GET + `useQuery` (danh sách / chi tiết có query)
+
+**Dấu hiệu**: method GET, URL có `?page=&size=` hoặc filter, response là array hoặc object đọc được.
+
+**Pattern**:
+
+1. `Request` extends `IPagingRequest` từ `#/model/paging.model` nếu API có phân trang (page/size/sort…).
+2. Hàm async gọi API nhận `(params, signal)` và truyền `{ signal }` vào `http.get`:
+   - `http.get<ResponseType>(endpoint, params, { signal })`
+3. Export hook `useGet…Query` dùng `#/hooks/use-query`:
+   - `queryKey: ['feature-name', options.params]` (luôn gắn params để cache đúng).
+   - `queryFn: ({ signal }) => get…(options.params, signal)`
+   - spread `...options`
+
+**Tham chiếu**: `list-hospitals.ts` — endpoint `/hospitals`, type response array `ListHospitalsResponse[]`.
+
+---
+
+## Case 2 — POST (hoặc PUT) + `useMutation` (login, submit, SSO…)
+
+**Dấu hiệu**: method POST, body JSON (form fields trong Postman Body raw / x-www-form-urlencoded map sang object).
+
+**Pattern**:
+
+1. Export `…Request` / `…Response` (và nested type như `AuthCamIDUser` nếu cần).
+2. Hàm async gọi API:
+   - `http.post<ResponseType>(endpoint, requestBody)`  
+   - Nếu wrapper `useMutation` truyền `signal` vào `mutationFn`, nên forward: `http.post(..., { signal })` trong object config thứ 3 (xem `http.post` trong `http-request.ts`).
+3. Export hook `use…Mutation` từ `#/hooks/use-mutation`:
+   - `mutationFn: tenHamApiAsync`
+   - `UseMutationOptions<HttpCommonResponse<ResponseType>, RequestType>`
+
+**Tham chiếu**: `authCamID.ts` — endpoint `/auth/sso`, body `{ partnerToken }`.
+
+---
+
+## Không thuộc 2 case trên
+
+- **multipart upload** → `http.postMultipart` + `PostMultipartBody` (`file: File`), xem `src/services/query/upload/use-upload-image-mutate.ts`.
+- **DELETE** → `http.delete` + hook tương ứng (query/mutation tùy UX).
+
+---
+
+## Checklist nhanh từ screenshot API
+
+| Quan sát | Làm gì |
+|----------|--------|
+| GET + query | Case 1, `useQuery`, `queryKey` + `params` |
+| POST/PUT + JSON body | Case 2, `useMutation`, `Request`/`Response` types |
+| `data` trong response wrapper | Generic `T` = shape của `data` |
+| Path + baseURL | Chỉ path relative (vd `/hospitals`) — `baseURL` đã ở `axios` |
+
+Sau khi tạo file, **export hook + types** để gọi từ route/component.

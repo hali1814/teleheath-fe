@@ -10,3 +10,4 @@ Project rules:
 6. This project uses `pnpm`. Prefer `pnpm` for install, script execution, and dependency management. Do not use `npm` or `yarn` unless explicitly requested.
 7. For React UI components, prefer using the `Text` component from `src/components/text` for rendering user-facing string content (especially body text and labels) instead of raw `<p>`, `<span>`, or `<div>` with inline `text-*` classes, unless there is a strong reason not to.
 8. For images, prefer using the `Image` component from `src/components/image` instead of raw `<img>` tags, so that `loading="lazy"`, `decoding="async"`, `aspectRatio`, and consistent sizing/optimization are applied by default. Use raw `<img>` only when the `Image` component cannot support a specific requirement.
+9. When implementing new API modules under `src/services/query/`, follow `.cursor/rules/api-query-patterns.mdc` (GET + useQuery vs POST + useMutation), using `list-hospitals.ts` and `authCamID.ts` as references.
