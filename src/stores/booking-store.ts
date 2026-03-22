@@ -9,7 +9,7 @@ export type BookingState = {
   specialtyId?: number
   packageId?: number
   bookingType?: 'HOSPITAL' | 'PACKAGE' | 'DOCTOR'
-  patientId?: number
+  patientProfileId?: number
   appointmentDate?: Date
   startTime?: string
   endTime?: string

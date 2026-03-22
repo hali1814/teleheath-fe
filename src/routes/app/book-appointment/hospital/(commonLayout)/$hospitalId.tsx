@@ -41,7 +41,7 @@ const steps = [
   {
     title: 'Select Patient & Medical Records',
     component: PatientStep,
-    validate: (s: BookingState) => !!s.patientId,
+    validate: (s: BookingState) => !!s.patientProfileId,
   },
   {
     title: 'Review & Payment',

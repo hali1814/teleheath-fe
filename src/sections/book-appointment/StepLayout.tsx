@@ -12,8 +12,10 @@ export function StepLayout({
   step,
   total,
   disableNext,
+  onSubmit,
 }: any) {
   const router = useRouter()
+
   return (
     <div className="flex min-h-dvh flex-col relative bg-background pb-[103px]">
       <Header isHome={false} title={title} />
@@ -56,7 +58,13 @@ export function StepLayout({
 
         <Button
           className="w-[120px] h-[45px] rounded-[40px] bg-primary"
-          onClick={onNext}
+          onClick={() => {
+            if (step === total - 1) {
+              onSubmit()
+            } else {
+              onNext()
+            }
+          }}
           disabled={disableNext}
         >
           <Text className="font-medium leading-normal text-white">
