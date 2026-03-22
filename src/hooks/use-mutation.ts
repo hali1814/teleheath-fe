@@ -8,6 +8,7 @@ import {
 import { useCallback, useRef } from 'react'
 import { type HttpCommonResponse } from '@/services/network/http-request'
 import { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 /**
  * -------------------------------------------------------------------------
@@ -109,7 +110,7 @@ export const useMutation = <
     },
     onError: (error, variables, onMutateResult, context) => {
       if (isShowError) {
-        // showToast.error('Lỗi', (error as Error)?.message ?? 'Có lỗi xảy ra')
+        toast.error((error as Error)?.message ?? 'An error occurred')
       }
       userOnError?.(error, variables, onMutateResult, context)
     },

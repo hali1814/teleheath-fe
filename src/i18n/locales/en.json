@@ -53,6 +53,15 @@
       "book": "Book",
       "history": "History",
       "profile": "Profile"
+    },
+    "entry": {
+      "verifyingTitle": "Verifying your access",
+      "verifyingSubtitle": "Please wait while we verify your session before continuing.",
+      "loadingLabel": "Loading…",
+      "needsAuthTitle": "You're not signed in",
+      "needsAuthSubtitle": "We couldn't verify your session. Sign in to continue.",
+      "signIn": "Sign in",
+      "retryVerify": "Try again"
     }
   },
   "home": {

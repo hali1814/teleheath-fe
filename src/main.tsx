@@ -5,12 +5,15 @@ import { ThemeProvider } from 'next-themes'
 import './i18n'
 import { routeTree } from './routeTree.gen'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { registerRouter } from './router-instance'
 
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
   scrollRestoration: true,
 })
+
+registerRouter(router)
 
 const queryClient = new QueryClient({
   defaultOptions: {

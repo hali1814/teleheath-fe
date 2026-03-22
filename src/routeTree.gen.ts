@@ -17,6 +17,7 @@ import { Route as AppHistoryRouteRouteImport } from './routes/app/history/route'
 import { Route as AppBookOfflineRouteRouteImport } from './routes/app/book-offline/route'
 import { Route as AppHomeIndexRouteImport } from './routes/app/home/index'
 import { Route as AppHistoryIndexRouteImport } from './routes/app/history/index'
+import { Route as AppEntryIndexRouteImport } from './routes/app/entry/index'
 import { Route as AppComponentIndexRouteImport } from './routes/app/component/index'
 import { Route as AppBookOfflineIndexRouteImport } from './routes/app/book-offline/index'
 import { Route as AppSearchcommonLayoutRouteRouteImport } from './routes/app/search/(commonLayout)/route'
@@ -87,6 +88,11 @@ const AppHistoryIndexRoute = AppHistoryIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppHistoryRouteRoute,
+} as any)
+const AppEntryIndexRoute = AppEntryIndexRouteImport.update({
+  id: '/entry/',
+  path: '/entry/',
+  getParentRoute: () => AppRouteRoute,
 } as any)
 const AppComponentIndexRoute = AppComponentIndexRouteImport.update({
   id: '/component/',
@@ -283,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/app/search': typeof AppSearchcommonLayoutRouteRouteWithChildren
   '/app/book-offline/': typeof AppBookOfflineIndexRoute
   '/app/component/': typeof AppComponentIndexRoute
+  '/app/entry/': typeof AppEntryIndexRoute
   '/app/history/': typeof AppHistoryIndexRoute
   '/app/home/': typeof AppHomeIndexRoute
   '/app/appointments/$id': typeof AppAppointmentsdetailLayoutIdRoute
@@ -310,6 +317,7 @@ export interface FileRoutesByTo {
   '/app/profile': typeof AppProfilecommonLayoutIndexRoute
   '/app/book-offline': typeof AppBookOfflineIndexRoute
   '/app/component': typeof AppComponentIndexRoute
+  '/app/entry': typeof AppEntryIndexRoute
   '/app/history': typeof AppHistoryIndexRoute
   '/app/home': typeof AppHomeIndexRoute
   '/app/appointments/$id': typeof AppAppointmentsdetailLayoutIdRoute
@@ -348,6 +356,7 @@ export interface FileRoutesById {
   '/app/search/(commonLayout)': typeof AppSearchcommonLayoutRouteRouteWithChildren
   '/app/book-offline/': typeof AppBookOfflineIndexRoute
   '/app/component/': typeof AppComponentIndexRoute
+  '/app/entry/': typeof AppEntryIndexRoute
   '/app/history/': typeof AppHistoryIndexRoute
   '/app/home/': typeof AppHomeIndexRoute
   '/app/appointments/(detailLayout)/$id': typeof AppAppointmentsdetailLayoutIdRoute
@@ -386,6 +395,7 @@ export interface FileRouteTypes {
     | '/app/search'
     | '/app/book-offline/'
     | '/app/component/'
+    | '/app/entry/'
     | '/app/history/'
     | '/app/home/'
     | '/app/appointments/$id'
@@ -413,6 +423,7 @@ export interface FileRouteTypes {
     | '/app/profile'
     | '/app/book-offline'
     | '/app/component'
+    | '/app/entry'
     | '/app/history'
     | '/app/home'
     | '/app/appointments/$id'
@@ -450,6 +461,7 @@ export interface FileRouteTypes {
     | '/app/search/(commonLayout)'
     | '/app/book-offline/'
     | '/app/component/'
+    | '/app/entry/'
     | '/app/history/'
     | '/app/home/'
     | '/app/appointments/(detailLayout)/$id'
@@ -532,6 +544,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/history/'
       preLoaderRoute: typeof AppHistoryIndexRouteImport
       parentRoute: typeof AppHistoryRouteRoute
+    }
+    '/app/entry/': {
+      id: '/app/entry/'
+      path: '/entry'
+      fullPath: '/app/entry/'
+      preLoaderRoute: typeof AppEntryIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
     '/app/component/': {
       id: '/app/component/'
@@ -981,6 +1000,7 @@ interface AppRouteRouteChildren {
   AppProfileeditLayoutRouteRoute: typeof AppProfileeditLayoutRouteRouteWithChildren
   AppSearchcommonLayoutRouteRoute: typeof AppSearchcommonLayoutRouteRouteWithChildren
   AppComponentIndexRoute: typeof AppComponentIndexRoute
+  AppEntryIndexRoute: typeof AppEntryIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -1010,6 +1030,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppProfileeditLayoutRouteRoute: AppProfileeditLayoutRouteRouteWithChildren,
   AppSearchcommonLayoutRouteRoute: AppSearchcommonLayoutRouteRouteWithChildren,
   AppComponentIndexRoute: AppComponentIndexRoute,
+  AppEntryIndexRoute: AppEntryIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

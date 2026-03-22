@@ -7,6 +7,7 @@ import ItemHistoryAppointment, {
   type HistoryEntityKind,
   type HistoryVisitType,
 } from '#/sections/history/ItemHistoryAppointment'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/app/history/')({
   component: RouteComponent,
@@ -106,43 +107,55 @@ function RouteComponent() {
     overscan: 6,
   })
 
-  return (
-    <div ref={parentRef} className="mt-4 px-4 pb-4">
-      <div
-        className="relative w-full"
-        style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
-      >
-        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-          const row = rows[virtualRow.index]
+  const { t } = useTranslation(['common'])
+  const title = t('bottomNavigation.history')
 
-          return (
-            <div
-              key={row.id}
-              className="absolute left-0 top-0 w-full"
-              style={{ transform: `translateY(${virtualRow.start}px)` }}
-            >
-              {row.kind === 'title' ? (
-                <Text
-                  size="base_14"
-                  className="mb-3 text-[14px] font-medium uppercase leading-none tracking-[0.03em] text-[#64748B]"
-                >
-                  {row.title}
-                </Text>
-              ) : (
-                <div className="mb-3">
-                  <ItemHistoryAppointment
-                    visitType={row.item.visitType}
-                    entityKind={row.item.entityKind}
-                    name={row.item.name}
-                    scheduleLabel={row.item.scheduleLabel}
-                    status={row.item.status}
-                    avatarClassName={row.item.avatarClassName}
-                  />
-                </div>
-              )}
-            </div>
-          )
-        })}
+  return (
+    <div>
+      <header className="sticky top-0 z-50 h-[62px] px-[16px] py-[20px] border-b-[0.5px] border-[#FFE8E6] bg-background">
+        <div className="flex h-full items-center justify-center">
+          <Text size="lg_16" className="font-medium text-text-primary">
+            {title}
+          </Text>
+        </div>
+      </header>
+      <div ref={parentRef} className="mt-4 px-4 pb-4">
+        <div
+          className="relative w-full"
+          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+        >
+          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+            const row = rows[virtualRow.index]
+
+            return (
+              <div
+                key={row.id}
+                className="absolute left-0 top-0 w-full"
+                style={{ transform: `translateY(${virtualRow.start}px)` }}
+              >
+                {row.kind === 'title' ? (
+                  <Text
+                    size="base_14"
+                    className="mb-3 text-[14px] font-medium uppercase leading-none tracking-[0.03em] text-[#64748B]"
+                  >
+                    {row.title}
+                  </Text>
+                ) : (
+                  <div className="mb-3">
+                    <ItemHistoryAppointment
+                      visitType={row.item.visitType}
+                      entityKind={row.item.entityKind}
+                      name={row.item.name}
+                      scheduleLabel={row.item.scheduleLabel}
+                      status={row.item.status}
+                      avatarClassName={row.item.avatarClassName}
+                    />
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

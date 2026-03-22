@@ -11,9 +11,36 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Giảm auto zoom font khi xoay màn / Safari */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 html,
 body {
   overscroll-behavior: none;
+  /* WebView: hạn chế double-tap zoom */
+  touch-action: manipulation;
+}
+
+/*
+ * WebView mobile: tắt chọn / copy / callout long-press trên nội dung thường.
+ * Ô nhập: vẫn chọn chữ + long-press để Paste (iOS cần -webkit-touch-callout: default).
+ */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+input,
+textarea,
+select,
+[contenteditable='true'] {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
 }
 
 html,

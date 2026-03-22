@@ -53,6 +53,15 @@
       "book": "Đặt lịch",
       "history": "Lịch sử",
       "profile": "Hồ sơ"
+    },
+    "entry": {
+      "verifyingTitle": "Đang xác minh quyền truy cập",
+      "verifyingSubtitle": "Vui lòng đợi trong khi chúng tôi xác minh phiên của bạn trước khi tiếp tục.",
+      "loadingLabel": "Đang tải…",
+      "needsAuthTitle": "Bạn chưa đăng nhập",
+      "needsAuthSubtitle": "Không thể xác minh phiên. Vui lòng đăng nhập để tiếp tục.",
+      "signIn": "Đăng nhập",
+      "retryVerify": "Thử lại"
     }
   },
   "home": {
