@@ -9,6 +9,14 @@ import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 const config = defineConfig({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://103.173.226.3:8080',
+        changeOrigin: true,
+      },
+    },
+  },
   plugins: [
     devtools(),
     tsconfigPaths({ projects: ['./tsconfig.json'] }),
