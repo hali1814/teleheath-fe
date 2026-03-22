@@ -45,6 +45,7 @@
     "react-hook-form": "^7.71.2",
     "react-i18next": "^16.5.8",
     "react-intersection-observer": "^10.0.3",
+    "react-qr-code": "^2.0.18",
     "shadcn": "^4.0.6",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",

@@ -1,15 +1,27 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
-import { createFileRoute } from '@tanstack/react-router'
+import { useGetDetailPaymentQuery } from '#/services/query/payment/detail-payment'
+import { DATE_TIME_TYPE, formatDate } from '#/utils'
+import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/app/book-appointment/(success)/success')(
-  {
-    component: RouteComponent,
-  },
-)
+export const Route = createFileRoute(
+  '/app/book-appointment/success/$appointmentId',
+)({
+  component: RouteComponent,
+})
 
 function RouteComponent() {
+  const { appointmentId } = useParams({
+    from: '/app/book-appointment/success/$appointmentId',
+  })
+
+  const { data: { data: detailPayment } = { data: null } } =
+    useGetDetailPaymentQuery({
+      params: { appointmentId },
+      enabled: !!appointmentId,
+    })
+
   return (
     <div className="relative mt-[60px] px-[15px]">
       <div className="flex flex-col items-center justify-center gap-[16px]">
@@ -27,12 +39,16 @@ function RouteComponent() {
           </Text>
           <div className="flex items-center gap-[8px]">
             <Text className="font-medium leading-normal text-muted-foreground">
-              Booking ID: <span className="text-dust-red-8">#BK-0511639</span>
+              Booking ID:{' '}
+              <span className="text-dust-red-8">#{appointmentId}</span>
             </Text>
             <Icon name="copy" className="w-[16px] h-[16px] text-dust-red-8" />
           </div>
           <Text size="sm_12" className="leading-[1.3] text-muted-foreground">
-            Nov 05, 2025 • 09:41 AM
+            {formatDate(
+              detailPayment?.paidAt,
+              DATE_TIME_TYPE.MMM_DD_YYYY_HH_mm_A,
+            )}
           </Text>
         </div>
       </div>
@@ -50,19 +66,19 @@ function RouteComponent() {
         </div>
         <div className="flex flex-col gap-[8px]">
           <div className="flex items-center gap-[8px]">
-            <div className="w-[6px] h-[6px] bg-[#F0B133] rounded-full" />
+            <div className="flex h-[6px] w-[6px] items-center justify-center rounded-full bg-[#F0B133]" />
             <Text size="sm_12" className="leading-[1.3] text-[#334155]">
               Please arrive 15 minutes early for check-in.
             </Text>
           </div>
           <div className="flex items-center gap-[8px]">
-            <div className="w-[6px] h-[6px] bg-[#F0B133] rounded-full" />
+            <div className="flex h-[6px] w-[6px] items-center justify-center rounded-full bg-[#F0B133]" />
             <Text size="sm_12" className="leading-[1.3] text-[#334155]">
               Bring your ID or Passport for verification.
             </Text>
           </div>
           <div className="flex items-center gap-[8px]">
-            <div className="w-[6px] h-[6px] bg-[#F0B133] rounded-full" />
+            <div className="flex h-[6px] w-[6px] items-center justify-center rounded-full bg-[#F0B133]" />
             <Text size="sm_12" className="leading-[1.3] text-[#334155]">
               Bring original medical records and recent test results.
             </Text>
@@ -71,20 +87,23 @@ function RouteComponent() {
       </div>
 
       <div
-        className="fixed bottom-0 left-0 right-0 pt-[10px] pb-[35px] px-[20px]
-      flex flex-col gap-[16px]
+        className="fixed bottom-0 left-0 right-0 flex flex-col gap-[16px] px-[20px] pb-[35px] pt-[10px]
       "
       >
-        <Button className="w-full h-[45px] rounded-[40px] bg-primary">
-          <Text className="font-medium leading-normal text-white">
-            View My Appointment
-          </Text>
+        <Button className="h-[45px] w-full rounded-[40px] bg-primary" asChild>
+          <Link to="/app/home">
+            <Text className="font-medium leading-normal text-white">
+              View My Appointment
+            </Text>
+          </Link>
         </Button>
 
-        <Button className="w-full h-[45px] rounded-[40px] bg-[#E6E6E6]">
-          <Text className="font-medium leading-normal text-[#333333]">
-            Go to Homepage
-          </Text>
+        <Button className="h-[45px] w-full rounded-[40px] bg-[#E6E6E6]" asChild>
+          <Link to="/app/home">
+            <Text className="font-medium leading-normal text-[#333333]">
+              Go to Homepage
+            </Text>
+          </Link>
         </Button>
       </div>
     </div>
