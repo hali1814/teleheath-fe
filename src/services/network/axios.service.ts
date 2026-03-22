@@ -9,8 +9,25 @@ import axios, {
 } from 'axios'
 import { toast } from 'sonner'
 
+/**
+ * - **Dev (`pnpm dev`)**: gọi thẳng IP (Vite proxy `/api` cũng được nếu đặt env).
+ * - **Vercel (HTTPS)**: không được gọi `http://IP` từ browser → Mixed Content / ERR_NETWORK.
+ *   Build production dùng **`/api`** → `vercel.json` proxy sang backend.
+ * - Override: `VITE_API_BASE_URL` (Vercel → Environment Variables, rebuild).
+ */
+function getApiBaseURL(): string {
+  const fromEnv = import.meta.env.VITE_API_BASE_URL
+  if (fromEnv !== undefined && fromEnv !== '') {
+    return fromEnv.replace(/\/$/, '')
+  }
+  if (import.meta.env.PROD) {
+    return '/api'
+  }
+  return 'http://103.173.226.3:8080/api'
+}
+
 export const axiosInstance = axios.create({
-  baseURL: 'http://103.173.226.3:8080/api',
+  baseURL: getApiBaseURL(),
   timeout: 60000,
   headers: {
     'Content-Type': 'application/json',

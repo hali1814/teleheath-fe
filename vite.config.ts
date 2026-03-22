@@ -17,6 +17,15 @@ const config = defineConfig({
       },
     },
   },
+  /** `pnpm build && vite preview` — cùng base `/api` như Vercel */
+  preview: {
+    proxy: {
+      '/api': {
+        target: 'http://103.173.226.3:8080',
+        changeOrigin: true,
+      },
+    },
+  },
   plugins: [
     devtools(),
     tsconfigPaths({ projects: ['./tsconfig.json'] }),
