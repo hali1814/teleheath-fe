@@ -1,6 +1,12 @@
 import { cleanParams } from '#/utils'
+import { getToken } from '#/stores/token'
 import { type AxiosRequestConfig } from 'axios'
 import { axiosInstance } from './axios.service'
+
+export type PostMultipartBody = {
+  file: File
+  fieldName?: string
+}
 
 export interface HttpCommonResponse<T> {
   data: T
@@ -201,25 +207,29 @@ export const http = {
     )
     return response.data
   },
-  // postMultipart: async <P extends IUploadImageRequest, T>(url: string, data: P, config?: AxiosRequestConfig): Promise<HttpCommonResponse<T>> => {
-  //   const formData = new FormData() as any;
-  //   formData.append("upload", {
-  //     uri: data.upload.uri,
-  //     name: data.upload.fileName || "image.jpg",
-  //     type: data.upload.mimeType || "image/jpeg",
-  //   });
 
-  //   const token = await TOKEN_STORAGE.getTokens();
+  postMultipart: async <T>(
+    url: string,
+    data: PostMultipartBody,
+    config?: AxiosRequestConfig,
+  ): Promise<HttpCommonResponse<T>> => {
+    const formData = new FormData()
+    const field = data.fieldName ?? 'file'
+    formData.append(field, data.file, data.file.name)
 
-  //   const response = await axiosInstance.post<HttpCommonResponse<T>>(url, formData, {
-  //     ...config,
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data',
-  //       ...config?.headers,
-  //       Authorization: `Bearer ${token}`
-  //     }
-  //   })
-  //   return response.data;
+    const token = getToken()
 
-  // }
+    const response = await axiosInstance.post<HttpCommonResponse<T>>(
+      url,
+      formData,
+      {
+        ...config,
+        headers: {
+          ...config?.headers,
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      },
+    )
+    return response.data
+  },
 }
