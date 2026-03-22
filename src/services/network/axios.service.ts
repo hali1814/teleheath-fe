@@ -40,6 +40,11 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    // Default instance sets Content-Type: application/json — that breaks multipart
+    // uploads (server expects multipart/form-data + boundary). Let axios set it.
+    if (config.data instanceof FormData) {
+      config.headers.delete('Content-Type')
+    }
     return config
   },
   (error) => Promise.reject(error),
