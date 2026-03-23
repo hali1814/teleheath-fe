@@ -5,20 +5,31 @@ export interface GetProfileRequest {}
 
 export interface PatientProfileResponse {
   id: number
-  camId: string
+  camId?: string | null
   name: string
   phone: string
   email: string
   dateOfBirth: string
   gender: string
-  address: string | null
+  address?: {
+    countryCode?: string | null
+    countryName?: string | null
+    cityId?: number | null
+    cityName?: string | null
+    districtId?: number | null
+    districtName?: string | null
+    precinctId?: number | null
+    precinctName?: string | null
+    detail?: string | null
+    fullAddress?: string | null
+  } | null
   avatarUrl: string | null
-  nationality: string | null
-  idCard: string | null
-  patientCode: string | null
+  nationality?: string | null
+  idCard?: string | null
+  patientCode?: string | null
   relationship: string
-  patientStatus: string
-  owner: boolean
+  patientStatus?: string
+  owner?: boolean
 }
 
 const getProfile = async (_params: GetProfileRequest, signal: AbortSignal) => {

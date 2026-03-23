@@ -1,24 +1,31 @@
 import { BottomSheet } from '#/components/BottomSheet'
 import { Icon } from '#/components/icon'
-import Image from '#/components/image'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Spinner } from '#/components/ui/spinner'
 import { useUploadImageMutation } from '#/services/query/upload/use-upload-image-mutate'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import Avatar from './Avatar'
 
 export interface UploadAvatarProps {
   /** Gọi sau khi upload thành công, trả về URL file từ server. */
   onChange?: (fileUrl: string) => void
+  value?: string
 }
 
-export default function UploadAvatar({ onChange }: UploadAvatarProps) {
+export default function UploadAvatar({ onChange, value }: UploadAvatarProps) {
   const { t } = useTranslation(['profile'])
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(value ?? null)
   const [sheetOpen, setSheetOpen] = useState(false)
   const cameraInputRef = useRef<HTMLInputElement>(null)
   const libraryInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (value) {
+      setAvatarUrl(value)
+    }
+  }, [value])
 
   const { mutateAsync, isPending } = useUploadImageMutation()
 
@@ -77,17 +84,12 @@ export default function UploadAvatar({ onChange }: UploadAvatarProps) {
         type="button"
         disabled={isPending}
         onClick={() => setSheetOpen(true)}
-        className="relative flex h-[128px] w-[128px] shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border-0 bg-[#D331311A] p-0 disabled:opacity-60"
+        className="relative flex h-[128px] w-[128px] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-[#D331311A] p-0 disabled:opacity-60"
         aria-label={t('uploadPhoto')}
       >
         {avatarUrl ? (
           <>
-            <Image
-              src={avatarUrl}
-              alt=""
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-              loading="eager"
-            />
+            <Avatar src={avatarUrl} alt="" />
             {isPending ? (
               <div
                 className="absolute inset-0 flex items-center justify-center bg-black/35"

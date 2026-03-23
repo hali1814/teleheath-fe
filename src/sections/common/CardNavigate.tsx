@@ -23,9 +23,11 @@ export default function CardNavigate({
   return (
     <Card
       className={cn(
-        'px-4 py-4 shadow-[0px_1px_2px_rgba(0,0,0,0.05)] cursor-pointer',
+        // `Card` mặc định đã có `shadow-xs`; dùng `!` để đảm bảo override.
+        'px-4 py-4 cursor-pointer shadow-none',
         className,
       )}
+      style={{ boxShadow: '0px 1px 2px rgba(0,0,0,0.05)' }}
       onClick={onClick}
       role="button"
       tabIndex={0}

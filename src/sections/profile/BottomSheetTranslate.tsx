@@ -3,12 +3,10 @@ import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { cn } from '#/lib/utils'
 import { useTranslation } from 'react-i18next'
-import {
-  LANGUAGE_STORAGE_KEY,
-  supportedLanguages,
-  type AppLanguage,
-} from '@/i18n'
+import { LANGUAGE_STORAGE_KEY, type AppLanguage } from '@/i18n'
 import { useEffect, useMemo, useState } from 'react'
+import FlagKhmer from '#/assets/icons/profile/flag-cambodia.svg?react'
+import FlagEnglish from '#/assets/icons/profile/flag-england.svg?react'
 
 interface BottomSheetTranslateProps {
   open: boolean
@@ -28,12 +26,16 @@ export function BottomSheetTranslate({
     [i18n.language, i18n.resolvedLanguage],
   )
 
-  const [selectedLanguage, setSelectedLanguage] =
-    useState<AppLanguage>(currentLanguage)
+  const visibleLanguages = useMemo<AppLanguage[]>(() => ['km', 'en'], [])
+
+  const [selectedLanguage, setSelectedLanguage] = useState<AppLanguage>(() => {
+    // Tạm thời ẩn VI: nếu đang là VI thì map về KM để hiển thị đúng selected.
+    return currentLanguage === 'vi' ? 'km' : currentLanguage
+  })
 
   useEffect(() => {
     if (!open) return
-    setSelectedLanguage(currentLanguage)
+    setSelectedLanguage(currentLanguage === 'vi' ? 'km' : currentLanguage)
   }, [open, currentLanguage])
 
   return (
@@ -44,7 +46,7 @@ export function BottomSheetTranslate({
     >
       <div className="space-y-6">
         <div className="space-y-4">
-          {supportedLanguages.map((language) => (
+          {visibleLanguages.map((language) => (
             <LanguageOption
               key={language}
               code={language}
@@ -106,6 +108,7 @@ function LanguageOption({
   //   code,
   label,
   selected,
+  code,
   onSelect,
 }: LanguageOptionProps) {
   //   const flagName =
@@ -127,6 +130,10 @@ function LanguageOption({
         {selected ? (
           <span className="inline-flex size-3 rounded-full bg-badge " />
         ) : null}
+      </span>
+      <span className="inline-flex items-center justify-center shrink-0">
+        {code === 'km' ? <FlagKhmer aria-hidden="true" /> : null}
+        {code === 'en' ? <FlagEnglish aria-hidden="true" /> : null}
       </span>
       {/* <Icon name={flagName} className="h-3 w-[18px] shrink-0" /> */}
       <Text size="base_14" className="font-normal text-[#666666]">

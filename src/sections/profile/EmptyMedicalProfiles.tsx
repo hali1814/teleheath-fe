@@ -1,6 +1,5 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
-import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import CardNavigate from '#/sections/common/CardNavigate'
 
@@ -57,23 +56,6 @@ export default function EmptyMedicalProfiles() {
           hideArrow
           onClick={() => console.log('Faster booking')}
         />
-      </div>
-
-      {/* stricky save button */}
-      <div className="fixed inset-x-4 bottom-4">
-        <Button
-          type="button"
-          variant="secondary"
-          className="flex h-[45px] w-full items-center justify-center gap-3 rounded-[40px]"
-          onClick={() => {
-            console.log('Add new profile')
-          }}
-        >
-          <Icon name="add_profile" />
-          <Text size="base_14" className="font-medium text-white">
-            {t('emptyMedicalProfilesAddNewProfile')}
-          </Text>
-        </Button>
       </div>
     </div>
   )

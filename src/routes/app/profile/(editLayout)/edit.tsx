@@ -12,11 +12,17 @@ import { useGetCountriesQuery } from '#/services/query/profile/getCountry'
 import { useGetDistrictsQuery } from '#/services/query/profile/getDistrict'
 import { useGetPrecinctsQuery } from '#/services/query/profile/getPrecinct'
 import { useProfileStore } from '#/stores/profile'
-import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useMemo, useRef } from 'react'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { useEffect, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
+import { toast } from 'sonner'
+import {
+  useAddNewProfileMutation,
+  useUpdateProfileMutation,
+} from '#/services/query/profile/updateProfile'
+import { Icon } from '#/components/icon'
 
 /** Optional query: `/edit` hoặc `/edit?idMember=1` */
 const editSearchSchema = z.object({
@@ -28,6 +34,7 @@ const editSearchSchema = z.object({
       const n = typeof v === 'number' ? v : Number(v)
       return Number.isFinite(n) ? n : undefined
     }),
+  addNew: z.boolean().optional().default(false),
 })
 
 export type EditSearch = z.infer<typeof editSearchSchema>
@@ -61,7 +68,7 @@ function RouteComponent() {
       phoneNumber: '',
       email: '',
       country: '',
-      relationship: 'SELF',
+      relationship: '',
       city: '',
       district: '',
       precinct: '',
@@ -71,9 +78,9 @@ function RouteComponent() {
   })
 
   const { t, i18n } = useTranslation(['profile', 'common'])
-  const { idMember } = Route.useSearch()
+  const { idMember, addNew } = Route.useSearch()
   const user = useProfileStore((s) => s.profile)
-
+  const setProfile = useProfileStore((s) => s.setProfile)
   const country = useWatch({ control, name: 'country' })
   const city = useWatch({ control, name: 'city' })
   const district = useWatch({ control, name: 'district' })
@@ -196,71 +203,142 @@ function RouteComponent() {
     t,
   ])
 
-  const skipCountryCascade = useRef(true)
-  useEffect(() => {
-    if (skipCountryCascade.current) {
-      skipCountryCascade.current = false
-      return
-    }
-    setValue('city', '')
-    setValue('district', '')
-    setValue('precinct', '')
-  }, [country, setValue])
-
-  const skipCityCascade = useRef(true)
-  useEffect(() => {
-    if (skipCityCascade.current) {
-      skipCityCascade.current = false
-      return
-    }
-    setValue('district', '')
-    setValue('precinct', '')
-  }, [city, setValue])
-
-  const skipDistrictCascade = useRef(true)
-  useEffect(() => {
-    if (skipDistrictCascade.current) {
-      skipDistrictCascade.current = false
-      return
-    }
-    setValue('precinct', '')
-  }, [district, setValue])
-
-  const canSave = useMemo(() => {
+  const validateAndToast = () => {
     if (!formValues) return false
     const w = formValues
-    return Boolean(
-      w.fullName?.trim() &&
-      w.dateOfBirth &&
-      w.gender &&
-      w.phoneNumber?.trim() &&
-      w.relationship &&
-      w.country &&
-      w.city &&
-      w.district &&
-      w.precinct &&
-      w.street?.trim() &&
-      w.avatarUrl,
-    )
-  }, [formValues])
+
+    if (!w.fullName?.trim()) {
+      toast.error(t('requiredFullName'))
+      return false
+    }
+    if (!w.dateOfBirth) {
+      toast.error(t('requiredDateOfBirth'))
+      return false
+    }
+    if (!w.gender) {
+      toast.error(t('requiredGender'))
+      return false
+    }
+    if (!w.phoneNumber?.trim()) {
+      toast.error(t('requiredPhoneNumber'))
+      return false
+    }
+    if (w.email?.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(w.email.trim())) {
+      const invalidEmailMessage = (i18n.language ?? '').startsWith('vi')
+        ? 'Email không đúng định dạng.'
+        : (i18n.language ?? '').startsWith('km')
+          ? 'អ៊ីមែលមិនមានទម្រង់ត្រឹមត្រូវ។'
+          : 'Invalid email format.'
+      toast.error(invalidEmailMessage)
+      return false
+    }
+
+    if (!w.country) {
+      toast.error(t('requiredCountry'))
+      return false
+    }
+    if (!w.city) {
+      toast.error(t('requiredCity'))
+      return false
+    }
+    if (!w.district) {
+      toast.error(t('requiredDistrict'))
+      return false
+    }
+    if (!w.precinct) {
+      toast.error(t('requiredPrecinct'))
+      return false
+    }
+
+    // Relationship chỉ cần khi edit family member (có idMember).
+    if (idMember && !w.relationship) {
+      toast.error(t('requiredRelationship'))
+      return false
+    }
+
+    if (!w.street?.trim()) {
+      toast.error(t('requiredStreet'))
+      return false
+    }
+    if (!w.avatarUrl) {
+      toast.error(t('requiredAvatar'))
+      return false
+    }
+
+    return true
+  }
 
   useEffect(() => {
-    if (!idMember) {
+    if (!idMember && !addNew) {
       setValue('fullName', user?.name ?? '')
       setValue('dateOfBirth', user?.dateOfBirth ?? '')
       setValue('gender', (user?.gender as GenderValue) ?? 'MALE')
       setValue('phoneNumber', user?.phone ?? '')
       setValue('email', user?.email ?? '')
       setValue('relationship', user?.relationship ?? 'SELF')
-      setValue('country', user?.nationality ?? '')
+      setValue('country', user?.address?.countryCode ?? '')
       setValue('avatarUrl', user?.avatarUrl ?? '')
+      setValue('city', user?.address?.cityId?.toString() ?? '')
+      setValue('district', user?.address?.districtId?.toString() ?? '')
+      setValue('precinct', user?.address?.precinctId?.toString() ?? '')
+      setValue('street', user?.address?.detail ?? '')
     }
   }, [idMember, setValue, user])
+
+  const { mutateAsync: updateProfile, isPending: isUpdatingProfile } =
+    useUpdateProfileMutation()
+  const router = useRouter()
+
+  const { mutateAsync: addNewProfile, isPending: isAddingNewProfile } =
+    useAddNewProfileMutation()
+
+  const handleSaveProfile = async () => {
+    if (!validateAndToast()) return
+    const request = {
+      name: formValues.fullName!,
+      dateOfBirth: formValues.dateOfBirth!,
+      gender: formValues.gender!,
+      phone: formValues.phoneNumber!,
+      email: formValues.email || '',
+      avatarUrl: formValues.avatarUrl,
+      relationship: formValues.relationship,
+      nationality: formValues.country,
+      address: {
+        countryCode: formValues.country,
+        cityId: Number(formValues.city),
+        districtId: Number(formValues.district),
+        precinctId: Number(formValues.precinct),
+        detail: formValues.street,
+        cityName: cityOptions.find((c) => c.value === formValues.city)?.label,
+        districtName: districtOptions.find(
+          (d) => d.value === formValues.district,
+        )?.label,
+        precinctName: precinctOptions.find(
+          (p) => p.value === formValues.precinct,
+        )?.label,
+        countryName: countryOptions.find((c) => c.value === formValues.country)
+          ?.label,
+      },
+    }
+    const res = addNew
+      ? await addNewProfile(request)
+      : await updateProfile(request)
+
+    if (res.success) {
+      toast.success(t('profileUpdated'))
+      router.history.back()
+      if (!addNew && !idMember) {
+        // update profile store
+        setProfile(res.data)
+      }
+    }
+  }
 
   return (
     <div className="pt-4 pb-20 px-4">
       <div className="mt-6">
         <UploadAvatar
+          value={formValues.avatarUrl}
           onChange={(fileUrl) => {
             setValue('avatarUrl', fileUrl)
           }}
@@ -306,32 +384,61 @@ function RouteComponent() {
           placeholder={t('email')}
         />
 
-        <InputSelect
-          control={control}
-          name="relationship"
-          options={[
-            { label: t('common:relationships.self'), value: 'SELF' },
-            { label: t('common:relationships.father'), value: 'FATHER' },
-            { label: t('common:relationships.mother'), value: 'MOTHER' },
-            { label: t('common:relationships.husband'), value: 'HUSBAND' },
-            { label: t('common:relationships.wife'), value: 'WIFE' },
-            { label: t('common:relationships.child'), value: 'CHILD' },
-            {
-              label: t('common:relationships.grandfather'),
-              value: 'GRANDFATHER',
-            },
-            {
-              label: t('common:relationships.grandmother'),
-              value: 'GRANDMOTHER',
-            },
-            { label: t('common:relationships.sibling'), value: 'SIBLING' },
-            { label: t('common:relationships.relative'), value: 'RELATIVE' },
-            { label: t('common:relationships.friend'), value: 'FRIEND' },
-          ]}
-          placeholder={t('relationship')}
-          label={t('relationship')}
-          isRequired
-        />
+        {idMember || addNew ? (
+          <InputSelect
+            control={control}
+            name="relationship"
+            options={[
+              {
+                label: t('common:relationships.self'),
+                value: 'SELF',
+              },
+              {
+                label: t('common:relationships.father'),
+                value: 'FATHER',
+              },
+              {
+                label: t('common:relationships.mother'),
+                value: 'MOTHER',
+              },
+              {
+                label: t('common:relationships.husband'),
+                value: 'HUSBAND',
+              },
+              {
+                label: t('common:relationships.wife'),
+                value: 'WIFE',
+              },
+              {
+                label: t('common:relationships.child'),
+                value: 'CHILD',
+              },
+              {
+                label: t('common:relationships.grandfather'),
+                value: 'GRANDFATHER',
+              },
+              {
+                label: t('common:relationships.grandmother'),
+                value: 'GRANDMOTHER',
+              },
+              {
+                label: t('common:relationships.sibling'),
+                value: 'SIBLING',
+              },
+              {
+                label: t('common:relationships.relative'),
+                value: 'RELATIVE',
+              },
+              {
+                label: t('common:relationships.friend'),
+                value: 'FRIEND',
+              },
+            ]}
+            placeholder={t('relationship')}
+            label={t('relationship')}
+            isRequired
+          />
+        ) : null}
 
         <InputSelect
           control={control}
@@ -341,6 +448,11 @@ function RouteComponent() {
           label={t('country')}
           isRequired
           emptyMessage={countryEmptyMessage}
+          onChangeCallback={() => {
+            setValue('city', '')
+            setValue('district', '')
+            setValue('precinct', '')
+          }}
         />
 
         <InputSelect
@@ -352,6 +464,10 @@ function RouteComponent() {
           isRequired
           disabled={!country}
           emptyMessage={cityEmptyMessage}
+          onChangeCallback={() => {
+            setValue('district', '')
+            setValue('precinct', '')
+          }}
         />
 
         <InputSelect
@@ -363,6 +479,9 @@ function RouteComponent() {
           isRequired
           disabled={!country || !city}
           emptyMessage={districtEmptyMessage}
+          onChangeCallback={() => {
+            setValue('precinct', '')
+          }}
         />
 
         <InputSelect
@@ -391,15 +510,24 @@ function RouteComponent() {
           type="button"
           variant="secondary"
           className="h-[45px] w-full rounded-full"
-          disabled={!canSave}
-          onClick={() => {}}
+          onClick={handleSaveProfile}
+          disabled={addNew ? isAddingNewProfile : isUpdatingProfile}
         >
-          <Text
-            size="base_14"
-            className="w-full text-center font-medium text-white"
-          >
-            {t('save')}
-          </Text>
+          {addNew ? (
+            <>
+              <Icon name="add_profile" />
+              <Text size="base_14" className="font-medium text-white">
+                {t('addProfile')}
+              </Text>
+            </>
+          ) : (
+            <Text
+              size="base_14"
+              className="w-full text-center font-medium text-white"
+            >
+              {t('save')}
+            </Text>
+          )}
         </Button>
       </div>
     </div>

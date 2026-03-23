@@ -50,7 +50,7 @@ export default function InputSelect({
       >
         <SelectTrigger
           className={cn(
-            'w-full h-[45px] rounded-[6px] border border-dust-red-1 bg-white px-[12px]',
+            'w-full h-[45px] rounded-[6px] border border-dust-red-1 bg-white px-[12px] text-base',
             className,
           )}
         >

@@ -1,5 +1,5 @@
 import Header from '#/sections/home/Header'
-import { createFileRoute, Outlet, useLocation } from '@tanstack/react-router'
+import { createFileRoute, Outlet, useSearch } from '@tanstack/react-router'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,19 +9,19 @@ export const Route = createFileRoute('/app/profile/(editLayout)')({
 
 function RouteComponent() {
   const { t } = useTranslation('profile')
-  const { pathname } = useLocation()
+  const search = useSearch({ strict: false })
 
   const title = useMemo(() => {
-    switch (pathname) {
-      case '/app/profile/medical-profiles':
-        return t('medicalProfiles')
-      case '/app/profile/edit':
-        return t('profileInformation')
-
-      default:
-        break
+    if (!search?.addNew && !search?.idMember) {
+      return t('profileInformation')
     }
-  }, [pathname])
+    if (search?.addNew) {
+      return t('patientProfile')
+    }
+    if (search?.idMember) {
+      return t('editPatientProfile')
+    }
+  }, [search, t])
 
   return (
     <div>

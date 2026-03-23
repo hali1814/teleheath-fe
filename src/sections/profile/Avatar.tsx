@@ -1,4 +1,4 @@
-import Text from '#/components/text'
+import Text, { type TextSize } from '#/components/text'
 import Image from '#/components/image'
 import { Icon } from '#/components/icon'
 
@@ -10,6 +10,9 @@ export interface AvatarProps {
   alt?: string
   initials?: string
   onCameraClick?: () => void
+  size?: number
+  hideCamera?: boolean
+  textSize?: TextSize
 }
 
 export default function Avatar({
@@ -17,36 +20,50 @@ export default function Avatar({
   alt = 'Avatar',
   initials = '?',
   onCameraClick,
+  size = 128,
+  hideCamera = false,
+  textSize = '8xl_40',
 }: AvatarProps) {
   const hasImage = Boolean(src)
 
   return (
     <div
-      className="relative flex size-[128px] items-center justify-center rounded-[100px] border-4 border-white bg-clip-padding opacity-100"
+      className={`relative flex size-[${size}px] items-center justify-center rounded-full border-4 border-white bg-clip-padding opacity-100`}
       style={{
-        padding: '26px 20px',
+        // Khi có ảnh, không padding để ảnh phủ full hình tròn.
+        padding: hasImage ? 0 : '26px 20px',
         background: hasImage ? undefined : AVATAR_PLACEHOLDER_GRADIENT,
         boxSizing: 'border-box',
       }}
     >
       {hasImage ? (
-        <Image src={src!} alt={alt} className="h-full w-full object-cover" />
+        <Image
+          src={src!}
+          alt={alt}
+          className="w-full h-full rounded-full object-cover"
+        />
       ) : (
         <Text
-          size="8xl_40"
-          className="font-semibold uppercase text-[#A8071A80]"
+          size={textSize}
+          className="font-semibold uppercase text-[#A8071A]"
         >
           {initials}
         </Text>
       )}
 
-      <div
-        onClick={onCameraClick}
-        className="absolute bottom-0 right-0 flex size-8 items-center justify-center rounded-full border-2 border-white p-2 bg-secondary"
-        aria-label="Change avatar"
-      >
-        <Icon color="#FFFFFF" name="camera" className="size-[12px] shrink-0" />
-      </div>
+      {!hideCamera && (
+        <div
+          onClick={onCameraClick}
+          className="absolute bottom-0 right-0 flex size-8 items-center justify-center rounded-full border-2 border-white p-2 bg-secondary"
+          aria-label="Change avatar"
+        >
+          <Icon
+            color="#FFFFFF"
+            name="camera"
+            className="size-[12px] shrink-0"
+          />
+        </div>
+      )}
     </div>
   )
 }

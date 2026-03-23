@@ -52,7 +52,12 @@ function RouteComponent() {
       <div className="flex justify-center">
         <Button
           className="w-[200px] mt-2 bg-secondary"
-          onClick={() => navigate({ to: '/app/profile/edit' })}
+          onClick={() =>
+            navigate({
+              to: '/app/profile/edit',
+              search: { idMember: undefined, addNew: false },
+            })
+          }
         >
           <Icon name="pencil" className="size-4" />
           {t('editProfile')}
@@ -82,7 +87,10 @@ function RouteComponent() {
             />
             <InfoRow label={t('phoneNumber')} value={user?.phone ?? ''} />
             <InfoRow label={t('email')} value={user?.email ?? ''} />
-            <InfoRow label={t('address')} value={user?.address ?? ''} />
+            <InfoRow
+              label={t('address')}
+              value={user?.address?.fullAddress ?? ''}
+            />
           </CardContent>
         </Card>
 
