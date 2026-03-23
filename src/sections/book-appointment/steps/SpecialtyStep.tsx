@@ -6,7 +6,7 @@ import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-special
 import { useBookingStore } from '#/stores/booking-store'
 
 export function SpecialtyStep() {
-  const { specialtyId, setData } = useBookingStore()
+  const { specialty, setData } = useBookingStore()
 
   const {
     data: { data: { content: specialties } } = {
@@ -31,8 +31,8 @@ export function SpecialtyStep() {
               icon={item.iconUrl}
               size="md"
               clickable
-              selected={specialtyId === item.id}
-              onClick={() => setData({ specialtyId: item.id })}
+              selected={specialty?.id === item.id}
+              onClick={() => setData({ specialty: item })}
             />
           ))}
       </div>

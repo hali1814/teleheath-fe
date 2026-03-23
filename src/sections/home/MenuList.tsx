@@ -2,32 +2,6 @@ import type { IconName } from '#/components/icon'
 import MenuItem from '#/components/MenuItem'
 import { useTranslation } from 'react-i18next'
 
-const MENU_ITEMS: {
-  icon: IconName
-  title: string
-  href: string
-  variant: 'solid' | 'outline'
-}[] = [
-  {
-    icon: 'medical_services',
-    title: 'menu.bookingOffline',
-    href: '/app/book-offline',
-    variant: 'solid',
-  },
-  {
-    icon: 'call_doctor',
-    title: 'menu.onlineDoctor',
-    href: '/app/online-doctor',
-    variant: 'outline',
-  },
-  {
-    icon: 'chat_ai',
-    title: 'menu.aiChatbot',
-    href: '/app/ai-chatbot',
-    variant: 'outline',
-  },
-]
-
 export default function MenuList() {
   const { t } = useTranslation(['home'])
 
@@ -46,7 +20,7 @@ export default function MenuList() {
     {
       icon: 'call_doctor',
       title: t('menu.onlineDoctor'),
-      href: '/app/online-doctor',
+      href: '/app/doctor',
       variant: 'outline',
     },
     {

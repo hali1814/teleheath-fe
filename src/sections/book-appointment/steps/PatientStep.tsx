@@ -5,7 +5,7 @@ import { MedicalRecords } from '../MedicalRecords'
 import { useGetListFamilyQuery } from '#/services/query/profile/list-family'
 
 export function PatientStep() {
-  const { patientProfileId, setData } = useBookingStore()
+  const { patientProfile, setData } = useBookingStore()
 
   const { data: { data: family } = { data: [] } } = useGetListFamilyQuery({
     params: {},
@@ -16,10 +16,10 @@ export function PatientStep() {
       <SearchBar placeholder="Search patient profile" />
       <PatientProfileList
         profiles={family}
-        selected={patientProfileId}
+        selected={patientProfile?.id}
         onClick={(profile) =>
           setData({
-            patientProfileId: profile.id,
+            patientProfile: profile,
           })
         }
       />

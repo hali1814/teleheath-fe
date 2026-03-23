@@ -1,5 +1,5 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
-import type { IPagingRequest } from '#/model/paging.model'
+import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 interface ListDoctorRequest extends IPagingRequest {}
@@ -13,7 +13,7 @@ interface Hospital {
   website: string
 }
 
-export interface ListDoctorResponse {
+export interface ListDoctorResponse extends IPagingResponse<{
   id: number
   name: string
   description: string
@@ -23,13 +23,13 @@ export interface ListDoctorResponse {
   imageUrl: string
   hospitals: Hospital[]
   active: boolean
-}
+}> {}
 
 const getListDoctor = async (
   params: ListDoctorRequest,
   signal: AbortSignal,
 ) => {
-  const response = await http.get<ListDoctorResponse[]>('/doctors', params, {
+  const response = await http.get<ListDoctorResponse>('/doctors', params, {
     signal,
   })
   return response
@@ -37,7 +37,7 @@ const getListDoctor = async (
 
 export const useGetListDoctorQuery = (
   options: UseQueryOptions<
-    HttpCommonResponse<ListDoctorResponse[]>,
+    HttpCommonResponse<ListDoctorResponse>,
     ListDoctorRequest
   >,
 ) => {

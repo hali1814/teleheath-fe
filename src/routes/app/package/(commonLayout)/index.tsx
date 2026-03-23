@@ -8,6 +8,7 @@ import { useState } from 'react'
 import ModalFilterPackage from '#/sections/package/ModalFilterPackage'
 import { useTranslation } from 'react-i18next'
 import { useGetListPackagesQuery } from '#/services/query/package/list-packages'
+import { ALL_PAGINATION } from '#/const/pagination'
 
 export const Route = createFileRoute('/app/package/(commonLayout)/')({
   component: RouteComponent,
@@ -17,13 +18,13 @@ function RouteComponent() {
   const [open, setOpen] = useState(false)
   const { t } = useTranslation(['package'])
 
-  const { data: { data: packagesData } = { data: [] } } =
-    useGetListPackagesQuery({
-      params: {
-        page: 1,
-        pageSize: 10,
-      },
-    })
+  const {
+    data: { data: { content: packagesData } = { content: [] } } = {
+      data: { content: [] },
+    },
+  } = useGetListPackagesQuery({
+    params: ALL_PAGINATION,
+  })
 
   return (
     <>
@@ -37,9 +38,10 @@ function RouteComponent() {
             </Badge>
           </div>
         </div>
-        {packagesData.map((p) => (
-          <PackageCard key={p.id} {...p} />
-        ))}
+        {packagesData.length > 0 &&
+          packagesData.map((p) => (
+            <PackageCard key={p.id} {...p} location="Vietnam" />
+          ))}
       </div>
       <ModalFilterPackage open={open} onOpenChange={setOpen} />
     </>

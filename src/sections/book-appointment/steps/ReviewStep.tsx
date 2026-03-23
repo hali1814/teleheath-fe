@@ -1,14 +1,18 @@
 import { Icon, type IconName } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
-import { Avatar, AvatarImage } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import { Checkbox } from '#/components/ui/checkbox'
+import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
 import { consultationTypes } from '#/mockData'
 import { useGetListServiceQuery } from '#/services/query/services/list-service'
+import { useBookingStore } from '#/stores/booking-store'
+import { DATE_TIME_TYPE, formatDate } from '#/utils'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { formatPrice } from '#/utils/price.util'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const ServiceItem = ({
   icon,
@@ -110,8 +114,19 @@ const paymentMethods = [
 ]
 
 export function ReviewStep() {
+  const { i18n } = useTranslation()
   const [selectedServices, setSelectedServices] = useState<number[]>([])
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<number>(1)
+  const {
+    branch,
+    consultationTier,
+    specialty,
+    // package,
+    patientProfile,
+    appointmentDate,
+    startTime,
+    endTime,
+  } = useBookingStore()
 
   const { data: { data: services } = { data: [] } } = useGetListServiceQuery({
     params: {
@@ -197,9 +212,16 @@ export function ReviewStep() {
               size="lg_16"
               className="leading-[1.2] font-semibold text-[#333333]"
             >
-              Tam Anh Hospital
+              {getLocalizedTextByLang(
+                branch?.nameVi ?? '',
+                branch?.nameKh ?? '',
+                branch?.nameEn ?? '',
+                i18n.language as AppLanguage,
+              )}
             </Text>
-            <Text className="leading-normal text-[#333333]">Ho Chi Minh</Text>
+            {/* <Text className="leading-normal text-[#333333]">
+              {branch?.address}
+            </Text> */}
           </div>
         </div>
         <div className="flex items-start gap-[16px]">
@@ -220,7 +242,7 @@ export function ReviewStep() {
               size="lg_16"
               className="leading-[1.2] font-semibold text-[#333333]"
             >
-              2B Pho Quang Street, Ward 2, Tan Binh District, Ho Chi Minh City
+              {branch?.address}
             </Text>
           </div>
         </div>
@@ -242,7 +264,7 @@ export function ReviewStep() {
               size="lg_16"
               className="leading-[1.2] font-semibold text-[#333333]"
             >
-              Sokra Chum
+              {patientProfile?.name}
             </Text>
           </div>
         </div>
@@ -256,7 +278,7 @@ export function ReviewStep() {
               Date
             </Text>
             <Text className="leading-normal font-medium text-[#333333]">
-              Nov 16, 2025
+              {formatDate(appointmentDate, DATE_TIME_TYPE.MMM_DD_YYYY)}
             </Text>
           </div>
           <div className="flex-1 flex flex-col gap-[4px] p-[12px] rounded-[8px] bg-dust-red-1 border border-dust-red-2">
@@ -267,62 +289,71 @@ export function ReviewStep() {
               Time
             </Text>
             <Text className="leading-normal font-medium text-[#333333]">
-              06:30 - 07:00 AM
+              {startTime} - {endTime}
             </Text>
           </div>
         </div>
 
-        <div className="flex items-center gap-[12px] bg-[#F8FAFC] p-[12px] rounded-[8px]">
-          <Icon
-            name="medical_services"
-            className="w-[20px] h-[20px] text-primary"
-          />
-          <Text className="flex-1 leading-normal font-medium">
-            Specialty: Cardiology
-          </Text>
-        </div>
+        {specialty && (
+          <div className="flex items-center gap-[12px] bg-[#F8FAFC] p-[12px] rounded-[8px]">
+            <Icon
+              name="medical_services"
+              className="w-[20px] h-[20px] text-primary"
+            />
+            <Text className="flex-1 leading-normal font-medium">
+              Specialty: {specialty?.name}
+            </Text>
+          </div>
+        )}
       </div>
 
-      <div
-        className={cn(
-          'flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white border border-transparent',
-        )}
-      >
-        <div className="flex justify-between items-center">
-          <Text size="lg_16" className="font-semibold leading-[1.2]">
-            Service Package
-          </Text>
-          <Badge className="bg-[#FEF3C7]">
-            <Text
-              size="sm_12"
-              className="text-[#B45309] leading-[1.3] font-semibold"
-            >
-              VIP
+      {consultationTier && (
+        <div
+          className={cn(
+            'flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white border border-transparent',
+          )}
+        >
+          <div className="flex justify-between items-center">
+            <Text size="lg_16" className="font-semibold leading-[1.2]">
+              Service Package
             </Text>
-          </Badge>
-        </div>
-        <div className="flex-1 flex flex-col gap-[12px]">
-          <Text
-            size="lg_16"
-            className="font-semibold leading-[1.2] text-secondary"
-          >
-            {consultationTypes[1].title}
-          </Text>
-          {consultationTypes[1].benefits.map((benefit) => (
-            <div key={benefit} className="flex items-start gap-[8px]">
-              <div className="w-[16px] h-[16px] flex items-center justify-center rounded-full bg-primary/10">
-                <Icon name="check" className="w-[6px] h-[4px] text-primary" />
-              </div>
+            <Badge className="bg-[#FEF3C7]">
               <Text
                 size="sm_12"
-                className="flex-1 text-muted-foreground leading-[1.3]"
+                className="text-[#B45309] leading-[1.3] font-semibold"
               >
-                {benefit}
+                {consultationTier?.code}
               </Text>
-            </div>
-          ))}
+            </Badge>
+          </div>
+          <div className="flex-1 flex flex-col gap-[12px]">
+            <Text
+              size="lg_16"
+              className="font-semibold leading-[1.2] text-secondary"
+            >
+              {getLocalizedTextByLang(
+                consultationTier?.nameVi ?? '',
+                '',
+                consultationTier?.nameEn ?? '',
+                i18n.language as AppLanguage,
+              )}
+            </Text>
+            {consultationTier?.features?.map((feature, index) => (
+              <div key={index} className="flex items-start gap-[8px]">
+                <div className="w-[16px] h-[16px] flex items-center justify-center rounded-full bg-primary/10">
+                  <Icon name="check" className="w-[6px] h-[4px] text-primary" />
+                </div>
+                <Text
+                  size="sm_12"
+                  className="flex-1 text-muted-foreground leading-[1.3]"
+                >
+                  {feature}
+                </Text>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
         <Text size="lg_16" className="font-semibold leading-[1.2]">

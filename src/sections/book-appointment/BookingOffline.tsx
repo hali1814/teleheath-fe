@@ -10,21 +10,25 @@ export default function BookingOffline() {
     title: string
     description: string
     icon: IconName
+    href: string
   }[] = [
     {
       title: t('bookingOffline.bookByHospital'),
       description: t('bookingOffline.bookByHospitalDescription'),
       icon: 'hospital',
+      href: '/app/hospital',
     },
     {
       title: t('bookingOffline.bookByMedicalPackage'),
       description: t('bookingOffline.bookByMedicalPackageDescription'),
       icon: 'medical_web_service_solid',
+      href: '/app/package',
     },
     {
       title: t('bookingOffline.bookByDoctor'),
       description: t('bookingOffline.bookByDoctorDescription'),
       icon: 'user_doctor_solid',
+      href: '/app/doctor',
     },
   ]
 
@@ -42,7 +46,7 @@ export default function BookingOffline() {
           title={item.title}
           description={item.description}
           icon={item.icon}
-          href="/app/book-appointment/hospital"
+          href={item.href}
         />
       ))}
     </>

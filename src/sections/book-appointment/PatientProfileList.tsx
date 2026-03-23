@@ -1,13 +1,10 @@
 import Text from '#/components/text'
 import EmptyPatientProfiles from './EmptyPatientProfiles'
-import { patientProfiles } from '#/mockData/book-appointment'
-import { Avatar, AvatarImage } from '#/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import { Icon } from '#/components/icon'
 import { cn } from '#/lib/utils'
 import { useState } from 'react'
-import DetailProfileModal, {
-  type DetailProfileModalProfile,
-} from '../profile/DetailProfileModal'
+import DetailProfileModal from '../profile/DetailProfileModal'
 import ProfileFormModal from '../profile/ProfileFormModal'
 import type { ListFamilyResponse } from '#/services/query/profile/list-family'
 
@@ -29,19 +26,27 @@ const PatientProfileItem = ({
           <Avatar
             className={cn(
               'w-[80px] h-[80px] flex items-center justify-center rounded-full overflow-hidden after:border-0',
-              selected && 'border-2 border-[#ED2630]',
+              selected ? 'border-2 border-[#ED2630]' : 'opacity-50',
             )}
           >
             <AvatarImage
-              src={profile.avatarUrl ?? ''}
+              src={profile.avatarUrl ?? undefined}
               alt={profile.name}
               className="w-[68px] h-[68px]"
             />
+            <AvatarFallback className="w-[68px] h-[68px] bg-[linear-gradient(135deg,#FFEFEF_0%,#FFA7A7_100%)]">
+              <Text
+                size="2xl_20"
+                className="font-semibold leading-normal text-[#A8071A80] uppercase"
+              >
+                {profile.name.slice(0, 2)}
+              </Text>
+            </AvatarFallback>
           </Avatar>
           {selected && (
             <div
               className="absolute right-0 bottom-0 w-[24px] h-[24px] bg-primary rounded-full 
-         flex items-center justify-center z-50 border-2 border-white"
+         flex items-center justify-center z-20 border-2 border-white"
             >
               <Icon name="check" className="w-[8px] h-[8px] text-white" />
             </div>
@@ -88,9 +93,19 @@ export function PatientProfileList({
   return (
     <>
       <div className="flex flex-col gap-[16px]">
-        <Text size="lg_16" className="font-semibold leading-[1.2]">
-          Patient Profile
-        </Text>
+        <div className="flex items-center justify-between">
+          <Text size="lg_16" className="font-semibold leading-[1.2]">
+            Patient Profile
+          </Text>
+          <button onClick={() => setOpenAddNewProfileModal(true)}>
+            <Text
+              size="sm_12"
+              className="font-medium leading-[1.3] text-primary"
+            >
+              + Add Profile
+            </Text>
+          </button>
+        </div>
         {profiles && profiles.length > 0 ? (
           <div className="flex gap-[16px] overflow-x-auto no-scrollbar py-[10px]">
             {profiles.length > 0 &&

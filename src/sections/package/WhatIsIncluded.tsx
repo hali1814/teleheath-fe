@@ -3,10 +3,10 @@ import Text from '#/components/text'
 import { useTranslation } from 'react-i18next'
 
 const IncludedItem = ({
-  title,
+  name,
   description,
 }: {
-  title: string
+  name: string
   description: string
 }) => {
   return (
@@ -19,7 +19,7 @@ const IncludedItem = ({
       </div>
       <div className="flex-1 flex flex-col gap-[6px]">
         <Text className="font-medium leading-normal text-[#333333]">
-          {title}
+          {name}
         </Text>
         <Text size="sm_12" className="leading-[1.3] text-muted-foreground">
           {description}
@@ -32,7 +32,7 @@ const IncludedItem = ({
 export default function WhatIsIncluded({
   includedItems,
 }: {
-  includedItems: { title: string; description: string }[]
+  includedItems: { name: string; description: string }[]
 }) {
   const { t } = useTranslation(['package'])
 
@@ -42,7 +42,7 @@ export default function WhatIsIncluded({
         {t('whatIsIncluded')}
       </Text>
       {includedItems.map((item) => (
-        <IncludedItem key={item.title} {...item} />
+        <IncludedItem key={item.name} {...item} />
       ))}
     </div>
   )

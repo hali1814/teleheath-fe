@@ -2,18 +2,16 @@ import Text from '#/components/text'
 import { useGetListBranchesQuery } from '#/services/query/hospital/list-branches'
 import { useBookingStore } from '#/stores/booking-store'
 import { LocationCard } from '../LocationCard'
-import { useParams } from '@tanstack/react-router'
 
 export function LocationStep() {
-  const { hospitalId } = useParams({
-    from: '/app/book-appointment/hospital/(commonLayout)/$hospitalId',
-  })
-  const { branchId, setData } = useBookingStore()
+  const { branch, setData, hospitalId } = useBookingStore()
 
+  console.log(hospitalId)
   const { data: { data: branches } = { data: [] } } = useGetListBranchesQuery({
     params: {
-      hospitalId: hospitalId,
+      hospitalId: hospitalId ?? '',
     },
+    enabled: !!hospitalId,
   })
 
   return (
@@ -25,8 +23,8 @@ export function LocationStep() {
         branches.map((item) => (
           <LocationCard
             key={item.branchId}
-            selected={branchId === item.branchId}
-            onClick={() => setData({ branchId: item.branchId })}
+            selected={branch?.branchId === item.branchId}
+            onClick={() => setData({ branch: item })}
             {...item}
           />
         ))}

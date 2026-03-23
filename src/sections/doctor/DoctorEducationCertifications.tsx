@@ -30,11 +30,7 @@ const EducationCertificationItem = ({
 export default function DoctorEducationCertifications({
   educationCertifications,
 }: {
-  educationCertifications: {
-    icon: IconName
-    title: string
-    description: string
-  }[]
+  educationCertifications: string
 }) {
   const { t } = useTranslation(['doctor', 'common'])
   return (
@@ -43,12 +39,17 @@ export default function DoctorEducationCertifications({
         {t('educationCertifications')}
       </Text>
       <div className="flex flex-col gap-[12px]">
-        {educationCertifications.map((educationCertification) => (
+        {/* {educationCertifications.map((educationCertification) => (
           <EducationCertificationItem
             key={educationCertification.title}
             {...educationCertification}
           />
-        ))}
+        ))} */}
+        <EducationCertificationItem
+          icon="graduate_cap"
+          title={educationCertifications}
+          description=""
+        />
       </div>
     </div>
   )

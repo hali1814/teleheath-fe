@@ -19,7 +19,7 @@ export default function PackageCard({
   sizeThumbnail = 'md',
 }: {
   className?: string
-  id: string
+  id: number
   name: string
   location: string
   price: number
@@ -35,7 +35,7 @@ export default function PackageCard({
   return (
     <Link
       to="/app/package/$id"
-      params={{ id }}
+      params={{ id: id.toString() }}
       className={cn(
         className,
         'w-full flex items-center gap-4 rounded-[12px] p-[16px] bg-white',
@@ -51,7 +51,7 @@ export default function PackageCard({
           {name}
         </Text>
         <LocationBadge
-          location={location}
+          location={location ?? 'Vietnam'}
           className="text-muted-foreground leading-[1.3]"
           textSize="xs_10"
         />
@@ -59,18 +59,23 @@ export default function PackageCard({
           {formatPrice(price)}
         </Text>
         {!hideBookAppointment && (
-          <Button className="w-full h-[32px] bg-dust-red-1">
-            <Icon
-              name="book_appointment"
-              color="var(--primary)"
-              className="w-[16px] h-[16px]"
-            />
-            <Text
-              size="sm_12"
-              className="font-medium leading-[1.3] text-primary"
+          <Button className="w-full h-[32px] bg-dust-red-1" asChild>
+            <Link
+              to="/app/book-appointment/package/$packageId"
+              params={{ packageId: id.toString() }}
             >
-              {t('actions.bookAppointment')}
-            </Text>
+              <Icon
+                name="book_appointment"
+                color="var(--primary)"
+                className="w-[16px] h-[16px]"
+              />
+              <Text
+                size="sm_12"
+                className="font-medium leading-[1.3] text-primary"
+              >
+                {t('actions.bookAppointment')}
+              </Text>
+            </Link>
           </Button>
         )}
       </div>

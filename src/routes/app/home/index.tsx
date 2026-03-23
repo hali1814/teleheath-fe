@@ -1,10 +1,10 @@
 import CountryTab from '#/components/CountryTab'
 import SearchBar from '#/components/SearchBar'
 import {
+  FEATURED_DOCTOR_PAGINATION,
   SPECIALIZED_PACKAGE_PAGINATION,
   TOP_HOSPITAL_PAGINATION,
 } from '#/const/pagination'
-import { doctors } from '#/mockData'
 import { DoctorLists } from '#/sections/doctor'
 import { MenuList, PremiumService } from '#/sections/home'
 import { HospitalList } from '#/sections/hospital'
@@ -15,6 +15,7 @@ import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospita
 import { useGetListPackagesQuery } from '#/services/query/package/list-packages'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { useGetListDoctorQuery } from '#/services/query/doctor/list-doctor'
 
 export const Route = createFileRoute('/app/home/')({
   component: RouteComponent,
@@ -52,6 +53,14 @@ function RouteComponent() {
     params: SPECIALIZED_PACKAGE_PAGINATION,
   })
 
+  const {
+    data: { data: { content: doctorsData } = { content: [] } } = {
+      data: { content: [] },
+    },
+  } = useGetListDoctorQuery({
+    params: FEATURED_DOCTOR_PAGINATION,
+  })
+
   return (
     <>
       <SearchBar
@@ -81,11 +90,11 @@ function RouteComponent() {
                     packages={packagesData}
                   />
                 )}
-                {doctors.length > 0 && (
+                {doctorsData.length > 0 && (
                   <DoctorLists
                     title={t('featuredDoctors')}
                     href="/app/doctor"
-                    doctors={doctors}
+                    doctors={doctorsData}
                   />
                 )}
               </div>

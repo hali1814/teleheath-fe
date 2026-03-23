@@ -12,14 +12,8 @@ const emptySchedules: ListScheduleByBranchResponse = {
 }
 
 export function ScheduleStep() {
-  const {
-    branchId,
-    specialtyId,
-    appointmentDate,
-    startTime,
-    endTime,
-    setData,
-  } = useBookingStore()
+  const { branch, specialty, appointmentDate, startTime, endTime, setData } =
+    useBookingStore()
 
   const dateParam =
     appointmentDate != null
@@ -29,11 +23,11 @@ export function ScheduleStep() {
   const { data: { data: schedules } = { data: emptySchedules } } =
     useGetListScheduleByBranchQuery({
       params: {
-        branchId: branchId!,
-        specialtyId: specialtyId,
+        branchId: branch?.branchId ?? '',
+        specialtyId: specialty?.id ?? 1,
         date: dateParam,
       },
-      enabled: !!branchId && !!dateParam,
+      enabled: !!branch?.branchId && !!dateParam,
     })
 
   const selectedDateLabel =

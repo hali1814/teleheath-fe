@@ -13,7 +13,7 @@ interface Hospital {
   website: string
 }
 
-export interface ListPackagesResponse extends IPagingResponse<{
+export interface Package {
   id: number
   name: string
   description: string
@@ -23,7 +23,9 @@ export interface ListPackagesResponse extends IPagingResponse<{
   imageUrl: string
   hospitals: Hospital[]
   active: boolean
-}> {}
+}
+
+export interface ListPackagesResponse extends IPagingResponse<Package> {}
 
 const getListPackages = async (
   params: ListPackagesRequest,

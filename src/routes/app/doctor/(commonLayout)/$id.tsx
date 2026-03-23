@@ -31,11 +31,14 @@ function RouteComponent() {
       />
       <AboutDoctor {...doctorData} />
       <DoctorCurrentLocation
-        hospitalName={doctorData?.hospitalName ?? ''}
-        address={doctorData?.address ?? ''}
+        hospitalName={doctorData?.hospitalName ?? 'Tam Anh Hospital'}
+        address={
+          doctorData?.address ??
+          '2B Pho Quang Street, Ward 2, Tan Binh District, Ho Chi Minh City, Vietnam'
+        }
       />
       <DoctorEducationCertifications
-        educationCertifications={doctorData?.educationCertifications ?? []}
+        educationCertifications={doctorData?.certifications ?? []}
       />
       <DoctorActions />
     </div>

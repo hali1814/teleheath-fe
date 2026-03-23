@@ -20,6 +20,7 @@ export enum DATE_TIME_TYPE {
   YYYY_MM_DD_HH = 'YYYY-MM-DD HH',
   MM_YYYY = 'MM-YYYY',
   MMM_DD_YYYY_HH_mm_A = 'MMM DD, YYYY • hh:mm A',
+  MMM_DD_YYYY = 'MMM DD, YYYY',
 }
 
 /**

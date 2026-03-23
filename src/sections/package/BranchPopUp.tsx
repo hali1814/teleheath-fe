@@ -25,7 +25,7 @@ const BranchItem = ({ name, address }: { name: string; address: string }) => {
           size="sm_12"
           className="flex-1 font-normal leading-[1.3] text-muted-foreground"
         >
-          {address}
+          {address ?? 'Vietnam'}
         </Text>
       </div>
     </div>

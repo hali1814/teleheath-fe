@@ -1,15 +1,20 @@
+import type { ListBranchesResponse } from '#/services/query/hospital/list-branches'
+import type { ListConsultationResponse } from '#/services/query/hospital/list-consultation'
+import type { Specialty } from '#/services/query/hospital/list-specialty'
+import type { Package } from '#/services/query/package/list-packages'
+import type { ListFamilyResponse } from '#/services/query/profile/list-family'
 import { create } from 'zustand'
 
 export type BookingState = {
   step: number
   hospitalId?: string
-  branchId?: string
-  consultationTierId?: number
-  doctorId?: string
-  specialtyId?: number
-  packageId?: number
+  branch?: ListBranchesResponse
+  consultationTier?: ListConsultationResponse
+  doctor?: string
+  specialty?: Specialty
+  package?: Package
   bookingType?: 'HOSPITAL' | 'PACKAGE' | 'DOCTOR'
-  patientProfileId?: number
+  patientProfile?: ListFamilyResponse
   appointmentDate?: Date
   startTime?: string
   endTime?: string
@@ -25,6 +30,7 @@ export type BookingState = {
   setData: (data: Partial<BookingState>) => void
   appendFileId: (id: string) => void
   removeFileId: (id: string) => void
+  reset: () => void
 }
 
 export const useBookingStore = create<BookingState>((set) => ({
@@ -44,4 +50,24 @@ export const useBookingStore = create<BookingState>((set) => ({
     set((s) => ({
       medicalFiles: s.medicalFiles.filter((x) => x !== id),
     })),
+
+  reset: () =>
+    set({
+      step: 0,
+      serviceIds: [],
+      medicalFiles: [],
+      hospitalId: undefined,
+      branch: undefined,
+      consultationTier: undefined,
+      doctor: undefined,
+      specialty: undefined,
+      package: undefined,
+      bookingType: undefined,
+      patientProfile: undefined,
+      appointmentDate: undefined,
+      startTime: undefined,
+      endTime: undefined,
+      notes: undefined,
+      medicalHistory: undefined,
+    }),
 }))

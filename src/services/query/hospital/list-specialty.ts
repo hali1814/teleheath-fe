@@ -4,12 +4,14 @@ import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 interface ListSpecialtyRequest extends IPagingRequest {}
 
-export interface ListSpecialtyResponse extends IPagingResponse<{
+export interface Specialty {
   id: number
   name: string
   description: string
   iconUrl: string
-}> {}
+}
+
+export interface ListSpecialtyResponse extends IPagingResponse<Specialty> {}
 
 const getListSpecialty = async (
   params: ListSpecialtyRequest,

@@ -1,8 +1,9 @@
 import { Icon } from '#/components/icon'
 import SearchBar from '#/components/SearchBar'
 import { Badge } from '#/components/ui/badge'
-import { doctors } from '#/mockData'
+import { ALL_PAGINATION } from '#/const/pagination'
 import { DoctorCard, ModalFilterDoctor } from '#/sections/doctor'
+import { useGetListDoctorQuery } from '#/services/query/doctor/list-doctor'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +15,15 @@ export const Route = createFileRoute('/app/doctor/(commonLayout)/')({
 function RouteComponent() {
   const [open, setOpen] = useState(false)
   const { t } = useTranslation(['doctor', 'common'])
+
+  const {
+    data: { data: { content: doctorsData = [] } = { content: [] } } = {
+      data: { content: [] },
+    },
+  } = useGetListDoctorQuery({
+    params: ALL_PAGINATION,
+  })
+
   return (
     <>
       <div className="flex flex-col gap-[16px] p-[16px]">
@@ -26,9 +36,15 @@ function RouteComponent() {
             </Badge>
           </div>
         </div>
-        {doctors.map((doctor) => (
-          <DoctorCard key={doctor.id} {...doctor} variant="horizontal" />
-        ))}
+        {doctorsData.length > 0 &&
+          doctorsData.map((doctor) => (
+            <DoctorCard
+              key={doctor.id}
+              {...doctor}
+              variant="horizontal"
+              location="Vietnam"
+            />
+          ))}
       </div>
       <ModalFilterDoctor open={open} onOpenChange={setOpen} />
     </>

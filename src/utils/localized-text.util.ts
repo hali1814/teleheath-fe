@@ -9,10 +9,10 @@ export const getLocalizedTextByLang = (
 ) => {
   switch (lang) {
     case 'km':
-      return textKh || textEn || textVi
+      return textKh || textEn || textVi || ''
     case 'vi':
-      return textVi || textEn
+      return textVi || textEn || ''
     default:
-      return textEn || textVi
+      return textEn || textVi || ''
   }
 }
