@@ -16,6 +16,7 @@ function backendOrigin(): string {
   return raw.replace(/\/$/, '')
 }
 
+//
 export function fileUrlForSameOriginDisplay(
   url: string | undefined,
 ): string | undefined {
