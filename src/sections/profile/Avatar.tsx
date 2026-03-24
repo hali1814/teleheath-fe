@@ -28,12 +28,14 @@ export default function Avatar({
 
   return (
     <div
-      className={`relative flex size-[${size}px] items-center justify-center rounded-full border-4 border-white bg-clip-padding opacity-100`}
+      className={`relative flex items-center justify-center rounded-full border-4 border-white bg-clip-padding opacity-100`}
       style={{
         // Khi có ảnh, không padding để ảnh phủ full hình tròn.
         padding: hasImage ? 0 : '26px 20px',
         background: hasImage ? undefined : AVATAR_PLACEHOLDER_GRADIENT,
         boxSizing: 'border-box',
+        width: size,
+        height: size,
       }}
     >
       {hasImage ? (
