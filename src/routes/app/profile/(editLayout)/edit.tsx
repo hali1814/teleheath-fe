@@ -4,6 +4,7 @@ import DateInput from '#/components/react-hook-form/DateInput'
 import GenderInput from '#/components/react-hook-form/GenderInput'
 import InputSelect from '#/components/react-hook-form/InputSelect'
 import TextInput from '#/components/react-hook-form/TextInput'
+import FlagCambodia from '#/assets/icons/profile/flag-cambodia.svg?react'
 import ConfirmModal from '#/components/ConfirmModal'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
@@ -283,7 +284,6 @@ function RouteComponent() {
     params: {},
     enabled: !isUserProfile,
   })
-  const familyMembers = familyList?.data?.patients ?? []
 
   const { mutateAsync: getPatientProfile, isPending: isGettingPatientProfile } =
     useGetPatientProfileMutation({
@@ -342,7 +342,9 @@ function RouteComponent() {
       name: formValues.fullName!,
       dateOfBirth: formValues.dateOfBirth!,
       gender: formValues.gender!,
-      phone: formValues.phoneNumber!,
+      phone: formValues.phoneNumber?.startsWith('+855')
+        ? formValues.phoneNumber
+        : `+855${formValues.phoneNumber}`,
       email: formValues.email || '',
       avatarUrl: formValues.avatarUrl,
       relationship: formValues.relationship,
@@ -496,13 +498,31 @@ function RouteComponent() {
           label={t('gender')}
           isRequired
         />
-        <TextInput
-          control={control}
-          name="phoneNumber"
-          label={t('phoneNumber')}
-          placeholder={t('phoneNumber')}
-          isRequired
-        />
+        <div className="flex flex-col gap-1">
+          <Text size="base_14" className="text-text-secondary font-normal">
+            {t('phoneNumber')}
+            <span className="ml-1 text-primary">*</span>
+          </Text>
+          <div className="flex h-[45px] overflow-hidden rounded-[6px] border border-dust-red-1 bg-white">
+            <div className="flex h-full items-center gap-[6px] border-r border-dust-red-1 bg-dust-red-1 px-[10px]">
+              <FlagCambodia className="h-4 w-6 shrink-0" aria-hidden="true" />
+              <Text size="sm_12" className="font-normal text-[#1A1A1A]">
+                +855
+              </Text>
+            </div>
+            <input
+              value={formValues.phoneNumber ?? ''}
+              onChange={(event) => setValue('phoneNumber', event.target.value)}
+              onBlur={() => {}}
+              name="phoneNumber"
+              ref={() => {}}
+              type="tel"
+              inputMode="tel"
+              placeholder={t('phoneNumber')}
+              className="h-full w-full bg-transparent px-3 text-base text-[#1A1A1A] outline-none placeholder:text-muted-foreground"
+            />
+          </div>
+        </div>
 
         <TextInput
           control={control}
