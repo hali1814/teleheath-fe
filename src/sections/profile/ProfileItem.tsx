@@ -35,16 +35,9 @@ export default function ProfileItem({
       className={['w-full rounded-xl bg-white p-4', className ?? ''].join(' ')}
       style={{ boxShadow: '0px 1px 2px rgba(0,0,0,0.05)' }}
       onClick={() => {
-        if (relationshipLabel === 'SELF') {
-          router.navigate({
-            to: '/app/profile/edit',
-            search: { idMember: undefined, addNew: false },
-          })
-          return
-        }
         router.navigate({
           to: '/app/profile/edit',
-          search: { idMember: id, addNew: false },
+          search: { idMember: id, isUserProfile: false },
         })
       }}
     >

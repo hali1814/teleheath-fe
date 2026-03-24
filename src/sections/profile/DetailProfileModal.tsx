@@ -4,7 +4,7 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Dialog, DialogContent, DialogTitle } from '#/components/ui/dialog'
-import type { ListFamilyResponse } from '#/services/query/profile/list-family'
+import type { ListFamilyResponse } from '#/services/query/profile/listFamily'
 
 export interface DetailProfileModalProfile {
   avatarSrc?: string

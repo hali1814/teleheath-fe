@@ -24,7 +24,7 @@ export async function updateProfile(
   request: UpdateProfileRequest,
   signal: AbortSignal,
 ): Promise<HttpCommonResponse<PatientProfileResponse>> {
-  return http.put<PatientProfileResponse>('/patients/me', request, {
+  return http.put<PatientProfileResponse>('/users/me', request, {
     signal,
   })
 }
@@ -37,28 +37,6 @@ export const useUpdateProfileMutation = (
 ) => {
   return useMutation({
     mutationFn: updateProfile,
-    ...options,
-  })
-}
-
-export async function addNewProfile(
-  request: UpdateProfileRequest,
-  signal: AbortSignal,
-): Promise<HttpCommonResponse<PatientProfileResponse>> {
-  return http.post<PatientProfileResponse>('/patients/me/family', request, {
-    signal,
-  })
-}
-
-export const useAddNewProfileMutation = (
-  options?: UseMutationOptions<
-    HttpCommonResponse<PatientProfileResponse>,
-    UpdateProfileRequest
-  >,
-) => {
-  return useMutation({
-    mutationFn: addNewProfile,
-    mutationKey: ['list-family'],
     ...options,
   })
 }

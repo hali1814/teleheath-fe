@@ -1,3 +1,5 @@
+import type { PatientProfileResponse } from '#/services/query/profile/getProfile'
+
 /**
  * Chữ ký tên hiển thị avatar: "Dev Patient" → "DP", một từ → 2 ký tự đầu hoặc 1 ký tự.
  */
@@ -18,4 +20,8 @@ export function getInitialsFromName(name: string | null | undefined): string {
   const first = parts[0].charAt(0)
   const last = parts[parts.length - 1].charAt(0)
   return (first + last).toUpperCase()
+}
+
+export const concatAddress = (address: PatientProfileResponse['address']) => {
+  return `${address?.detail || ''} ${address?.districtName || ''} ${address?.cityName || ''} ${address?.countryName || ''}`
 }

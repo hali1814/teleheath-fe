@@ -2,7 +2,7 @@ import type { ListBranchesResponse } from '#/services/query/hospital/list-branch
 import type { ListConsultationResponse } from '#/services/query/hospital/list-consultation'
 import type { Specialty } from '#/services/query/hospital/list-specialty'
 import type { Package } from '#/services/query/package/list-packages'
-import type { ListFamilyResponse } from '#/services/query/profile/list-family'
+import type { ListFamilyResponse } from '#/services/query/profile/listFamily'
 import { create } from 'zustand'
 
 export type BookingState = {

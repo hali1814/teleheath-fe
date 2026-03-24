@@ -34,7 +34,7 @@ export interface PatientProfileResponse {
 
 const getProfile = async (_params: GetProfileRequest, signal: AbortSignal) => {
   const response = await http.get<PatientProfileResponse>(
-    '/patients/me',
+    '/users/me',
     {},
     {
       signal,

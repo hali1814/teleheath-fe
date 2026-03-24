@@ -3,7 +3,7 @@ import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import EmptyMedicalProfiles from '#/sections/profile/EmptyMedicalProfiles'
 import ProfileItem from '#/sections/profile/ProfileItem'
-import { useGetListFamilyQuery } from '#/services/query/profile/list-family'
+import { useGetListFamilyQuery } from '#/services/query/profile/listFamily'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { formatDate, DATE_TIME_TYPE } from '#/utils'
@@ -21,7 +21,7 @@ function RouteComponent() {
     params: {},
   })
 
-  const familyMembers = familyList?.data ?? []
+  const familyMembers = familyList?.data?.patients ?? []
 
   return (
     <div className="px-4 pb-20">
@@ -29,7 +29,7 @@ function RouteComponent() {
         <EmptyMedicalProfiles />
       ) : (
         <div className="flex flex-col gap-3 mt-4">
-          {familyMembers.map((member) => {
+          {familyMembers?.map((member) => {
             const relationshipLabel = member.relationship
 
             return (
@@ -44,6 +44,7 @@ function RouteComponent() {
                   DATE_TIME_TYPE.MMM_DD_YYYY,
                 )}
                 phone={member.phone}
+                id={member.id}
               />
             )
           })}
@@ -59,7 +60,7 @@ function RouteComponent() {
           onClick={() => {
             router.navigate({
               to: '/app/profile/edit',
-              search: { idMember: undefined, addNew: true },
+              search: { idMember: undefined, isUserProfile: false },
             })
           }}
         >

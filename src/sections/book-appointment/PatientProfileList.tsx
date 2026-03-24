@@ -6,7 +6,7 @@ import { cn } from '#/lib/utils'
 import { useState } from 'react'
 import DetailProfileModal from '../profile/DetailProfileModal'
 import ProfileFormModal from '../profile/ProfileFormModal'
-import type { ListFamilyResponse } from '#/services/query/profile/list-family'
+import type { ListFamilyResponse } from '#/services/query/profile/listFamily'
 
 const PatientProfileItem = ({
   profile,

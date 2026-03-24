@@ -2,7 +2,7 @@ import SearchBar from '#/components/SearchBar'
 import { useBookingStore } from '#/stores/booking-store'
 import { PatientProfileList } from '../PatientProfileList'
 import { MedicalRecords } from '../MedicalRecords'
-import { useGetListFamilyQuery } from '#/services/query/profile/list-family'
+import { useGetListFamilyQuery } from '#/services/query/profile/listFamily'
 
 export function PatientStep() {
   const { patientProfile, setData } = useBookingStore()

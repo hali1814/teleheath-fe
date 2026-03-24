@@ -4,6 +4,7 @@ import DateInput from '#/components/react-hook-form/DateInput'
 import GenderInput from '#/components/react-hook-form/GenderInput'
 import InputSelect from '#/components/react-hook-form/InputSelect'
 import TextInput from '#/components/react-hook-form/TextInput'
+import ConfirmModal from '#/components/ConfirmModal'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import UploadAvatar from '#/sections/profile/UploadAvatar'
@@ -13,16 +14,25 @@ import { useGetDistrictsQuery } from '#/services/query/profile/getDistrict'
 import { useGetPrecinctsQuery } from '#/services/query/profile/getPrecinct'
 import { useProfileStore } from '#/stores/profile'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import {
-  useAddNewProfileMutation,
-  useUpdateProfileMutation,
-} from '#/services/query/profile/updateProfile'
+import { useUpdateProfileMutation } from '#/services/query/profile/updateProfile'
 import { Icon } from '#/components/icon'
+import {
+  useAddNewPatientProfileMutation,
+  useDeletePatientProfileMutation,
+  useUpdatePatientProfileMutation,
+} from '#/services/query/profile/patientProfile'
+import LoadingBlocking from '#/components/LoadingBlocking'
+import {
+  useGetListFamilyQuery,
+  useGetPatientProfileMutation,
+} from '#/services/query/profile/listFamily'
+import type { HttpCommonResponse } from '#/services/network/http-request'
+import type { PatientProfileResponse } from '#/services/query/profile/getProfile'
 
 /** Optional query: `/edit` hoặc `/edit?idMember=1` */
 const editSearchSchema = z.object({
@@ -34,7 +44,7 @@ const editSearchSchema = z.object({
       const n = typeof v === 'number' ? v : Number(v)
       return Number.isFinite(n) ? n : undefined
     }),
-  addNew: z.boolean().optional().default(false),
+  isUserProfile: z.boolean().optional().default(false),
 })
 
 export type EditSearch = z.infer<typeof editSearchSchema>
@@ -78,9 +88,10 @@ function RouteComponent() {
   })
 
   const { t, i18n } = useTranslation(['profile', 'common'])
-  const { idMember, addNew } = Route.useSearch()
+  const { idMember, isUserProfile } = Route.useSearch()
   const user = useProfileStore((s) => s.profile)
   const setProfile = useProfileStore((s) => s.setProfile)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const country = useWatch({ control, name: 'country' })
   const city = useWatch({ control, name: 'city' })
   const district = useWatch({ control, name: 'district' })
@@ -268,20 +279,47 @@ function RouteComponent() {
     return true
   }
 
+  const { data: familyList } = useGetListFamilyQuery({
+    params: {},
+    enabled: !isUserProfile,
+  })
+  const familyMembers = familyList?.data?.patients ?? []
+
+  const { mutateAsync: getPatientProfile, isPending: isGettingPatientProfile } =
+    useGetPatientProfileMutation({
+      onSuccess: (data) => {
+        setValue('fullName', data.data.name ?? '')
+        setValue('dateOfBirth', data.data.dateOfBirth ?? '')
+        setValue('gender', (data.data.gender as GenderValue) ?? 'MALE')
+        setValue('phoneNumber', data.data.phone ?? '')
+        setValue('email', data.data.email ?? '')
+        setValue('country', data.data.address?.countryCode ?? '')
+        setValue('avatarUrl', data.data.avatarUrl ?? '')
+        setValue('city', data.data.address?.cityId?.toString() ?? '')
+        setValue('district', data.data.address?.districtId?.toString() ?? '')
+        setValue('precinct', data.data.address?.precinctId?.toString() ?? '')
+        setValue('street', data.data.address?.detail ?? '')
+        setValue('relationship', data.data.relationship)
+      },
+    })
+
   useEffect(() => {
-    if (!idMember && !addNew) {
+    if (isUserProfile) {
       setValue('fullName', user?.name ?? '')
       setValue('dateOfBirth', user?.dateOfBirth ?? '')
       setValue('gender', (user?.gender as GenderValue) ?? 'MALE')
       setValue('phoneNumber', user?.phone ?? '')
       setValue('email', user?.email ?? '')
-      setValue('relationship', user?.relationship ?? 'SELF')
       setValue('country', user?.address?.countryCode ?? '')
       setValue('avatarUrl', user?.avatarUrl ?? '')
       setValue('city', user?.address?.cityId?.toString() ?? '')
       setValue('district', user?.address?.districtId?.toString() ?? '')
       setValue('precinct', user?.address?.precinctId?.toString() ?? '')
       setValue('street', user?.address?.detail ?? '')
+    }
+
+    if (idMember) {
+      getPatientProfile(idMember)
     }
   }, [idMember, setValue, user])
 
@@ -290,7 +328,13 @@ function RouteComponent() {
   const router = useRouter()
 
   const { mutateAsync: addNewProfile, isPending: isAddingNewProfile } =
-    useAddNewProfileMutation()
+    useAddNewPatientProfileMutation()
+  const {
+    mutateAsync: updatePatientProfile,
+    isPending: isUpdatingPatientProfile,
+  } = useUpdatePatientProfileMutation()
+  const { mutateAsync: deletePatientProfile, isPending: isDeletingProfile } =
+    useDeletePatientProfileMutation()
 
   const handleSaveProfile = async () => {
     if (!validateAndToast()) return
@@ -320,19 +364,102 @@ function RouteComponent() {
           ?.label,
       },
     }
-    const res = addNew
-      ? await addNewProfile(request)
-      : await updateProfile(request)
 
+    let res: HttpCommonResponse<PatientProfileResponse> | undefined
+    if (idMember) {
+      res = await updatePatientProfile({
+        ...request,
+        memberId: idMember,
+      })
+    }
+
+    if (isUserProfile) {
+      res = await updateProfile(request)
+    }
+
+    if (!isUserProfile && !idMember) {
+      res = await addNewProfile(request)
+    }
+
+    if (!res) return
     if (res.success) {
       toast.success(t('profileUpdated'))
       router.history.back()
-      if (!addNew && !idMember) {
+      if (isUserProfile) {
         // update profile store
         setProfile(res.data)
       }
     }
   }
+
+  const handleConfirmDelete = async () => {
+    if (!idMember) return
+    const res = await deletePatientProfile(idMember)
+    if (res.success) {
+      toast.success(t('profileDeleted'))
+      setIsDeleteDialogOpen(false)
+      router.history.back()
+    }
+  }
+
+  const relationshipOptions = [
+    {
+      label: t('common:relationships.self'),
+      value: 'SELF',
+    },
+    {
+      label: t('common:relationships.father'),
+      value: 'FATHER',
+    },
+    {
+      label: t('common:relationships.mother'),
+      value: 'MOTHER',
+    },
+    {
+      label: t('common:relationships.husband'),
+      value: 'HUSBAND',
+    },
+    {
+      label: t('common:relationships.wife'),
+      value: 'WIFE',
+    },
+    {
+      label: t('common:relationships.child'),
+      value: 'CHILD',
+    },
+    {
+      label: t('common:relationships.grandfather'),
+      value: 'GRANDFATHER',
+    },
+    {
+      label: t('common:relationships.grandmother'),
+      value: 'GRANDMOTHER',
+    },
+    {
+      label: t('common:relationships.sibling'),
+      value: 'SIBLING',
+    },
+    {
+      label: t('common:relationships.relative'),
+      value: 'RELATIVE',
+    },
+    {
+      label: t('common:relationships.friend'),
+      value: 'FRIEND',
+    },
+  ]
+
+  const filteredRelationshipOptions = useMemo(() => {
+    if (
+      familyList?.data?.patients?.find(
+        (patient) =>
+          patient.relationship === 'SELF' && formValues.relationship !== 'SELF',
+      )
+    ) {
+      return relationshipOptions.filter((option) => option.value !== 'SELF')
+    }
+    return relationshipOptions
+  }, [familyList?.data?.patients, formValues.relationship])
 
   return (
     <div className="pt-4 pb-20 px-4">
@@ -384,56 +511,11 @@ function RouteComponent() {
           placeholder={t('email')}
         />
 
-        {idMember || addNew ? (
+        {idMember || !isUserProfile ? (
           <InputSelect
             control={control}
             name="relationship"
-            options={[
-              {
-                label: t('common:relationships.self'),
-                value: 'SELF',
-              },
-              {
-                label: t('common:relationships.father'),
-                value: 'FATHER',
-              },
-              {
-                label: t('common:relationships.mother'),
-                value: 'MOTHER',
-              },
-              {
-                label: t('common:relationships.husband'),
-                value: 'HUSBAND',
-              },
-              {
-                label: t('common:relationships.wife'),
-                value: 'WIFE',
-              },
-              {
-                label: t('common:relationships.child'),
-                value: 'CHILD',
-              },
-              {
-                label: t('common:relationships.grandfather'),
-                value: 'GRANDFATHER',
-              },
-              {
-                label: t('common:relationships.grandmother'),
-                value: 'GRANDMOTHER',
-              },
-              {
-                label: t('common:relationships.sibling'),
-                value: 'SIBLING',
-              },
-              {
-                label: t('common:relationships.relative'),
-                value: 'RELATIVE',
-              },
-              {
-                label: t('common:relationships.friend'),
-                value: 'FRIEND',
-              },
-            ]}
+            options={filteredRelationshipOptions}
             placeholder={t('relationship')}
             label={t('relationship')}
             isRequired
@@ -506,30 +588,79 @@ function RouteComponent() {
 
       {/* stricky save button */}
       <div className="fixed inset-x-4 bottom-4">
-        <Button
-          type="button"
-          variant="secondary"
-          className="h-[45px] w-full rounded-full"
-          onClick={handleSaveProfile}
-          disabled={addNew ? isAddingNewProfile : isUpdatingProfile}
-        >
-          {addNew ? (
-            <>
-              <Icon name="add_profile" />
-              <Text size="base_14" className="font-medium text-white">
-                {t('addProfile')}
+        {!idMember && (
+          <Button
+            type="button"
+            variant="secondary"
+            className="h-[45px] w-full rounded-full"
+            onClick={handleSaveProfile}
+            disabled={!isUserProfile ? isAddingNewProfile : isUpdatingProfile}
+          >
+            {!isUserProfile ? (
+              <>
+                <Icon name="add_profile" />
+                <Text size="base_14" className="font-medium text-white">
+                  {t('addProfile')}
+                </Text>
+              </>
+            ) : (
+              <Text
+                size="base_14"
+                className="w-full text-center font-medium text-white"
+              >
+                {t('save')}
               </Text>
-            </>
-          ) : (
-            <Text
-              size="base_14"
-              className="w-full text-center font-medium text-white"
+            )}
+          </Button>
+        )}
+
+        {idMember && (
+          <div className="flex items-center gap-[10px]">
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-[45px] flex-1 rounded-[40px] border border-primary bg-background px-3 py-[12px] hover:bg-white"
+              onClick={() => setIsDeleteDialogOpen(true)}
+              disabled={isDeletingProfile}
             >
-              {t('save')}
-            </Text>
-          )}
-        </Button>
+              <Text size="base_14" className="font-medium text-primary">
+                {t('delete')}
+              </Text>
+            </Button>
+
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-[45px] flex-1 rounded-[40px] bg-primary px-3 py-[12px] hover:bg-primary"
+              onClick={handleSaveProfile}
+              disabled={isUpdatingProfile}
+            >
+              <Text size="base_14" className="font-medium text-white">
+                {t('profile:editProfile')}
+              </Text>
+            </Button>
+          </div>
+        )}
       </div>
+      <ConfirmModal
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        title={t('deletePatientProfileTitle')}
+        description={t('deletePatientProfileMessage')}
+        cancelText={t('no')}
+        confirmText={t('yes')}
+        confirmDisabled={isDeletingProfile}
+        onConfirm={handleConfirmDelete}
+      />
+      <LoadingBlocking
+        isLoading={
+          isAddingNewProfile ||
+          isUpdatingProfile ||
+          isDeletingProfile ||
+          isUpdatingPatientProfile ||
+          isGettingPatientProfile
+        }
+      />
     </div>
   )
 }

@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { BottomSheetTranslate } from '#/sections/profile/BottomSheetTranslate'
 import { useProfileStore } from '#/stores/profile'
-import { formatDate, getInitialsFromName } from '#/utils'
+import { concatAddress, formatDate, getInitialsFromName } from '#/utils'
 
 export const Route = createFileRoute('/app/profile/(commonLayout)/')({
   component: RouteComponent,
@@ -55,7 +55,7 @@ function RouteComponent() {
           onClick={() =>
             navigate({
               to: '/app/profile/edit',
-              search: { idMember: undefined, addNew: false },
+              search: { idMember: undefined, isUserProfile: true },
             })
           }
         >
@@ -89,7 +89,7 @@ function RouteComponent() {
             <InfoRow label={t('email')} value={user?.email ?? ''} />
             <InfoRow
               label={t('address')}
-              value={user?.address?.fullAddress ?? ''}
+              value={concatAddress(user?.address)}
             />
           </CardContent>
         </Card>
