@@ -11,7 +11,7 @@ interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 
 export default function Image({
   className,
-  loading = 'lazy',
+  loading = 'eager',
   decoding = 'async',
   aspectRatio,
   src,
