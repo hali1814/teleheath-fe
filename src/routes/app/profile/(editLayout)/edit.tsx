@@ -338,6 +338,7 @@ function RouteComponent() {
 
   const handleSaveProfile = async () => {
     if (!validateAndToast()) return
+
     const request = {
       name: formValues.fullName!,
       dateOfBirth: formValues.dateOfBirth!,
