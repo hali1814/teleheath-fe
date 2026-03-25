@@ -29,7 +29,7 @@ function RouteComponent() {
   })
 
   return (
-    <div className="flex flex-col gap-[16px] p-[16px]">
+    <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
       <SearchBar
         placeholder={t('searchPlaceholder')}
         value={query}
@@ -41,13 +41,11 @@ function RouteComponent() {
         hospitalsData.map((hospital) => (
           <HospitalCard
             key={hospital.hospitalId}
-            id={hospital.hospitalId}
-            name={hospital.nameVi}
-            location={hospital.address}
-            thumbnail={hospital.thumbnailUrl}
             size="md"
             variantButton="solid"
             showBadge={true}
+            showAddress={true}
+            {...hospital}
           />
         ))}
     </div>

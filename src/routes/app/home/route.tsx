@@ -10,7 +10,7 @@ function RouteComponent() {
   return (
     <>
       <Header isHome />
-      <div className="flex flex-col gap-[20px] px-[16px] mt-[20px]">
+      <div className="flex flex-col gap-[20px] mt-[20px]">
         <Outlet />
       </div>
       <BottomNavigation />

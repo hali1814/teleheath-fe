@@ -10,7 +10,7 @@ export default function ExpandViewButton({
 
   return (
     <div {...props}>
-      <div className="flex items-center gap-[6px]">
+      <div className="h-full flex items-center gap-[6px]">
         <Text className="text-dust-red-8 leading-[1.7] font-medium cursor-pointer">
           {expanded ? t('actions.viewLess') : t('actions.viewMore')}
         </Text>

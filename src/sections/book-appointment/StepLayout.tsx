@@ -37,7 +37,7 @@ export function StepLayout({
       </div>
 
       {/* Content */}
-      <div className="flex-1 mt-[20px] px-[16px]">{children}</div>
+      <div className="flex-1 mt-[20px]">{children}</div>
 
       {/* Footer */}
       <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center pt-[10px] pb-[32px] px-[20px] bg-background">
@@ -68,7 +68,7 @@ export function StepLayout({
           disabled={disableNext}
         >
           <Text className="font-medium leading-normal text-white">
-            Continue
+            {step === total - 1 ? 'Book Now' : 'Continue'}
           </Text>
         </Button>
       </div>

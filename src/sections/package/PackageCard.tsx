@@ -7,27 +7,24 @@ import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
+import type { Package } from '#/types/package'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
+import type { AppLanguage } from '#/i18n'
+
+type PackageCardProps = {
+  className?: string
+  hideBookAppointment?: boolean
+  sizeThumbnail?: 'sm' | 'md'
+} & Package
 
 export default function PackageCard({
   className,
-  id,
-  name,
-  location,
-  price,
-  imageUrl,
   hideBookAppointment = false,
   sizeThumbnail = 'md',
-}: {
-  className?: string
-  id: number
-  name: string
-  location: string
-  price: number
-  imageUrl: string
-  hideBookAppointment?: boolean
-  sizeThumbnail?: 'sm' | 'md'
-}) {
-  const { t } = useTranslation(['common'])
+  ...packageData
+}: PackageCardProps) {
+  const { id, name, countries, price, imageUrl } = packageData
+  const { t, i18n } = useTranslation(['common'])
 
   const thumbnailSize =
     sizeThumbnail === 'sm' ? 'w-[68px] h-[68px]' : 'w-[108px] h-[108px]'
@@ -51,7 +48,12 @@ export default function PackageCard({
           {name}
         </Text>
         <LocationBadge
-          location={location ?? 'Vietnam'}
+          location={getLocalizedTextByLang(
+            countries[0].nameVi,
+            null,
+            countries[0].nameEn,
+            i18n.language as AppLanguage,
+          )}
           className="text-muted-foreground leading-[1.3]"
           textSize="xs_10"
         />

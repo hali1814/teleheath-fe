@@ -27,7 +27,7 @@ function RouteComponent() {
     })
 
   return (
-    <>
+    <div className="pb-[100px]">
       <HospitalDetailHeader
         thumbnail={hospitalData?.thumbnailUrl ?? ''}
         name={hospitalData?.nameVi ?? ''}
@@ -38,6 +38,8 @@ function RouteComponent() {
         <AboutHospital aboutUs={hospitalData?.description ?? ''} />
         <SpecialtyList specialties={hospitalData?.specialties ?? []} />
         <BranchList hospitalId={id} />
+      </div>
+      <div className="fixed bottom-0 left-0 right-0 pt-[10px] pb-[35px] px-[20px] bg-background">
         <Button
           className="w-full h-[45px] bg-primary rounded-[40px] gap-[10px]"
           asChild
@@ -57,6 +59,6 @@ function RouteComponent() {
           </Link>
         </Button>
       </div>
-    </>
+    </div>
   )
 }

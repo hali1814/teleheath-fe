@@ -67,7 +67,7 @@ export function SlotTimeList({
           <SlotTimeChip
             key={`${item.startTime}-${item.endTime}`}
             time={`${item.startTime} - ${item.endTime}`}
-            disabled={item.status === 'FULL'}
+            disabled={item.status !== 'AVAILABLE'}
             selected={
               selectedTime.startTime !== null &&
               selectedTime.endTime !== null &&

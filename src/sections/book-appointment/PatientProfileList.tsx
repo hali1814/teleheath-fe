@@ -6,15 +6,15 @@ import { cn } from '#/lib/utils'
 import { useState } from 'react'
 import DetailProfileModal from '../profile/DetailProfileModal'
 import ProfileFormModal from '../profile/ProfileFormModal'
-import type { ListFamilyResponse } from '#/services/query/profile/listFamily'
+import type { ListFamilyPatient } from '#/services/query/profile/listFamily'
 
 const PatientProfileItem = ({
-  profile,
+  patient,
   selected = false,
   onClick,
   onViewDetails,
 }: {
-  profile: ListFamilyResponse
+  patient: ListFamilyPatient
   selected?: boolean
   onClick?: () => void
   onViewDetails?: () => void
@@ -30,8 +30,8 @@ const PatientProfileItem = ({
             )}
           >
             <AvatarImage
-              src={profile.avatarUrl ?? undefined}
-              alt={profile.name}
+              src={patient.avatarUrl ?? undefined}
+              alt={patient.name}
               className="w-[68px] h-[68px]"
             />
             <AvatarFallback className="w-[68px] h-[68px] bg-[linear-gradient(135deg,#FFEFEF_0%,#FFA7A7_100%)]">
@@ -39,7 +39,7 @@ const PatientProfileItem = ({
                 size="2xl_20"
                 className="font-semibold leading-normal text-[#A8071A80] uppercase"
               >
-                {profile.name.slice(0, 2)}
+                {patient.name.slice(0, 2)}
               </Text>
             </AvatarFallback>
           </Avatar>
@@ -54,7 +54,7 @@ const PatientProfileItem = ({
         </div>
         <div>
           <Text className="text-center font-medium leading-normal">
-            {profile.name}
+            {patient.name}
           </Text>
           <div onClick={onViewDetails}>
             <Text
@@ -76,24 +76,24 @@ export function PatientProfileList({
   profiles,
 }: {
   selected?: number
-  onClick?: (profile: ListFamilyResponse) => void
-  profiles: ListFamilyResponse[]
+  onClick?: (patient: ListFamilyPatient) => void
+  profiles: ListFamilyPatient[]
 }) {
   const [open, setOpen] = useState(false)
   const [openAddNewProfileModal, setOpenAddNewProfileModal] = useState(false)
-  const [profile, setProfile] = useState<ListFamilyResponse | null>(null)
+  const [patient, setPatient] = useState<ListFamilyPatient | null>(null)
 
-  const handleViewDetails = (patientID: number) => {
-    const profile = profiles?.find((profile) => profile.id === patientID)
-    if (!profile) return
-    setProfile(profile)
+  const handleViewDetails = (patientId: number) => {
+    const patient = profiles?.find((patient) => patient.id === patientId)
+    if (!patient) return
+    setPatient(patient)
     setOpen(true)
   }
 
   return (
     <>
       <div className="flex flex-col gap-[16px]">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between px-[16px]">
           <Text size="lg_16" className="font-semibold leading-[1.2]">
             Patient Profile
           </Text>
@@ -107,15 +107,15 @@ export function PatientProfileList({
           </button>
         </div>
         {profiles && profiles.length > 0 ? (
-          <div className="flex gap-[16px] overflow-x-auto no-scrollbar py-[10px]">
+          <div className="flex gap-[16px] overflow-x-auto no-scrollbar py-[10px] pl-[16px]">
             {profiles.length > 0 &&
-              profiles.map((profile) => (
+              profiles.map((patient) => (
                 <PatientProfileItem
-                  key={profile.id}
-                  profile={profile}
-                  selected={selected === profile.id}
-                  onClick={() => onClick?.(profile)}
-                  onViewDetails={() => handleViewDetails(profile.id)}
+                  key={patient.id}
+                  patient={patient}
+                  selected={selected === patient.id}
+                  onClick={() => onClick?.(patient)}
+                  onViewDetails={() => handleViewDetails(patient.id)}
                 />
               ))}
           </div>
@@ -123,11 +123,11 @@ export function PatientProfileList({
           <EmptyPatientProfiles />
         )}
       </div>
-      {profile && (
+      {patient && (
         <DetailProfileModal
           open={open}
           onOpenChange={setOpen}
-          profile={profile}
+          patient={patient}
           onEdit={() => setOpenAddNewProfileModal(true)}
         />
       )}

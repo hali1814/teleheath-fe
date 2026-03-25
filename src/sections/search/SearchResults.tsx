@@ -124,7 +124,6 @@ export default function SearchResults({ data, tab }: { data: any; tab: Tab }) {
                 {...item}
                 variant="horizontal"
                 hideBookAppointment={true}
-                sizeAvatar="sm"
               />
             ))}
           </Section>

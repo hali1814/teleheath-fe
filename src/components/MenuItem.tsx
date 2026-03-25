@@ -29,7 +29,7 @@ export default function MenuItem({
   const defaultBorderClass =
     variant === 'outline'
       ? 'border-[1.25px] border-[#F6D6D6] shadow-[0px_1px_6px_rgba(0,0,0,0.12)]'
-      : ''
+      : 'shadow-[0px_1px_6px_rgba(0,0,0,0.12)]'
 
   const bgClass = backgroundColor ? '' : defaultBgClass
   const borderClass = borderColor ? '' : defaultBorderClass
@@ -62,7 +62,7 @@ export default function MenuItem({
           color={resolvedIconColor}
         />
       </div>
-      <Text size="sm_12" className="font-medium text-center">
+      <Text size="sm_12" className="font-medium leading-none text-center">
         {title}
       </Text>
     </Link>

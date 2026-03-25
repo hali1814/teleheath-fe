@@ -32,7 +32,7 @@ export default function MenuList() {
   ]
 
   return (
-    <div className="flex gap-[16px]">
+    <div className="flex gap-[16px] py-[10px]">
       {MENU_ITEMS.map((item) => (
         <MenuItem
           key={item.href}

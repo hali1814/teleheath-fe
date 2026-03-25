@@ -15,38 +15,32 @@ export default function Header({
   const router = useRouter()
 
   return (
-    <header className="sticky top-0 z-50 h-[62px] px-[16px] py-[20px] border-b-[0.5px] border-[#FFE8E6] bg-background">
+    <header className="sticky top-0 z-50 h-[62px] border-b-[0.5px] border-[#FFE8E6] bg-background">
       {isHome ? (
-        <div className="flex items-center justify-between">
-          <Link to="/app/home" className="flex items-center gap-[4px]">
-            <Image src="/logo.png" alt="logo" className="w-[32px] h-[32px]" />
-            <Text
-              size="4xl_24"
-              className="font-medium uppercase text-[#D43129]"
-            >
-              {title}
-            </Text>
+        <div className="flex items-center justify-between h-full pl-[16px] pr-[20px]">
+          <Link to="/app/home">
+            <Image src="/logo.svg" alt="logo" className="w-[155px] h-[48px]" />
           </Link>
           <Link to="/app/notification">
             <Icon
               name="notification"
-              className="w-[28px] h-[28px]"
+              className="w-[21px] h-[21px]"
               color="#B3B3B3"
             />
           </Link>
         </div>
       ) : isCenter ? (
         <div className="flex h-full items-center justify-center">
-          <Text size="lg_16" className="font-medium text-text-primary">
+          <Text size="lg_16" className="font-medium leading-normal">
             {title}
           </Text>
         </div>
       ) : (
-        <div className="flex items-center justify-between">
+        <div className="flex h-full items-center justify-between px-[16px]">
           <div className="flex items-center gap-[16px]">
             <div
               onClick={() => router.history.back()}
-              className="flex items-center gap-[16px] bg-transparent border-0 p-0 cursor-pointer"
+              className="flex items-center gap-[16px] bg-transparent border-0 p-0"
               aria-label="Go back"
             >
               <Icon
@@ -55,7 +49,7 @@ export default function Header({
                 color="#808080"
               />
             </div>
-            <Text size="lg_16" className="font-medium">
+            <Text size="lg_16" className="font-medium leading-normal">
               {title}
             </Text>
           </div>

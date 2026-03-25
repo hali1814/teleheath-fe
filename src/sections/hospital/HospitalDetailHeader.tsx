@@ -2,6 +2,7 @@ import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
 import { Avatar, AvatarImage } from '#/components/ui/avatar'
+import { getDomainWebsite } from '#/utils'
 
 export default function HospitalDetailHeader({
   thumbnail,
@@ -31,7 +32,7 @@ export default function HospitalDetailHeader({
             <div className="flex items-center gap-[6px]">
               <Icon name="plump_web" className="w-[16px] h-[16px]" />
               <Text className="text-muted-foreground leading-normal font-normal">
-                {website}
+                {getDomainWebsite(website)}
               </Text>
             </div>
           </div>

@@ -2,7 +2,10 @@ import type { ListBranchesResponse } from '#/services/query/hospital/list-branch
 import type { ListConsultationResponse } from '#/services/query/hospital/list-consultation'
 import type { Specialty } from '#/services/query/hospital/list-specialty'
 import type { Package } from '#/services/query/package/list-packages'
-import type { ListFamilyResponse } from '#/services/query/profile/listFamily'
+import type {
+  ListFamilyPatient,
+  ListFamilyResponse,
+} from '#/services/query/profile/listFamily'
 import { create } from 'zustand'
 
 export type BookingState = {
@@ -14,7 +17,7 @@ export type BookingState = {
   specialty?: Specialty
   package?: Package
   bookingType?: 'HOSPITAL' | 'PACKAGE' | 'DOCTOR'
-  patientProfile?: ListFamilyResponse
+  patientProfile?: ListFamilyPatient
   appointmentDate?: Date
   startTime?: string
   endTime?: string

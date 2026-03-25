@@ -14,21 +14,35 @@ export const Route = createFileRoute('/app/package/(commonLayout)/')({
   component: RouteComponent,
 })
 
+export interface FilterPackage {
+  country: string
+  hospital: string
+  price: string
+}
+
 function RouteComponent() {
   const [open, setOpen] = useState(false)
   const { t } = useTranslation(['package'])
+  const [filter, setFilter] = useState<FilterPackage>({
+    country: '',
+    hospital: '',
+    price: '',
+  })
 
   const {
     data: { data: { content: packagesData } = { content: [] } } = {
       data: { content: [] },
     },
   } = useGetListPackagesQuery({
-    params: ALL_PAGINATION,
+    params: {
+      ...ALL_PAGINATION,
+      country: filter.country,
+    },
   })
 
   return (
     <>
-      <div className="flex flex-col gap-[16px] p-[16px]">
+      <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
         <div className="flex items-center gap-[10px]">
           <SearchBar placeholder={t('searchPlaceholder')} />
           <div className="relative" onClick={() => setOpen(true)}>
@@ -39,11 +53,14 @@ function RouteComponent() {
           </div>
         </div>
         {packagesData.length > 0 &&
-          packagesData.map((p) => (
-            <PackageCard key={p.id} {...p} location="Vietnam" />
-          ))}
+          packagesData.map((p) => <PackageCard key={p.id} {...p} />)}
       </div>
-      <ModalFilterPackage open={open} onOpenChange={setOpen} />
+      <ModalFilterPackage
+        open={open}
+        onOpenChange={setOpen}
+        filter={filter}
+        setFilter={setFilter}
+      />
     </>
   )
 }

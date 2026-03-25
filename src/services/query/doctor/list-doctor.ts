@@ -1,29 +1,19 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
+import type { Doctor } from '#/types/doctor'
 
-interface ListDoctorRequest extends IPagingRequest {}
-
-interface Hospital {
-  id: number
-  name: string
-  address: string
-  phone: string
-  email: string
-  website: string
+interface ListDoctorRequest extends IPagingRequest {
+  country?: string
+  specialty?: string
+  gender?: string
+  experienceYears?: string
+  consultationType?: string
+  priceRange?: string
+  keyword?: string
 }
 
-export interface ListDoctorResponse extends IPagingResponse<{
-  id: number
-  name: string
-  description: string
-  category: string
-  price: number
-  durationMinutes: number
-  imageUrl: string
-  hospitals: Hospital[]
-  active: boolean
-}> {}
+export interface ListDoctorResponse extends IPagingResponse<Doctor> {}
 
 const getListDoctor = async (
   params: ListDoctorRequest,

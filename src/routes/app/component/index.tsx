@@ -1,4 +1,4 @@
-import CountryTab from '#/components/CountryTab'
+import CountryTab from '#/components/CountryTabOld'
 import MenuItem from '#/components/MenuItem'
 // import PremiumService from '#/components/PremiumService'
 import { createFileRoute } from '@tanstack/react-router'

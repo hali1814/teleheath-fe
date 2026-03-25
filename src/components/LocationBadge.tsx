@@ -7,11 +7,13 @@ export default function LocationBadge({
   textSize = 'base_14',
   location,
   disabled = false,
+  iconSize = 'w-[12px] h-[12px]',
 }: {
   className?: string
   textSize?: TextSize
   location: string
   disabled?: boolean
+  iconSize?: string
 }) {
   const textColor = disabled ? 'text-primary/50' : 'text-primary'
 
@@ -20,7 +22,7 @@ export default function LocationBadge({
       <Icon
         name="map_marker"
         color={textColor}
-        className="w-[12px] h-[12px] text-primary"
+        className={cn(iconSize, 'text-primary')}
       />
       <Text size={textSize} className={cn(textColor, className, 'flex-1')}>
         {location}

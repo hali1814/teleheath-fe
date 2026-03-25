@@ -1,54 +1,66 @@
 import Text from '#/components/text'
-import { cn } from '#/lib/utils'
-import { useState } from 'react'
+import { useClampExpand } from '#/hooks/use-clamp-expand'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useTranslation } from 'react-i18next'
 import { SpecialtyChip } from './SpecialtyChip'
-import type { Specialty } from '#/services/query/hospital/hospital-detail'
+import type { Specialty } from '#/types/specialty'
 
 export default function SpecialtyList({
   specialties,
 }: {
   specialties: Specialty[]
 }) {
-  const [expanded, setExpanded] = useState(false)
+  const contentKey = specialties.map((s) => s.id).join(',')
+  const {
+    ref: listRef,
+    expanded,
+    needsExpand,
+    toggle,
+    collapsedContainerStyle,
+  } = useClampExpand({
+    contentKey,
+    flexClamp: {
+      maxRows: 4,
+      rowHeightPx: 32,
+      gapPx: 16,
+    },
+  })
   const { t } = useTranslation(['hospital', 'common'])
 
   return (
-    <div className="flex flex-col gap-[16px] py-[12px]">
+    <div className="flex flex-col gap-[16px] py-[12px] bg-[#F8F6F6]">
       <Text size="lg_16" className="font-semibold leading-[1.2]">
         {t('specialties')}
       </Text>
       <div className="relative">
         <div
-          className={cn(
-            'flex flex-wrap gap-[16px] overflow-hidden',
-            expanded ? '' : 'max-h-[170px]',
-          )}
+          ref={listRef}
+          style={collapsedContainerStyle}
+          className="flex flex-wrap gap-[16px] overflow-hidden"
         >
           {specialties.length > 0 &&
-            specialties.map((specialty, index) => (
+            specialties.map((specialty) => (
               <SpecialtyChip
-                key={index}
+                key={specialty.id}
                 name={specialty.name}
                 icon={specialty.iconUrl}
               />
             ))}
         </div>
-        {!expanded && (
-          <div className="flex justify-center absolute -bottom-1 left-0 right-0 h-[32px] bg-[linear-gradient(180deg,#FFFFFF00_0%,#FBFAFA_52.7%,#FAF9F9_88%,#F8F6F6_100%)]">
-            <ExpandViewButton
-              expanded={expanded}
-              onClick={() => setExpanded(!expanded)}
-            />
+        {needsExpand && !expanded && (
+          <div
+            className="flex justify-center absolute bottom-0 left-0 right-0 h-[32px]"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(251, 250, 250, 0.527027) 30.5%, rgba(250, 249, 249, 0.88) 61%, #F8F6F6 80.45%)',
+            }}
+          >
+            <ExpandViewButton expanded={expanded} onClick={toggle} />
           </div>
         )}
-        {expanded && (
+        {needsExpand && expanded && (
           <div className="h-[32px] w-full flex justify-center items-center mt-[4px]">
-            <ExpandViewButton
-              expanded={expanded}
-              onClick={() => setExpanded(!expanded)}
-            />
+            <ExpandViewButton expanded={expanded} onClick={toggle} />
           </div>
         )}
       </div>

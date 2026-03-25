@@ -69,7 +69,7 @@
     "kicker": "Test Theme va Ngon Ngu",
     "title": "Chuyen dark mode va doi ngon ngu",
     "description": "Dung cac nut ben duoi de kiem tra light/dark mode, sau do thu chuyen qua lai giua English, Khmer va Vietnamese.",
-    "searchPlaceholder": "Tìm kiếm bác sĩ, bệnh viện, gói dịch vụ",
+    "searchPlaceholder": "Tìm kiếm bác sĩ, bệnh viện, gói dịch vụ...",
     "menu": {
       "bookingOffline": "Đặt lịch offline",
       "onlineDoctor": "Bác sĩ online",

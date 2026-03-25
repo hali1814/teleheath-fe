@@ -24,12 +24,23 @@ function RouteComponent() {
     })
 
   return (
-    <div className="flex flex-col items-center gap-[16px] p-[16px]">
-      <DoctorInfoHeader {...doctorData} />
+    <div className="flex flex-col items-center gap-[16px] p-[16px] pb-[165px]">
+      <DoctorInfoHeader
+        avatarUrl={doctorData?.avatarUrl ?? ''}
+        nameVi={doctorData?.nameVi ?? ''}
+        nameKh={doctorData?.nameKh ?? ''}
+        nameEn={doctorData?.nameEn ?? ''}
+        specialties={doctorData?.specialties ?? []}
+        experienceYears={doctorData?.experienceYears ?? 0}
+      />
       <DoctorConsultationFee
         consultationFee={doctorData?.consultationFee ?? 0}
       />
-      <AboutDoctor {...doctorData} />
+      <AboutDoctor
+        bioVi={doctorData?.bioVi ?? ''}
+        bioKh={doctorData?.bioKh ?? ''}
+        bioEn={doctorData?.bioEn ?? ''}
+      />
       <DoctorCurrentLocation
         hospitalName={doctorData?.hospitalName ?? 'Tam Anh Hospital'}
         address={
@@ -38,7 +49,7 @@ function RouteComponent() {
         }
       />
       <DoctorEducationCertifications
-        educationCertifications={doctorData?.certifications ?? []}
+        certifications={doctorData?.certifications ?? ''}
       />
       <DoctorActions />
     </div>

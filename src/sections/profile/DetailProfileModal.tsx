@@ -4,23 +4,12 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Dialog, DialogContent, DialogTitle } from '#/components/ui/dialog'
-import type { ListFamilyResponse } from '#/services/query/profile/listFamily'
-
-export interface DetailProfileModalProfile {
-  avatarSrc?: string
-  name: string
-  relationshipLabel: string
-  genderLabel?: string
-  dateOfBirth?: string // expected DD-MM-YYYY or YYYY-MM-DD
-  phone?: string
-  patientIdLabel: string
-  address?: string
-}
+import type { ListFamilyPatient } from '#/services/query/profile/listFamily'
 
 export interface DetailProfileModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  profile: ListFamilyResponse
+  patient: ListFamilyPatient
   onEdit?: () => void
 }
 
@@ -36,13 +25,13 @@ function getAgeText(dateOfBirth?: string) {
 export default function DetailProfileModal({
   open,
   onOpenChange,
-  profile,
+  patient,
   onEdit,
 }: DetailProfileModalProps) {
   const { t } = useTranslation(['profile', 'common'])
-  const ageText = getAgeText(profile.dateOfBirth)
+  const ageText = getAgeText(patient.dateOfBirth)
   const genderText =
-    profile.gender === 'MALE'
+    patient.gender === 'MALE'
       ? t('profile:genderMale', { defaultValue: 'Male' })
       : t('profile:genderFemale', { defaultValue: 'Female' })
 
@@ -58,10 +47,10 @@ export default function DetailProfileModal({
 
         <div className="mt-4 flex flex-col items-center text-center">
           <div className="size-[90px] overflow-hidden rounded-full bg-[#E5E5E5]">
-            {profile.avatarUrl ? (
+            {patient.avatarUrl ? (
               <Image
-                src={profile.avatarUrl}
-                alt={profile.name}
+                src={patient.avatarUrl}
+                alt={patient.name}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -71,7 +60,7 @@ export default function DetailProfileModal({
 
           <div className="mt-2 flex items-center gap-3">
             <Text size="2xl_20" className="font-semibold text-text-primary">
-              {profile.name}
+              {patient.name}
             </Text>
           </div>
 
@@ -86,7 +75,7 @@ export default function DetailProfileModal({
               size="xs_10"
               className="font-medium text-[#D43129] leading-none"
             >
-              {profile.patientCode}
+              {patient.patientCode}
             </Text>
           </div>
         </div>
@@ -102,7 +91,7 @@ export default function DetailProfileModal({
                 {t('profile:dateOfBirth')}
               </Text>
               <Text size="base_14" className="font-normal text-[#333333]">
-                {profile.dateOfBirth ?? '--'}
+                {patient.dateOfBirth ?? '--'}
               </Text>
             </div>
 
@@ -111,7 +100,7 @@ export default function DetailProfileModal({
                 {t('profile:phoneNumber')}
               </Text>
               <Text size="base_14" className="font-normal text-[#333333]">
-                {profile.phone ?? '--'}
+                {patient.phone ?? '--'}
               </Text>
             </div>
 
@@ -126,7 +115,7 @@ export default function DetailProfileModal({
                 size="base_14"
                 className="flex-1 wrap-break-word font-normal text-[#333333] text-right"
               >
-                {profile.address ?? '--'}
+                {patient.address?.fullAddress ?? '--'}
               </Text>
             </div>
           </div>

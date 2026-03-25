@@ -19,7 +19,7 @@ export default function GalleryImage({ images }: { images: string[] }) {
               <Image
                 src={image}
                 alt="gallery-image"
-                className="h-[112px] rounded-[8px]"
+                className="aspect-square rounded-[8px]"
               />
               {index === MAX_IMAGE - 1 && (
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-[8px]">

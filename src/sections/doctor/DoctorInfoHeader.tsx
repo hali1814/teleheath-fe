@@ -3,6 +3,7 @@ import Text from '#/components/text'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import type { AppLanguage } from '#/i18n'
+import type { Doctor } from '#/types/doctor'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { useTranslation } from 'react-i18next'
 
@@ -13,19 +14,15 @@ export default function DoctorInfoHeader({
   nameEn,
   specialties,
   experienceYears,
-}: {
-  avatarUrl: string
-  nameVi: string
-  nameKh: string
-  nameEn: string
-  specialties: {
-    id: string
-    name: string
-    description: string
-    iconUrl: string
-  }[]
-  experienceYears: number
-}) {
+}: Pick<
+  Doctor,
+  | 'avatarUrl'
+  | 'nameVi'
+  | 'nameKh'
+  | 'nameEn'
+  | 'specialties'
+  | 'experienceYears'
+>) {
   const { t, i18n } = useTranslation(['doctor', 'common'])
 
   return (
@@ -52,9 +49,9 @@ export default function DoctorInfoHeader({
             i18n.language as AppLanguage,
           )}
         </Text>
-        {/* <Text size="lg_16" className="font-medium text-primary leading-normal">
+        <Text size="lg_16" className="font-medium text-primary leading-normal">
           {specialties.length > 0 ? specialties[0].name : ''}
-        </Text> */}
+        </Text>
         <Badge className="h-[30px] flex items-center gap-[8px] px-[12px] py-[4px] rounded-full bg-[#FFEAE8]">
           <Icon
             name="work_history_outline"

@@ -1,28 +1,12 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
+import type { Package } from '#/types/package'
 
-interface ListPackagesRequest extends IPagingRequest {}
-
-interface Hospital {
-  id: number
-  name: string
-  address: string
-  phone: string
-  email: string
-  website: string
-}
-
-export interface Package {
-  id: number
-  name: string
-  description: string
-  category: string
-  price: number
-  durationMinutes: number
-  imageUrl: string
-  hospitals: Hospital[]
-  active: boolean
+interface ListPackagesRequest extends IPagingRequest {
+  country?: string
+  hospital?: string
+  price?: string
 }
 
 export interface ListPackagesResponse extends IPagingResponse<Package> {}

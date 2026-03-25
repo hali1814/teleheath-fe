@@ -42,7 +42,7 @@ export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
     validate: (s) => !!s.patientProfile,
   },
   {
-    title: 'Review & Payment',
+    title: 'Review & Confirm',
     component: ReviewStep,
     validate: () => true,
   },
@@ -65,7 +65,7 @@ export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
     validate: (s) => !!s.patientProfile,
   },
   {
-    title: 'Review & Payment',
+    title: 'Review & Confirm',
     component: ReviewStep,
     validate: () => true,
   },
@@ -88,7 +88,7 @@ export const BOOKING_STEPS_PACKAGE: BookingStepConfig[] = [
     validate: (s) => !!s.patientProfile,
   },
   {
-    title: 'Review & Payment',
+    title: 'Review & Confirm',
     component: ReviewStep,
     validate: () => true,
   },

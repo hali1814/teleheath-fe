@@ -69,7 +69,7 @@
     "kicker": "Theme and Language Test",
     "title": "Toggle dark mode and switch language",
     "description": "Use the controls below to verify light and dark mode, then switch between English, Khmer, and Vietnamese.",
-    "searchPlaceholder": "Search for doctors, hospitals, packages",
+    "searchPlaceholder": "Search for doctors, hospitals, packages...",
     "menu": {
       "bookingOffline": "Booking Offline",
       "onlineDoctor": "Online Doctor",

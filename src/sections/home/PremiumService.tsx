@@ -26,17 +26,14 @@ export default function PremiumService() {
           color="white"
         />
 
-        <Badge
-          variant="outline"
-          className="self-start px-[10px] py-[4px] text-white bg-white/20 border-white/40 rounded-full"
-        >
+        <div className="self-start flex items-center justify-center text-white bg-white/20 border-0 rounded-[16px] px-[10px] py-[4px]">
           <Text
             size="xs_10"
-            className="font-semibold tracking-[0.48px] leading-none text-white uppercase"
+            className="font-semibold tracking-[3%] leading-none text-white uppercase text-xs"
           >
             {t('premiumService.tag')}
           </Text>
-        </Badge>
+        </div>
 
         <div>
           <Text
@@ -55,7 +52,7 @@ export default function PremiumService() {
               </div>
               <Text
                 size="sm_12"
-                className="font-medium leading-[1.3] text-white/90"
+                className="font-normal leading-[1.3] text-white/90"
               >
                 {item}
               </Text>
@@ -63,17 +60,18 @@ export default function PremiumService() {
           ))}
         </div>
 
-        <div className="flex items-center justify-between">
-          <Button className="px-[12px] rounded-[6px] bg-white" asChild>
-            <Link to="/app/book-appointment">
-              <Text
-                size="sm_12"
-                className="font-semibold leading-none text-[#F5222D] uppercase"
-              >
-                {t('premiumService.bookNow')}
-              </Text>
-            </Link>
-          </Button>
+        <div className="flex items-start justify-between">
+          <Link
+            to="/app/book-appointment"
+            className="px-[12px] py-[10px] rounded-[6px] bg-white"
+          >
+            <Text
+              size="sm_12"
+              className="font-semibold leading-none tracking-[3%] text-dust-red-6 uppercase"
+            >
+              {t('premiumService.bookNow')}
+            </Text>
+          </Link>
 
           <div className="flex items-center">
             {benefitIcons.map((icon, index) => (

@@ -1,31 +1,11 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
+import type { Hospital } from '#/types/hospital'
 
 interface ListHospitalsRequest extends IPagingRequest {}
 
-interface WorkingHour {
-  day: 'Mo' | 'Tu' | 'We' | 'Th' | 'Fr' | 'Sa' | 'Su'
-  open: boolean
-  openTime: string | null
-  closeTime: string | null
-}
-
-export interface ListHospitalsResponse extends IPagingResponse<{
-  hospitalId: string
-  nameVi: string
-  nameKh: string | null
-  nameEn: string
-  country: string
-  address: string
-  lat: number
-  lng: number
-  thumbnailUrl: string | null
-  workingHours: WorkingHour[]
-  timezone: string
-  status: 'ACTIVE' | 'INACTIVE' | string
-  specialties: unknown[] | null
-}> {}
+export interface ListHospitalsResponse extends IPagingResponse<Hospital> {}
 
 const getListHospitals = async (
   params: ListHospitalsRequest,

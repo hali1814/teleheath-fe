@@ -2,14 +2,7 @@ import { PackageCard } from '#/sections/package'
 import { Link } from '@tanstack/react-router'
 import Text from '#/components/text'
 import { useTranslation } from 'react-i18next'
-
-interface Package {
-  id: string
-  name: string
-  location: string
-  price: number
-  imageUrl: string
-}
+import type { Package } from '#/types/package'
 
 export default function PackageList({
   title,
@@ -23,13 +16,16 @@ export default function PackageList({
   const { t } = useTranslation(['common'])
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4 px-[16px]">
       <div className="flex items-center justify-between">
-        <Text size="base_14" className="font-medium leading-[1.2]">
+        <Text size="base_14" className="font-semibold leading-[1.2]">
           {title}
         </Text>
         <Link to={href}>
-          <Text size="sm_12" className="text-dust-red-8">
+          <Text
+            size="sm_12"
+            className="font-medium leading-none text-dust-red-8"
+          >
             {t('actions.viewAll')}
           </Text>
         </Link>

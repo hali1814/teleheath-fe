@@ -1,5 +1,6 @@
 import { Icon, type IconName } from '#/components/icon'
 import Text from '#/components/text'
+import type { Doctor } from '#/types/doctor'
 import { useTranslation } from 'react-i18next'
 
 const EducationCertificationItem = ({
@@ -28,10 +29,8 @@ const EducationCertificationItem = ({
 }
 
 export default function DoctorEducationCertifications({
-  educationCertifications,
-}: {
-  educationCertifications: string
-}) {
+  certifications,
+}: Pick<Doctor, 'certifications'>) {
   const { t } = useTranslation(['doctor', 'common'])
   return (
     <div className="w-full flex flex-col gap-[16px] py-[16px]">
@@ -45,11 +44,14 @@ export default function DoctorEducationCertifications({
             {...educationCertification}
           />
         ))} */}
-        <EducationCertificationItem
-          icon="graduate_cap"
-          title={educationCertifications}
-          description=""
-        />
+        {certifications.split(',').map((certification) => (
+          <EducationCertificationItem
+            key={certification}
+            icon="graduate_cap"
+            title={certification}
+            description=""
+          />
+        ))}
       </div>
     </div>
   )

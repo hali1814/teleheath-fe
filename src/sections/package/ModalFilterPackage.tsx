@@ -9,15 +9,38 @@ import { Icon } from '#/components/icon'
 import InputSelect from '#/components/input/InputSelect'
 import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
+import type { FilterPackage } from '#/routes/app/package/(commonLayout)'
+import { useGetCountryListQuery } from '#/services/query/country/country-list'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
+import { type AppLanguage } from '#/i18n'
 
 export default function ModalFilterPackage({
   open,
   onOpenChange,
+  filter,
+  setFilter,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  filter: FilterPackage
+  setFilter: (filter: FilterPackage) => void
 }) {
-  const { t } = useTranslation(['package', 'common'])
+  const { t, i18n } = useTranslation(['package', 'common'])
+
+  const { data: countryList } = useGetCountryListQuery({
+    params: {},
+  })
+
+  const handleClearAllFilters = () => {
+    setFilter({ country: '', hospital: '', price: '' })
+  }
+
+  const handleApplyFilters = () => {
+    console.log(filter)
+  }
+
+  const isDisabled = !filter.country && !filter.hospital && !filter.price
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -45,16 +68,31 @@ export default function ModalFilterPackage({
           <div className="flex flex-col gap-[8px]">
             <Text>{t('filter.country')}</Text>
             <InputSelect
+              value={filter.country}
+              onValueChange={(value) =>
+                setFilter({ ...filter, country: value })
+              }
               placeholder={t('filter.country')}
-              options={[
-                { label: 'Vietnam', value: 'vietnam' },
-                { label: 'Cambodia', value: 'cambodia' },
-              ]}
+              options={
+                countryList?.data.map((country) => ({
+                  label: getLocalizedTextByLang(
+                    country.nameVi,
+                    null,
+                    country.nameEn,
+                    i18n.language as AppLanguage,
+                  ),
+                  value: country.code,
+                })) ?? []
+              }
             />
           </div>
           <div className="flex flex-col gap-[8px]">
             <Text>{t('filter.hospital')}</Text>
             <InputSelect
+              value={filter.hospital}
+              onValueChange={(value) =>
+                setFilter({ ...filter, hospital: value })
+              }
               placeholder={t('filter.hospital')}
               options={[
                 { label: 'Hospital 1', value: 'hospital-1' },
@@ -65,6 +103,8 @@ export default function ModalFilterPackage({
           <div className="flex flex-col gap-[8px]">
             <Text>{t('filter.priceRange')}</Text>
             <InputSelect
+              value={filter.price}
+              onValueChange={(value) => setFilter({ ...filter, price: value })}
               placeholder={t('filter.priceRange')}
               options={[
                 { label: 'Under 100$', value: '0-100' },
@@ -76,12 +116,21 @@ export default function ModalFilterPackage({
           </div>
         </div>
         <div className="flex justify-between items-center gap-[8px] pt-[10px]">
-          <Button variant="ghost" className="p-0">
+          <Button
+            variant="ghost"
+            className="p-0"
+            onClick={handleClearAllFilters}
+            disabled={isDisabled}
+          >
             <Text className="text-[#A8071A] leading-normal font-medium">
               {t('common:actions.clearAllFilters')}
             </Text>
           </Button>
-          <Button className="h-[45px] px-[32px] py-[12px] rounded-[40px]">
+          <Button
+            className="h-[45px] px-[32px] py-[12px] rounded-[40px]"
+            disabled={isDisabled}
+            onClick={handleApplyFilters}
+          >
             <Text className="leading-normal font-medium text-white">
               {t('common:actions.apply')}
             </Text>

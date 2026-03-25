@@ -15,7 +15,7 @@ export function LocationStep() {
   })
 
   return (
-    <div className="flex flex-col gap-[16px]">
+    <div className="flex flex-col gap-[16px] px-[16px]">
       <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
         Select Location
       </Text>

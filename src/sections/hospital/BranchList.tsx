@@ -178,7 +178,7 @@ export default function BranchList({ hospitalId }: { hospitalId: string }) {
             working_hours={branch.workingHours}
           />
         ))}
-        {!expanded && (
+        {branches.length > LIMIT_BRANCH && !expanded && (
           <ExpandViewButton
             className="w-full flex justify-center"
             expanded={expanded}

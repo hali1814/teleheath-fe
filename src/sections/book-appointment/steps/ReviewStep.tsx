@@ -1,11 +1,10 @@
-import { Icon, type IconName } from '#/components/icon'
+import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
 import { Checkbox } from '#/components/ui/checkbox'
 import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
-import { consultationTypes } from '#/mockData'
 import { useGetListServiceQuery } from '#/services/query/services/list-service'
 import { useBookingStore } from '#/stores/booking-store'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
@@ -116,7 +115,9 @@ const paymentMethods = [
 export function ReviewStep() {
   const { i18n } = useTranslation()
   const [selectedServices, setSelectedServices] = useState<number[]>([])
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<number>(1)
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    number | undefined
+  >(undefined)
   const {
     branch,
     consultationTier,
@@ -136,7 +137,7 @@ export function ReviewStep() {
   })
 
   return (
-    <div className="flex flex-col gap-[16px]">
+    <div className="flex flex-col gap-[16px] px-[16px]">
       <div className="flex items-center px-[30px] py-[16px] rounded-[48px] bg-[#ED26300D] border-2 border-[#ED263033]">
         <div className="flex-1 flex flex-col gap-[6px]">
           <Text size="sm_12" color="secondary" className="leading-[1.3]">
@@ -239,8 +240,8 @@ export function ReviewStep() {
               Address
             </Text>
             <Text
-              size="lg_16"
-              className="leading-[1.2] font-semibold text-[#333333]"
+              size="base_14"
+              className="leading-normal font-medium text-[#333333]"
             >
               {branch?.address}
             </Text>
@@ -261,8 +262,8 @@ export function ReviewStep() {
               Patient
             </Text>
             <Text
-              size="lg_16"
-              className="leading-[1.2] font-semibold text-[#333333]"
+              size="base_14"
+              className="leading-normal font-medium text-[#333333]"
             >
               {patientProfile?.name}
             </Text>
@@ -338,26 +339,31 @@ export function ReviewStep() {
                 i18n.language as AppLanguage,
               )}
             </Text>
-            {consultationTier?.features?.map((feature, index) => (
-              <div key={index} className="flex items-start gap-[8px]">
-                <div className="w-[16px] h-[16px] flex items-center justify-center rounded-full bg-primary/10">
-                  <Icon name="check" className="w-[6px] h-[4px] text-primary" />
+            {consultationTier?.features?.map(
+              (feature: string, index: number) => (
+                <div key={index} className="flex items-start gap-[8px]">
+                  <div className="w-[16px] h-[16px] flex items-center justify-center rounded-full bg-primary/10">
+                    <Icon
+                      name="check"
+                      className="w-[6px] h-[4px] text-primary"
+                    />
+                  </div>
+                  <Text
+                    size="sm_12"
+                    className="flex-1 text-muted-foreground leading-[1.3]"
+                  >
+                    {feature}
+                  </Text>
                 </div>
-                <Text
-                  size="sm_12"
-                  className="flex-1 text-muted-foreground leading-[1.3]"
-                >
-                  {feature}
-                </Text>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         </div>
       )}
 
       <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
         <Text size="lg_16" className="font-semibold leading-[1.2]">
-          Text Details
+          Payment Details
         </Text>
         <div className="flex items-center justify-between">
           <Text className="leading-normal text-muted-foreground">
@@ -384,7 +390,7 @@ export function ReviewStep() {
           </Text>
           <Text
             size="xl_18"
-            className="leading-normal font-medium text-primary"
+            className="leading-normal font-semibold text-primary"
           >
             {formatPrice(80)}
           </Text>

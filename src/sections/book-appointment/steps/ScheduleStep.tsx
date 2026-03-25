@@ -5,6 +5,7 @@ import { useBookingStore } from '#/stores/booking-store'
 import { SlotTimeList } from '../SlotTimeList'
 import type { ListScheduleByBranchResponse } from '#/services/query/schedule/list-schedule-by-branch'
 import { useGetListScheduleByBranchQuery } from '#/services/query/schedule/list-schedule-by-branch'
+import { keepPreviousData } from '@tanstack/react-query'
 
 const emptySchedules: ListScheduleByBranchResponse = {
   morning: [],
@@ -28,6 +29,7 @@ export function ScheduleStep() {
         date: dateParam,
       },
       enabled: !!branch?.branchId && !!dateParam,
+      placeholderData: keepPreviousData,
     })
 
   const selectedDateLabel =
@@ -36,7 +38,7 @@ export function ScheduleStep() {
       : '—'
 
   return (
-    <div className="flex flex-col gap-[16px]">
+    <div className="flex flex-col gap-[16px] px-[16px]">
       <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
         Select Date
       </Text>

@@ -8,47 +8,33 @@ import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import type { AppLanguage } from '#/i18n'
+import type { Doctor } from '#/types/doctor'
+
+type DoctorCardProps = {
+  className?: string
+  variant?: 'vertical' | 'horizontal'
+  hideBookAppointment?: boolean
+} & Doctor
 
 export default function DoctorCard({
   className,
-  doctorId,
-  avatarUrl,
-  nameVi,
-  nameKh,
-  nameEn,
-  experienceYears,
-  specialties,
   variant = 'vertical',
   hideBookAppointment = false,
-  sizeAvatar = 'md',
-}: {
-  className?: string
-  doctorId: string
-  avatarUrl: string
-  nameVi: string
-  nameKh: string
-  nameEn: string
-  gender: string
-  bioVi: string
-  bioKh: string
-  bioEn: string
-  experienceYears: number
-  consultationType: string
-  consultationFee: number
-  certifications: string
-  specialties: {
-    id: string
-    name: string
-    description: string
-    iconUrl: string
-  }[]
-  variant?: 'vertical' | 'horizontal'
-  hideBookAppointment?: boolean
-  sizeAvatar?: 'sm' | 'md'
-}) {
+  ...doctor
+}: DoctorCardProps) {
   const { t, i18n } = useTranslation(['common'])
+  const {
+    doctorId,
+    avatarUrl,
+    nameVi,
+    nameKh,
+    nameEn,
+    experienceYears,
+    specialties,
+    country,
+  } = doctor
   const avatarSize =
-    sizeAvatar === 'sm' ? 'w-[63px] h-[63px]' : 'w-[86px] h-[86px]'
+    variant === 'vertical' ? 'w-[86px] h-[86px]' : 'w-[103px] h-[103px]'
   if (variant === 'horizontal') {
     return (
       <Link
@@ -99,7 +85,13 @@ export default function DoctorCard({
               size="xs_10"
               className="font-normal text-muted-foreground leading-[1.3]"
             >
-              {experienceYears} Years Experience • {'Vietnam'}
+              {experienceYears} Years Experience •{' '}
+              {getLocalizedTextByLang(
+                country.nameVi,
+                null,
+                country.nameEn,
+                i18n.language as AppLanguage,
+              )}
             </Text>
           </div>
           {!hideBookAppointment && (
@@ -151,7 +143,12 @@ export default function DoctorCard({
       </Avatar>
       <div className="w-full flex flex-col items-center gap-[8px]">
         <LocationBadge
-          location={'Vietnam'}
+          location={getLocalizedTextByLang(
+            country.nameVi,
+            null,
+            country.nameEn,
+            i18n.language as AppLanguage,
+          )}
           className="text-muted-foreground leading-[1.3]"
           textSize="xs_10"
         />

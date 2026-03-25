@@ -1,25 +1,16 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
+import type { ConsultationTier } from '#/types/consultationTier'
 
 interface ListConsultationRequest {
   hospitalId: string
-}
-
-export interface ListConsultationResponse {
-  id: number
-  code: string
-  nameVi: string
-  nameEn: string
-  description: string
-  features: string[]
-  surchargeAmount: number
 }
 
 const getListConsultations = async (
   params: ListConsultationRequest,
   signal: AbortSignal,
 ) => {
-  const response = await http.get<ListConsultationResponse[]>(
+  const response = await http.get<ConsultationTier[]>(
     `/hospitals/${params.hospitalId}/consultation-tiers`,
     {},
     {
@@ -32,7 +23,7 @@ const getListConsultations = async (
 
 export const useGetListConsultationsQuery = (
   options: UseQueryOptions<
-    HttpCommonResponse<ListConsultationResponse[]>,
+    HttpCommonResponse<ConsultationTier[]>,
     ListConsultationRequest
   >,
 ) => {

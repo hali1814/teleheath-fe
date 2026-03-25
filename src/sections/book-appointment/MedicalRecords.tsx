@@ -145,7 +145,7 @@ export function MedicalRecords() {
   }
 
   return (
-    <div className="flex flex-col gap-[12px]">
+    <div className="flex flex-col gap-[12px] px-[16px]">
       <input
         ref={fileInputRef}
         type="file"

@@ -18,7 +18,7 @@ export const Route = createFileRoute('/app')({
 
 function App() {
   return (
-    <div>
+    <div className="bg-background">
       <Outlet />
     </div>
   )

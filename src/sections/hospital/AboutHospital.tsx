@@ -1,11 +1,13 @@
 import Text from '#/components/text'
+import { useClampExpand } from '#/hooks/use-clamp-expand'
 import { cn } from '#/lib/utils'
-import { useState } from 'react'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useTranslation } from 'react-i18next'
 
 export default function AboutHospital({ aboutUs }: { aboutUs: string }) {
-  const [expanded, setExpanded] = useState(false)
+  const { ref: bodyRef, expanded, needsExpand, toggle } = useClampExpand({
+    contentKey: aboutUs,
+  })
   const { t } = useTranslation(['hospital', 'common'])
 
   return (
@@ -14,28 +16,29 @@ export default function AboutHospital({ aboutUs }: { aboutUs: string }) {
         {t('aboutUs')}
       </Text>
       <div className="relative">
-        <Text
+        <div
+          ref={bodyRef}
           className={cn(
-            'text-muted-foreground leading-[1.7] font-normal',
-            expanded ? '' : 'line-clamp-6',
+            'text-base text-muted-foreground leading-[1.7] font-normal',
+            expanded ? '' : 'line-clamp-5',
           )}
         >
           {aboutUs}
-        </Text>
-        {!expanded && (
-          <div className="flex justify-center absolute -bottom-1 left-0 right-0 h-[32px] bg-[linear-gradient(180deg,#FFFFFF00_0%,#FBFAFA_52.7%,#FAF9F9_88%,#F8F6F6_100%)]">
-            <ExpandViewButton
-              expanded={expanded}
-              onClick={() => setExpanded(!expanded)}
-            />
+        </div>
+        {needsExpand && !expanded && (
+          <div
+            className="flex justify-center absolute -bottom-1 left-0 right-0 h-[32px]"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(251, 250, 250, 0.527027) 30.5%, rgba(250, 249, 249, 0.88) 61%, #F8F6F6 80.45%)',
+            }}
+          >
+            <ExpandViewButton expanded={expanded} onClick={toggle} />
           </div>
         )}
-        {expanded && (
+        {needsExpand && expanded && (
           <div className="w-full flex justify-center">
-            <ExpandViewButton
-              expanded={expanded}
-              onClick={() => setExpanded(!expanded)}
-            />
+            <ExpandViewButton expanded={expanded} onClick={toggle} />
           </div>
         )}
       </div>

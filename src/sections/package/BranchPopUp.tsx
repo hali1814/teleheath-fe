@@ -11,6 +11,7 @@ import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import type { AppLanguage } from '#/i18n'
+import type { Hospital } from '#/types/package'
 
 const BranchItem = ({ name, address }: { name: string; address: string }) => {
   return (
@@ -25,7 +26,7 @@ const BranchItem = ({ name, address }: { name: string; address: string }) => {
           size="sm_12"
           className="flex-1 font-normal leading-[1.3] text-muted-foreground"
         >
-          {address ?? 'Vietnam'}
+          {address}
         </Text>
       </div>
     </div>
@@ -39,13 +40,7 @@ export default function BranchPopUp({
 }: {
   name: string
   branchCount: number
-  branches: {
-    hospitalId: string
-    nameVi: string
-    nameKh: string | null
-    nameEn: string
-    address: string
-  }[]
+  branches: Hospital[]
 }) {
   const [open, setOpen] = useState(false)
   const { t, i18n } = useTranslation(['package', 'common'])
@@ -96,11 +91,16 @@ export default function BranchPopUp({
               key={index}
               name={getLocalizedTextByLang(
                 branch.nameVi,
-                branch.nameKh,
+                null,
                 branch.nameEn,
                 i18n.language as AppLanguage,
               )}
-              address={branch.address}
+              address={getLocalizedTextByLang(
+                branch.country.nameVi,
+                null,
+                branch.country.nameEn,
+                i18n.language as AppLanguage,
+              )}
             />
           ))}
           <div className="flex justify-end">
