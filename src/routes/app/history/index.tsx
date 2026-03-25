@@ -2,103 +2,46 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useMemo, useRef } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import Text from '#/components/text'
-import ItemHistoryAppointment, {
-  type HistoryAppointmentStatus,
-  type HistoryEntityKind,
-  type HistoryVisitType,
-} from '#/sections/history/ItemHistoryAppointment'
+import ItemHistoryAppointment from '#/sections/history/ItemHistoryAppointment'
 import { useTranslation } from 'react-i18next'
+import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appointments'
+import { groupAppointmentsByMonth } from '#/utils/history'
 
 export const Route = createFileRoute('/app/history/')({
   component: RouteComponent,
 })
 
-type HistoryRowItem = {
-  id: string
-  visitType: HistoryVisitType
-  entityKind: HistoryEntityKind
-  name: string
-  scheduleLabel: string
-  status: HistoryAppointmentStatus
-  avatarClassName?: string
-}
-
 function RouteComponent() {
-  const mockSections: { title: string; data: HistoryRowItem[] }[] = [
-    {
-      title: 'THIS MONTH',
-      data: [
-        {
-          id: 'm-1',
-          visitType: 'video',
-          entityKind: 'doctor',
-          name: 'Dr. Nguyen Duc Anh',
-          scheduleLabel: 'Wed, 16 Nov • 06:30 - 07:00 AM',
-          status: 'confirmed',
-          avatarClassName: 'bg-[#53B6B5]',
-        },
-        {
-          id: 'm-2',
-          visitType: 'video',
-          entityKind: 'doctor',
-          name: 'Dr. Hoan Ngoc Huy',
-          scheduleLabel: 'Fri, 12 Nov • 14:00 - 14:30 AM',
-          status: 'cancelled',
-          avatarClassName: 'bg-[#8B5CF6]',
-        },
-        {
-          id: 'm-3',
-          visitType: 'in_person',
-          entityKind: 'hospital',
-          name: 'Tam Anh Hospital',
-          scheduleLabel: 'Wed, 10 Nov • 16:00 - 16:30 AM',
-          status: 'completed',
-        },
-      ],
-    },
-    {
-      title: 'OCTOBER 2025',
-      data: [
-        {
-          id: 'o-1',
-          visitType: 'in_person',
-          entityKind: 'doctor',
-          name: 'Dr. Dinh Vinh Quang',
-          scheduleLabel: 'Fri, 22 Oct • 07:00 - 07:30 AM',
-          status: 'no_show',
-          avatarClassName: 'bg-[#0D9488]',
-        },
-        {
-          id: 'o-2',
-          visitType: 'video',
-          entityKind: 'doctor',
-          name: 'Dr. Hoan Ngoc Huy',
-          scheduleLabel: 'Mon, 18 Oct • 07:00 - 07:30 AM',
-          status: 'completed',
-          avatarClassName: 'bg-[#53B6B5]',
-        },
-      ],
-    },
-  ]
+  const parentRef = useRef<HTMLDivElement>(null)
+
+  const { t } = useTranslation(['common'])
+  const title = t('bottomNavigation.history')
+
+  const { data: appointments } = useGetMyAppointmentsQuery({
+    params: {},
+  })
+
+  const groupedAppointments = useMemo(() => {
+    return groupAppointmentsByMonth(appointments?.data ?? [])
+  }, [appointments?.data])
 
   const rows = useMemo(() => {
-    return mockSections.flatMap((section) => {
+    return Object.entries(groupedAppointments).flatMap(([key, value]) => {
+      console.log(key, value)
       return [
         {
           kind: 'title' as const,
-          id: `title-${section.title}`,
-          title: section.title,
+          id: `title-${key}`,
+          title: key,
         },
-        ...section.data.map((item) => ({
+        ...value.map((item) => ({
           kind: 'item' as const,
           id: item.id,
           item,
         })),
       ]
     })
-  }, [mockSections])
-
-  const parentRef = useRef<HTMLDivElement>(null)
+  }, [groupedAppointments])
 
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
@@ -106,9 +49,6 @@ function RouteComponent() {
     estimateSize: (index) => (rows[index]?.kind === 'title' ? 30 : 110),
     overscan: 6,
   })
-
-  const { t } = useTranslation(['common'])
-  const title = t('bottomNavigation.history')
 
   return (
     <div>
@@ -142,14 +82,7 @@ function RouteComponent() {
                   </Text>
                 ) : (
                   <div className="mb-3">
-                    <ItemHistoryAppointment
-                      visitType={row.item.visitType}
-                      entityKind={row.item.entityKind}
-                      name={row.item.name}
-                      scheduleLabel={row.item.scheduleLabel}
-                      status={row.item.status}
-                      avatarClassName={row.item.avatarClassName}
-                    />
+                    <ItemHistoryAppointment item={row.item} />
                   </div>
                 )}
               </div>

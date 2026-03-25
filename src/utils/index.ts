@@ -1,3 +1,4 @@
+export * from './appointment'
 export * from './date.util'
 export * from './file-url.util'
 export * from './helper.util'

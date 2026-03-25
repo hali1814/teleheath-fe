@@ -1,26 +1,15 @@
 import { Icon, type IconName } from '#/components/icon'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import ConfirmCancelAppointmentModal from './ConfirmCancelAppointmentModal'
 import { useRouter } from '@tanstack/react-router'
-
-export type AppointmentItemType =
-  | 'video_cancel'
-  | 'video_join_disabled'
-  | 'video_join'
-  | 'in_person_cancel'
-  | 'in_person_directions_disabled'
+import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
+import { useMemo } from 'react'
+import dayjs from 'dayjs'
+import Image from '#/components/image'
 
 export interface ItemAppointmentProps {
-  type?: AppointmentItemType
-  doctorName?: string
-  timeLabel?: string
-  dateLabel?: string
-  onPrimaryClick?: () => void
-  onSecondaryClick?: () => void
-  className?: string
+  appointment: MyAppointmentItem
 }
 
 export function ActionButton({
@@ -81,126 +70,130 @@ export function ActionButton({
   )
 }
 
-export default function ItemAppointment({
-  type = 'video_cancel',
-  doctorName = 'Dr. Nguyen Duc Anh',
-  timeLabel = '07:00 - 07:30 AM',
-  dateLabel = 'Thu, 25 Nov',
-  onPrimaryClick,
-  onSecondaryClick,
-  className,
-}: ItemAppointmentProps) {
-  const { t } = useTranslation(['appointment'])
-  const [openCancelModal, setOpenCancelModal] = useState(false)
+export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
+  const { t, i18n } = useTranslation(['appointment'])
   const router = useRouter()
-  const isVideo = type.startsWith('video')
-  const showDate = !isVideo
-  const canCancel = type === 'video_cancel' || type === 'in_person_cancel'
+
+  const label = useMemo(() => {
+    if (appointment.bookingType === 'HOSPITAL') {
+      return i18n.language === 'vi'
+        ? appointment.hospital?.nameVi
+        : appointment.hospital?.nameEn
+    }
+    if (appointment.bookingType === 'PACKAGE') {
+      return appointment.medicalPackage?.name
+    }
+
+    if (appointment.bookingType === 'DOCTOR') {
+      return i18n.language === 'vi'
+        ? appointment.doctor?.nameVi
+        : appointment.doctor?.nameEn
+    }
+
+    return ''
+  }, [appointment.bookingType, t])
+
+  const avatarSrc = useMemo(() => {
+    if (appointment.bookingType === 'DOCTOR') {
+      return appointment?.doctor?.avatarUrl
+    }
+    if (appointment.bookingType === 'HOSPITAL') {
+      return '1233'
+    }
+    if (appointment.bookingType === 'PACKAGE') {
+      return '3123'
+    }
+    return ''
+  }, [appointment.bookingType])
+
+  const scheduleLabel = useMemo(() => {
+    const locale = (i18n.language ?? '').startsWith('vi')
+      ? 'vi-VN'
+      : (i18n.language ?? '').startsWith('km')
+        ? 'km-KH'
+        : 'en-US'
+
+    const dateLabel = dayjs(appointment.appointmentDate).isValid()
+      ? (() => {
+          const date = dayjs(appointment.appointmentDate).toDate()
+          const weekday = new Intl.DateTimeFormat(locale, {
+            weekday: 'short',
+          }).format(date)
+          const day = dayjs(appointment.appointmentDate).format('DD')
+          const month = new Intl.DateTimeFormat(locale, {
+            month: 'short',
+          }).format(date)
+
+          return `${weekday}, ${day} ${month}`
+        })()
+      : appointment.appointmentDate
+
+    const formatTime = (value: string) => {
+      const parsed = dayjs(value, ['HH:mm:ss', 'HH:mm', 'hh:mm A'], true)
+      if (parsed.isValid()) {
+        return new Intl.DateTimeFormat(locale, {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        }).format(parsed.toDate())
+      }
+      return value
+    }
+
+    return `${dateLabel} • ${formatTime(appointment.startTime)} - ${formatTime(appointment.endTime)}`
+  }, [
+    i18n.language,
+    appointment.appointmentDate,
+    appointment.endTime,
+    appointment.startTime,
+  ])
 
   return (
     <div
-      className={`w-full rounded-[12px] bg-white p-4 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] ${className ?? ''}`}
+      className={`w-full rounded-[12px] bg-white p-4 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]`}
       onClick={() =>
-        router.navigate({ to: '/app/appointments/$id', params: { id: '1' } })
+        router.navigate({
+          to: '/app/appointments/$id',
+          params: { id: appointment.id.toString() },
+        })
       }
     >
       <div className="flex items-center gap-3">
-        <div className="flex size-[65px] items-center justify-center rounded-[60px] bg-[#53B6B5]">
-          <Icon name="user_doctor_solid" className="size-10 text-white" />
-        </div>
-
+        <Image
+          src={avatarSrc}
+          alt={label}
+          className="size-[65px] rounded-full"
+        />
         <div className="min-w-0 flex-1 gap-1 flex flex-col">
           <Text
             size="sm_12"
-            className={`font-medium uppercase tracking-[0.03em] ${isVideo ? 'text-secondary' : 'text-[#1D5EF2]'}`}
+            className={`font-medium uppercase tracking-[0.03em] text-[#1D5EF2]`}
           >
-            {isVideo ? t('videoConsultation') : t('inPersonVisit')}
+            {t('inPersonVisit')}
           </Text>
           <Text size="base_14" className="mt-1 font-semibold text-text-primary">
-            {doctorName}
+            {label}
           </Text>
           <Text size="sm_12" className="mt-1 font-normal text-[#64748B]">
-            {showDate ? `${dateLabel} • ${timeLabel}` : timeLabel}
+            {scheduleLabel}
           </Text>
         </div>
 
         <div
-          className={`flex absolute right-4 top-4 size-8 items-center justify-center rounded-[8px] p-2 ${isVideo ? 'bg-[#FFF1F0]' : 'bg-[#E6F0FF]'}`}
+          className={`flex absolute right-4 top-4 size-8 items-center justify-center rounded-[8px] p-2 bg-[#E6F0FF]`}
         >
-          <Icon
-            name={isVideo ? 'record' : 'location_blue'}
-            className="size-4"
-            color={isVideo ? '#E22A36' : '#1D5EF2'}
-          />
+          <Icon name={'location_blue'} className="size-4" color={'#1D5EF2'} />
         </div>
       </div>
 
       <div className="mt-3 flex gap-3">
-        {type === 'video_cancel' ? (
-          <ActionButton
-            text={t('cancelAppointment')}
-            variant="danger-outline"
-            onClick={() => setOpenCancelModal(true)}
-          />
-        ) : null}
-
-        {type === 'video_join_disabled' ? (
-          <ActionButton
-            text={t('joinCall')}
-            iconName="call_doctor"
-            disabled
-            onClick={onPrimaryClick}
-          />
-        ) : null}
-
-        {type === 'video_join' ? (
-          <ActionButton
-            text={t('joinCall')}
-            iconName="add_record"
-            onClick={onPrimaryClick}
-          />
-        ) : null}
-
-        {type === 'in_person_cancel' ? (
-          <>
-            <ActionButton
-              text={t('getDirections')}
-              iconName="map_blue"
-              variant="light"
-              onClick={onPrimaryClick}
-            />
-            <ActionButton
-              text={t('cancelAppointment')}
-              variant="danger-outline"
-              onClick={() => setOpenCancelModal(true)}
-            />
-          </>
-        ) : null}
-
-        {type === 'in_person_directions_disabled' ? (
-          <ActionButton
-            text={t('getDirections')}
-            iconName="map_blue"
-            variant="light"
-            disabled
-            onClick={onPrimaryClick}
-          />
-        ) : null}
-      </div>
-
-      {canCancel ? (
-        <ConfirmCancelAppointmentModal
-          open={openCancelModal}
-          onOpenChange={setOpenCancelModal}
-          onConfirm={() => {
-            if (type === 'video_cancel') {
-              onPrimaryClick?.()
-              return
-            }
-            onSecondaryClick?.()
-          }}
+        <ActionButton
+          text={t('getDirections')}
+          iconName="map_blue"
+          variant="light"
+          onClick={() => {}}
         />
-      ) : null}
+      </div>
     </div>
   )
 }
