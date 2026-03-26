@@ -114,7 +114,7 @@ const paymentMethods = [
 
 export function ReviewStep() {
   const { i18n } = useTranslation()
-  const [selectedServices, setSelectedServices] = useState<number[]>([])
+  const { serviceIds, setData } = useBookingStore()
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
     number | undefined
   >(undefined)
@@ -180,14 +180,14 @@ export function ReviewStep() {
             key={service.id}
             icon={service.iconUrl}
             title={service.name}
-            selected={selectedServices.includes(service.id)}
+            selected={serviceIds.includes(service.id)}
             onClick={() => {
-              if (selectedServices.includes(service.id)) {
-                setSelectedServices(
-                  selectedServices.filter((s) => s !== service.id),
-                )
+              if (serviceIds.includes(service.id)) {
+                setData({
+                  serviceIds: serviceIds.filter((s) => s !== service.id),
+                })
               } else {
-                setSelectedServices([...selectedServices, service.id])
+                setData({ serviceIds: [...serviceIds, service.id] })
               }
             }}
           />

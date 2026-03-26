@@ -91,6 +91,8 @@ import UserOutlineIcon from '#/assets/icons/common/user-outline.svg?react'
 import BookingSuccessIcon from '#/assets/icons/common/booking-success.svg?react'
 import CopyIcon from '#/assets/icons/common/copy.svg?react'
 import WarningIcon from '#/assets/icons/common/warning.svg?react'
+import LogoIcon from '#/assets/icons/common/logo.svg?react'
+import DownloadIcon from '#/assets/icons/common/download.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -179,6 +181,8 @@ const ICONS_TEMPLATE = {
   booking_success: BookingSuccessIcon,
   copy: CopyIcon,
   warning: WarningIcon,
+  logo: LogoIcon,
+  download: DownloadIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

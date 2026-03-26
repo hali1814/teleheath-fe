@@ -8,6 +8,7 @@ interface GenerateKhqrRequest {
 export interface GenerateKhqrResponse {
   refId: string
   qrCode: string
+  qrImage: string
   amount: number
   currency: string
   expiredTime: number

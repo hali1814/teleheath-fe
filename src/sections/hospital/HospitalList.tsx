@@ -38,6 +38,7 @@ export default function HospitalList({
             {...hospital}
           />
         ))}
+        <div className="w-[16px]" />
       </div>
     </div>
   )

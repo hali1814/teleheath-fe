@@ -10,7 +10,9 @@ import { registerRouter } from './router-instance'
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
+  // Giống stack native: push/replace → cuộn đầu trang; back/forward → khôi phục vị trí đã lưu
   scrollRestoration: true,
+  scrollRestorationBehavior: 'instant',
 })
 
 registerRouter(router)

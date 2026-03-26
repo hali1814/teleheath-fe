@@ -34,6 +34,7 @@ export default function DoctorLists({
         {doctors.map((doctor) => (
           <DoctorCard key={doctor.doctorId} {...doctor} className="w-[60%]" />
         ))}
+        <div className="w-[16px]" />
       </div>
     </div>
   )

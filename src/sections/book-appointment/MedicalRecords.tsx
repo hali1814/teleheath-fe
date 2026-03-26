@@ -74,7 +74,7 @@ const MedicalFileItem = ({
 }
 
 export function MedicalRecords() {
-  const { medicalHistory, notes, setData } = useBookingStore()
+  const { medicalFileIds, medicalHistory, notes, setData } = useBookingStore()
   const appendFileId = useBookingStore((s) => s.appendFileId)
   const removeFileId = useBookingStore((s) => s.removeFileId)
 
@@ -119,18 +119,9 @@ export function MedicalRecords() {
             throw new Error('Missing fileId')
           }
           appendFileId(fileId)
-          setRows((prev) =>
-            prev.map((r) =>
-              r.id === rowId ? { ...r, fileId, status: 'success' as const } : r,
-            ),
-          )
+          setData({ medicalFileIds: [...medicalFileIds, fileId] })
         } catch {
           toast.error(`Could not upload ${file.name}`)
-          setRows((prev) =>
-            prev.map((r) =>
-              r.id === rowId ? { ...r, status: 'error' as const } : r,
-            ),
-          )
         }
       }
     })()

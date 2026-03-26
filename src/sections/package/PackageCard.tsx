@@ -38,12 +38,17 @@ export default function PackageCard({
         'w-full flex items-center gap-4 rounded-[12px] p-[16px] bg-white',
       )}
     >
-      <Image
-        src={imageUrl}
-        alt={name}
-        className={cn(thumbnailSize, 'rounded-[8px] border border-dust-red-1')}
-      />
-      <div className="w-full flex flex-col gap-2">
+      <div>
+        <Image
+          src={imageUrl}
+          alt={name}
+          className={cn(
+            thumbnailSize,
+            'rounded-[8px] border border-dust-red-1',
+          )}
+        />
+      </div>
+      <div className="flex-1 flex flex-col gap-2">
         <Text size="base_14" className="font-semibold leading-[1.2]">
           {name}
         </Text>

@@ -19,7 +19,7 @@ export default function Header({
       {isHome ? (
         <div className="flex items-center justify-between h-full pl-[16px] pr-[20px]">
           <Link to="/app/home">
-            <Image src="/logo.svg" alt="logo" className="w-[155px] h-[48px]" />
+            <Icon name="logo" className="w-[155px] h-[48px]" />
           </Link>
           <Link to="/app/notification">
             <Icon

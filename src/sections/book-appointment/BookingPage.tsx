@@ -127,7 +127,7 @@ export default function BookingPage({
       notes: store.notes,
       medicalHistory: store.medicalHistory,
       serviceIds: store.serviceIds,
-      medicalFiles: store.medicalFiles,
+      medicalFileIds: store.medicalFileIds,
     })
   }
 

@@ -18,6 +18,8 @@ export default function Image({
   onError,
   ...props
 }: ImageProps) {
+  const [loaded, setLoaded] = useState(false)
+  const [error, setError] = useState(false)
   const aspectClass = aspectRatio ? `aspect-[${aspectRatio}]` : undefined
   const [srcDisplay, setSrcDisplay] = useState(src)
 

@@ -1,6 +1,7 @@
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Progress } from '#/components/ui/progress'
+import { useEffect } from 'react'
 import { Header } from '../home'
 import { useRouter } from '@tanstack/react-router'
 
@@ -15,6 +16,10 @@ export function StepLayout({
   onSubmit,
 }: any) {
   const router = useRouter()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [step])
 
   return (
     <div className="flex min-h-dvh flex-col relative bg-background pb-[103px]">

@@ -25,7 +25,7 @@ export type BookingState = {
   medicalHistory?: string
   serviceIds: number[]
   /** UUID từ API upload file (medical records) */
-  medicalFiles: string[]
+  medicalFileIds: string[]
 
   setStep: (step: number) => void
   next: () => void

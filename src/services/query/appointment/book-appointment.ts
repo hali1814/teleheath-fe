@@ -16,7 +16,7 @@ export interface BookAppointmentRequest {
   notes?: string
   medicalHistory?: string
   serviceIds?: number[]
-  medicalFiles?: string[]
+  medicalFileIds?: string[]
 }
 
 /** Điều chỉnh theo response thực tế của API. */
