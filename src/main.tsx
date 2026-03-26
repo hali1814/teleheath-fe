@@ -17,6 +17,7 @@ const router = createRouter({
 
 registerRouter(router)
 
+//
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
