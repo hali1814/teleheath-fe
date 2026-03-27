@@ -59,7 +59,10 @@ export function getUpcomingAppointmentLabels(
   }
 }
 
-const getUpcomingBucket = (dateValue: string, now: dayjs.Dayjs): UpcomingBucket => {
+const getUpcomingBucket = (
+  dateValue: string,
+  now: dayjs.Dayjs,
+): UpcomingBucket => {
   const date = dayjs(dateValue).startOf('day')
   if (!date.isValid()) return 'later'
 
@@ -72,7 +75,10 @@ const getUpcomingBucket = (dateValue: string, now: dayjs.Dayjs): UpcomingBucket 
   const currentWeekStart = today.startOf('week')
   const currentWeekEnd = currentWeekStart.add(6, 'day').endOf('day')
 
-  if (date.isAfter(tomorrow, 'day') && date.isBefore(currentWeekEnd.add(1, 'millisecond'))) {
+  if (
+    date.isAfter(tomorrow, 'day') &&
+    date.isBefore(currentWeekEnd.add(1, 'millisecond'))
+  ) {
     return 'thisWeek'
   }
 
@@ -121,7 +127,7 @@ export function groupAppointmentsByUpcomingWindow(
     later: [],
   }
 
-  const upcomingOnly = items.filter((item) => {
+  const upcomingOnly = items?.filter((item) => {
     const appointmentDay = dayjs(item.appointmentDate).startOf('day')
     if (!appointmentDay.isValid()) return false
     return !appointmentDay.isBefore(today)

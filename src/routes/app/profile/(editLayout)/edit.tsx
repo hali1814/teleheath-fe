@@ -93,6 +93,8 @@ function RouteComponent() {
   const user = useProfileStore((s) => s.profile)
   const setProfile = useProfileStore((s) => s.setProfile)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [isUseAccountInfoDialogOpen, setIsUseAccountInfoDialogOpen] =
+    useState(false)
   const country = useWatch({ control, name: 'country' })
   const city = useWatch({ control, name: 'city' })
   const district = useWatch({ control, name: 'district' })
@@ -236,44 +238,13 @@ function RouteComponent() {
       return false
     }
     if (w.email?.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(w.email.trim())) {
-      const invalidEmailMessage = (i18n.language ?? '').startsWith('vi')
-        ? 'Email không đúng định dạng.'
-        : (i18n.language ?? '').startsWith('km')
-          ? 'អ៊ីមែលមិនមានទម្រង់ត្រឹមត្រូវ។'
-          : 'Invalid email format.'
-      toast.error(invalidEmailMessage)
-      return false
-    }
-
-    if (!w.country) {
-      toast.error(t('requiredCountry'))
-      return false
-    }
-    if (!w.city) {
-      toast.error(t('requiredCity'))
-      return false
-    }
-    if (!w.district) {
-      toast.error(t('requiredDistrict'))
-      return false
-    }
-    if (!w.precinct) {
-      toast.error(t('requiredPrecinct'))
+      toast.error(t('invalidEmail'))
       return false
     }
 
     // Relationship chỉ cần khi edit family member (có idMember).
     if (idMember && !w.relationship) {
       toast.error(t('requiredRelationship'))
-      return false
-    }
-
-    if (!w.street?.trim()) {
-      toast.error(t('requiredStreet'))
-      return false
-    }
-    if (!w.avatarUrl) {
-      toast.error(t('requiredAvatar'))
       return false
     }
 
@@ -285,37 +256,44 @@ function RouteComponent() {
     enabled: !isUserProfile,
   })
 
-  const { mutateAsync: getPatientProfile, isPending: isGettingPatientProfile } =
-    useGetPatientProfileMutation({
-      onSuccess: (data) => {
-        setValue('fullName', data.data.name ?? '')
-        setValue('dateOfBirth', data.data.dateOfBirth ?? '')
-        setValue('gender', (data.data.gender as GenderValue) ?? 'MALE')
-        setValue('phoneNumber', data.data.phone ?? '')
-        setValue('email', data.data.email ?? '')
-        setValue('country', data.data.address?.countryCode ?? '')
-        setValue('avatarUrl', data.data.avatarUrl ?? '')
-        setValue('city', data.data.address?.cityId?.toString() ?? '')
-        setValue('district', data.data.address?.districtId?.toString() ?? '')
-        setValue('precinct', data.data.address?.precinctId?.toString() ?? '')
-        setValue('street', data.data.address?.detail ?? '')
-        setValue('relationship', data.data.relationship)
-      },
-    })
+  const {
+    mutateAsync: getPatientProfile,
+    isPending: isGettingPatientProfile,
+    data: patientProfile,
+  } = useGetPatientProfileMutation({
+    onSuccess: (data) => {
+      setValue('fullName', data.data.name ?? '')
+      setValue('dateOfBirth', data.data.dateOfBirth ?? '')
+      setValue('gender', (data.data.gender as GenderValue) ?? 'MALE')
+      setValue('phoneNumber', data.data.phone ?? '')
+      setValue('email', data.data.email ?? '')
+      setValue('country', data.data.address?.countryCode ?? '')
+      setValue('avatarUrl', data.data.avatarUrl ?? '')
+      setValue('city', data.data.address?.cityId?.toString() ?? '')
+      setValue('district', data.data.address?.districtId?.toString() ?? '')
+      setValue('precinct', data.data.address?.precinctId?.toString() ?? '')
+      setValue('street', data.data.address?.detail ?? '')
+      setValue('relationship', data.data.relationship)
+    },
+  })
+
+  const fillProfileInfoToForm = () => {
+    setValue('fullName', user?.name ?? '')
+    setValue('dateOfBirth', user?.dateOfBirth ?? '')
+    setValue('gender', (user?.gender as GenderValue) ?? 'MALE')
+    setValue('phoneNumber', user?.phone ?? '')
+    setValue('email', user?.email ?? '')
+    setValue('country', user?.address?.countryCode ?? '')
+    setValue('avatarUrl', user?.avatarUrl ?? '')
+    setValue('city', user?.address?.cityId?.toString() ?? '')
+    setValue('district', user?.address?.districtId?.toString() ?? '')
+    setValue('precinct', user?.address?.precinctId?.toString() ?? '')
+    setValue('street', user?.address?.detail ?? '')
+  }
 
   useEffect(() => {
     if (isUserProfile) {
-      setValue('fullName', user?.name ?? '')
-      setValue('dateOfBirth', user?.dateOfBirth ?? '')
-      setValue('gender', (user?.gender as GenderValue) ?? 'MALE')
-      setValue('phoneNumber', user?.phone ?? '')
-      setValue('email', user?.email ?? '')
-      setValue('country', user?.address?.countryCode ?? '')
-      setValue('avatarUrl', user?.avatarUrl ?? '')
-      setValue('city', user?.address?.cityId?.toString() ?? '')
-      setValue('district', user?.address?.districtId?.toString() ?? '')
-      setValue('precinct', user?.address?.precinctId?.toString() ?? '')
-      setValue('street', user?.address?.detail ?? '')
+      fillProfileInfoToForm()
     }
 
     if (idMember) {
@@ -475,6 +453,15 @@ function RouteComponent() {
         />
       </div>
 
+      {!!idMember && (
+        <Text
+          size="lg_16"
+          className="text-primary font-medium mt-2 text-center"
+        >
+          {t('patientId')}: #{patientProfile?.data?.patientCode}
+        </Text>
+      )}
+
       {/* //form */}
       <div className="mt-6 gap-4 flex flex-col">
         <TextInput
@@ -540,6 +527,11 @@ function RouteComponent() {
             placeholder={t('relationship')}
             label={t('relationship')}
             isRequired
+            onChangeCallback={(value) => {
+              if (value === 'SELF') {
+                setIsUseAccountInfoDialogOpen(true)
+              }
+            }}
           />
         ) : null}
 
@@ -549,7 +541,6 @@ function RouteComponent() {
           options={countryOptions}
           placeholder={t('country')}
           label={t('country')}
-          isRequired
           emptyMessage={countryEmptyMessage}
           onChangeCallback={() => {
             setValue('city', '')
@@ -564,7 +555,6 @@ function RouteComponent() {
           options={cityOptions}
           placeholder={t('city')}
           label={t('city')}
-          isRequired
           disabled={!country}
           emptyMessage={cityEmptyMessage}
           onChangeCallback={() => {
@@ -579,7 +569,6 @@ function RouteComponent() {
           options={districtOptions}
           placeholder={t('district')}
           label={t('district')}
-          isRequired
           disabled={!country || !city}
           emptyMessage={districtEmptyMessage}
           onChangeCallback={() => {
@@ -593,7 +582,6 @@ function RouteComponent() {
           options={precinctOptions}
           placeholder={t('precinct')}
           label={t('precinct')}
-          isRequired
           disabled={!country || !city || !district}
           emptyMessage={precinctEmptyMessage}
         />
@@ -603,7 +591,6 @@ function RouteComponent() {
           name="street"
           label={t('street')}
           placeholder={t('street')}
-          isRequired
         />
       </div>
 
@@ -672,6 +659,18 @@ function RouteComponent() {
         confirmText={t('yes')}
         confirmDisabled={isDeletingProfile}
         onConfirm={handleConfirmDelete}
+      />
+      <ConfirmModal
+        open={isUseAccountInfoDialogOpen}
+        onOpenChange={setIsUseAccountInfoDialogOpen}
+        title={t('useAccountInformationTitle')}
+        description={t('useAccountInformationMessage')}
+        cancelText={t('no')}
+        confirmText={t('yes')}
+        onConfirm={() => {
+          fillProfileInfoToForm()
+          setIsUseAccountInfoDialogOpen(false)
+        }}
       />
       <LoadingBlocking
         isLoading={

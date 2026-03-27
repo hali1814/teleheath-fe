@@ -22,7 +22,7 @@ function RouteComponent() {
   })
 
   const groupedAppointments = useMemo(() => {
-    return groupAppointmentsByMonth(appointments?.data ?? [])
+    return groupAppointmentsByMonth(appointments?.data?.content ?? [])
   }, [appointments?.data])
 
   const rows = useMemo(() => {

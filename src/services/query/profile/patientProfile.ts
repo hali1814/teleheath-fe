@@ -20,6 +20,7 @@ export const useAddNewPatientProfileMutation = (
 ) => {
   return useMutation({
     mutationFn: addNewPatientProfile,
+    mutationKey: ['list-family'],
     ...options,
   })
 }
@@ -49,6 +50,7 @@ export const useUpdatePatientProfileMutation = (
 ) => {
   return useMutation({
     mutationFn: updatePatientProfile,
+    mutationKey: ['list-family'],
     ...options,
   })
 }
@@ -67,6 +69,7 @@ export const useDeletePatientProfileMutation = (
 ) => {
   return useMutation({
     mutationFn: deletePatientProfile,
+    mutationKey: ['list-family'],
     ...options,
   })
 }

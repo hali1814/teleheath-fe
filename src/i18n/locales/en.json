@@ -153,6 +153,9 @@
     "emptyMedicalProfilesAddNewProfile": "Add New Profile",
     "viewDetails": "View Details",
     "edit": "Edit",
+    "patientId": "Patient ID",
+    "useAccountInformationTitle": "Use account information?",
+    "useAccountInformationMessage": "Your entered information will be replaced with account details.",
     "invalidEmail": "Invalid email format."
   },
   "hospital": {
@@ -280,6 +283,7 @@
     "later": "Later",
     "completed": "Completed",
     "cancelled": "Cancelled",
+    "waitingConfirm": "Waiting Confirm",
     "noShow": "No-show",
     "paymentDetails": "Payment Details",
     "consultationFee": "Consultation Fee",

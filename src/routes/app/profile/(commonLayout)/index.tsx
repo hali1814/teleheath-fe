@@ -45,11 +45,8 @@ function RouteComponent() {
           {user?.name}
         </Text>
       </div>
-      <Text size="lg_16" className="text-primary font-medium mt-2 text-center">
-        Patient ID: #{user?.patientCode}
-      </Text>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-2">
         <Button
           className="w-[200px] mt-2 bg-secondary"
           onClick={() =>

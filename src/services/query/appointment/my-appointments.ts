@@ -1,8 +1,10 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
+import type { IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 export type AppointmentStatus =
   | 'PENDING'
+  | 'WAITING_CONFIRM'
   | 'CONFIRMED'
   | 'COMPLETED'
   | 'CANCELLED'
@@ -17,6 +19,7 @@ interface AppointmentHospital {
   nameVi: string
   nameEn: string
   address: string
+  nameKh: string
 }
 
 interface AppointmentBranch {
@@ -24,6 +27,7 @@ interface AppointmentBranch {
   nameVi: string
   nameEn: string
   address: string
+  nameKh: string
 }
 
 interface AppointmentDoctor {
@@ -31,6 +35,7 @@ interface AppointmentDoctor {
   nameVi: string
   nameEn: string
   avatarUrl: string
+  nameKh: string
 }
 
 interface AppointmentBookedFor {
@@ -109,18 +114,20 @@ export interface MyAppointmentItem {
   consultationTier: AppointmentConsultationTier | null
 }
 
+interface MyAppointmentsResponse extends IPagingResponse<MyAppointmentItem> {}
+
 const getMyAppointments = async (
   params: MyAppointmentsRequest,
   signal: AbortSignal,
 ) => {
-  return http.get<MyAppointmentItem[]>('/appointments', params, {
+  return http.get<MyAppointmentsResponse>('/appointments', params, {
     signal,
   })
 }
 
 export const useGetMyAppointmentsQuery = (
   options: UseQueryOptions<
-    HttpCommonResponse<MyAppointmentItem[]>,
+    HttpCommonResponse<MyAppointmentsResponse>,
     MyAppointmentsRequest
   >,
 ) => {

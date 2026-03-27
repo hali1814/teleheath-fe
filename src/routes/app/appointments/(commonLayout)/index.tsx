@@ -23,7 +23,7 @@ function RouteComponent() {
     })
 
   const groupedAppointments = useMemo(() => {
-    return groupAppointmentsByUpcomingWindow(appointments?.data ?? [])
+    return groupAppointmentsByUpcomingWindow(appointments?.data?.content ?? [])
   }, [appointments?.data])
 
   if (Object.keys(groupedAppointments).length === 0) {

@@ -6,6 +6,8 @@ import dayjs from 'dayjs'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import GetStatus from '../appointment/GetStatus'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
+import type { AppLanguage } from '#/i18n'
 
 export interface ItemHistoryAppointmentProps {
   item: MyAppointmentItem
@@ -20,16 +22,24 @@ export default function ItemHistoryAppointment({
 
   const label = useMemo(() => {
     if (item.bookingType === 'HOSPITAL') {
-      return i18n.language === 'vi'
-        ? item.hospital?.nameVi
-        : item.hospital?.nameEn
+      return getLocalizedTextByLang(
+        item.hospital?.nameVi || '',
+        item.hospital?.nameKh || '',
+        item.hospital?.nameEn || '',
+        i18n.language as AppLanguage,
+      )
     }
     if (item.bookingType === 'PACKAGE') {
       return item.medicalPackage?.name
     }
 
     if (item.bookingType === 'DOCTOR') {
-      return i18n.language === 'vi' ? item.doctor?.nameVi : item.doctor?.nameEn
+      return getLocalizedTextByLang(
+        item.doctor?.nameVi || '',
+        item.doctor?.nameKh || '',
+        item.doctor?.nameEn || '',
+        i18n.language as AppLanguage,
+      )
     }
 
     return ''
@@ -97,33 +107,38 @@ export default function ItemHistoryAppointment({
         })
       }
     >
-      <div className="flex gap-3">
+      <div className="flex gap-4">
         <Image
           src={avatarSrc}
           alt={label}
-          className="size-[65px] rounded-full"
+          className="size-[72px] rounded-full"
         />
-        <div className="flex flex-col justify-between flex-1">
-          <div className="flex justify-between gap-2 ">
-            <Text
-              size="sm_12"
-              className={`shrink font-medium uppercase tracking-[0.03em] ${'text-[#1D5EF2]'}`}
-            >
-              {t('inPersonVisit')}
-            </Text>
-            <GetStatus status={item.status} />
-          </div>
-
-          <Text size="base_14" className="mt-1 font-semibold text-text-primary">
+        <div className="flex flex-col justify-between flex-1 gap-1">
+          <Text size="base_14" className="font-semibold text-text-primary">
             {label}
           </Text>
 
+          {item.bookingType !== 'HOSPITAL' && (
+            <Text size="sm_12" className="text-[#A8071A] font-medium">
+              {getLocalizedTextByLang(
+                item?.hospital?.nameVi || '',
+                item?.hospital?.nameKh || '',
+                item?.hospital?.nameEn || '',
+                i18n.language as AppLanguage,
+              )}
+            </Text>
+          )}
+
           <Text
             size="sm_12"
-            className="mt-1 font-normal leading-[130%] text-[#64748B]"
+            className="font-normal leading-[130%] text-[#64748B]"
           >
             {scheduleLabel}
           </Text>
+
+          <div>
+            <GetStatus status={item.status} />
+          </div>
         </div>
       </div>
     </div>

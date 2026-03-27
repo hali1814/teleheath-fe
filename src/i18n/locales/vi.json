@@ -153,6 +153,9 @@
     "emptyMedicalProfilesAddNewProfile": "Thêm hồ sơ mới",
     "viewDetails": "Xem chi tiết",
     "edit": "Chỉnh sửa",
+    "patientId": "Mã bệnh nhân",
+    "useAccountInformationTitle": "Dùng thông tin tài khoản?",
+    "useAccountInformationMessage": "Thông tin bạn đã nhập sẽ được thay thế bằng thông tin tài khoản.",
     "invalidEmail": "Email không đúng định dạng."
   },
   "hospital": {
@@ -280,6 +283,7 @@
     "later": "Sau đó",
     "completed": "Đã hoàn thành",
     "cancelled": "Đã hủy",
+    "waitingConfirm": "Chờ xác nhận",
     "noShow": "Không đến",
     "paymentDetails": "Chi tiết thanh toán",
     "consultationFee": "Phí tư vấn",

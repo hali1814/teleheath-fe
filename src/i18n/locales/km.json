@@ -153,6 +153,9 @@
     "emptyMedicalProfilesAddNewProfile": "បន្ថែមប្រវត្តិរូបថ្មី",
     "viewDetails": "មើលព័ត៌មានលម្អិត",
     "edit": "កែសម្រួល",
+    "patientId": "លេខសម្គាល់អ្នកជំងឺ",
+    "useAccountInformationTitle": "ប្រើព័ត៌មានគណនី?",
+    "useAccountInformationMessage": "ព័ត៌មានដែលអ្នកបានបញ្ចូល នឹងត្រូវបានជំនួសដោយព័ត៌មានគណនី។",
     "invalidEmail": "អ៊ីមែលមិនមានទម្រង់ត្រឹមត្រូវ។"
   },
   "hospital": {
@@ -280,6 +283,7 @@
     "later": "ពេលក្រោយ",
     "completed": "បានបញ្ចប់",
     "cancelled": "បានបោះបង់",
+    "waitingConfirm": "កំពុងរង់ចាំការបញ្ជាក់",
     "noShow": "មិនបានមក",
     "paymentDetails": "ព័ត៌មានលម្អិតការទូទាត់",
     "consultationFee": "ថ្លៃពិគ្រោះ",

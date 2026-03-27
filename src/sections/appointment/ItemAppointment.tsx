@@ -1,4 +1,4 @@
-import { Icon, type IconName } from '#/components/icon'
+import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
@@ -7,67 +7,11 @@ import type { MyAppointmentItem } from '#/services/query/appointment/my-appointm
 import { useMemo } from 'react'
 import dayjs from 'dayjs'
 import Image from '#/components/image'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
+import type { AppLanguage } from '#/i18n'
 
 export interface ItemAppointmentProps {
   appointment: MyAppointmentItem
-}
-
-export function ActionButton({
-  text,
-  iconName,
-  disabled = false,
-  variant = 'primary',
-  onClick,
-}: {
-  text: string
-  iconName?: IconName
-  disabled?: boolean
-  variant?: 'primary' | 'light' | 'danger-outline'
-  onClick?: () => void
-}) {
-  const baseClass =
-    'h-[36px] flex-1 rounded-[8px] px-3 py-2 text-base font-medium leading-[20px]'
-
-  if (variant === 'danger-outline') {
-    return (
-      <Button
-        type="button"
-        variant="ghost"
-        disabled={disabled}
-        onClick={onClick}
-        className={`${baseClass} border border-[#FFCCC7] bg-white text-primary hover:bg-[#FFF7F6]`}
-      >
-        {text}
-      </Button>
-    )
-  }
-
-  if (variant === 'light') {
-    return (
-      <Button
-        type="button"
-        variant="ghost"
-        onClick={onClick}
-        className={`${baseClass} gap-2 bg-[#E6F0FF] text-[#1D5EF2] hover:bg-[#DDE9FF] disabled:bg-[#E6EEF9] disabled:text-[#1D5EF2]`}
-      >
-        {iconName ? <Icon name={iconName} className="size-4" /> : null}
-        {text}
-      </Button>
-    )
-  }
-
-  return (
-    <Button
-      type="button"
-      variant="secondary"
-      disabled={disabled}
-      onClick={onClick}
-      className={`${baseClass} gap-2 ${disabled ? 'bg-[#D9D9D9] text-white' : 'bg-primary text-white '}`}
-    >
-      {iconName ? <Icon name={iconName} className="size-4" /> : null}
-      {text}
-    </Button>
-  )
 }
 
 export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
@@ -76,18 +20,24 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
 
   const label = useMemo(() => {
     if (appointment.bookingType === 'HOSPITAL') {
-      return i18n.language === 'vi'
-        ? appointment.hospital?.nameVi
-        : appointment.hospital?.nameEn
+      return getLocalizedTextByLang(
+        appointment.hospital?.nameVi || '',
+        appointment.hospital?.nameKh || '',
+        appointment.hospital?.nameEn || '',
+        i18n.language as AppLanguage,
+      )
     }
     if (appointment.bookingType === 'PACKAGE') {
       return appointment.medicalPackage?.name
     }
 
     if (appointment.bookingType === 'DOCTOR') {
-      return i18n.language === 'vi'
-        ? appointment.doctor?.nameVi
-        : appointment.doctor?.nameEn
+      return getLocalizedTextByLang(
+        appointment.doctor?.nameVi || '',
+        appointment.doctor?.nameKh || '',
+        appointment.doctor?.nameEn || '',
+        i18n.language as AppLanguage,
+      )
     }
 
     return ''
@@ -158,41 +108,48 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
         })
       }
     >
-      <div className="flex items-center gap-3">
+      <div className="flex gap-3 bg">
         <Image
           src={avatarSrc}
           alt={label}
-          className="size-[65px] rounded-full"
+          className="size-[72px] rounded-full "
         />
-        <div className="min-w-0 flex-1 gap-1 flex flex-col">
-          <Text
-            size="sm_12"
-            className={`font-medium uppercase tracking-[0.03em] text-[#1D5EF2]`}
+
+        <div className="gap-3 flex flex-col flex-1">
+          <div className="min-w-0 flex-1  flex flex-col gap-2">
+            <Text
+              size="base_14"
+              className="mt-1 font-semibold text-text-primary"
+            >
+              {label}
+            </Text>
+            {appointment.bookingType !== 'HOSPITAL' && (
+              <Text size="sm_12" className="text-[#A8071A] font-medium">
+                {getLocalizedTextByLang(
+                  appointment?.hospital?.nameVi || '',
+                  appointment?.hospital?.nameKh || '',
+                  appointment?.hospital?.nameEn || '',
+                  i18n.language as AppLanguage,
+                )}
+              </Text>
+            )}
+
+            <Text size="sm_12" className="font-normal text-[#64748B]">
+              {scheduleLabel}
+            </Text>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => {}}
+            className={`h-[36px] gap-2 bg-[#FFF1F0]`}
           >
-            {t('inPersonVisit')}
-          </Text>
-          <Text size="base_14" className="mt-1 font-semibold text-text-primary">
-            {label}
-          </Text>
-          <Text size="sm_12" className="mt-1 font-normal text-[#64748B]">
-            {scheduleLabel}
-          </Text>
+            <Icon name="map_blue" className="size-4" />
+            <Text size="base_14" className="font-medium text-primary">
+              {t('getDirections')}
+            </Text>
+          </Button>
         </div>
-
-        <div
-          className={`flex absolute right-4 top-4 size-8 items-center justify-center rounded-[8px] p-2 bg-[#E6F0FF]`}
-        >
-          <Icon name={'location_blue'} className="size-4" color={'#1D5EF2'} />
-        </div>
-      </div>
-
-      <div className="mt-3 flex gap-3">
-        <ActionButton
-          text={t('getDirections')}
-          iconName="map_blue"
-          variant="light"
-          onClick={() => {}}
-        />
       </div>
     </div>
   )

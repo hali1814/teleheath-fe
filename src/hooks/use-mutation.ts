@@ -63,7 +63,7 @@ export const useMutation = <
 >({
   mutationFn,
   isShowError = true,
-  invalidateQueries,
+  mutationKey,
   onError: userOnError,
   onSuccess: userOnSuccess,
   ...options
@@ -101,9 +101,9 @@ export const useMutation = <
     },
     onSuccess: (data, variables, onMutateResult, context) => {
       // Cache invalidation
-      if (invalidateQueries?.length) {
-        for (const key of invalidateQueries) {
-          queryClient.invalidateQueries({ queryKey: key })
+      if (mutationKey?.length) {
+        for (const key of mutationKey) {
+          queryClient.invalidateQueries({ queryKey: [key] })
         }
       }
       userOnSuccess?.(data, variables, onMutateResult, context)
