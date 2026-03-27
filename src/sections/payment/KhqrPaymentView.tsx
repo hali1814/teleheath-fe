@@ -1,14 +1,19 @@
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Spinner } from '#/components/ui/spinner'
-import { useCheckStatusPaymentQuery } from '#/services/query/payment/check-status-payment'
+import {
+  useCheckStatusPaymentQuery,
+  type CheckStatusPaymentResponse,
+} from '#/services/query/payment/check-status-payment'
 import { useGenerateKhqrQuery } from '#/services/query/payment/generate-khqr'
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import Image from '#/components/image'
 import { Icon } from '#/components/icon'
 import { formatPrice } from '#/utils/price.util'
+import { useBookingStore } from '#/stores/booking-store'
+import { useCallback } from 'react'
 
-const POLL_INTERVAL_MS = 30_000
+const POLL_INTERVAL_MS = 10_000
 
 /** Dừng poll khi backend trả trạng thái kết thúc (điều chỉnh theo API thực tế). */
 function isTerminalPaymentStatus(status: string) {
@@ -27,6 +32,7 @@ function isTerminalPaymentStatus(status: string) {
 export function KhqrPaymentView({ appointmentId }: { appointmentId: string }) {
   const router = useRouter()
   const navigate = useNavigate()
+  const { reset } = useBookingStore()
   const { data, isLoading, isError, refetch, isFetching } =
     useGenerateKhqrQuery({
       params: { appointmentId },
@@ -35,13 +41,24 @@ export function KhqrPaymentView({ appointmentId }: { appointmentId: string }) {
 
   const khqr = data?.data
 
-  const {
-    data: statusResponse,
-    isLoading: isLoadingStatus,
-    isError: isErrorStatus,
-    refetch: refetchStatus,
-    isFetching: isFetchingStatus,
-  } = useCheckStatusPaymentQuery({
+  const onCheckStatusSuccess = useCallback(
+    ({ data }: { data: CheckStatusPaymentResponse }) => {
+      if (!data) return
+      if (khqr?.expiredAt && new Date(khqr.expiredAt) < new Date()) {
+        router.history.back()
+      }
+      if (data.status === 'SUCCESS') {
+        reset()
+        navigate({
+          to: '/app/book-appointment/success/$appointmentId',
+          params: { appointmentId },
+        })
+      }
+    },
+    [khqr, router, reset, navigate, appointmentId],
+  )
+
+  useCheckStatusPaymentQuery({
     params: { refId: khqr?.refId ?? '' },
     enabled: !!khqr?.refId,
     /** Tránh toast lặp mỗi lần poll lỗi */
@@ -52,24 +69,12 @@ export function KhqrPaymentView({ appointmentId }: { appointmentId: string }) {
       if (isTerminalPaymentStatus(payload.status)) return false
       return POLL_INTERVAL_MS
     },
-    /** Vẫn poll khi chuyển tab (tuỳ nhu cầu bảo mật có thể đổi thành false). */
-    refetchIntervalInBackground: true,
-    onSuccess: (data) => {
-      console.log(data)
-      if (data.data?.status === 'SUCCESS') {
-        navigate({
-          to: '/app/book-appointment/success/$appointmentId',
-          params: { appointmentId },
-        })
-      }
-    },
+    onSuccess: onCheckStatusSuccess,
   })
-
-  const payment = statusResponse?.data
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
-      <div className="flex flex-1 flex-col items-center gap-[16px] px-[16px] pb-[10px] pt-[40px]">
+      <div className="flex flex-1 flex-col items-center gap-[16px] px-[16px] pb-[100px] pt-[40px]">
         {isLoading || isFetching ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-[16px]">
             <Spinner className="h-8 w-8 text-primary" />

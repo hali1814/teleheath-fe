@@ -1,19 +1,31 @@
-import type { ListBranchesResponse } from '#/services/query/hospital/list-branches'
-import type { ListConsultationResponse } from '#/services/query/hospital/list-consultation'
-import type { Specialty } from '#/services/query/hospital/list-specialty'
-import type { Package } from '#/services/query/package/list-packages'
-import type {
-  ListFamilyPatient,
-  ListFamilyResponse,
-} from '#/services/query/profile/listFamily'
+import type { ListFamilyPatient } from '#/services/query/profile/listFamily'
+import type { ListServiceResponse } from '#/services/query/services/list-service'
+import type { Branch, Hospital, Service } from '#/types/hospital'
+import type { Doctor } from '#/types/doctor'
+import type { Specialty } from '#/types/specialty'
 import { create } from 'zustand'
+import type { Package } from '#/types/package'
+
+export type FileRowStatus = 'uploading' | 'success' | 'error'
+
+export type MedicalFileRow = {
+  id: string
+  file: File
+  fileId?: string
+  status: FileRowStatus
+}
+
+const defaultFeeInfo = {
+  consultationFee: 0,
+  serviceFee: 0,
+  totalAmount: 0,
+}
 
 export type BookingState = {
   step: number
-  hospitalId?: string
-  branch?: ListBranchesResponse
-  consultationTier?: ListConsultationResponse
-  doctor?: string
+  hospital?: Partial<Hospital>
+  branch?: Branch
+  doctor?: Partial<Doctor>
   specialty?: Specialty
   package?: Package
   bookingType?: 'HOSPITAL' | 'PACKAGE' | 'DOCTOR'
@@ -25,21 +37,36 @@ export type BookingState = {
   medicalHistory?: string
   serviceIds: number[]
   /** UUID từ API upload file (medical records) */
-  medicalFileIds: string[]
+  medicalFiles: MedicalFileRow[]
+  paymentMethod?: {
+    id: number
+    name: string
+    logo: string
+  }
+  feeInfo: {
+    consultationFee: number
+    serviceFee: number
+    totalAmount: number
+  }
 
   setStep: (step: number) => void
   next: () => void
   back: () => void
   setData: (data: Partial<BookingState>) => void
-  appendFileId: (id: string) => void
-  removeFileId: (id: string) => void
+  /** Truyền danh sách dịch vụ từ API (vd list-service) để tính phí theo `serviceIds`. */
+  calcFeeInfo: (services: Service[], consultationFee: number) => void
+  appendMedicalFile: (id: string, file: File) => void
+  updateMedicalFile: (id: string, fileId: string, status: FileRowStatus) => void
+  removeMedicalFile: (id: string) => void
   reset: () => void
 }
 
 export const useBookingStore = create<BookingState>((set) => ({
   step: 0,
+  appointmentDate: new Date(),
   serviceIds: [],
   medicalFiles: [],
+  feeInfo: defaultFeeInfo,
 
   setStep: (step) => set({ step }),
   next: () => set((s) => ({ step: s.step + 1 })),
@@ -47,11 +74,48 @@ export const useBookingStore = create<BookingState>((set) => ({
 
   setData: (data) => set((s) => ({ ...s, ...data })),
 
-  appendFileId: (id) => set((s) => ({ medicalFiles: [...s.medicalFiles, id] })),
+  calcFeeInfo: (services: Service[], consultationFee: number) =>
+    set((s) => {
+      const serviceFee = s.serviceIds.reduce((acc, serviceId) => {
+        const price = services.find((svc) => svc.id === serviceId)?.price ?? 0
+        return acc + price
+      }, 0)
 
-  removeFileId: (id) =>
+      const next = {
+        consultationFee,
+        serviceFee,
+        totalAmount: consultationFee + serviceFee,
+      }
+      const p = s.feeInfo
+      if (
+        p.consultationFee === next.consultationFee &&
+        p.serviceFee === next.serviceFee &&
+        p.totalAmount === next.totalAmount
+      ) {
+        return s
+      }
+      return { feeInfo: next }
+    }),
+
+  appendMedicalFile: (id: string, file: File) =>
     set((s) => ({
-      medicalFiles: s.medicalFiles.filter((x) => x !== id),
+      medicalFiles: [...s.medicalFiles, { id, file, status: 'uploading' }],
+    })),
+
+  updateMedicalFile: (id: string, fileId: string, status: FileRowStatus) =>
+    set((s) => {
+      const row = s.medicalFiles.find((x) => x.id === id)
+      if (!row) return s
+      return {
+        medicalFiles: s.medicalFiles.map((x) =>
+          x.id === id ? { ...row, fileId: fileId, status } : x,
+        ),
+      }
+    }),
+
+  removeMedicalFile: (id: string) =>
+    set((s) => ({
+      medicalFiles: s.medicalFiles.filter((x) => x.id !== id),
     })),
 
   reset: () =>
@@ -59,9 +123,9 @@ export const useBookingStore = create<BookingState>((set) => ({
       step: 0,
       serviceIds: [],
       medicalFiles: [],
-      hospitalId: undefined,
+      feeInfo: defaultFeeInfo,
+      hospital: undefined,
       branch: undefined,
-      consultationTier: undefined,
       doctor: undefined,
       specialty: undefined,
       package: undefined,
@@ -72,5 +136,6 @@ export const useBookingStore = create<BookingState>((set) => ({
       endTime: undefined,
       notes: undefined,
       medicalHistory: undefined,
+      paymentMethod: undefined,
     }),
 }))

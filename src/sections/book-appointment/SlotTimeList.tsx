@@ -1,6 +1,8 @@
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
 import { cn } from '#/lib/utils'
+import type { Doctor } from '#/types/doctor'
+import { useCallback } from 'react'
 
 const SlotTimeChip = ({
   time,
@@ -20,7 +22,7 @@ const SlotTimeChip = ({
         selected && 'bg-primary border-primary',
         disabled && 'cursor-not-allowed bg-[#F2F2F2] border-[#CCCCCC]',
       )}
-      onClick={onClick}
+      onClick={() => !disabled && onClick()}
     >
       <Text
         size="sm_12"
@@ -36,24 +38,35 @@ const SlotTimeChip = ({
   )
 }
 
+interface SlotTime {
+  startTime: string
+  endTime: string
+  doctor: Partial<Doctor>
+  status: 'AVAILABLE' | 'FULL'
+}
+
 export function SlotTimeList({
   title,
-  selectedTime,
-  setSelectedTime,
+  selectedSlot,
+  setSelectedSlot,
   slotTimes,
 }: {
   title: string
-  selectedTime: { startTime: string | null; endTime: string | null }
-  setSelectedTime: (time: {
-    startTime: string | null
-    endTime: string | null
-  }) => void
-  slotTimes: {
-    startTime: string
-    endTime: string
-    status?: 'AVAILABLE' | 'FULL'
-  }[]
+  selectedSlot?: SlotTime
+  setSelectedSlot: (slot?: SlotTime | undefined) => void
+  slotTimes: SlotTime[]
 }) {
+  const isSelected = useCallback(
+    (slot: SlotTime) => {
+      return (
+        selectedSlot?.startTime === slot.startTime &&
+        selectedSlot?.endTime === slot.endTime &&
+        selectedSlot?.doctor.doctorId === slot.doctor.doctorId
+      )
+    },
+    [selectedSlot],
+  )
+
   return (
     <div className="flex flex-col gap-[14px] pt-[8px]">
       <Text
@@ -68,27 +81,12 @@ export function SlotTimeList({
             key={`${item.startTime}-${item.endTime}`}
             time={`${item.startTime} - ${item.endTime}`}
             disabled={item.status !== 'AVAILABLE'}
-            selected={
-              selectedTime.startTime !== null &&
-              selectedTime.endTime !== null &&
-              selectedTime.startTime === item.startTime &&
-              selectedTime.endTime === item.endTime
+            selected={selectedSlot ? isSelected(item) : false}
+            onClick={() =>
+              setSelectedSlot(
+                selectedSlot && isSelected(item) ? undefined : item,
+              )
             }
-            onClick={() => {
-              if (
-                selectedTime.startTime !== null &&
-                selectedTime.endTime !== null &&
-                selectedTime.startTime === item.startTime &&
-                selectedTime.endTime === item.endTime
-              ) {
-                setSelectedTime({ startTime: null, endTime: null })
-              } else {
-                setSelectedTime({
-                  startTime: item.startTime,
-                  endTime: item.endTime,
-                })
-              }
-            }}
           />
         ))}
       </div>

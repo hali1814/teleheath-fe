@@ -20,8 +20,8 @@ export default function HospitalDetailHeader({
         alt="hospital-detail-header"
         className="w-full h-[192px]"
       />
-      <div className="w-[350px] bg-white p-[16px] rounded-[8px] absolute top-[140px] left-1/2 -translate-x-1/2 shadow-[0px_1px_6px_rgba(0,0,0,0.05)]">
-        <div className="w-full flex items-center gap-[16px]">
+      <div className="w-full px-[20px] absolute top-[140px] left-1/2 -translate-x-1/2">
+        <div className="w-full flex items-center gap-[16px] p-[16px] rounded-[8px] bg-white shadow-[0px_1px_6px_rgba(0,0,0,0.05)]">
           <Avatar className="w-[63px] h-[63px] border border-dust-red-1 rounded-full">
             <AvatarImage src="/thumbnail.png" alt="hospital-logo" />
           </Avatar>

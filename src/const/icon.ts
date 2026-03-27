@@ -93,6 +93,7 @@ import CopyIcon from '#/assets/icons/common/copy.svg?react'
 import WarningIcon from '#/assets/icons/common/warning.svg?react'
 import LogoIcon from '#/assets/icons/common/logo.svg?react'
 import DownloadIcon from '#/assets/icons/common/download.svg?react'
+import HospitalSolidIcon from '#/assets/icons/common/hospital-solid.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -183,6 +184,7 @@ const ICONS_TEMPLATE = {
   warning: WarningIcon,
   logo: LogoIcon,
   download: DownloadIcon,
+  hospital_solid: HospitalSolidIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

@@ -116,7 +116,9 @@ function RouteComponent() {
       {status === 'EMPTY' && (
         <>
           <SearchTabs value={tab} onChange={setTab} />
-          <EmptyState query={query} />
+          <EmptyState>
+            No results for <span className="italic">&quot;{query}&quot;</span>
+          </EmptyState>
         </>
       )}
     </>

@@ -2,17 +2,15 @@ import { useMutation, type UseMutationOptions } from '#/hooks/use-mutation'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 export interface BookAppointmentRequest {
-  hospitalId: string
   branchId: string
-  consultationTierId: number
   doctorId: string
   specialtyId: number
   packageId?: number
-  bookingType: 'HOSPITAL' | 'PACKAGE' | 'DOCTOR'
-  patientProfileId: number
   appointmentDate: Date
   startTime: string
   endTime: string
+  bookingType: 'HOSPITAL' | 'PACKAGE' | 'DOCTOR'
+  patientProfileId: number
   notes?: string
   medicalHistory?: string
   serviceIds?: number[]

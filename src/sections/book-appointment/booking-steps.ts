@@ -1,13 +1,13 @@
 import type { ComponentType } from 'react'
 import type { BookingState } from '#/stores/booking-store'
 import {
-  ConsultationStep,
   SpecialtyStep,
   LocationStep,
   ScheduleStep,
   PatientStep,
 } from '#/sections/book-appointment/steps'
 import { ReviewStep } from '#/sections/book-appointment/steps/ReviewStep'
+import { ScheduleStepByDoctor } from './steps/ScheduleStepByDoctor'
 
 export type BookingStepConfig = {
   title: string
@@ -17,18 +17,13 @@ export type BookingStepConfig = {
 
 export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
   {
-    title: 'Select consultation type',
-    component: ConsultationStep,
-    validate: (s) => !!s.consultationTier,
-  },
-  {
     title: 'Select specialty',
     component: SpecialtyStep,
     validate: (s) => !!s.specialty,
   },
   {
     title: 'Select location',
-    component: LocationStep,
+    component: () => LocationStep({ type: 'HOSPITAL' }),
     validate: (s) => !!s.branch,
   },
   {
@@ -44,19 +39,21 @@ export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
   {
     title: 'Review & Confirm',
     component: ReviewStep,
-    validate: () => true,
+    validate: (s) =>
+      (!!s.paymentMethod && s.feeInfo.totalAmount > 0) ||
+      s.feeInfo.totalAmount === 0,
   },
 ]
 
 export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
   {
     title: 'Select location',
-    component: LocationStep,
+    component: () => LocationStep({ type: 'DOCTOR' }),
     validate: (s) => !!s.branch,
   },
   {
     title: 'Select schedule',
-    component: ScheduleStep,
+    component: ScheduleStepByDoctor,
     validate: (s) => !!s.appointmentDate && !!s.startTime && !!s.endTime,
   },
   {
@@ -67,14 +64,16 @@ export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
   {
     title: 'Review & Confirm',
     component: ReviewStep,
-    validate: () => true,
+    validate: (s) =>
+      (!!s.paymentMethod && s.feeInfo.totalAmount > 0) ||
+      s.feeInfo.totalAmount === 0,
   },
 ]
 
 export const BOOKING_STEPS_PACKAGE: BookingStepConfig[] = [
   {
     title: 'Select location',
-    component: LocationStep,
+    component: () => LocationStep({ type: 'HOSPITAL' }),
     validate: (s) => !!s.branch,
   },
   {
@@ -90,6 +89,8 @@ export const BOOKING_STEPS_PACKAGE: BookingStepConfig[] = [
   {
     title: 'Review & Confirm',
     component: ReviewStep,
-    validate: () => true,
+    validate: (s) =>
+      (!!s.paymentMethod && s.feeInfo.totalAmount > 0) ||
+      s.feeInfo.totalAmount === 0,
   },
 ]

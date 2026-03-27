@@ -3,7 +3,10 @@ import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 import type { Specialty } from '#/types/specialty'
 
-interface ListSpecialtyRequest extends IPagingRequest {}
+interface ListSpecialtyRequest extends IPagingRequest {
+  hospitalId?: string
+  keyword?: string
+}
 
 export interface ListSpecialtyResponse extends IPagingResponse<Specialty> {}
 
@@ -13,10 +16,9 @@ const getListSpecialty = async (
 ) => {
   const response = await http.get<ListSpecialtyResponse>(
     `/specialties`,
-    {},
+    params,
     {
       signal,
-      params,
     },
   )
   return response
