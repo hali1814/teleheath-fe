@@ -9,14 +9,14 @@ interface ListScheduleByBranchRequest {
 }
 
 interface ScheduleByBranch {
-  doctorId: string
-  doctorName: string
-  doctorAvatarUrl: string
-  scheduleDate: string
   startTime: string
   endTime: string
   status: 'AVAILABLE' | 'FULL'
-  price: number
+  availableSlots: number
+  doctors: Array<{
+    doctorId: string
+    nameVi: string
+  }>
 }
 
 export interface ListScheduleByBranchResponse {

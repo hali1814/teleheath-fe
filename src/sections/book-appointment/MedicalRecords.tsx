@@ -4,8 +4,8 @@ import { Button } from '#/components/ui/button'
 import { Spinner } from '#/components/ui/spinner'
 import { Textarea } from '#/components/ui/textarea'
 import { useUploadImageMutation } from '#/services/query/upload/use-upload-image-mutate'
-import { useBookingStore } from '#/stores/booking-store'
-import { useRef, useState } from 'react'
+import { useBookingStore, type FileRowStatus } from '#/stores/booking-store'
+import { useRef } from 'react'
 import { toast } from 'sonner'
 
 const MAX_FILE_BYTES = 10 * 1024 * 1024
@@ -14,15 +14,6 @@ function formatFileSize(bytes: number) {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-}
-
-type FileRowStatus = 'uploading' | 'success' | 'error'
-
-type MedicalFileRow = {
-  id: string
-  file: File
-  fileId?: string
-  status: FileRowStatus
 }
 
 const MedicalFileItem = ({
@@ -74,12 +65,12 @@ const MedicalFileItem = ({
 }
 
 export function MedicalRecords() {
-  const { medicalFileIds, medicalHistory, notes, setData } = useBookingStore()
-  const appendFileId = useBookingStore((s) => s.appendFileId)
-  const removeFileId = useBookingStore((s) => s.removeFileId)
+  const { medicalFiles, medicalHistory, notes, setData } = useBookingStore()
+  const appendMedicalFile = useBookingStore((s) => s.appendMedicalFile)
+  const updateMedicalFile = useBookingStore((s) => s.updateMedicalFile)
+  const removeMedicalFile = useBookingStore((s) => s.removeMedicalFile)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [rows, setRows] = useState<MedicalFileRow[]>([])
 
   const { mutateAsync: uploadFile } = useUploadImageMutation({
     isShowError: false,
@@ -108,8 +99,8 @@ export function MedicalRecords() {
 
     void (async () => {
       for (const file of accepted) {
-        const rowId = crypto.randomUUID()
-        setRows((prev) => [...prev, { id: rowId, file, status: 'uploading' }])
+        const id = crypto.randomUUID()
+        appendMedicalFile(id, file)
 
         try {
           const res = await uploadFile({ file })
@@ -118,21 +109,20 @@ export function MedicalRecords() {
           if (!fileId) {
             throw new Error('Missing fileId')
           }
-          appendFileId(fileId)
-          setData({ medicalFileIds: [...medicalFileIds, fileId] })
+          updateMedicalFile(id, fileId, 'success')
         } catch {
           toast.error(`Could not upload ${file.name}`)
+          updateMedicalFile(id, '', 'error')
         }
       }
     })()
   }
 
   const removeRow = (index: number) => {
-    const row = rows[index]
+    const row = medicalFiles[index]
     if (row?.fileId) {
-      removeFileId(row.fileId)
+      removeMedicalFile(row.id)
     }
-    setRows((prev) => prev.filter((_, i) => i !== index))
   }
 
   return (
@@ -180,7 +170,7 @@ export function MedicalRecords() {
           </Text>
         </Button>
       </div>
-      {rows.map((row, index) => (
+      {medicalFiles.map((row, index) => (
         <MedicalFileItem
           key={row.id}
           name={row.file.name}

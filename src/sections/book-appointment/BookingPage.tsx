@@ -1,15 +1,17 @@
 import { useBookAppointmentMutation } from '#/services/query/appointment/book-appointment'
 import { useGetDoctorDetailQuery } from '#/services/query/doctor/doctor-detail'
 import { useGetPackageDetailQuery } from '#/services/query/package/package-detail'
+import type { HttpCommonResponse } from '#/services/network/http-request'
 import { useBookingStore } from '#/stores/booking-store'
+import type { Doctor } from '#/types/doctor'
+import type { Hospital } from '#/types/hospital'
+import type { Package } from '#/types/package'
 import { useNavigate } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useCallback } from 'react'
 import type { BookingRouteContext } from './booking-context'
 import type { BookingStepConfig } from './booking-steps'
 import { StepLayout } from './StepLayout'
-
-const DEFAULT_DOCTOR_ID = '33333333-0000-0000-0000-000000000001'
-const DEFAULT_HOSPITAL_ID = '11111111-0000-0000-0000-000000000001'
+import { useGetHospitalDetailQuery } from '#/services/query/hospital/hospital-detail'
 
 export default function BookingPage({
   steps,
@@ -32,54 +34,68 @@ export default function BookingPage({
   const doctorParam = isDoctor ? context.doctorId : undefined
   const packageParam = isPackage ? context.packageId : undefined
 
-  const doctorQuery = useGetDoctorDetailQuery({
+  const onDoctorDetailSuccess = useCallback(
+    (res: HttpCommonResponse<Doctor>) => {
+      console.log(res.data)
+      setData({
+        bookingType: 'DOCTOR',
+        doctor: res.data,
+      })
+    },
+    [setData],
+  )
+
+  const onHospitalDetailSuccess = useCallback(
+    (res: HttpCommonResponse<Hospital>) => {
+      setData({
+        bookingType: 'HOSPITAL',
+        hospital: res.data,
+      })
+    },
+    [setData],
+  )
+
+  const onPackageDetailSuccess = useCallback(
+    (res: HttpCommonResponse<Package>) => {
+      setData({
+        bookingType: 'PACKAGE',
+        package: res.data,
+      })
+    },
+    [setData],
+  )
+
+  useGetHospitalDetailQuery({
+    params: { hospitalId: hospitalParam ?? '' },
+    enabled: isHospital && !!hospitalParam,
+    onSuccess: onHospitalDetailSuccess,
+  })
+
+  useGetDoctorDetailQuery({
     params: { doctorId: doctorParam ?? '' },
     enabled: isDoctor && !!doctorParam,
+    onSuccess: onDoctorDetailSuccess,
   })
 
-  const packageQuery = useGetPackageDetailQuery({
+  useGetPackageDetailQuery({
     params: { packageId: packageParam ?? '' },
     enabled: isPackage && !!packageParam,
+    onSuccess: onPackageDetailSuccess,
   })
-
-  useEffect(() => {
-    if (!isHospital || !hospitalParam) return
-    setData({
-      bookingType: 'HOSPITAL',
-      hospitalId: hospitalParam ?? '',
-    })
-  }, [isHospital, hospitalParam, setData])
-
-  useEffect(() => {
-    if (!isDoctor || !doctorParam) return
-    const doc = doctorQuery.data?.data
-    if (!doc) return
-    setData({
-      bookingType: 'DOCTOR',
-      doctor: doctorParam,
-      hospitalId: doc.hospitalId,
-    })
-  }, [isDoctor, doctorParam, doctorQuery.data?.data, setData])
-
-  useEffect(() => {
-    if (!isPackage || !packageParam) return
-    const pkg = packageQuery.data?.data
-    if (!pkg) return
-    // const firstHospital = pkg.hospitals?.[0]
-    setData({
-      bookingType: 'PACKAGE',
-      package: pkg,
-      hospitalId: DEFAULT_HOSPITAL_ID,
-    })
-  }, [isPackage, packageParam, packageQuery.data?.data, setData])
 
   const { mutate: bookAppointment } = useBookAppointmentMutation({
     onSuccess: ({ data }) => {
-      if (!data?.id) return
-      store.reset()
+      if (!data.id) return
+      if (store.feeInfo.totalAmount === 0) {
+        navigate({
+          to: '/app/book-appointment/success/$appointmentId',
+          params: { appointmentId: data.id },
+        })
+        return
+      }
       navigate({
         to: '/app/payment/khqr/$appointmentId',
-        params: { appointmentId: data?.id },
+        params: { appointmentId: data.id },
       })
     },
   })
@@ -102,10 +118,7 @@ export default function BookingPage({
           ? 'DOCTOR'
           : 'PACKAGE'
 
-    const doctorId =
-      context.flow === 'DOCTOR' && doctorParam
-        ? doctorParam
-        : (store.doctor ?? DEFAULT_DOCTOR_ID)
+    const doctorId = store.doctor?.doctorId ?? ''
 
     const packageId =
       context.flow === 'PACKAGE' && packageParam
@@ -113,9 +126,7 @@ export default function BookingPage({
         : undefined
 
     bookAppointment({
-      hospitalId: store.branch.hospitalId,
       branchId: store.branch.branchId,
-      consultationTierId: store.consultationTier?.id ?? 1,
       doctorId,
       specialtyId: store.specialty?.id ?? 1,
       packageId,
@@ -127,7 +138,10 @@ export default function BookingPage({
       notes: store.notes,
       medicalHistory: store.medicalHistory,
       serviceIds: store.serviceIds,
-      medicalFileIds: store.medicalFileIds,
+      medicalFileIds: store.medicalFiles
+        .filter((x) => x.status === 'success')
+        .map((x) => x.fileId)
+        .filter((x) => x !== undefined),
     })
   }
 

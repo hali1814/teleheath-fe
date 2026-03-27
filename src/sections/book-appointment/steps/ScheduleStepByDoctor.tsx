@@ -3,28 +3,23 @@ import { DATE_TIME_TYPE, formatDate } from '#/utils/date.util'
 import { CalendarSchedule } from '../CalendarSchedule'
 import { useBookingStore } from '#/stores/booking-store'
 import { SlotTimeList } from '../SlotTimeList'
-import type { ListScheduleByBranchResponse } from '#/services/query/schedule/list-schedule-by-branch'
-import { useGetListScheduleByBranchQuery } from '#/services/query/schedule/list-schedule-by-branch'
 import { keepPreviousData } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { checkEmptySchedule } from '#/utils/schedule.util'
 import { EmptyState } from '#/sections/search'
+import {
+  useGetListScheduleByDoctorQuery,
+  type ListScheduleByDoctorResponse,
+} from '#/services/query/schedule/list-schedule-by-doctor'
 
-const emptySchedules: ListScheduleByBranchResponse = {
+const emptySchedules: ListScheduleByDoctorResponse = {
   morning: [],
   afternoon: [],
 }
 
-export function ScheduleStep() {
-  const {
-    branch,
-    specialty,
-    doctor,
-    appointmentDate,
-    startTime,
-    endTime,
-    setData,
-  } = useBookingStore()
+export function ScheduleStepByDoctor() {
+  const { doctor, appointmentDate, startTime, endTime, setData, branch } =
+    useBookingStore()
 
   const dateParam =
     appointmentDate != null
@@ -32,13 +27,13 @@ export function ScheduleStep() {
       : undefined
 
   const { data: { data: schedules } = { data: emptySchedules } } =
-    useGetListScheduleByBranchQuery({
+    useGetListScheduleByDoctorQuery({
       params: {
-        branchId: branch?.branchId ?? '',
-        specialtyId: specialty?.id ?? 1,
+        doctorId: doctor?.doctorId ?? '',
         date: dateParam,
+        branchId: branch?.branchId ?? '',
       },
-      enabled: !!branch?.branchId && !!dateParam,
+      enabled: !!doctor?.doctorId && !!dateParam,
       placeholderData: keepPreviousData,
     })
 
@@ -52,7 +47,12 @@ export function ScheduleStep() {
       schedules?.morning.map((item) => ({
         startTime: item.startTime,
         endTime: item.endTime,
-        doctor: item.doctors[0],
+        doctor: {
+          doctorId: item.doctorId,
+          nameEn: item.doctorName,
+          consultationFee: item.price,
+          avatarUrl: item.doctorAvatarUrl,
+        },
         status: item.status,
       })) ?? []
     )
@@ -63,7 +63,12 @@ export function ScheduleStep() {
       schedules?.afternoon.map((item) => ({
         startTime: item.startTime,
         endTime: item.endTime,
-        doctor: item.doctors[0],
+        doctor: {
+          doctorId: item.doctorId,
+          nameEn: item.doctorName,
+          consultationFee: item.price,
+          avatarUrl: item.doctorAvatarUrl,
+        },
         status: item.status,
       })) ?? []
     )
@@ -78,9 +83,7 @@ export function ScheduleStep() {
       </Text>
       <CalendarSchedule
         selected={appointmentDate ?? null}
-        onSelect={(date) =>
-          setData({ appointmentDate: date, startTime: '', endTime: '' })
-        }
+        onSelect={(date) => setData({ appointmentDate: date })}
         disablePastDates
       />
       <div className="flex flex-col gap-[10px]">
@@ -105,14 +108,24 @@ export function ScheduleStep() {
             selectedSlot={{
               startTime: startTime ?? '',
               endTime: endTime ?? '',
-              doctor: doctor ?? { doctorId: '', nameVi: '' },
+              doctor: doctor ?? {
+                doctorId: '',
+                nameEn: '',
+                consultationFee: 0,
+                avatarUrl: '',
+              },
               status: 'AVAILABLE',
             }}
             setSelectedSlot={(slot) =>
               setData({
                 startTime: slot?.startTime ?? '',
                 endTime: slot?.endTime ?? '',
-                doctor: slot?.doctor ?? { doctorId: '', nameVi: '' },
+                doctor: slot?.doctor ?? {
+                  doctorId: '',
+                  nameEn: '',
+                  consultationFee: 0,
+                  avatarUrl: '',
+                },
               })
             }
           />
@@ -122,14 +135,26 @@ export function ScheduleStep() {
             selectedSlot={{
               startTime: startTime ?? '',
               endTime: endTime ?? '',
-              doctor: doctor ?? { doctorId: '', nameVi: '' },
+              doctor: doctor ?? {
+                doctorId: '',
+                nameEn: '',
+                consultationFee: 0,
+                avatarUrl: '',
+                specialties: [],
+              },
               status: 'AVAILABLE',
             }}
             setSelectedSlot={(slot) =>
               setData({
                 startTime: slot?.startTime ?? '',
                 endTime: slot?.endTime ?? '',
-                doctor: slot?.doctor ?? { doctorId: '', nameVi: '' },
+                doctor: slot?.doctor ?? {
+                  doctorId: '',
+                  nameEn: '',
+                  consultationFee: 0,
+                  avatarUrl: '',
+                  specialties: [],
+                },
               })
             }
           />

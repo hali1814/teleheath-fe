@@ -1,9 +1,10 @@
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Progress } from '#/components/ui/progress'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Header } from '../home'
 import { useRouter } from '@tanstack/react-router'
+import { useBookingStore } from '#/stores/booking-store'
 
 export function StepLayout({
   title,
@@ -16,6 +17,17 @@ export function StepLayout({
   onSubmit,
 }: any) {
   const router = useRouter()
+  const routerRef = useRef(router)
+  routerRef.current = router
+  const { reset } = useBookingStore()
+
+  useEffect(() => {
+    return () => {
+      const pathname = routerRef.current.state.location.pathname
+      if (pathname.startsWith('/app/payment/khqr')) return
+      reset()
+    }
+  }, [reset])
 
   useEffect(() => {
     window.scrollTo(0, 0)

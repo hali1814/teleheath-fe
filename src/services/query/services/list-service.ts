@@ -7,6 +7,7 @@ interface ListServiceRequest extends IPagingRequest {}
 export interface ListServiceResponse {
   id: number
   name: string
+  /** TipTap HTML persisted by backend */
   description: string
   iconUrl: string
   price: number

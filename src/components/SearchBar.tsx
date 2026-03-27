@@ -20,7 +20,6 @@ export default function SearchBar({
   onClick,
   onClear,
 }: Props) {
-  // 👉 UI chung (reuse)
   const content = (
     <>
       <Icon name="search_icon" className="w-[20px] h-[20px]" />
@@ -28,7 +27,7 @@ export default function SearchBar({
       {isHome ? (
         <Text
           size="base_14"
-          className="flex-1 text-[#999999] leading-normal truncate"
+          className="flex-1 text-start text-[#999999] leading-normal truncate"
         >
           {placeholder}
         </Text>
