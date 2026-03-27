@@ -6,6 +6,7 @@ import ItemHistoryAppointment from '#/sections/history/ItemHistoryAppointment'
 import { useTranslation } from 'react-i18next'
 import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appointments'
 import { groupAppointmentsByMonth } from '#/utils/history'
+import LoadingBlocking from '#/components/LoadingBlocking'
 
 export const Route = createFileRoute('/app/history/')({
   component: RouteComponent,
@@ -17,7 +18,7 @@ function RouteComponent() {
   const { t } = useTranslation(['common'])
   const title = t('bottomNavigation.history')
 
-  const { data: appointments } = useGetMyAppointmentsQuery({
+  const { data: appointments, isLoading } = useGetMyAppointmentsQuery({
     params: {},
   })
 
@@ -90,6 +91,7 @@ function RouteComponent() {
           })}
         </div>
       </div>
+      <LoadingBlocking isLoading={isLoading} />
     </div>
   )
 }

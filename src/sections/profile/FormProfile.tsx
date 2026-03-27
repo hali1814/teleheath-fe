@@ -39,6 +39,7 @@ import type { AppLanguage } from '#/i18n'
 export interface FormProfileProps {
   idMember?: number
   isUserProfile: boolean
+  customButton?: (handleSaveProfile: () => void) => React.ReactNode
 }
 
 interface FormValues {
@@ -59,6 +60,7 @@ interface FormValues {
 export default function FormProfile({
   idMember,
   isUserProfile,
+  customButton,
 }: FormProfileProps) {
   const { control, setValue } = useForm<FormValues>({
     defaultValues: {
@@ -594,61 +596,66 @@ export default function FormProfile({
         />
       </div>
 
-      <div className="fixed inset-x-4 bottom-4">
-        {!idMember && (
-          <Button
-            type="button"
-            variant="secondary"
-            className="h-[45px] w-full rounded-full"
-            onClick={handleSaveProfile}
-            disabled={!isUserProfile ? isAddingNewProfile : isUpdatingProfile}
-          >
-            {!isUserProfile ? (
-              <>
-                <Icon name="add_profile" />
-                <Text size="base_14" className="font-medium text-white">
-                  {t('addProfile')}
-                </Text>
-              </>
-            ) : (
-              <Text
-                size="base_14"
-                className="w-full text-center font-medium text-white"
-              >
-                {t('save')}
-              </Text>
-            )}
-          </Button>
-        )}
-
-        {idMember && (
-          <div className="flex items-center gap-[10px]">
-            <Button
-              type="button"
-              variant="ghost"
-              className="h-[45px] flex-1 rounded-[40px] border border-primary bg-background px-3 py-[12px] hover:bg-white"
-              onClick={() => setIsDeleteDialogOpen(true)}
-              disabled={isDeletingProfile}
-            >
-              <Text size="base_14" className="font-medium text-primary">
-                {t('delete')}
-              </Text>
-            </Button>
-
+      {!!customButton ? (
+        customButton(handleSaveProfile)
+      ) : (
+        <div className="fixed inset-x-4 bottom-4">
+          {!idMember && (
             <Button
               type="button"
               variant="secondary"
-              className="h-[45px] flex-1 rounded-[40px] bg-primary px-3 py-[12px] hover:bg-primary"
+              className="h-[45px] w-full rounded-full"
               onClick={handleSaveProfile}
-              disabled={isUpdatingProfile}
+              disabled={!isUserProfile ? isAddingNewProfile : isUpdatingProfile}
             >
-              <Text size="base_14" className="font-medium text-white">
-                {t('profile:editProfile')}
-              </Text>
+              {!isUserProfile ? (
+                <>
+                  <Icon name="add_profile" />
+                  <Text size="base_14" className="font-medium text-white">
+                    {t('addProfile')}
+                  </Text>
+                </>
+              ) : (
+                <Text
+                  size="base_14"
+                  className="w-full text-center font-medium text-white"
+                >
+                  {t('save')}
+                </Text>
+              )}
             </Button>
-          </div>
-        )}
-      </div>
+          )}
+
+          {idMember && (
+            <div className="flex items-center gap-[10px]">
+              <Button
+                type="button"
+                variant="ghost"
+                className="h-[45px] flex-1 rounded-[40px] border border-primary bg-background px-3 py-[12px] hover:bg-white"
+                onClick={() => setIsDeleteDialogOpen(true)}
+                disabled={isDeletingProfile}
+              >
+                <Text size="base_14" className="font-medium text-primary">
+                  {t('delete')}
+                </Text>
+              </Button>
+
+              <Button
+                type="button"
+                variant="secondary"
+                className="h-[45px] flex-1 rounded-[40px] bg-primary px-3 py-[12px] hover:bg-primary"
+                onClick={handleSaveProfile}
+                disabled={isUpdatingProfile}
+              >
+                <Text size="base_14" className="font-medium text-white">
+                  {t('profile:editProfile')}
+                </Text>
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+
       <ConfirmModal
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
