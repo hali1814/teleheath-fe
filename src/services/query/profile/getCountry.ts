@@ -8,6 +8,7 @@ export interface CountryItem {
   code: string
   nameVi: string
   nameEn: string
+  nameKh: string
 }
 
 const getCountries = async (

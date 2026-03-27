@@ -10,6 +10,7 @@ export interface DistrictItem {
   id: number
   nameVi: string
   nameEn: string
+  nameKh: string
 }
 
 const getDistricts = async (

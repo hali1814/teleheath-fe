@@ -9,6 +9,7 @@ export interface CityItem {
   id: number
   nameVi: string
   nameEn: string
+  nameKh: string
 }
 
 const getCities = async (params: GetCitiesRequest, signal: AbortSignal) => {

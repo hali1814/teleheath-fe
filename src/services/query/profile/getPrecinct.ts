@@ -10,6 +10,7 @@ export interface PrecinctItem {
   id: number
   nameVi: string
   nameEn: string
+  nameKh: string
 }
 
 const getPrecincts = async (
@@ -34,7 +35,12 @@ export const useGetPrecinctsQuery = (
   >,
 ) => {
   return useQuery({
-    queryKey: ['locations', 'districts', options.params.districtId, 'precincts'],
+    queryKey: [
+      'locations',
+      'districts',
+      options.params.districtId,
+      'precincts',
+    ],
     queryFn: ({ signal }) => getPrecincts(options.params, signal),
     gcTime: 1000 * 60 * 60 * 24,
     ...options,
