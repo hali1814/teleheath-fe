@@ -1,0 +1,32 @@
+name: Sync to repo B
+
+on:
+  push:
+    branches:
+      - master   # repo A đang dùng branch này
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo A
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # lấy full history để tránh lỗi push
+
+      - name: Setup git
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "bot@sync.com"
+
+      - name: Create extra commit (optional)
+        run: |
+          echo "synced at $(date)" > sync.txt
+          git add .
+          git commit -m "chore: sync from repo A" || echo "no changes"
+
+      - name: Push to repo B
+        run: |
+          git remote add target https://${{ secrets.REPO_B_TOKEN }}@github.com/hali1814/teleheath-fe.git
+          git push target HEAD:master --force
