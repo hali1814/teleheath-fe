@@ -49,7 +49,7 @@ export default function BranchPopUp({
     <>
       <div
         className="flex items-center gap-[16px] rounded-[12px] bg-white p-[16px]"
-        onClick={() => setOpen(true)}
+        onClick={() => (branchCount > 0 ? setOpen(true) : undefined)}
       >
         <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-[#ED2630]/10">
           <Icon name="hospital" className="w-[20px] h-[20px] text-primary" />

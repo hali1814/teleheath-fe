@@ -13,6 +13,11 @@ export const TOP_HOSPITAL_PAGINATION = {
   size: 5,
 }
 
+export const ALL_SPECIALTY_PAGINATION = {
+  page: 0,
+  size: 6,
+}
+
 export const SPECIALIZED_PACKAGE_PAGINATION = {
   page: 0,
   size: 5,
@@ -20,5 +25,5 @@ export const SPECIALIZED_PACKAGE_PAGINATION = {
 
 export const FEATURED_DOCTOR_PAGINATION = {
   page: 0,
-  size: 5,
+  size: 10000,
 }

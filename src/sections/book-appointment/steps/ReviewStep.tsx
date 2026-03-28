@@ -128,7 +128,7 @@ export function ReviewStep() {
     specialty,
     doctor,
     hospital,
-    // package,
+    packageData,
     patientProfile,
     appointmentDate,
     startTime,
@@ -140,6 +140,7 @@ export function ReviewStep() {
     setData,
     calcFeeInfo,
   } = useBookingStore()
+  console.log(doctor)
 
   const { data } = useGetListServiceQuery({
     params: {
@@ -153,7 +154,9 @@ export function ReviewStep() {
   const consultationFee =
     bookingType === 'DOCTOR'
       ? (doctor?.consultationFee ?? 0)
-      : (hospital?.consultationFee ?? 0)
+      : bookingType === 'PACKAGE'
+        ? (packageData?.price ?? 0)
+        : (branch?.depositFee ?? 0)
 
   useEffect(() => {
     const list = data?.data ?? EMPTY_SERVICES
@@ -243,10 +246,7 @@ export function ReviewStep() {
                       i18n.language as AppLanguage,
                     )}
                   </Text>
-                  <Text
-                    size="sm_12"
-                    className="leading-[1.3] text-muted-foreground"
-                  >
+                  <Text size="sm_12" className="leading-[1.3] text-[#D33131]">
                     {doctor?.specialties?.[0]?.name}
                   </Text>
                   <div className="flex items-center gap-[8px]">
@@ -256,6 +256,73 @@ export function ReviewStep() {
                     />
                     <Text className="font-medium leading-normal text-[#333333]">
                       Consultation: {formatPrice(doctor?.consultationFee ?? 0)}
+                    </Text>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {bookingType === 'PACKAGE' && (
+          <>
+            <div className="flex items-center px-[30px] py-[16px] rounded-[48px] bg-[#ED26300D] border-2 border-[#ED263033]">
+              <div className="flex-1 flex flex-col gap-[6px]">
+                <Text size="sm_12" color="secondary" className="leading-[1.3]">
+                  BOOK BY PACKAGE
+                </Text>
+                <Text className="leading-[1.2] font-semibold text-[#333333]">
+                  {getLocalizedTextByLang(
+                    packageData?.name ?? '',
+                    '',
+                    '',
+                    i18n.language as AppLanguage,
+                  )}
+                </Text>
+              </div>
+              <div
+                className="
+            w-[28px] h-[28px] rounded-full bg-[#D33131] text-white border-2
+         border-white/30 flex items-center justify-center"
+              >
+                <Icon
+                  name="medical_web_service_solid"
+                  className="w-[10px] h-[10px] text-white"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white">
+              <Text size="lg_16" className="leading-[1.2] font-semibold">
+                Selected Package
+              </Text>
+              <div className="flex items-center gap-[16px]">
+                <Image
+                  src={packageData?.imageUrl ?? ''}
+                  alt={getLocalizedTextByLang(
+                    packageData?.name ?? '',
+                    '',
+                    '',
+                    i18n.language as AppLanguage,
+                  )}
+                  className="w-[57px] h-[57px] rounded-full"
+                />
+                <div className="flex flex-col gap-[10px]">
+                  <Text className="leading-normal font-medium text-[#333333]">
+                    {getLocalizedTextByLang(
+                      packageData?.name ?? '',
+                      '',
+                      '',
+                      i18n.language as AppLanguage,
+                    )}
+                  </Text>
+                  <div className="flex items-center gap-[8px]">
+                    <Icon
+                      name="money"
+                      className="w-[16px] h-[16px] text-primary"
+                    />
+                    <Text className="font-medium leading-normal text-[#333333]">
+                      {formatPrice(packageData?.price ?? 0)}
                     </Text>
                   </div>
                 </div>

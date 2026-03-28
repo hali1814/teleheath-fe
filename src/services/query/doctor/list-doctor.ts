@@ -11,6 +11,7 @@ interface ListDoctorRequest extends IPagingRequest {
   consultationType?: string
   priceRange?: string
   keyword?: string
+  topOnly?: boolean
 }
 
 export interface ListDoctorResponse extends IPagingResponse<Doctor> {}

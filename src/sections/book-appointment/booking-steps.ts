@@ -7,7 +7,6 @@ import {
   PatientStep,
 } from '#/sections/book-appointment/steps'
 import { ReviewStep } from '#/sections/book-appointment/steps/ReviewStep'
-import { ScheduleStepByDoctor } from './steps/ScheduleStepByDoctor'
 
 export type BookingStepConfig = {
   title: string
@@ -53,7 +52,7 @@ export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
   },
   {
     title: 'Select schedule',
-    component: ScheduleStepByDoctor,
+    component: ScheduleStep,
     validate: (s) => !!s.appointmentDate && !!s.startTime && !!s.endTime,
   },
   {
@@ -73,7 +72,7 @@ export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
 export const BOOKING_STEPS_PACKAGE: BookingStepConfig[] = [
   {
     title: 'Select location',
-    component: () => LocationStep({ type: 'HOSPITAL' }),
+    component: () => LocationStep({ type: 'PACKAGE' }),
     validate: (s) => !!s.branch,
   },
   {

@@ -26,13 +26,11 @@ function RouteComponent() {
       },
     })
 
+  if (!hospitalData) return null
+
   return (
     <div className="pb-[100px]">
-      <HospitalDetailHeader
-        thumbnail={hospitalData?.thumbnailUrl ?? ''}
-        name={hospitalData?.nameVi ?? ''}
-        website={hospitalData?.website ?? ''}
-      />
+      <HospitalDetailHeader {...hospitalData} />
       <div className="flex flex-col gap-[16px] p-[16px]">
         <GalleryImage images={hospitalData?.gallery ?? []} />
         <AboutHospital aboutUs={hospitalData?.description ?? ''} />

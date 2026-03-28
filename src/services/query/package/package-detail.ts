@@ -3,7 +3,7 @@ import { http, type HttpCommonResponse } from '#/services/network/http-request'
 import type { Package } from '#/types/package'
 
 interface PackageDetailRequest {
-  packageId: string
+  packageId: number
 }
 
 const getPackageDetail = async (

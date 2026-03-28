@@ -48,6 +48,10 @@ export interface Branch {
   lng: number
   workingHours: WorkingHour[]
   status: 'ACTIVE' | 'INACTIVE' | string
+  depositRequired: boolean
+  depositFee: number | null
+  emergencySupport: boolean
+  additionalServices: Service[]
 }
 
 export interface Service {

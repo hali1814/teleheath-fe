@@ -36,7 +36,6 @@ export default function BookingPage({
 
   const onDoctorDetailSuccess = useCallback(
     (res: HttpCommonResponse<Doctor>) => {
-      console.log(res.data)
       setData({
         bookingType: 'DOCTOR',
         doctor: res.data,
@@ -59,7 +58,7 @@ export default function BookingPage({
     (res: HttpCommonResponse<Package>) => {
       setData({
         bookingType: 'PACKAGE',
-        package: res.data,
+        packageData: res.data,
       })
     },
     [setData],
@@ -78,7 +77,7 @@ export default function BookingPage({
   })
 
   useGetPackageDetailQuery({
-    params: { packageId: packageParam ?? '' },
+    params: { packageId: Number(packageParam) ?? 0 },
     enabled: isPackage && !!packageParam,
     onSuccess: onPackageDetailSuccess,
   })

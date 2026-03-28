@@ -1,16 +1,22 @@
 import { cn } from '#/lib/utils'
+import { useGetCountriesQuery } from '#/services/query/profile/getCountry'
+import { useTranslation } from 'react-i18next'
 import { Icon } from './icon'
 import Text from './text'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
+import type { AppLanguage } from '#/i18n'
+import { useAppStore } from '#/stores/app'
 
-export default function CountryTab({
-  tabs,
-  value,
-  onChange,
-}: {
-  tabs: { value: string; label: string }[]
-  value: string
-  onChange: (value: string) => void
-}) {
+export default function CountryTab() {
+  const { i18n } = useTranslation()
+  const { activeCountry, setActiveCountry } = useAppStore()
+
+  const { data: countriesData } = useGetCountriesQuery({
+    params: {},
+  })
+
+  const countries = countriesData?.data || []
+
   return (
     <div
       className="w-full h-[45px] flex items-center justify-between rounded-[30px] bg-secondary/5 px-[4px]"
@@ -18,25 +24,32 @@ export default function CountryTab({
         boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.05) inset',
       }}
     >
-      {tabs.map((tab) => (
+      {countries.map((country) => (
         <div
-          key={tab.value}
+          key={country.code}
           className={cn(
             'h-[37px] flex-1 flex items-center justify-center gap-[6px] rounded-[30px]',
-            tab.value === value ? 'bg-white' : '',
+            country.code === activeCountry ? 'bg-white' : '',
           )}
           style={{
             boxShadow:
-              tab.value === value ? '0px 1px 2px -1px rgba(0, 0, 0, 0.1)' : '',
+              country.code === activeCountry
+                ? '0px 1px 2px -1px rgba(0, 0, 0, 0.1)'
+                : '',
           }}
-          onClick={() => onChange(tab.value)}
+          onClick={() => setActiveCountry(country.code as 'KH' | 'VN')}
         >
           <Icon name="map_marker" className="w-[14px] h-[14px] text-primary" />
           <Text
             size="base_14"
             className="font-medium leading-normal text-center text-primary"
           >
-            {tab.label}
+            {getLocalizedTextByLang(
+              country.nameVi,
+              country.nameKh,
+              country.nameEn,
+              i18n.language as AppLanguage,
+            )}
           </Text>
         </div>
       ))}

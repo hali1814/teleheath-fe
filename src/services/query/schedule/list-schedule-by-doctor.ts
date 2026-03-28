@@ -8,14 +8,14 @@ interface ListScheduleByDoctorRequest {
 }
 
 interface ScheduleByDoctor {
-  doctorId: string
-  doctorName: string
-  doctorAvatarUrl: string
-  scheduleDate: string
   startTime: string
   endTime: string
   status: 'AVAILABLE' | 'FULL'
-  price: number
+  availableSlots: number
+  doctors: Array<{
+    doctorId: string
+    nameVi: string
+  }>
 }
 
 export interface ListScheduleByDoctorResponse {

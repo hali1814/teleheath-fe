@@ -3,13 +3,16 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 import BottomNavigation from '#/components/BottomNavigation'
 import { useState } from 'react'
 import PopupAds from '#/sections/home/PopupAds'
+import { FloatChatAI } from '#/sections/home/FloatChatAI'
+import { useAppStore } from '#/stores/app'
 
 export const Route = createFileRoute('/app/home')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const [isOpen, setIsOpen] = useState(true)
+  const { popup, setPopup } = useAppStore()
+
   return (
     <>
       <Header isHome />
@@ -17,7 +20,8 @@ function RouteComponent() {
         <Outlet />
       </div>
       <BottomNavigation />
-      <PopupAds isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <FloatChatAI />
+      <PopupAds isOpen={popup} onClose={() => setPopup(false)} />
     </>
   )
 }

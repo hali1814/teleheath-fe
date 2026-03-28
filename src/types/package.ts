@@ -1,4 +1,12 @@
 import type { Country } from './country'
+import type { Branch } from './hospital'
+
+export interface WorkingHour {
+  day: string // "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"
+  open: boolean
+  openTime: string | null // e.g. "07:00" or null if closed
+  closeTime: string | null // e.g. "17:00" or null if closed
+}
 
 export interface Hospital {
   hospitalId: string
@@ -7,6 +15,7 @@ export interface Hospital {
   country: Country
   logoUrl: string
   branchCount: number
+  branches: Branch[]
 }
 
 export interface PackageInclusion {
@@ -23,7 +32,7 @@ export interface Package {
   durationMinutes: number
   imageUrl: string
   countries: Country[]
-  hospitals: Hospital[]
+  hospital: Hospital
   inclusions: PackageInclusion[]
   active: boolean
 }

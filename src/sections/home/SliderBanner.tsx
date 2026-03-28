@@ -23,9 +23,9 @@ export type CarouselImageItem = {
 type CarouselProps = {
   className?: string
   trackClassName?: string
-  /** Khoảng cách giữa các card (px) */
+  /** Khoảng cách giữa các card (px). Mặc định 8 — mỗi slide vẫn full bề ngang vùng nhìn thấy */
   gap?: number
-  /** Padding ngang của vùng cuộn (px) — mobile: nên ≥ 16 để cân với layout */
+  /** Padding ngang track (px). Mặc định 0 — card full theo khối cha (vd đã có px ở layout). */
   paddingX?: number
   hideScrollbar?: boolean
   /** Nút trước/sau (mặc định ẩn trên mobile) */
@@ -35,6 +35,7 @@ type CarouselProps = {
   items?: CarouselImageItem[]
   slideClassName?: string
   classNameImage?: string
+  /** Chiều cao ảnh (slide cố định theo chiều cao này) */
   imageHeight?: string
   children?: ReactNode
 }
@@ -48,21 +49,21 @@ function getSlideCount(
 }
 
 /**
- * Carousel cuộn ngang, tối ưu mobile (snap, swipe, không scrollbar).
- * Indicator: slide đang xem = pill rộng màu primary; còn lại = chấm tròn nhạt.
+ * Carousel cuộn ngang: mỗi card **full width** vùng nhìn thấy, `gap` giữa các slide (mặc định 8px),
+ * chiều cao ảnh mặc định **180px**. Indicator: slide đang xem = pill; còn lại = chấm nhạt.
  */
 export default function Carousel({
   className,
   trackClassName,
-  gap = 12,
-  paddingX = 16,
+  gap = 8,
+  paddingX = 0,
   hideScrollbar = true,
   showArrows = false,
   showIndicators,
   items,
   slideClassName,
   classNameImage,
-  imageHeight = 'h-[160px]',
+  imageHeight = 'h-[180px]',
   children,
 }: CarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null)
@@ -74,8 +75,7 @@ export default function Carousel({
     [items, children],
   )
 
-  const indicatorsOn =
-    showIndicators !== false && slideCount > 1
+  const indicatorsOn = showIndicators !== false && slideCount > 1
 
   const updateActiveFromScroll = useCallback(() => {
     const root = trackRef.current
@@ -128,33 +128,36 @@ export default function Carousel({
     return () => ro?.disconnect()
   }, [updateActiveFromScroll])
 
-  const scrollByDir = useCallback((dir: -1 | 1) => {
-    const el = trackRef.current
-    if (!el) return
-    const delta = Math.max(el.clientWidth * 0.72, 200) * dir
-    el.scrollBy({ left: delta, behavior: 'smooth' })
-  }, [])
-
-  const scrollToIndex = useCallback(
-    (index: number) => {
-      const root = trackRef.current
-      if (!root) return
-      const slides = root.querySelectorAll<HTMLElement>('[data-carousel-slide]')
-      if (index < 0 || index >= slides.length) return
-      const slide = slides[index]
-
-      const slideLeft = slide.offsetLeft
-      const slideW = slide.offsetWidth
-      const trackW = root.clientWidth
-      const target = slideLeft - (trackW - slideW) / 2
-      const maxScroll = root.scrollWidth - trackW
-      root.scrollTo({
-        left: Math.min(maxScroll, Math.max(0, target)),
-        behavior: 'smooth',
-      })
+  const scrollByDir = useCallback(
+    (dir: -1 | 1) => {
+      const el = trackRef.current
+      if (!el) return
+      const first = el.querySelector<HTMLElement>('[data-carousel-slide]')
+      const w = first?.offsetWidth ?? el.clientWidth
+      // Một bước = rộng slide + gap (flex gap không tính trong offsetWidth)
+      const step = w + gap
+      el.scrollBy({ left: step * dir, behavior: 'smooth' })
     },
-    [],
+    [gap],
   )
+
+  const scrollToIndex = useCallback((index: number) => {
+    const root = trackRef.current
+    if (!root) return
+    const slides = root.querySelectorAll<HTMLElement>('[data-carousel-slide]')
+    if (index < 0 || index >= slides.length) return
+    const slide = slides[index]
+
+    const slideLeft = slide.offsetLeft
+    const slideW = slide.offsetWidth
+    const trackW = root.clientWidth
+    const target = slideLeft - (trackW - slideW) / 2
+    const maxScroll = root.scrollWidth - trackW
+    root.scrollTo({
+      left: Math.min(maxScroll, Math.max(0, target)),
+      behavior: 'smooth',
+    })
+  }, [])
 
   const content =
     items && items.length > 0
@@ -162,21 +165,22 @@ export default function Carousel({
           <CarouselSlide
             key={item.id}
             className={cn(
-              'w-[min(92vw,300px)] overflow-hidden rounded-[16px] bg-muted/30 shadow-sm sm:w-[min(88vw,280px)]',
+              'box-border w-full min-w-full shrink-0 basis-full overflow-hidden rounded-[16px] bg-muted/30 shadow-sm',
+              imageHeight,
               slideClassName,
             )}
           >
             <Image
               src={item.src}
               alt={item.alt}
-              className={cn('w-full object-cover', imageHeight, classNameImage)}
+              className={cn('h-full w-full object-cover', classNameImage)}
             />
           </CarouselSlide>
         ))
       : children
 
   return (
-    <div className={cn('relative w-full', className)}>
+    <div className={cn('relative w-full min-w-0', className)}>
       {showArrows && (
         <>
           <button
@@ -228,7 +232,7 @@ export default function Carousel({
 
       {indicatorsOn && (
         <div
-          className="mt-3 flex items-center justify-center gap-2 px-2"
+          className="mt-3 flex items-center justify-center gap-[6px] px-2"
           role="group"
           aria-label="Carousel pagination"
         >
@@ -242,7 +246,7 @@ export default function Carousel({
                 aria-label={`Go to slide ${i + 1} of ${slideCount}`}
                 onClick={() => scrollToIndex(i)}
                 className={cn(
-                  'flex min-h-[44px] min-w-[44px] items-center justify-center p-2',
+                  'flex items-center justify-center p-2',
                   '-m-2 touch-manipulation',
                 )}
               >
@@ -250,8 +254,8 @@ export default function Carousel({
                   className={cn(
                     'rounded-full transition-[width,background-color] duration-300 ease-out',
                     active
-                      ? 'h-2 w-6 bg-primary'
-                      : 'h-2 w-2 bg-[#FADDDD]',
+                      ? 'h-[4px] w-[24px] bg-[#D33131]'
+                      : 'h-[4px] w-[8px] bg-[#D3313133]',
                   )}
                 />
               </button>
@@ -263,7 +267,7 @@ export default function Carousel({
   )
 }
 
-/** Mỗi card: snap + `data-carousel-slide` để tính indicator */
+/** Mỗi card: full width track + snap + `data-carousel-slide` */
 export function CarouselSlide({
   className,
   children,
@@ -274,7 +278,10 @@ export function CarouselSlide({
   return (
     <div
       data-carousel-slide
-      className={cn('shrink-0 snap-start snap-always', className)}
+      className={cn(
+        'box-border w-full min-w-full shrink-0 basis-full snap-start snap-always',
+        className,
+      )}
     >
       {children}
     </div>

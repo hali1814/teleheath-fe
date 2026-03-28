@@ -27,7 +27,7 @@ export type BookingState = {
   branch?: Branch
   doctor?: Partial<Doctor>
   specialty?: Specialty
-  package?: Package
+  packageData?: Package
   bookingType?: 'HOSPITAL' | 'PACKAGE' | 'DOCTOR'
   patientProfile?: ListFamilyPatient
   appointmentDate?: Date
@@ -128,7 +128,7 @@ export const useBookingStore = create<BookingState>((set) => ({
       branch: undefined,
       doctor: undefined,
       specialty: undefined,
-      package: undefined,
+      packageData: undefined,
       bookingType: undefined,
       patientProfile: undefined,
       appointmentDate: undefined,

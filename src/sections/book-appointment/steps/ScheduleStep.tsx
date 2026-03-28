@@ -9,6 +9,8 @@ import { keepPreviousData } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { checkEmptySchedule } from '#/utils/schedule.util'
 import { EmptyState } from '#/sections/search'
+import { useGetListScheduleByDoctorQuery } from '#/services/query/schedule/list-schedule-by-doctor'
+import { useGetListScheduleByPackageQuery } from '#/services/query/schedule/list-schedule-by-package'
 
 const emptySchedules: ListScheduleByBranchResponse = {
   morning: [],
@@ -17,6 +19,7 @@ const emptySchedules: ListScheduleByBranchResponse = {
 
 export function ScheduleStep() {
   const {
+    bookingType,
     branch,
     specialty,
     doctor,
@@ -24,6 +27,7 @@ export function ScheduleStep() {
     startTime,
     endTime,
     setData,
+    packageData,
   } = useBookingStore()
 
   const dateParam =
@@ -31,16 +35,44 @@ export function ScheduleStep() {
       ? formatDate(appointmentDate, DATE_TIME_TYPE.YYYY_MM_DD)
       : undefined
 
-  const { data: { data: schedules } = { data: emptySchedules } } =
+  const { data: { data: schedulesBranch } = { data: emptySchedules } } =
     useGetListScheduleByBranchQuery({
       params: {
         branchId: branch?.branchId ?? '',
         specialtyId: specialty?.id ?? 1,
         date: dateParam,
       },
-      enabled: !!branch?.branchId && !!dateParam,
+      enabled: !!branch?.branchId && !!dateParam && bookingType === 'HOSPITAL',
       placeholderData: keepPreviousData,
     })
+
+  const { data: { data: schedulesDoctor } = { data: emptySchedules } } =
+    useGetListScheduleByDoctorQuery({
+      params: {
+        doctorId: doctor?.doctorId ?? '',
+        date: dateParam,
+        branchId: branch?.branchId ?? '',
+      },
+      enabled: !!doctor?.doctorId && !!dateParam && bookingType === 'DOCTOR',
+      placeholderData: keepPreviousData,
+    })
+
+  const { data: { data: schedulesPackage } = { data: emptySchedules } } =
+    useGetListScheduleByPackageQuery({
+      params: {
+        packageId: packageData?.id ?? 0,
+        date: dateParam,
+      },
+      enabled: !!packageData?.id && !!dateParam && bookingType === 'PACKAGE',
+      placeholderData: keepPreviousData,
+    })
+
+  const schedules =
+    bookingType === 'HOSPITAL'
+      ? schedulesBranch
+      : bookingType === 'DOCTOR'
+        ? schedulesDoctor
+        : schedulesPackage
 
   const selectedDateLabel =
     appointmentDate != null
@@ -99,40 +131,60 @@ export function ScheduleStep() {
       </div>
       {!isEmptySchedule ? (
         <>
-          <SlotTimeList
-            title="Morning sessions"
-            slotTimes={slotTimesMorning}
-            selectedSlot={{
-              startTime: startTime ?? '',
-              endTime: endTime ?? '',
-              doctor: doctor ?? { doctorId: '', nameVi: '' },
-              status: 'AVAILABLE',
-            }}
-            setSelectedSlot={(slot) =>
-              setData({
-                startTime: slot?.startTime ?? '',
-                endTime: slot?.endTime ?? '',
-                doctor: slot?.doctor ?? { doctorId: '', nameVi: '' },
-              })
-            }
-          />
-          <SlotTimeList
-            title="Afternoon sessions"
-            slotTimes={slotTimesAfternoon}
-            selectedSlot={{
-              startTime: startTime ?? '',
-              endTime: endTime ?? '',
-              doctor: doctor ?? { doctorId: '', nameVi: '' },
-              status: 'AVAILABLE',
-            }}
-            setSelectedSlot={(slot) =>
-              setData({
-                startTime: slot?.startTime ?? '',
-                endTime: slot?.endTime ?? '',
-                doctor: slot?.doctor ?? { doctorId: '', nameVi: '' },
-              })
-            }
-          />
+          {schedules?.morning.length > 0 && (
+            <SlotTimeList
+              title="Morning sessions"
+              slotTimes={slotTimesMorning}
+              selectedSlot={{
+                startTime: startTime ?? '',
+                endTime: endTime ?? '',
+                doctor: doctor ?? {
+                  doctorId: '',
+                  nameEn: '',
+                  nameVi: '',
+                  nameKh: '',
+                },
+                status: 'AVAILABLE',
+              }}
+              setSelectedSlot={(slot) =>
+                setData({
+                  startTime: slot?.startTime ?? '',
+                  endTime: slot?.endTime ?? '',
+                  doctor: {
+                    ...doctor,
+                    ...slot?.doctor,
+                  },
+                })
+              }
+            />
+          )}
+          {schedules?.afternoon.length > 0 && (
+            <SlotTimeList
+              title="Afternoon sessions"
+              slotTimes={slotTimesAfternoon}
+              selectedSlot={{
+                startTime: startTime ?? '',
+                endTime: endTime ?? '',
+                doctor: doctor ?? {
+                  doctorId: '',
+                  nameEn: '',
+                  nameVi: '',
+                  nameKh: '',
+                },
+                status: 'AVAILABLE',
+              }}
+              setSelectedSlot={(slot) =>
+                setData({
+                  startTime: slot?.startTime ?? '',
+                  endTime: slot?.endTime ?? '',
+                  doctor: {
+                    ...doctor,
+                    ...slot?.doctor,
+                  },
+                })
+              }
+            />
+          )}
         </>
       ) : (
         <EmptyState className="h-auto max-w-[300px] mx-auto">
