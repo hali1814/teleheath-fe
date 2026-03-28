@@ -1,5 +1,5 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
-import type { IPagingResponse } from '#/model/paging.model'
+import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 export type AppointmentStatus =
@@ -10,8 +10,10 @@ export type AppointmentStatus =
   | 'CANCELLED'
   | 'NO_SHOW'
 
-export interface MyAppointmentsRequest {
+export interface MyAppointmentsRequest extends IPagingRequest {
   status?: AppointmentStatus
+  fromDate?: string
+  toDate?: string
 }
 
 interface AppointmentHospital {

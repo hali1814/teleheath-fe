@@ -18,8 +18,33 @@ function RouteComponent() {
     params: { id: parseInt(id) },
   })
 
+  const status = appointmentData?.data?.status
+  const showCancelledBanner = status === 'CANCELLED'
+  const showCompletedBanner = status === 'COMPLETED'
+
   return (
     <div className="p-4 pb-20">
+      {(showCancelledBanner || showCompletedBanner) && (
+        <div className="mb-4 flex items-start gap-3 rounded-[12px] bg-[#FFF1F0] px-4 py-3">
+          <Icon
+            name={
+              showCancelledBanner
+                ? 'appointment_cancel'
+                : 'appointment_clock_detail'
+            }
+            className="mt-0.5 size-[17px] shrink-0"
+            aria-hidden
+          />
+          <Text
+            size="base_14"
+            className="font-medium leading-normal text-[#E22A36]"
+          >
+            {showCancelledBanner
+              ? t('detailBannerCancelled')
+              : t('detailBannerCompleted')}
+          </Text>
+        </div>
+      )}
       <Header appointment={appointmentData?.data} />
       <AppointmentInformation appointment={appointmentData?.data} />
 

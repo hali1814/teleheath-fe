@@ -285,6 +285,7 @@
     "completed": "Completed",
     "cancelled": "Cancelled",
     "waitingConfirm": "Waiting Confirm",
+    "pending": "Pending",
     "noShow": "No-show",
     "paymentDetails": "Payment Details",
     "consultationFee": "Consultation Fee",
@@ -294,6 +295,8 @@
     "noAppointmentYet": "No appointment yet.",
     "patientNote": "Patient note:",
     "no": "No",
-    "yes": "Yes"
+    "yes": "Yes",
+    "detailBannerCancelled": "Reason for cancellation",
+    "detailBannerCompleted": "This appointment has already ended."
   }
 }

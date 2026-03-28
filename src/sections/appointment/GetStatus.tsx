@@ -24,7 +24,7 @@ export default function GetStatus({ status }: { status: string }) {
     CANCELLED: t('cancelled'),
     COMPLETED: t('completed'),
     NO_SHOW: t('noShow'),
-    PENDING: 'PENDING',
+    PENDING: t('pending'),
     WAITING_CONFIRM: t('waitingConfirm'),
   }
 

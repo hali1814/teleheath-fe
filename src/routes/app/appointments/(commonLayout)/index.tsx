@@ -7,6 +7,7 @@ import Text from '#/components/text'
 import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appointments'
 import LoadingBlocking from '#/components/LoadingBlocking'
 import { groupAppointmentsByUpcomingWindow } from '#/utils'
+import dayjs from 'dayjs'
 
 export const Route = createFileRoute('/app/appointments/(commonLayout)/')({
   component: RouteComponent,
@@ -19,6 +20,10 @@ function RouteComponent() {
     useGetMyAppointmentsQuery({
       params: {
         status: 'CONFIRMED',
+        page: 0,
+        size: 1805,
+        fromDate: dayjs().format('YYYY-MM-DD'),
+        sortDir: 'DESC',
       },
     })
 
@@ -51,12 +56,16 @@ function RouteComponent() {
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: (index) => (rows[index]?.kind === 'title' ? 36 : 162),
-    overscan: 6,
+    // Title: lg_16 + pb-3 (12) on row wrapper. Item: card ~72px avatar + p-4 + text + 36px button + pb-3; 150 was too low → layout jump before measureElement.
+    estimateSize: (index) => (rows[index]?.kind === 'title' ? 52 : 210),
+    overscan: 8,
   })
 
   return (
-    <div ref={parentRef} className="px-4 pb-4 mt-4">
+    <div
+      ref={parentRef}
+      className="mt-4 max-h-[calc(100dvh-200px)] overflow-y-auto px-4 pb-4"
+    >
       <div
         className="relative w-full"
         style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
@@ -66,8 +75,10 @@ function RouteComponent() {
 
           return (
             <div
-              key={row.id}
-              className="absolute left-0 top-0 w-full"
+              key={virtualRow.key}
+              data-index={virtualRow.index}
+              ref={rowVirtualizer.measureElement}
+              className="absolute left-0 top-0 w-full pb-3"
               style={{ transform: `translateY(${virtualRow.start}px)` }}
             >
               {row.kind === 'title' ? (

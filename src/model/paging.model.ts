@@ -2,7 +2,7 @@ export interface IPagingRequest {
   page: number
   size: number
   sortBy?: string
-  sortDir?: 'asc' | 'desc'
+  sortDir?: 'ASC' | 'DESC'
 }
 
 export interface IPagingResponse<T> {
