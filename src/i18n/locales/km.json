@@ -284,6 +284,7 @@
     "completed": "បានបញ្ចប់",
     "cancelled": "បានបោះបង់",
     "waitingConfirm": "កំពុងរង់ចាំការបញ្ជាក់",
+    "pending": "កំពុងរង់ចាំ",
     "noShow": "មិនបានមក",
     "paymentDetails": "ព័ត៌មានលម្អិតការទូទាត់",
     "consultationFee": "ថ្លៃពិគ្រោះ",
@@ -293,6 +294,8 @@
     "noAppointmentYet": "មិនទាន់មានការណាត់ជួបទេ។",
     "patientNote": "កំណត់ចំណាំអ្នកជំងឺ៖",
     "no": "ទេ",
-    "yes": "បាទ/ចាស"
+    "yes": "បាទ/ចាស",
+    "detailBannerCancelled": "មូលហេតុនៃការលុបចោល",
+    "detailBannerCompleted": "ការណាត់ជួបនេះបានបញ្ចប់រួចហើយ។"
   }
 }

@@ -95,7 +95,8 @@ export default function AppointmentInformation({
             size="base_14"
             className="font-normal leading-[150%] text-text-primary"
           >
-            {appointment?.branch?.address}
+            {JSON.parse(appointment?.branch?.address ?? '{}')?.fullAddress ||
+              ''}
           </Text>
           <div className="mt-[2px] flex items-center gap-1">
             <Icon

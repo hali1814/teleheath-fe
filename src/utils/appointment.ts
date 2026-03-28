@@ -127,20 +127,13 @@ export function groupAppointmentsByUpcomingWindow(
     later: [],
   }
 
-  const upcomingOnly = items?.filter((item) => {
+  const upcomingOnly = (items ?? []).filter((item) => {
     const appointmentDay = dayjs(item.appointmentDate).startOf('day')
     if (!appointmentDay.isValid()) return false
     return !appointmentDay.isBefore(today)
   })
 
-  const sorted = [...upcomingOnly].sort((a, b) => {
-    if (a.appointmentDate !== b.appointmentDate) {
-      return a.appointmentDate.localeCompare(b.appointmentDate)
-    }
-    return (a.startTime ?? '').localeCompare(b.startTime ?? '')
-  })
-
-  for (const item of sorted) {
+  for (const item of upcomingOnly) {
     const bucket = getUpcomingBucket(item.appointmentDate, now)
     groupedByBucket[bucket].push(item)
   }

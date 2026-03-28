@@ -77,6 +77,8 @@ import AppointmentLocationIcon from '#/assets/icons/appointment/location.svg?rea
 import AppointmentHospitalIcon from '#/assets/icons/appointment/hospital.svg?react'
 import AppointmentCarIcon from '#/assets/icons/appointment/car.svg?react'
 import AppointmentUserSpIcon from '#/assets/icons/appointment/user-sp.svg?react'
+import AppointmentCancelIcon from '#/assets/icons/appointment/cancel.svg?react'
+import AppointmentClockDetailIcon from '#/assets/icons/appointment/clock-detail-app.svg?react'
 import CircleSolidIcon from '#/assets/icons/common/circle-solid.svg?react'
 import BellCheckIcon from '#/assets/icons/common/bell-check.svg?react'
 import SendCancelFilledIcon from '#/assets/icons/common/send-cancel-filled.svg?react'
@@ -168,6 +170,8 @@ const ICONS_TEMPLATE = {
   hospital_appointment: AppointmentHospitalIcon,
   car_appointment: AppointmentCarIcon,
   user_sp_appointment: AppointmentUserSpIcon,
+  appointment_cancel: AppointmentCancelIcon,
+  appointment_clock_detail: AppointmentClockDetailIcon,
   circle_solid: CircleSolidIcon,
   bell_check: BellCheckIcon,
   send_cancel_filled: SendCancelFilledIcon,

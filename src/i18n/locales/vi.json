@@ -284,6 +284,7 @@
     "completed": "Đã hoàn thành",
     "cancelled": "Đã hủy",
     "waitingConfirm": "Chờ xác nhận",
+    "pending": "Đang chờ",
     "noShow": "Không đến",
     "paymentDetails": "Chi tiết thanh toán",
     "consultationFee": "Phí tư vấn",
@@ -293,6 +294,8 @@
     "noAppointmentYet": "Chưa có lịch hẹn nào.",
     "patientNote": "Ghi chú bệnh nhân:",
     "no": "Không",
-    "yes": "Có"
+    "yes": "Có",
+    "detailBannerCancelled": "Lý do hủy",
+    "detailBannerCompleted": "Cuộc hẹn này đã kết thúc."
   }
 }
