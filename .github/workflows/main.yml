@@ -20,27 +20,19 @@ jobs:
           git config user.name "sync-bot"
           git config user.email "bot@sync.com"
 
-      # 🔥 Check secret có tồn tại không
-      - name: Check token exists
-        run: |
-          if [ -z "${{ secrets.HAOHOA }}" ]; then
-            echo "❌ TOKEN EMPTY"
-            exit 1
-          else
-            echo "✅ TOKEN EXISTS"
-          fi
-
-      # 🔥 Test auth thật sự
+      # 🔥 Debug auth (giữ lại để chắc chắn)
       - name: Debug auth
         run: |
           git ls-remote https://x-access-token:${{ secrets.HAOHOA }}@github.com/hali1814/teleheath-fe.git
 
-      - name: Create extra commit (optional)
+      # 🔥 Commit (có thể xoá nếu không cần)
+      - name: Create extra commit
         run: |
           echo "synced at $(date)" > sync.txt
           git add .
           git commit -m "chore: sync from repo A" || echo "no changes"
 
+      # 🚀 Push chuẩn nhất (không dùng remote nữa)
       - name: Push to repo B
         run: |
           git push https://x-access-token:${{ secrets.HAOHOA }}@github.com/hali1814/teleheath-fe.git HEAD:master --force
