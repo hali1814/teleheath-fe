@@ -1,5 +1,6 @@
 import { useMutation, type UseMutationOptions } from '#/hooks/use-mutation'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
+import type { PatientProfileResponse } from '../profile/getProfile'
 
 export interface AuthCamIDRequest {
   partnerToken: string
@@ -18,7 +19,7 @@ export interface AuthCamIDResponse {
   refreshToken: string
   expiresIn: number
   tokenType: string
-  user: AuthCamIDUser
+  user: PatientProfileResponse
 }
 
 export const authCamID = async (request: AuthCamIDRequest) => {

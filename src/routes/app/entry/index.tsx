@@ -20,7 +20,7 @@ function RouteComponent() {
   const { t } = useTranslation('common')
   const navigate = useNavigate()
   const { search } = useLocation()
-  const searchParams = new URLSearchParams(search)
+  const searchParams = new URLSearchParams(search as Record<string, string>)
   const code = searchParams.get('token')
 
   const [isVerifying, setIsVerifying] = useState(true)
