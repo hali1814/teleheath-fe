@@ -12,7 +12,7 @@ const config = defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://103.173.226.3:8080',
+        target: 'http://teleheath.site/api',
         changeOrigin: true,
       },
     },
@@ -21,7 +21,7 @@ const config = defineConfig({
   preview: {
     proxy: {
       '/api': {
-        target: 'http://103.173.226.3:8080',
+        target: 'http://teleheath.site/api',
         changeOrigin: true,
       },
     },

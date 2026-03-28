@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "http://103.173.226.3:8080/api/:path*"
+      "destination": "http://teleheath.site/api/:path*"
     },
     { "source": "/(.*)", "destination": "/" }
   ]
