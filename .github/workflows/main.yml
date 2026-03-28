@@ -20,10 +20,6 @@ jobs:
           git config user.name "sync-bot"
           git config user.email "bot@sync.com"
 
-      # 🔥 Debug auth (giữ lại để chắc chắn)
-      - name: Debug auth
-        run: |
-          git ls-remote https://x-access-token:${{ secrets.HAOHOA }}@github.com/hali1814/teleheath-fe.git
 
       # 🔥 Commit (có thể xoá nếu không cần)
       - name: Create extra commit
