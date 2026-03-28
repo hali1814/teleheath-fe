@@ -21,6 +21,7 @@ function RouteComponent() {
 
   const navigate = useNavigate()
   const { search } = useLocation()
+
   const searchParams = new URLSearchParams(search as Record<string, string>)
 
   ////
