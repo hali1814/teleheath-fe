@@ -20,6 +20,7 @@ function RouteComponent() {
   const { t } = useTranslation('common')
 
   const navigate = useNavigate()
+
   const { search } = useLocation()
 
   const searchParams = new URLSearchParams(search as Record<string, string>)
