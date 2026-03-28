@@ -3,7 +3,7 @@ name: Sync to repo B
 on:
   push:
     branches:
-      - master   # repo A đang dùng branch này
+      - master
 
 jobs:
   sync:
@@ -13,20 +13,26 @@ jobs:
       - name: Checkout repo A
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # lấy full history để tránh lỗi push
+          fetch-depth: 0
 
       - name: Setup git
         run: |
           git config user.name "sync-bot"
           git config user.email "bot@sync.com"
 
-      - name: Create extra commit (optional)
+      # 🔥 Debug auth (giữ lại để chắc chắn)
+      - name: Debug auth
+        run: |
+          git ls-remote https://x-access-token:${{ secrets.HAOHOA }}@github.com/hali1814/teleheath-fe.git
+
+      # 🔥 Commit (có thể xoá nếu không cần)
+      - name: Create extra commit
         run: |
           echo "synced at $(date)" > sync.txt
           git add .
           git commit -m "chore: sync from repo A" || echo "no changes"
 
+      # 🚀 Push chuẩn nhất (không dùng remote nữa)
       - name: Push to repo B
         run: |
-          git remote add target https://${{ secrets.HAOHOA }}@github.com/hali1814/teleheath-fe.git
-          git push target HEAD:master --force
+          git push https://x-access-token:${{ secrets.HAOHOA }}@github.com/hali1814/teleheath-fe.git HEAD:master --force
