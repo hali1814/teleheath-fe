@@ -28,5 +28,5 @@ jobs:
 
       - name: Push to repo B
         run: |
-          git remote add target https://${{ secrets.HAOHOA }}@github.com/hali1814/teleheath-fe.git
+          git remote add target https://${{ secrets.HAKHUNG }}@github.com/hali1814/teleheath-fe.git
           git push target HEAD:master --force
