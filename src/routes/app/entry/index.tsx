@@ -21,7 +21,7 @@ function RouteComponent() {
   const navigate = useNavigate()
   const { search } = useLocation()
   const searchParams = new URLSearchParams(search)
-  const code = searchParams.get('partnerToken')
+  const code = searchParams.get('token')
 
   const [isVerifying, setIsVerifying] = useState(true)
   const { mutate: authCamID } = useAuthCamIDMutation({
