@@ -23,7 +23,7 @@ function getApiBaseURL(): string {
   if (import.meta.env.PROD) {
     return '/api'
   }
-  return 'http://103.173.226.3:8080/api'
+  return 'http://teleheath.site/api'
 }
 
 export const axiosInstance = axios.create({

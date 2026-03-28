@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { useGetListDoctorQuery } from '#/services/query/doctor/list-doctor'
 import CountryTab from '#/components/CountryTab'
 import { useState } from 'react'
+import Carousel from '#/components/Carousel'
 
 export const Route = createFileRoute('/app/home/')({
   component: RouteComponent,
@@ -71,9 +72,24 @@ function RouteComponent() {
         <SearchBar
           isHome
           placeholder={t('searchPlaceholder')}
+          isAutoScroll={true}
           onClick={() => router.navigate({ to: '/app/search' })}
         />
-        <MenuList />
+        {/* <MenuList /> */}
+        {/* <Carousel
+          items={[
+            {
+              id: 1,
+              src: 'https://via.placeholder.com/150',
+              alt: 'Image 1',
+            },
+            {
+              id: 2,
+              src: 'https://via.placeholder.com/150',
+              alt: 'Image 2',
+            },
+          ]}
+        /> */}
         <PremiumService />
         <CountryTab
           value={activeCountry}

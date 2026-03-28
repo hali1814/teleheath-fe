@@ -1,3 +1,4 @@
+import { cn } from '#/lib/utils'
 import { Icon } from './icon'
 import Text from './text'
 
@@ -6,6 +7,7 @@ type Props = {
   placeholder?: string
   autoFocus?: boolean
   isHome?: boolean
+  isAutoScroll?: boolean
   onSearch?: (query: string) => void
   onClick?: () => void
   onClear?: () => void
@@ -16,6 +18,7 @@ export default function SearchBar({
   placeholder = 'Search',
   autoFocus = false,
   isHome = false,
+  isAutoScroll = false,
   onSearch,
   onClick,
   onClear,
@@ -25,12 +28,40 @@ export default function SearchBar({
       <Icon name="search_icon" className="w-[20px] h-[20px]" />
 
       {isHome ? (
-        <Text
-          size="base_14"
-          className="flex-1 text-start text-[#999999] leading-normal truncate"
-        >
-          {placeholder}
-        </Text>
+        <div className="flex min-h-[1.25em] min-w-0 flex-1 flex-col justify-center overflow-hidden text-start">
+          {!isAutoScroll ? (
+            <Text
+              size="base_14"
+              className="text-[#999999] truncate text-start leading-normal"
+            >
+              {placeholder}
+            </Text>
+          ) : (
+            <>
+              <Text
+                size="base_14"
+                className="hidden text-[#999999] motion-reduce:block motion-reduce:truncate"
+              >
+                {placeholder}
+              </Text>
+              <div className="motion-reduce:hidden">
+                <div
+                  className={cn(
+                    'search-bar-placeholder-track',
+                    'search-bar-placeholder-track--scroll',
+                  )}
+                >
+                  <span className="whitespace-nowrap pr-10 text-[14px] leading-normal text-[#999999]">
+                    {placeholder}
+                  </span>
+                  <span className="whitespace-nowrap pr-10 text-[14px] leading-normal text-[#999999]">
+                    {placeholder}
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       ) : (
         <input
           autoFocus={autoFocus}
@@ -47,6 +78,7 @@ export default function SearchBar({
 
       {!isHome && value && (
         <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation()
             onClear?.()
@@ -63,6 +95,7 @@ export default function SearchBar({
       <button
         type="button"
         onClick={onClick}
+        aria-label={placeholder}
         className="
           w-full flex items-center gap-[10px]
           px-[14px] py-[12px]

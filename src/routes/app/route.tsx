@@ -1,5 +1,7 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { getToken } from '#/stores/token'
+import { useState } from 'react'
+import PopupAds from '#/sections/home/PopupAds'
 
 export const Route = createFileRoute('/app')({
   component: App,
@@ -17,9 +19,11 @@ export const Route = createFileRoute('/app')({
 })
 
 function App() {
+  const [isOpen, setIsOpen] = useState(true)
   return (
     <div className="bg-background">
       <Outlet />
+      <PopupAds isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </div>
   )
 }

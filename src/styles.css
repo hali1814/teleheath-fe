@@ -243,6 +243,32 @@ a {
   }
 }
 
+/* SearchBar home: marquee placeholder (phải → trái, hai bản lặp seamless) */
+@keyframes search-bar-placeholder-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.search-bar-placeholder-track {
+  display: flex;
+  width: max-content;
+}
+
+.search-bar-placeholder-track--scroll {
+  animation: search-bar-placeholder-marquee 28s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-bar-placeholder-track--scroll {
+    animation: none;
+  }
+}
+
 :root {
   --sea-ink: #0f172a;
   --sea-ink-soft: #808080;
