@@ -3,7 +3,7 @@ name: Sync to repo B
 on:
   push:
     branches:
-      - master   # repo A đang dùng branch này
+      - master
 
 jobs:
   sync:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repo A
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # lấy full history để tránh lỗi push
+          fetch-depth: 0
 
       - name: Setup git
         run: |
@@ -28,5 +28,5 @@ jobs:
 
       - name: Push to repo B
         run: |
-          git remote add target  https://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@github.com/hali1814/teleheath-fe.git
+          git remote add target https://x-access-token:${{ secrets.HAOHOA }}@github.com/hali1814/teleheath-fe.git
           git push target HEAD:master --force
