@@ -22,7 +22,7 @@ function RouteComponent() {
   const { search } = useLocation()
   const searchParams = new URLSearchParams(search as Record<string, string>)
 
-  //
+  ////
 
   const code = searchParams.get('token')
 
