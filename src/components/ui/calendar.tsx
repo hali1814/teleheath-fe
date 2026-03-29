@@ -43,7 +43,10 @@ function Calendar({
         ...formatters,
       }}
       classNames={{
-        root: cn('w-[300px] max-w-[calc(100vw-32px)]', defaultClassNames.root),
+        root: cn(
+          'w-[300px] max-w-[calc(100vw-32px)] min-h-min shrink-0',
+          defaultClassNames.root,
+        ),
         months: cn(
           'relative flex flex-col gap-4 md:flex-row',
           defaultClassNames.months,
