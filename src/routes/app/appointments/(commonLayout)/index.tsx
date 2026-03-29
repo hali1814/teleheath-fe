@@ -32,10 +32,6 @@ function RouteComponent() {
     return groupAppointmentsByUpcomingWindow(appointments?.data?.content ?? [])
   }, [appointments?.data])
 
-  if (appointments?.data?.content?.length === 0) {
-    return <EmptyAppointment />
-  }
-
   const rows = useMemo(() => {
     return Object.entries(groupedAppointments).flatMap(([key, value]) => {
       if (value.length === 0) return []
@@ -61,6 +57,10 @@ function RouteComponent() {
     estimateSize: (index) => (rows[index]?.kind === 'title' ? 52 : 210),
     overscan: 8,
   })
+
+  if (appointments?.data?.content?.length === 0) {
+    return <EmptyAppointment />
+  }
 
   return (
     <div
