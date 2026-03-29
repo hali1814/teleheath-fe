@@ -1,9 +1,7 @@
 import SearchBar from '#/components/SearchBar'
 import {
-  ALL_SPECIALTY_PAGINATION,
   FEATURED_DOCTOR_PAGINATION,
   SPECIALIZED_PACKAGE_PAGINATION,
-  TOP_HOSPITAL_PAGINATION,
 } from '#/const/pagination'
 import { DoctorLists } from '#/sections/doctor'
 import { HospitalList } from '#/sections/hospital'
@@ -15,7 +13,10 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useGetListDoctorQuery } from '#/services/query/doctor/list-doctor'
 import CountryTab from '#/components/CountryTab'
-import { useState } from 'react'
+import {
+  HomeHorizontalSectionSkeleton,
+  HomeSpecialtyGridSkeleton,
+} from '#/sections/home/HomePageSkeleton'
 import SliderBanner from '#/sections/home/SliderBanner'
 import { useGetTopHospitalsQuery } from '#/services/query/hospital/top-hospitals'
 import ListSpecialty from '#/sections/specialty/ListSpecialty'
@@ -28,6 +29,7 @@ export const Route = createFileRoute('/app/home/')({
 
 function RouteComponent() {
   const { t } = useTranslation(['home', 'common'])
+  const viewAllLabel = t('common:actions.viewAll')
   const router = useRouter()
   const { activeCountry } = useAppStore()
 
@@ -43,21 +45,23 @@ function RouteComponent() {
     gcTime: 1000 * 60 * 30,
   })
 
-  const { data } = useGetTopHospitalsQuery({
+  const { data, isPending: hospitalsPending } = useGetTopHospitalsQuery({
     params: {
       country: activeCountry,
     },
   })
   const topHospitalsData = data?.data || []
 
-  const { data: specialtiesDataResponse } = useGetListSpecialtyQuery({
-    params: {
-      country: activeCountry,
-    },
-  })
+  const { data: specialtiesDataResponse, isPending: specialtiesPending } =
+    useGetListSpecialtyQuery({
+      params: {
+        country: activeCountry,
+      },
+    })
   const specialtiesData = specialtiesDataResponse?.data || []
 
   const {
+    isPending: packagesPending,
     data: { data: { content: packagesData } = { content: [] } } = {
       data: { content: [] },
     },
@@ -70,6 +74,7 @@ function RouteComponent() {
   })
 
   const {
+    isPending: doctorsPending,
     data: { data: { content: doctorsData } = { content: [] } } = {
       data: { content: [] },
     },
@@ -95,7 +100,7 @@ function RouteComponent() {
           items={[
             {
               id: 1,
-              src: '/thumbnail.png',
+              src: '/ads.png',
               alt: 'Image 1',
             },
             {
@@ -108,29 +113,65 @@ function RouteComponent() {
         {/* <PremiumService /> */}
         <CountryTab />
       </div>
-      <div className="flex flex-col gap-[20px] mb-[120px]">
-        {topHospitalsData.length > 0 && (
+      <div
+        className="flex flex-col gap-[20px] mb-[120px]"
+        aria-busy={
+          hospitalsPending ||
+          specialtiesPending ||
+          packagesPending ||
+          doctorsPending
+        }
+      >
+        {hospitalsPending && (
+          <HomeHorizontalSectionSkeleton
+            title={t('topHospitals')}
+            viewAllHref="/app/hospital"
+            viewAllLabel={viewAllLabel}
+          />
+        )}
+        {!hospitalsPending && topHospitalsData.length > 0 && (
           <HospitalList
             title={t('topHospitals')}
             href="/app/hospital"
             hospitals={topHospitalsData}
           />
         )}
-        {specialtiesData.length > 0 && (
+        {specialtiesPending && (
+          <HomeSpecialtyGridSkeleton
+            title={t('specialties')}
+            viewAllHref="/app/specialty"
+            viewAllLabel={viewAllLabel}
+          />
+        )}
+        {!specialtiesPending && specialtiesData.length > 0 && (
           <ListSpecialty
             title={t('specialties')}
             href="/app/specialty"
             specialties={specialtiesData}
           />
         )}
-        {packagesData.length > 0 && (
+        {packagesPending && (
+          <HomeHorizontalSectionSkeleton
+            title={t('specializedPackages')}
+            viewAllHref="/app/package"
+            viewAllLabel={viewAllLabel}
+          />
+        )}
+        {!packagesPending && packagesData.length > 0 && (
           <PackageList
             title={t('specializedPackages')}
             href="/app/package"
             packages={packagesData}
           />
         )}
-        {doctorsData.length > 0 && (
+        {doctorsPending && (
+          <HomeHorizontalSectionSkeleton
+            title={t('featuredDoctors')}
+            viewAllHref="/app/doctor"
+            viewAllLabel={viewAllLabel}
+          />
+        )}
+        {!doctorsPending && doctorsData.length > 0 && (
           <DoctorLists
             title={t('featuredDoctors')}
             href="/app/doctor"
