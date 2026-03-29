@@ -20,6 +20,7 @@ import {
   minMaxToPriceRangeKey,
   priceRangeKeyToMinMax,
 } from '#/sections/package/package-filter-price'
+import { EmptyState } from '#/sections/search'
 
 const optionalTrim = (s: string | undefined) => s?.trim() || undefined
 
@@ -175,23 +176,26 @@ function RouteComponent() {
             aria-label={t('filter.title')}
           >
             <Icon name="filter" className="text-icon" />
-            {activeFilterCount > 0 && (
-              <Badge className="absolute -top-2 -right-2 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
-                <Text size="xs_10" className="leading-[1.3] text-white">
-                  {activeFilterCount}
-                </Text>
-              </Badge>
-            )}
+            <Badge className="absolute -top-2 -right-2 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
+              <Text size="xs_10" className="leading-[1.3] text-white">
+                {activeFilterCount}
+              </Text>
+            </Badge>
           </button>
         </div>
-        {doctorsData.length > 0 &&
-          doctorsData.map((doctor) => (
-            <DoctorCard
-              key={doctor.doctorId}
-              variant="horizontal"
-              {...doctor}
-            />
-          ))}
+        {doctorsData.length > 0 ? (
+          <>
+            {doctorsData.map((doctor) => (
+              <DoctorCard
+                key={doctor.doctorId}
+                variant="horizontal"
+                {...doctor}
+              />
+            ))}
+          </>
+        ) : (
+          <EmptyState>No doctors found</EmptyState>
+        )}
       </div>
       <ModalFilterDoctor
         open={open}

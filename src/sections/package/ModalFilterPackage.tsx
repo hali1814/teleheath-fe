@@ -204,6 +204,7 @@ export default function ModalFilterPackage({
             type="button"
             className="h-[45px] rounded-[40px] px-[32px] py-[12px]"
             onClick={handleApply}
+            disabled={draftIsEmpty}
           >
             <Text className="font-medium leading-normal text-white">
               {t('common:actions.apply')}

@@ -33,8 +33,8 @@ function RouteComponent() {
     <>
       <Header title="Package Details" />
       <Image
-        src={packageData?.imageUrl}
-        alt="package-detail"
+        src={packageData?.imageUrl ?? ''}
+        alt={packageData?.name ?? ''}
         className="size-[361px] mx-auto"
       />
       <div className="flex flex-col gap-[16px] p-[16px] pb-[130px]">

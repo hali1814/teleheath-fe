@@ -38,6 +38,7 @@ export default function PackageList({
             {...p}
             className="w-[60%] max-w-[300px]"
             sizeThumbnail="full"
+            truncateName={true}
           />
         ))}
         <div className="w-[16px]" />
