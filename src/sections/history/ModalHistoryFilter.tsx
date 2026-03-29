@@ -60,6 +60,7 @@ export default function ModalHistoryFilter({
   onFilterChange: (next: HistoryAppointmentFilter) => void
   onApply: () => void
   /** Gọi khi draft đổi: số field đang có giá trị (0–3). */
+
   onActiveFieldCountChange?: (count: number) => void
 }) {
   const { t } = useTranslation(['appointment', 'common'])
@@ -148,10 +149,7 @@ export default function ModalHistoryFilter({
         </DialogHeader>
 
         {/* Status + dropdown nằm ngoài vùng scroll → absolute không bị overflow clip */}
-        <div
-          ref={statusDropdownRef}
-          className="relative z-100 mt-4 shrink-0"
-        >
+        <div ref={statusDropdownRef} className="relative z-100 mt-4 shrink-0">
           <div className="flex min-w-0 flex-col gap-2">
             <Text size="base_14" className="text-text-secondary font-normal">
               {t('appointment:status')}
