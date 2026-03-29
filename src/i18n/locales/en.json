@@ -297,6 +297,8 @@
     "no": "No",
     "yes": "Yes",
     "detailBannerCancelled": "Reason for cancellation",
-    "detailBannerCompleted": "This appointment has already ended."
+    "detailBannerCompleted": "This appointment has already ended.",
+    "medicalFileOpenInNewTab": "Open in new tab",
+    "medicalFilePreviewUnsupported": "This file type can't be previewed here. Open it in a new tab instead."
   }
 }
