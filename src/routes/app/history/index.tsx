@@ -11,42 +11,17 @@ import EmptyAppointment from '#/sections/appointment/EmptyAppointment'
 import ItemHistoryAppointment from '#/sections/history/ItemHistoryAppointment'
 import ModalHistoryFilter, {
   emptyHistoryAppointmentFilter,
+  getHistoryFilterActiveFieldCount,
   type HistoryAppointmentFilter,
 } from '#/sections/history/ModalHistoryFilter'
 import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appointments'
-import type {
-  AppointmentStatus,
-  MyAppointmentItem,
-} from '#/services/query/appointment/my-appointments'
+import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
 import { cn } from '#/lib/utils'
 import { groupAppointmentsByMonth } from '#/utils/history'
 
 export const Route = createFileRoute('/app/history/')({
   component: RouteComponent,
 })
-
-function filterHistoryAppointments(
-  items: MyAppointmentItem[],
-  f: HistoryAppointmentFilter,
-) {
-  return items.filter((item) => {
-    if (f.statuses.length > 0) {
-      const st = String(item.status) as AppointmentStatus
-      if (!f.statuses.includes(st)) return false
-    }
-    if (f.dateFrom) {
-      if (dayjs(item.appointmentDate).isBefore(dayjs(f.dateFrom), 'day')) {
-        return false
-      }
-    }
-    if (f.dateTo) {
-      if (dayjs(item.appointmentDate).isAfter(dayjs(f.dateTo), 'day')) {
-        return false
-      }
-    }
-    return true
-  })
-}
 
 function isGroupCurrentCalendarMonth(items: MyAppointmentItem[]) {
   if (items.length === 0) return false
@@ -66,26 +41,29 @@ function RouteComponent() {
   const { t } = useTranslation(['common', 'appointment'])
   const title = t('bottomNavigation.history')
 
-  const { data: appointments, isLoading } = useGetMyAppointmentsQuery({
+  const {
+    data: appointments,
+    isLoading,
+    isFetching,
+  } = useGetMyAppointmentsQuery({
     params: {
       page: 0,
       size: 1805,
+      fromDate: appliedFilter.dateFrom,
+      toDate: appliedFilter.dateTo,
+      status: appliedFilter.statuses.join(','),
     },
     staleTime: 0,
   })
 
-  const filteredItems = useMemo(
-    () =>
-      filterHistoryAppointments(
-        appointments?.data?.content ?? [],
-        appliedFilter,
-      ),
-    [appointments?.data?.content, appliedFilter],
+  const items = useMemo(
+    () => appointments?.data?.content ?? [],
+    [appointments?.data?.content],
   )
 
   const groupedAppointments = useMemo(() => {
-    return groupAppointmentsByMonth(filteredItems)
-  }, [filteredItems])
+    return groupAppointmentsByMonth(items)
+  }, [items])
 
   const rows = useMemo(() => {
     return Object.entries(groupedAppointments).flatMap(([key, value]) => {
@@ -113,13 +91,10 @@ function RouteComponent() {
     overscan: 6,
   })
 
-  const activeFilterCount = useMemo(() => {
-    return (
-      appliedFilter.statuses.length +
-      (appliedFilter.dateFrom ? 1 : 0) +
-      (appliedFilter.dateTo ? 1 : 0)
-    )
-  }, [appliedFilter])
+  const filterBadgeCount = useMemo(() => {
+    const f = filterOpen ? draftFilter : appliedFilter
+    return getHistoryFilterActiveFieldCount(f)
+  }, [filterOpen, draftFilter, appliedFilter])
 
   const openFilterModal = () => {
     setDraftFilter(appliedFilter)
@@ -147,9 +122,9 @@ function RouteComponent() {
             onClick={openFilterModal}
             aria-label={t('appointment:filter')}
           >
-            <Icon name="filter" className="size-5 text-text-primary" />
-            <span className="absolute top-0 left-[14px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#DB1A21] px-0.5 text-[10px] font-semibold leading-none text-white">
-              {activeFilterCount}
+            <Icon name="filter" className="size-5" color="#B3B3B3" />
+            <span className="absolute top-0 left-[16px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#DB1A21] px-0.5 text-[10px] font-semibold leading-none text-white">
+              {filterBadgeCount}
             </span>
           </button>
         </div>
@@ -216,7 +191,7 @@ function RouteComponent() {
         onFilterChange={setDraftFilter}
         onApply={handleApplyFilters}
       />
-      <LoadingBlocking isLoading={isLoading} />
+      <LoadingBlocking isLoading={isLoading || isFetching} />
     </div>
   )
 }

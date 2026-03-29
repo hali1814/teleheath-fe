@@ -80,6 +80,8 @@ import AppointmentUserSpIcon from '#/assets/icons/appointment/user-sp.svg?react'
 import AppointmentCancelIcon from '#/assets/icons/appointment/cancel.svg?react'
 import AppointmentClockDetailIcon from '#/assets/icons/appointment/clock-detail-app.svg?react'
 import AppointmentHeathIcon from '#/assets/icons/appointment/heath.svg?react'
+import AppointmentCalendarPrevIcon from '#/assets/icons/appointment/prev.svg?react'
+import AppointmentCalendarNextIcon from '#/assets/icons/appointment/next.svg?react'
 import CircleSolidIcon from '#/assets/icons/common/circle-solid.svg?react'
 import BellCheckIcon from '#/assets/icons/common/bell-check.svg?react'
 import SendCancelFilledIcon from '#/assets/icons/common/send-cancel-filled.svg?react'
@@ -174,6 +176,8 @@ const ICONS_TEMPLATE = {
   appointment_cancel: AppointmentCancelIcon,
   appointment_clock_detail: AppointmentClockDetailIcon,
   appointment_heath: AppointmentHeathIcon,
+  appointment_calendar_prev: AppointmentCalendarPrevIcon,
+  appointment_calendar_next: AppointmentCalendarNextIcon,
   circle_solid: CircleSolidIcon,
   bell_check: BellCheckIcon,
   send_cancel_filled: SendCancelFilledIcon,
