@@ -32,7 +32,11 @@ export default function DoctorLists({
       </div>
       <div className="w-full flex gap-[14px] overflow-x-auto pl-[16px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {doctors.map((doctor) => (
-          <DoctorCard key={doctor.doctorId} {...doctor} className="w-[60%]" />
+          <DoctorCard
+            key={doctor.doctorId}
+            {...doctor}
+            className="w-[60%] max-w-[300px]"
+          />
         ))}
         <div className="w-[16px]" />
       </div>

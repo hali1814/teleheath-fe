@@ -13,6 +13,7 @@ import useDebounce from '#/hooks/use-debounce'
 import { Spinner } from '#/components/ui/spinner'
 import { useGetSuggestionQuery } from '#/services/query/search/suggestion'
 import { useGetSearchQuery } from '#/services/query/search/search'
+import { useSearchStore } from '#/stores/search'
 
 export const Route = createFileRoute('/app/search/(commonLayout)/')({
   component: RouteComponent,
@@ -28,6 +29,7 @@ function RouteComponent() {
   >('IDLE')
   const debouncedQuery = useDebounce(query, 300)
   const [tab, setTab] = useState<Tab>('ALL')
+  const addRecent = useSearchStore((s) => s.addRecent)
 
   const { data: { data: { suggestions } } = { data: { suggestions: [] } } } =
     useGetSuggestionQuery({
@@ -89,12 +91,13 @@ function RouteComponent() {
 
     setSearchKeyword(trimmed)
     setStatus('LOADING')
+    addRecent(trimmed)
   }
 
   return (
     <>
       <SearchInput value={query} onSearch={handleSearch} />
-      {status === 'IDLE' && <RecentSearches />}
+      {status === 'IDLE' && <RecentSearches onSelect={handleSelect} />}
       {status === 'TYPING' && (
         <Suggestions
           query={query}

@@ -1,6 +1,5 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { getToken } from '#/stores/token'
-import { useState } from 'react'
 
 export const Route = createFileRoute('/app')({
   component: App,
@@ -18,9 +17,8 @@ export const Route = createFileRoute('/app')({
 })
 
 function App() {
-  const [isOpen, setIsOpen] = useState(true)
   return (
-    <div className="bg-background">
+    <div className="bg-background min-h-screen">
       <Outlet />
     </div>
   )

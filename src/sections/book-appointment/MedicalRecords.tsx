@@ -1,11 +1,10 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
-import { Button } from '#/components/ui/button'
 import { Spinner } from '#/components/ui/spinner'
 import { Textarea } from '#/components/ui/textarea'
 import { useUploadImageMutation } from '#/services/query/upload/use-upload-image-mutate'
 import { useBookingStore, type FileRowStatus } from '#/stores/booking-store'
-import { useRef } from 'react'
+import { useId } from 'react'
 import { toast } from 'sonner'
 
 const MAX_FILE_BYTES = 10 * 1024 * 1024
@@ -70,15 +69,11 @@ export function MedicalRecords() {
   const updateMedicalFile = useBookingStore((s) => s.updateMedicalFile)
   const removeMedicalFile = useBookingStore((s) => s.removeMedicalFile)
 
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const medicalFileInputId = useId()
 
   const { mutateAsync: uploadFile } = useUploadImageMutation({
     isShowError: false,
   })
-
-  const openFilePicker = () => {
-    fileInputRef.current?.click()
-  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const list = e.target.files
@@ -127,14 +122,6 @@ export function MedicalRecords() {
 
   return (
     <div className="flex flex-col gap-[12px] px-[16px]">
-      <input
-        ref={fileInputRef}
-        type="file"
-        className="sr-only"
-        accept="application/pdf,image/jpeg,image/png,.pdf,.jpg,.jpeg,.png"
-        multiple
-        onChange={handleFileChange}
-      />
       <Text size="lg_16" className="leading-[1.2] font-semibold text-[#333333]">
         Medical Records
       </Text>
@@ -142,13 +129,21 @@ export function MedicalRecords() {
         Providing your medical history helps our specialists prepare for your
         visit.
       </Text>
-      <div
-        className="h-[190px] border border-dashed border-dust-red-2 bg-dust-red-1
-      rounded-[12px] flex flex-col gap-[20px] py-[24px]
-      "
+      <label
+        htmlFor={medicalFileInputId}
+        className="flex h-[190px] cursor-pointer touch-manipulation flex-col gap-[20px] rounded-[12px] border border-dashed border-dust-red-2 bg-dust-red-1 py-[24px] active:opacity-90"
+        aria-label="Upload medical files"
       >
+        <input
+          id={medicalFileInputId}
+          type="file"
+          className="sr-only"
+          accept="image/*,application/pdf,.pdf,.jpg,.jpeg,.png,.heic,.heif"
+          multiple
+          onChange={handleFileChange}
+        />
         <div className="flex flex-col items-center justify-center gap-[10px]">
-          <Icon name="upload" className="w-[30px] h-[30px] text-primary" />
+          <Icon name="upload" className="h-[30px] w-[30px] text-primary" />
           <Text className="leading-normal font-medium">
             Upload Medical Files
           </Text>
@@ -156,20 +151,12 @@ export function MedicalRecords() {
             PDF, JPG, PNG (Max 10MB)
           </Text>
         </div>
-        <Button
-          type="button"
-          variant="secondary"
-          className="self-center h-[33px] w-[140px] rounded-full"
-          onClick={openFilePicker}
-        >
-          <Text
-            size="sm_12"
-            className="w-full text-center font-medium text-white"
-          >
+        <span className="inline-flex h-[33px] w-[140px] shrink-0 cursor-pointer select-none items-center justify-center self-center rounded-full bg-secondary text-sm font-medium text-secondary-foreground">
+          <Text size="sm_12" className="text-center font-medium text-white">
             Select Files
           </Text>
-        </Button>
-      </div>
+        </span>
+      </label>
       {medicalFiles.map((row, index) => (
         <MedicalFileItem
           key={row.id}

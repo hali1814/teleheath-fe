@@ -14,77 +14,103 @@ import { useGetCountryListQuery } from '#/services/query/country/country-list'
 import { type AppLanguage } from '#/i18n'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
-import { ALL_PAGINATION } from '#/const/pagination'
+import { useEffect, useMemo, useState } from 'react'
+
+const emptyFilter = (): FilterDoctor => ({
+  country: '',
+  specialty: '',
+  gender: '',
+  experienceYears: '',
+  consultationType: '',
+  priceRange: '',
+})
+
+const PRICE_OPTIONS = [
+  { label: 'Under 100$', value: '0-100' },
+  { label: '100 - 300$', value: '100-300' },
+  { label: '300 - 500$', value: '300-500' },
+  { label: 'Above 500$', value: '500' },
+]
 
 export default function ModalFilterDoctor({
   open,
   onOpenChange,
-  filter,
-  setFilter,
+  appliedFilter,
+  onApply,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  filter: FilterDoctor
-  setFilter: (filter: FilterDoctor) => void
+  appliedFilter: FilterDoctor
+  onApply: (filter: FilterDoctor) => void
 }) {
   const { t, i18n } = useTranslation(['doctor', 'common'])
+  const [draft, setDraft] = useState<FilterDoctor>(appliedFilter)
+
+  useEffect(() => {
+    if (open) setDraft({ ...appliedFilter })
+  }, [open, appliedFilter])
 
   const { data: countryList } = useGetCountryListQuery({
     params: {},
   })
 
-  const {
-    data: { data: { content: specialties } = { content: [] } } = {
-      data: { content: [] },
-    },
-  } = useGetListSpecialtyQuery({
-    params: ALL_PAGINATION,
-  })
-
-  const handleClearAllFilters = () => {
-    setFilter({
-      country: '',
-      specialty: '',
-      gender: '',
-      experienceYears: '',
-      consultationType: '',
-      priceRange: '',
+  const { data: { data: specialtiesData = [] } = { data: [] } } =
+    useGetListSpecialtyQuery({
+      params: {},
+      enabled: open,
     })
+
+  const handleClearDraft = () => {
+    setDraft(emptyFilter())
   }
 
-  const handleApplyFilters = () => {
-    console.log(filter)
+  const handleApply = () => {
+    onApply(draft)
+    onOpenChange(false)
   }
 
-  const isDisabled =
-    !filter.country &&
-    !filter.specialty &&
-    !filter.gender &&
-    !filter.experienceYears &&
-    !filter.consultationType &&
-    !filter.priceRange
+  const draftIsEmpty =
+    !draft.country &&
+    !draft.specialty &&
+    !draft.gender &&
+    !draft.experienceYears &&
+    !draft.consultationType &&
+    !draft.priceRange
+
+  const specialtyOptions = useMemo(() => {
+    return specialtiesData.map((specialty) => ({
+      label: specialty.name,
+      value: specialty.id.toString(),
+    }))
+  }, [specialtiesData])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
         aria-describedby={undefined}
-        className="gap-[20px] px-[20px] py-[24px] bg-white max-h-[80vh] overflow-y-auto no-scrollbar"
+        className="no-scrollbar max-h-[80vh] gap-[20px] overflow-y-auto bg-white px-[20px] py-[24px]"
       >
         <DialogHeader>
           <div className="flex items-center justify-between">
             <div className="hidden">
-              <DialogTitle></DialogTitle>
+              <DialogTitle />
             </div>
             <Text size="lg_16" className="font-semibold leading-[1.2]">
               {t('filter.title')}
             </Text>
-            <Icon
-              name="close"
-              className="w-[14px] h-[14px]"
-              color="#B3B3B3"
+            <button
+              type="button"
+              className="flex size-8 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:bg-muted"
               onClick={() => onOpenChange(false)}
-            />
+              aria-label={t('common:actions.close', { defaultValue: 'Close' })}
+            >
+              <Icon
+                name="close"
+                className="h-[14px] w-[14px]"
+                color="#B3B3B3"
+              />
+            </button>
           </div>
         </DialogHeader>
         <div className="flex flex-col gap-[12px]">
@@ -103,9 +129,9 @@ export default function ModalFilterDoctor({
                   value: country.code,
                 })) ?? []
               }
-              value={filter.country}
+              value={draft.country}
               onValueChange={(value) =>
-                setFilter({ ...filter, country: value })
+                setDraft((prev) => ({ ...prev, country: value }))
               }
             />
           </div>
@@ -113,13 +139,10 @@ export default function ModalFilterDoctor({
             <Text>{t('filter.specialty')}</Text>
             <InputSelect
               placeholder={t('filter.specialty')}
-              options={specialties.map((specialty) => ({
-                label: specialty.name,
-                value: specialty.id.toString(),
-              }))}
-              value={filter.specialty}
+              options={specialtyOptions}
+              value={draft.specialty}
               onValueChange={(value) =>
-                setFilter({ ...filter, specialty: value })
+                setDraft((prev) => ({ ...prev, specialty: value }))
               }
             />
           </div>
@@ -128,9 +151,13 @@ export default function ModalFilterDoctor({
             <InputSelect
               placeholder={t('filter.gender')}
               options={[
-                { label: 'Male', value: 'male' },
-                { label: 'Female', value: 'female' },
+                { label: 'Male', value: 'MALE' },
+                { label: 'Female', value: 'FEMALE' },
               ]}
+              value={draft.gender}
+              onValueChange={(value) =>
+                setDraft((prev) => ({ ...prev, gender: value }))
+              }
             />
           </div>
           <div className="flex flex-col gap-[8px]">
@@ -143,6 +170,10 @@ export default function ModalFilterDoctor({
                 { label: '10 - 15 years', value: '10-15' },
                 { label: 'Over 20 years', value: 'over-20' },
               ]}
+              value={draft.experienceYears}
+              onValueChange={(value) =>
+                setDraft((prev) => ({ ...prev, experienceYears: value }))
+              }
             />
           </div>
           <div className="flex flex-col gap-[8px]">
@@ -150,41 +181,45 @@ export default function ModalFilterDoctor({
             <InputSelect
               placeholder={t('filter.consultationType')}
               options={[
-                { label: 'In-person', value: 'in-person' },
-                { label: 'Online consultation', value: 'online' },
+                { label: 'In-person', value: 'IN_PERSON' },
+                { label: 'Online consultation', value: 'ONLINE' },
               ]}
+              value={draft.consultationType}
+              onValueChange={(value) =>
+                setDraft((prev) => ({ ...prev, consultationType: value }))
+              }
             />
           </div>
           <div className="flex flex-col gap-[8px]">
             <Text>{t('filter.priceRange')}</Text>
             <InputSelect
               placeholder={t('filter.priceRange')}
-              options={[
-                { label: 'Under 100$', value: '0-100' },
-                { label: '100 - 300$', value: '100-300' },
-                { label: '300 - 500$', value: '300-500' },
-                { label: 'Above 500$', value: '500' },
-              ]}
+              options={PRICE_OPTIONS}
+              value={draft.priceRange}
+              onValueChange={(value) =>
+                setDraft((prev) => ({ ...prev, priceRange: value }))
+              }
             />
           </div>
         </div>
-        <div className="flex justify-between items-center gap-[8px] pt-[10px]">
+        <div className="flex items-center justify-between gap-[8px] pt-[10px]">
           <Button
+            type="button"
             variant="ghost"
             className="p-0"
-            onClick={handleClearAllFilters}
-            disabled={isDisabled}
+            onClick={handleClearDraft}
+            disabled={draftIsEmpty}
           >
-            <Text className="text-[#A8071A] leading-normal font-medium">
+            <Text className="font-medium leading-normal text-[#A8071A]">
               {t('common:actions.clearAllFilters')}
             </Text>
           </Button>
           <Button
-            className="h-[45px] px-[32px] py-[12px] rounded-[40px]"
-            onClick={handleApplyFilters}
-            disabled={isDisabled}
+            type="button"
+            className="h-[45px] rounded-[40px] px-[32px] py-[12px]"
+            onClick={handleApply}
           >
-            <Text className="leading-normal font-medium text-white">
+            <Text className="font-medium leading-normal text-white">
               {t('common:actions.apply')}
             </Text>
           </Button>

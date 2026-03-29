@@ -34,7 +34,7 @@ export default function HospitalList({
         {hospitals.map((hospital) => (
           <HospitalCard
             key={hospital.hospitalId}
-            className="w-[60%]"
+            className="w-[60%] max-w-[300px]"
             {...hospital}
           />
         ))}

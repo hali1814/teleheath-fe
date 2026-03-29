@@ -1,6 +1,7 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
+import { Header } from '#/sections/home'
 import {
   HospitalDetailHeader,
   GalleryImage,
@@ -29,34 +30,37 @@ function RouteComponent() {
   if (!hospitalData) return null
 
   return (
-    <div className="pb-[100px]">
-      <HospitalDetailHeader {...hospitalData} />
-      <div className="flex flex-col gap-[16px] p-[16px]">
-        <GalleryImage images={hospitalData?.gallery ?? []} />
-        <AboutHospital aboutUs={hospitalData?.description ?? ''} />
-        <SpecialtyList specialties={hospitalData?.specialties ?? []} />
-        <BranchList hospitalId={id} />
-      </div>
-      <div className="fixed bottom-0 left-0 right-0 pt-[10px] pb-[35px] px-[20px] bg-background">
-        <Button
-          className="w-full h-[45px] bg-primary rounded-[40px] gap-[10px]"
-          asChild
-        >
-          <Link
-            to="/app/book-appointment/hospital/$hospitalId"
-            params={{ hospitalId: id }}
+    <>
+      <Header title="Hospital Details" />
+      <div className="pb-[100px]">
+        <HospitalDetailHeader {...hospitalData} />
+        <div className="flex flex-col gap-[16px] p-[16px]">
+          <GalleryImage images={hospitalData?.gallery ?? []} />
+          <AboutHospital aboutUs={hospitalData?.description ?? ''} />
+          <SpecialtyList specialties={hospitalData?.specialties ?? []} />
+          <BranchList hospitalId={id} />
+        </div>
+        <div className="fixed bottom-0 left-0 right-0 pt-[10px] pb-[35px] px-[20px] bg-background">
+          <Button
+            className="w-full h-[45px] bg-primary rounded-[40px] gap-[10px]"
+            asChild
           >
-            <Icon
-              name="book_appointment"
-              color="white"
-              className="w-[20px] h-[20px]"
-            />
-            <Text className="font-medium leading-normal text-white">
-              {t('common:actions.bookAppointment')}
-            </Text>
-          </Link>
-        </Button>
+            <Link
+              to="/app/book-appointment/hospital/$hospitalId"
+              params={{ hospitalId: id }}
+            >
+              <Icon
+                name="book_appointment"
+                color="white"
+                className="w-[20px] h-[20px]"
+              />
+              <Text className="font-medium leading-normal text-white">
+                {t('common:actions.bookAppointment')}
+              </Text>
+            </Link>
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

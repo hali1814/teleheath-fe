@@ -56,7 +56,12 @@ const PatientProfileItem = ({
           <Text className="text-center font-medium leading-normal">
             {patient.name}
           </Text>
-          <div onClick={onViewDetails}>
+          <div
+            onClick={(e) => {
+              e.stopPropagation()
+              onViewDetails?.()
+            }}
+          >
             <Text
               size="sm_12"
               className="text-center font-medium leading-[1.3] text-dust-red-8"
@@ -81,12 +86,13 @@ export function PatientProfileList({
 }) {
   const [open, setOpen] = useState(false)
   const [openAddNewProfileModal, setOpenAddNewProfileModal] = useState(false)
-  const [patient, setPatient] = useState<ListFamilyPatient | null>(null)
+  const [patientToViewDetails, setPatientToViewDetails] =
+    useState<ListFamilyPatient | null>(null)
 
   const handleViewDetails = (patientId: number) => {
     const patient = profiles?.find((patient) => patient.id === patientId)
     if (!patient) return
-    setPatient(patient)
+    setPatientToViewDetails(patient)
     setOpen(true)
   }
 
@@ -97,7 +103,12 @@ export function PatientProfileList({
           <Text size="lg_16" className="font-semibold leading-[1.2]">
             Patient Profile
           </Text>
-          <button onClick={() => setOpenAddNewProfileModal(true)}>
+          <button
+            onClick={() => {
+              setPatientToViewDetails(null)
+              setOpenAddNewProfileModal(true)
+            }}
+          >
             <Text
               size="sm_12"
               className="font-medium leading-[1.3] text-primary"
@@ -123,15 +134,16 @@ export function PatientProfileList({
           <EmptyPatientProfiles />
         )}
       </div>
-      {patient && (
+      {patientToViewDetails && (
         <DetailProfileModal
           open={open}
           onOpenChange={setOpen}
-          patient={patient}
+          patient={patientToViewDetails}
           onEdit={() => setOpenAddNewProfileModal(true)}
         />
       )}
       <ProfileFormModal
+        defaultValues={patientToViewDetails}
         open={openAddNewProfileModal}
         onOpenChange={setOpenAddNewProfileModal}
       />

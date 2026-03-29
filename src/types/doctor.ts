@@ -1,5 +1,6 @@
 import type { Specialty } from './specialty'
 import type { Country } from './country'
+import type { Branch } from './hospital'
 
 export interface WorkingHour {
   day: string
@@ -12,21 +13,22 @@ export type HospitalStatus = 'ACTIVE' | 'INACTIVE'
 
 export interface Doctor {
   doctorId: string
-  branchId: string
   hospitalId: string
   country: Country
+  branches: Branch[]
   avatarUrl: string
   nameVi: string
-  nameKh: string
+  nameKh: string | null
   nameEn: string
   gender: string
   bioVi: string
-  bioKh: string
+  bioKh: string | null
   bioEn: string
   experienceYears: number
   consultationType: string
   consultationFee: number
   certifications: string
-  status: string
+  status: HospitalStatus | string
+  isTop: boolean
   specialties: Specialty[]
 }

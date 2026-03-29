@@ -15,7 +15,8 @@ export default function CountryTab() {
     params: {},
   })
 
-  const countries = countriesData?.data || []
+  const countries =
+    countriesData?.data?.sort((a, b) => b.code.localeCompare(a.code)) || []
 
   return (
     <div
