@@ -7,6 +7,7 @@ import { useGetListFamilyQuery } from '#/services/query/profile/listFamily'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { formatDate, DATE_TIME_TYPE } from '#/utils'
+import LoadingBlocking from '#/components/LoadingBlocking'
 
 export const Route = createFileRoute(
   '/app/profile/(editLayout)/medical-profiles',
@@ -17,7 +18,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { t } = useTranslation(['profile', 'common'])
   const router = useRouter()
-  const { data: familyList } = useGetListFamilyQuery({
+  const { data: familyList, isFetching } = useGetListFamilyQuery({
     params: {},
   })
 
@@ -70,6 +71,7 @@ function RouteComponent() {
           </Text>
         </Button>
       </div>
+      <LoadingBlocking isLoading={isFetching} />
     </div>
   )
 }
