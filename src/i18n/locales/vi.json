@@ -291,6 +291,8 @@
     "totalAmount": "Tổng tiền",
     "paymentMethod": "Phương thức thanh toán",
     "paid": "Đã thanh toán",
+    "emptyHistoryTitle": "Chưa có lịch sử cuộc hẹn",
+    "emptyHistoryDescription": "Lịch sử các cuộc hẹn của bạn sẽ xuất hiện tại đây.",
     "noAppointmentYet": "Chưa có lịch hẹn nào.",
     "patientNote": "Ghi chú bệnh nhân:",
     "no": "Không",
