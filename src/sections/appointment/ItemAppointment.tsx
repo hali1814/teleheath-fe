@@ -44,17 +44,8 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
   }, [appointment.bookingType, t])
 
   const avatarSrc = useMemo(() => {
-    if (appointment.bookingType === 'DOCTOR') {
-      return appointment?.doctor?.avatarUrl
-    }
-    if (appointment.bookingType === 'HOSPITAL') {
-      return '1233'
-    }
-    if (appointment.bookingType === 'PACKAGE') {
-      return '3123'
-    }
-    return ''
-  }, [appointment.bookingType])
+    return appointment?.thumbnailUrl
+  }, [appointment?.thumbnailUrl])
 
   const scheduleLabel = useMemo(() => {
     const locale = (i18n.language ?? '').startsWith('vi')

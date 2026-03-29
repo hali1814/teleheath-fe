@@ -31,7 +31,7 @@ export default function Header({ appointment }: AppointmentHeaderProps) {
 
         <div className="mt-4 flex items-stretch gap-6">
           <Image
-            src={appointment?.doctor?.avatarUrl ?? ''}
+            src={appointment?.thumbnailUrl ?? ''}
             alt={appointment?.doctor?.nameEn ?? ''}
             className="size-[70px] rounded-full"
           />
@@ -81,7 +81,7 @@ export default function Header({ appointment }: AppointmentHeaderProps) {
 
         <div className="mt-4 flex items-stretch gap-6">
           <Image
-            src="/logo.svg"
+            src={appointment?.thumbnailUrl ?? ''}
             alt={t('servicePackage')}
             className="size-[57px] rounded-full"
           />

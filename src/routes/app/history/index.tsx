@@ -41,11 +41,7 @@ function RouteComponent() {
   const { t } = useTranslation(['common', 'appointment'])
   const title = t('bottomNavigation.history')
 
-  const {
-    data: appointments,
-    isLoading,
-    isFetching,
-  } = useGetMyAppointmentsQuery({
+  const { data: appointments, isLoading } = useGetMyAppointmentsQuery({
     params: {
       page: 0,
       size: 1805,

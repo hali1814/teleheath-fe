@@ -124,6 +124,7 @@ export interface MyAppointmentItem {
   serviceFee: number
   consultationTier: AppointmentConsultationTier | null
   consultationFee: number
+  thumbnailUrl: string
 }
 
 interface MyAppointmentsResponse extends IPagingResponse<MyAppointmentItem> {}
