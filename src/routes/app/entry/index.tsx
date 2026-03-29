@@ -64,7 +64,7 @@ function RouteComponent() {
         className="flex min-h-dvh flex-col items-center justify-center gap-8 px-6 pb-24 pt-12"
       >
         <Image
-          src="/logo.svg"
+          src="/logo.png"
           alt=""
           className="mx-auto h-14 w-14 object-contain"
           width={56}
@@ -95,7 +95,7 @@ function RouteComponent() {
       <div className="flex flex-col items-center gap-6 text-center">
         <div className="animate-pulse">
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt=""
             className="mx-auto h-14 w-14 object-contain"
             width={56}

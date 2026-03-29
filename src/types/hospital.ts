@@ -23,6 +23,8 @@ export interface Hospital {
   logoUrl: string
   website: string
   description: string
+  aboutEn: string
+  aboutKh: string
   gallery: string[]
   workingHours: {
     day: string
@@ -33,6 +35,7 @@ export interface Hospital {
   timezone: string
   status: string
   specialties: Specialty[]
+  emergencySupport: boolean
 }
 
 export interface Branch {

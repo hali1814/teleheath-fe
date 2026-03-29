@@ -3,7 +3,7 @@ import useDebounce from '#/hooks/use-debounce'
 import { Header } from '#/sections/home'
 import SpecialtyItem from '#/sections/specialty/SpecialtyItem'
 import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 export const Route = createFileRoute('/app/specialty/')({
@@ -11,7 +11,6 @@ export const Route = createFileRoute('/app/specialty/')({
 })
 
 function RouteComponent() {
-  const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 300)
 
@@ -21,14 +20,6 @@ function RouteComponent() {
     },
   })
   const specialties = data?.data ?? []
-
-  const handleClick = (id: number, name: string) => {
-    navigate({
-      to: '/app/specialty/search/$specialtyId',
-      params: { specialtyId: id.toString() },
-      search: { specialtyName: name },
-    })
-  }
 
   return (
     <>
@@ -43,11 +34,7 @@ function RouteComponent() {
         <div className="grid grid-cols-3 mt-[10px] gap-y-[36px]">
           {specialties.length > 0 &&
             specialties.map((specialty) => (
-              <SpecialtyItem
-                key={specialty.id}
-                {...specialty}
-                onClick={() => handleClick(specialty.id, specialty.name)}
-              />
+              <SpecialtyItem key={specialty.id} {...specialty} />
             ))}
         </div>
       </div>

@@ -2,7 +2,7 @@ import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Modal from '#/components/Modal'
 import Text from '#/components/text'
-import { Link } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 
 export default function PopupAds({
   isOpen,
@@ -11,6 +11,8 @@ export default function PopupAds({
   isOpen: boolean
   onClose: () => void
 }) {
+  const navigate = useNavigate()
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="relative max-h-[75vh] w-full rounded-[16px] bg-white overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden">
@@ -59,9 +61,14 @@ export default function PopupAds({
             hospitals and specialists.
           </Text>
 
-          <Link
-            to="/app/book-appointment"
-            search={{ country: 'VN' }}
+          <button
+            onClick={() => {
+              onClose()
+              navigate({
+                to: '/app/book-appointment',
+                search: { country: 'VN' },
+              })
+            }}
             className="w-full rounded-[40px] bg-primary py-[12px]"
             style={{
               boxShadow: '0px 2px 6px 0px #E22A364D',
@@ -73,7 +80,7 @@ export default function PopupAds({
             >
               Book now
             </Text>
-          </Link>
+          </button>
         </div>
       </div>
     </Modal>

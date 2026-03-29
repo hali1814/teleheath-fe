@@ -17,6 +17,7 @@ import {
 } from '#/sections/package/package-filter-price'
 import useDebounce from '#/hooks/use-debounce'
 import { keepPreviousData } from '@tanstack/react-query'
+import { EmptyState } from '#/sections/search'
 
 function parseSearchInt(v: unknown): number | undefined {
   if (v === undefined || v === null || v === '') return undefined
@@ -132,19 +133,22 @@ function RouteComponent() {
             aria-label={t('filter.title')}
           >
             <Icon name="filter" className="text-icon" />
-            {activeFilterCount > 0 && (
-              <Badge className="absolute -top-2 -right-2 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
-                <Text size="xs_10" className="leading-[1.3] text-white">
-                  {activeFilterCount}
-                </Text>
-              </Badge>
-            )}
+            <Badge className="absolute -top-2 -right-2 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
+              <Text size="xs_10" className="leading-[1.3] text-white">
+                {activeFilterCount}
+              </Text>
+            </Badge>
           </button>
         </div>
-        {packagesData.length > 0 &&
-          packagesData.map((p) => (
-            <PackageCard key={p.id} {...p} truncateName={false} />
-          ))}
+        {packagesData.length > 0 ? (
+          <>
+            {packagesData.map((p) => (
+              <PackageCard key={p.id} {...p} truncateName={false} />
+            ))}
+          </>
+        ) : (
+          <EmptyState>No packages found</EmptyState>
+        )}
       </div>
       <ModalFilterPackage
         open={open}

@@ -3,7 +3,11 @@ import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
 
-export default function EmptyPatientProfiles() {
+export default function EmptyPatientProfiles({
+  onClickAddProfile,
+}: {
+  onClickAddProfile: () => void
+}) {
   const { t } = useTranslation('profile')
   return (
     <div className="pb-[32px]">
@@ -39,7 +43,10 @@ export default function EmptyPatientProfiles() {
       </div>
 
       <div className="mt-[32px] flex items-center justify-center">
-        <Button className="h-[44px] w-[200px] flex items-center justify-center gap-[8px] rounded-[12px]">
+        <Button
+          onClick={onClickAddProfile}
+          className="h-[44px] w-[200px] flex items-center justify-center gap-[8px] rounded-[12px]"
+        >
           <Text className="font-medium text-white leading-normal">
             Add Profile
           </Text>

@@ -13,6 +13,8 @@ import { formatPrice } from '#/utils/price.util'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ModalDetailService } from '../ModalDetailService'
+import { useGetListServiceByBranchQuery } from '#/services/query/services/list-service-by-branch'
+import { useGetListServiceByPackageQuery } from '#/services/query/services/list-service-by-package'
 
 const EMPTY_SERVICES: Service[] = []
 
@@ -141,14 +143,26 @@ export function ReviewStep() {
     calcFeeInfo,
   } = useBookingStore()
 
-  const { data } = useGetListServiceQuery({
+  const { data: branchServices } = useGetListServiceByBranchQuery({
     params: {
-      page: 1,
-      size: 0,
+      branchId: branch?.branchId ?? '',
     },
+    enabled:
+      !!branch?.branchId &&
+      (bookingType === 'HOSPITAL' || bookingType === 'DOCTOR'),
   })
 
-  const services = data?.data ?? EMPTY_SERVICES
+  const { data: packageServices } = useGetListServiceByPackageQuery({
+    params: {
+      packageId: packageData?.id ?? 0,
+    },
+    enabled: !!packageData?.id && bookingType === 'PACKAGE',
+  })
+
+  const services =
+    bookingType === 'HOSPITAL' || bookingType === 'DOCTOR'
+      ? (branchServices?.data ?? EMPTY_SERVICES)
+      : (packageServices?.data ?? EMPTY_SERVICES)
 
   const consultationFee =
     bookingType === 'DOCTOR'
@@ -158,9 +172,9 @@ export function ReviewStep() {
         : (branch?.depositFee ?? 0)
 
   useEffect(() => {
-    const list = data?.data ?? EMPTY_SERVICES
+    const list = services ?? EMPTY_SERVICES
     calcFeeInfo(list, consultationFee)
-  }, [calcFeeInfo, consultationFee, data, serviceIds.join(',')])
+  }, [calcFeeInfo, consultationFee, services, serviceIds.join(',')])
 
   return (
     <>
@@ -367,7 +381,7 @@ export function ReviewStep() {
           <div className="flex items-start gap-[16px]">
             <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-[#ED2630]/10">
               <Icon
-                name="map_marker_outline"
+                name="location_appointment"
                 className="w-[20px] h-[20px] text-primary"
               />
             </div>

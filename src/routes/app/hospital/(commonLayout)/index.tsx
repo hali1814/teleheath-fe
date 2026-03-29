@@ -10,6 +10,8 @@ import { ALL_PAGINATION } from '#/const/pagination'
 import { keepPreviousData } from '@tanstack/react-query'
 import { Header } from '#/sections/home'
 import { z } from 'zod'
+import { EmptyState } from '#/sections/search'
+import Text from '#/components/text'
 
 const optionalTrim = (s: string | undefined) => s?.trim() || undefined
 
@@ -83,17 +85,22 @@ function RouteComponent() {
           onClear={() => setQuery('')}
         />
         <CountryList activeCountry={activeCountry} onClick={setCountry} />
-        {hospitalsData.length > 0 &&
-          hospitalsData.map((hospital) => (
-            <HospitalCard
-              key={hospital.hospitalId}
-              size="md"
-              variantButton="solid"
-              showBadge={true}
-              showAddress={true}
-              {...hospital}
-            />
-          ))}
+        {hospitalsData.length > 0 ? (
+          <>
+            {hospitalsData.map((hospital) => (
+              <HospitalCard
+                key={hospital.hospitalId}
+                size="md"
+                variantButton="solid"
+                showBadge={true}
+                showAddress={true}
+                {...hospital}
+              />
+            ))}
+          </>
+        ) : (
+          <EmptyState>No hospitals found</EmptyState>
+        )}
       </div>
     </>
   )

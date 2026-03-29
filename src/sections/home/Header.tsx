@@ -1,6 +1,7 @@
 import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
+import { Badge } from '#/components/ui/badge'
 import { Link, useRouter } from '@tanstack/react-router'
 
 export default function Header({
@@ -21,12 +22,17 @@ export default function Header({
           <Link to="/app/home">
             <Icon name="logo" className="w-[155px] h-[48px]" />
           </Link>
-          <Link to="/app/notification">
+          <Link to="/app/notification" className="relative">
             <Icon
               name="notification"
               className="w-[21px] h-[21px]"
               color="#B3B3B3"
             />
+            <Badge className="absolute -top-1 -right-1 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
+              <Text size="xs_10" className="leading-[1.3] text-white">
+                0
+              </Text>
+            </Badge>
           </Link>
         </div>
       ) : isCenter ? (

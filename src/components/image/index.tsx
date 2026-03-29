@@ -1,4 +1,4 @@
-import { useState, type ImgHTMLAttributes } from 'react'
+import { useEffect, useState, type ImgHTMLAttributes } from 'react'
 
 import { cn } from '#/lib/utils'
 
@@ -22,6 +22,11 @@ export default function Image({
   const [error, setError] = useState(false)
   const aspectClass = aspectRatio ? `aspect-[${aspectRatio}]` : undefined
   const [srcDisplay, setSrcDisplay] = useState(src)
+
+  // Prop `src` thường đến sau (API). Chỉ dùng useState(src) lần mount sẽ không cập nhật khi URL có.
+  useEffect(() => {
+    setSrcDisplay(src ?? '')
+  }, [src])
 
   return (
     // eslint-disable-next-line jsx-a11y/alt-text

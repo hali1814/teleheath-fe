@@ -6,12 +6,7 @@ export const cleanParams = (params: Record<string, any>) => {
       // Keep 0 and false as they are valid values
       if (value === 0 || value === false) return true
       // Remove other falsy values
-      return (
-        value !== undefined &&
-        value !== null &&
-        value !== '' &&
-        !Number.isNaN(value)
-      )
+      return value !== undefined && value !== null && !Number.isNaN(value)
     }),
   )
 }

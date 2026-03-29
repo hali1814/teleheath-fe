@@ -29,7 +29,7 @@ export default function AboutDoctor({
   })
 
   return (
-    <div className="flex flex-col gap-[16px] py-[12px]">
+    <div className="w-full flex flex-col gap-[16px] py-[12px]">
       <Text size="lg_16" className="font-semibold leading-[1.2]">
         {t('about')}
       </Text>

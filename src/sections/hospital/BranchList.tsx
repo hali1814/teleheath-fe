@@ -20,9 +20,17 @@ interface Branch {
     openTime: string | null
     closeTime: string | null
   }[]
+  emergencySupport: boolean
 }
 
-const BranchCard = ({ name, address, phone, email, working_hours }: Branch) => {
+const BranchCard = ({
+  name,
+  address,
+  phone,
+  email,
+  working_hours,
+  emergencySupport,
+}: Branch) => {
   const { t, i18n } = useTranslation(['hospital', 'common'])
 
   return (
@@ -143,6 +151,19 @@ const BranchCard = ({ name, address, phone, email, working_hours }: Branch) => {
             </Text>
           </div>
         ))}
+        {emergencySupport && (
+          <div className="flex justify-between items-center">
+            <Text
+              size="sm_12"
+              className="font-normal leading-[1.3] text-muted-foreground"
+            >
+              {t('operatingHours.emergency')}
+            </Text>
+            <Text size="sm_12" className="font-medium leading-[1.3]">
+              24/7
+            </Text>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -163,29 +184,34 @@ export default function BranchList({ hospitalId }: { hospitalId: string }) {
   const limitBranch = expanded ? branches.length : LIMIT_BRANCH
 
   return (
-    <div className="flex flex-col gap-[16px] py-[12px]">
-      <Text size="lg_16" className="font-semibold leading-[1.2]">
-        {t('ourBranches')}
-      </Text>
-      <div className="flex flex-col gap-[16px]">
-        {branches.slice(0, limitBranch).map((branch, index) => (
-          <BranchCard
-            key={index}
-            name={branch.nameVi}
-            address={branch.address}
-            phone={branch.hotline}
-            email={branch.email}
-            working_hours={branch.workingHours}
-          />
-        ))}
-        {branches.length > LIMIT_BRANCH && !expanded && (
-          <ExpandViewButton
-            className="w-full flex justify-center"
-            expanded={expanded}
-            onClick={() => setExpanded(!expanded)}
-          />
-        )}
-      </div>
-    </div>
+    <>
+      {branches.length > 0 && (
+        <div className="flex flex-col gap-[16px] py-[12px]">
+          <Text size="lg_16" className="font-semibold leading-[1.2]">
+            {t('ourBranches')}
+          </Text>
+          <div className="flex flex-col gap-[16px]">
+            {branches.slice(0, limitBranch).map((branch, index) => (
+              <BranchCard
+                key={index}
+                name={branch.nameVi}
+                address={branch.address}
+                phone={branch.hotline}
+                email={branch.email}
+                working_hours={branch.workingHours}
+                emergencySupport={branch.emergencySupport}
+              />
+            ))}
+            {branches.length > LIMIT_BRANCH && !expanded && (
+              <ExpandViewButton
+                className="w-full flex justify-center"
+                expanded={expanded}
+                onClick={() => setExpanded(!expanded)}
+              />
+            )}
+          </div>
+        </div>
+      )}
+    </>
   )
 }

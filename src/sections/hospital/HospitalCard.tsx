@@ -29,8 +29,16 @@ export default function HospitalCard({
   showAddress = false,
   ...hospital
 }: HospitalCardProps) {
-  const { hospitalId, nameVi, nameEn, nameKh, country, thumbnailUrl, address } =
-    hospital
+  const {
+    hospitalId,
+    nameVi,
+    nameEn,
+    nameKh,
+    country,
+    thumbnailUrl,
+    address,
+    emergencySupport,
+  } = hospital
   const { t, i18n } = useTranslation(['common'])
   const imgHeight = size === 'sm' ? 'h-[96px]' : 'h-[180px]'
   const textSize = size === 'sm' ? 'sm_12' : 'lg_16'
@@ -72,7 +80,7 @@ export default function HospitalCard({
                 i18n.language as AppLanguage,
               )}
             </Text>
-            {showBadge && (
+            {emergencySupport && (
               <Badge className="bg-[#DCFCE7] text-[#15803D] px-[8px] py-[4px] rounded-[6px]">
                 Open 24/7
               </Badge>

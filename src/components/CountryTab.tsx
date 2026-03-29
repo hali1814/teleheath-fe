@@ -1,4 +1,5 @@
 import { cn } from '#/lib/utils'
+import { HomeCountryTabSkeleton } from '#/sections/home/HomePageSkeleton'
 import { useGetCountriesQuery } from '#/services/query/profile/getCountry'
 import { useTranslation } from 'react-i18next'
 import { Icon } from './icon'
@@ -11,12 +12,16 @@ export default function CountryTab() {
   const { i18n } = useTranslation()
   const { activeCountry, setActiveCountry } = useAppStore()
 
-  const { data: countriesData } = useGetCountriesQuery({
+  const { data: countriesData, isPending } = useGetCountriesQuery({
     params: {},
   })
 
   const countries =
     countriesData?.data?.sort((a, b) => b.code.localeCompare(a.code)) || []
+
+  if (isPending) {
+    return <HomeCountryTabSkeleton />
+  }
 
   return (
     <div

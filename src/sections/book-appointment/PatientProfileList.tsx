@@ -131,7 +131,12 @@ export function PatientProfileList({
               ))}
           </div>
         ) : (
-          <EmptyPatientProfiles />
+          <EmptyPatientProfiles
+            onClickAddProfile={() => {
+              setPatientToViewDetails(null)
+              setOpenAddNewProfileModal(true)
+            }}
+          />
         )}
       </div>
       {patientToViewDetails && (
