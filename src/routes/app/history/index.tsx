@@ -191,7 +191,7 @@ function RouteComponent() {
         onFilterChange={setDraftFilter}
         onApply={handleApplyFilters}
       />
-      <LoadingBlocking isLoading={isLoading || isFetching} />
+      <LoadingBlocking isLoading={isLoading} />
     </div>
   )
 }
