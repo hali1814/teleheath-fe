@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
@@ -41,6 +41,10 @@ export default function DateInputBase({
   const isControlled = value !== undefined
   const [internalValue, setInternalValue] = useState<string>(defaultValue ?? '')
   const [open, setOpen] = useState(false)
+  /** Tháng đang xem trên lịch (controlled) — khi có value thì mở đúng tháng đó, không reset về tháng hiện tại. */
+  const [calendarMonth, setCalendarMonth] = useState<Date>(() =>
+    dayjs().startOf('month').toDate(),
+  )
 
   const currentValue = isControlled ? (value ?? '') : internalValue
 
@@ -49,6 +53,15 @@ export default function DateInputBase({
     const parsed = dayjs(currentValue, ['YYYY-MM-DD', 'DD-MM-YYYY'], true)
     return parsed.isValid() ? parsed.toDate() : undefined
   }, [currentValue])
+
+  useEffect(() => {
+    if (!open) return
+    setCalendarMonth(
+      selectedDate
+        ? dayjs(selectedDate).startOf('month').toDate()
+        : dayjs().startOf('month').toDate(),
+    )
+  }, [open, selectedDate])
 
   const displayValue = useMemo(() => {
     if (!selectedDate) return ''
@@ -110,15 +123,16 @@ export default function DateInputBase({
           aria-describedby={undefined}
           className={cn(
             'flex w-fit max-w-[calc(100vw-32px)] flex-col border-0 bg-transparent p-0 shadow-none',
-            /* Ghi đè layout grid mặc định — tránh ô lịch bị co chiều cao, hàng cuối “tràn” khỏi nền trắng trên mobile */
-            'max-h-[min(90dvh,100svh)] overflow-y-auto overflow-x-hidden',
+            'max-h-[92dvh] overflow-x-hidden overflow-y-auto',
           )}
         >
           <DialogTitle className="sr-only">Select date</DialogTitle>
           <DialogDescription className="sr-only">Select date</DialogDescription>
-          <div className="shrink-0 rounded-xl bg-white shadow-sm">
+          <div className="w-full min-h-[340px] shrink-0 rounded-xl bg-white shadow-sm">
             <Calendar
               mode="single"
+              month={calendarMonth}
+              onMonthChange={setCalendarMonth}
               selected={selectedDate}
               onSelect={(date) => {
                 if (!date) return
