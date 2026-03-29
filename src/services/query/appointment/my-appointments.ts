@@ -123,6 +123,7 @@ export interface MyAppointmentItem {
   services: AppointmentService[]
   serviceFee: number
   consultationTier: AppointmentConsultationTier | null
+  consultationFee: number
 }
 
 interface MyAppointmentsResponse extends IPagingResponse<MyAppointmentItem> {}

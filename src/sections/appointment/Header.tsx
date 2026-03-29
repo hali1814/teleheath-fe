@@ -3,6 +3,7 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import GetStatus from '#/sections/appointment/GetStatus'
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
+import { formatPrice } from '#/utils/price.util'
 import { useTranslation } from 'react-i18next'
 
 interface AppointmentHeaderProps {
@@ -55,8 +56,8 @@ export default function Header({ appointment }: AppointmentHeaderProps) {
                 size="base_14"
                 className="font-medium leading-[20px] text-text-primary"
               >
-                {t('consultation')}: $
-                {appointment?.consultationTier?.surchargeAmount ?? 0}
+                {t('consultation')}:{' '}
+                {formatPrice(appointment?.consultationFee ?? 0)}
               </Text>
             </div>
           </div>

@@ -53,7 +53,9 @@ export default function PaymentSection({ appointment }: PaymentSectionProps) {
 
       <div className="mt-4 flex items-center justify-between gap-3">
         <Text className={labelClass}>{t('consultationFee')}</Text>
-        <Text className={valueClass}>{formatMoney(serviceFee, currency)}</Text>
+        <Text className={valueClass}>
+          {formatMoney(appointment?.consultationFee ?? 0, currency)}
+        </Text>
       </div>
 
       <div className="my-3 h-px w-full bg-[#E2E8F0]" />
