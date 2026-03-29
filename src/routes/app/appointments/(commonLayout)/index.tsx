@@ -58,8 +58,20 @@ function RouteComponent() {
     overscan: 8,
   })
 
-  if (appointments?.data?.content?.length === 0) {
-    return <EmptyAppointment />
+  if (isLoadingAppointments) {
+    return (
+      <div className="relative mt-4 min-h-[min(320px,calc(100dvh-200px))]">
+        <LoadingBlocking isLoading />
+      </div>
+    )
+  }
+
+  /*
+   * Empty khi không còn hàng sau khi group: API có thể trả cuộc hẹn nhưng toàn quá khứ
+   * (groupAppointmentsByUpcomingWindow chỉ giữ từ hôm nay) → rows rỗng, không được coi là "có data".
+   */
+  if (rows.length === 0) {
+    return <EmptyAppointment variant="upcoming" />
   }
 
   return (
@@ -93,7 +105,6 @@ function RouteComponent() {
           )
         })}
       </div>
-      <LoadingBlocking isLoading={isLoadingAppointments} />
     </div>
   )
 }

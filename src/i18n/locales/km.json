@@ -291,6 +291,8 @@
     "totalAmount": "ទឹកប្រាក់សរុប",
     "paymentMethod": "វិធីសាស្រ្តទូទាត់",
     "paid": "បានទូទាត់",
+    "emptyHistoryTitle": "មិនទាន់មានប្រវត្តិការណាត់ជួបទេ។",
+    "emptyHistoryDescription": "ប្រវត្តិការណាត់ជួបរបស់អ្នកនឹងបង្ហាញនៅទីនេះ។",
     "noAppointmentYet": "មិនទាន់មានការណាត់ជួបទេ។",
     "patientNote": "កំណត់ចំណាំអ្នកជំងឺ៖",
     "no": "ទេ",
