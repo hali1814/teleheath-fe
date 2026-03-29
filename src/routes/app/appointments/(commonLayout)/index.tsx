@@ -32,7 +32,7 @@ function RouteComponent() {
     return groupAppointmentsByUpcomingWindow(appointments?.data?.content ?? [])
   }, [appointments?.data])
 
-  if (Object.keys(groupedAppointments).length === 0) {
+  if (appointments?.data?.content?.length === 0) {
     return <EmptyAppointment />
   }
 
