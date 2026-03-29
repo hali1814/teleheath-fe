@@ -148,6 +148,7 @@ export default function BookingPage({
         .filter((x) => x.status === 'success')
         .map((x) => x.fileId)
         .filter((x) => x !== undefined),
+      thumbnailUrl: store.thumbnailUrl,
     })
   }
 

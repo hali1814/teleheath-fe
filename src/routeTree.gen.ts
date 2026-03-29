@@ -22,8 +22,7 @@ import { Route as AppHistoryIndexRouteImport } from './routes/app/history/index'
 import { Route as AppEntryIndexRouteImport } from './routes/app/entry/index'
 import { Route as AppComponentIndexRouteImport } from './routes/app/component/index'
 import { Route as AppBookOfflineIndexRouteImport } from './routes/app/book-offline/index'
-import { Route as AppSpecialtySearchRouteImport } from './routes/app/specialty/search'
-import { Route as AppSpecialtySpecialtyIdRouteImport } from './routes/app/specialty/$specialtyId'
+import { Route as AppSpecialtySearchRouteRouteImport } from './routes/app/specialty/search/route'
 import { Route as AppSearchcommonLayoutRouteRouteImport } from './routes/app/search/(commonLayout)/route'
 import { Route as AppProfileeditLayoutRouteRouteImport } from './routes/app/profile/(editLayout)/route'
 import { Route as AppProfilecommonLayoutRouteRouteImport } from './routes/app/profile/(commonLayout)/route'
@@ -43,6 +42,7 @@ import { Route as AppHospitalcommonLayoutIndexRouteImport } from './routes/app/h
 import { Route as AppDoctorcommonLayoutIndexRouteImport } from './routes/app/doctor/(commonLayout)/index'
 import { Route as AppBookAppointmentcommonLayoutIndexRouteImport } from './routes/app/book-appointment/(commonLayout)/index'
 import { Route as AppAppointmentscommonLayoutIndexRouteImport } from './routes/app/appointments/(commonLayout)/index'
+import { Route as AppSpecialtySearchSpecialtyIdRouteImport } from './routes/app/specialty/search/$specialtyId'
 import { Route as AppProfileeditLayoutMedicalProfilesRouteImport } from './routes/app/profile/(editLayout)/medical-profiles'
 import { Route as AppProfileeditLayoutEditRouteImport } from './routes/app/profile/(editLayout)/edit'
 import { Route as AppPackagecommonLayoutIdRouteImport } from './routes/app/package/(commonLayout)/$id'
@@ -125,14 +125,9 @@ const AppBookOfflineIndexRoute = AppBookOfflineIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppBookOfflineRouteRoute,
 } as any)
-const AppSpecialtySearchRoute = AppSpecialtySearchRouteImport.update({
+const AppSpecialtySearchRouteRoute = AppSpecialtySearchRouteRouteImport.update({
   id: '/search',
   path: '/search',
-  getParentRoute: () => AppSpecialtyRouteRoute,
-} as any)
-const AppSpecialtySpecialtyIdRoute = AppSpecialtySpecialtyIdRouteImport.update({
-  id: '/$specialtyId',
-  path: '/$specialtyId',
   getParentRoute: () => AppSpecialtyRouteRoute,
 } as any)
 const AppSearchcommonLayoutRouteRoute =
@@ -249,6 +244,12 @@ const AppAppointmentscommonLayoutIndexRoute =
     path: '/',
     getParentRoute: () => AppAppointmentscommonLayoutRouteRoute,
   } as any)
+const AppSpecialtySearchSpecialtyIdRoute =
+  AppSpecialtySearchSpecialtyIdRouteImport.update({
+    id: '/$specialtyId',
+    path: '/$specialtyId',
+    getParentRoute: () => AppSpecialtySearchRouteRoute,
+  } as any)
 const AppProfileeditLayoutMedicalProfilesRoute =
   AppProfileeditLayoutMedicalProfilesRouteImport.update({
     id: '/medical-profiles',
@@ -362,8 +363,7 @@ export interface FileRoutesByFullPath {
   '/app/package': typeof AppPackagecommonLayoutRouteRouteWithChildren
   '/app/profile': typeof AppProfileeditLayoutRouteRouteWithChildren
   '/app/search': typeof AppSearchcommonLayoutRouteRouteWithChildren
-  '/app/specialty/$specialtyId': typeof AppSpecialtySpecialtyIdRoute
-  '/app/specialty/search': typeof AppSpecialtySearchRoute
+  '/app/specialty/search': typeof AppSpecialtySearchRouteRouteWithChildren
   '/app/book-offline/': typeof AppBookOfflineIndexRoute
   '/app/component/': typeof AppComponentIndexRoute
   '/app/entry/': typeof AppEntryIndexRoute
@@ -381,6 +381,7 @@ export interface FileRoutesByFullPath {
   '/app/package/$id': typeof AppPackagecommonLayoutIdRoute
   '/app/profile/edit': typeof AppProfileeditLayoutEditRoute
   '/app/profile/medical-profiles': typeof AppProfileeditLayoutMedicalProfilesRoute
+  '/app/specialty/search/$specialtyId': typeof AppSpecialtySearchSpecialtyIdRoute
   '/app/appointments/': typeof AppAppointmentscommonLayoutIndexRoute
   '/app/book-appointment/': typeof AppBookAppointmentcommonLayoutIndexRoute
   '/app/doctor/': typeof AppDoctorcommonLayoutIndexRoute
@@ -401,8 +402,7 @@ export interface FileRoutesByTo {
   '/app/appointments': typeof AppAppointmentscommonLayoutIndexRoute
   '/app/book-appointment/success': typeof AppBookAppointmentSuccessRouteRouteWithChildren
   '/app/profile': typeof AppProfilecommonLayoutIndexRoute
-  '/app/specialty/$specialtyId': typeof AppSpecialtySpecialtyIdRoute
-  '/app/specialty/search': typeof AppSpecialtySearchRoute
+  '/app/specialty/search': typeof AppSpecialtySearchRouteRouteWithChildren
   '/app/book-offline': typeof AppBookOfflineIndexRoute
   '/app/component': typeof AppComponentIndexRoute
   '/app/entry': typeof AppEntryIndexRoute
@@ -419,6 +419,7 @@ export interface FileRoutesByTo {
   '/app/package/$id': typeof AppPackagecommonLayoutIdRoute
   '/app/profile/edit': typeof AppProfileeditLayoutEditRoute
   '/app/profile/medical-profiles': typeof AppProfileeditLayoutMedicalProfilesRoute
+  '/app/specialty/search/$specialtyId': typeof AppSpecialtySearchSpecialtyIdRoute
   '/app/book-appointment': typeof AppBookAppointmentcommonLayoutIndexRoute
   '/app/doctor': typeof AppDoctorcommonLayoutIndexRoute
   '/app/hospital': typeof AppHospitalcommonLayoutIndexRoute
@@ -451,8 +452,7 @@ export interface FileRoutesById {
   '/app/profile/(commonLayout)': typeof AppProfilecommonLayoutRouteRouteWithChildren
   '/app/profile/(editLayout)': typeof AppProfileeditLayoutRouteRouteWithChildren
   '/app/search/(commonLayout)': typeof AppSearchcommonLayoutRouteRouteWithChildren
-  '/app/specialty/$specialtyId': typeof AppSpecialtySpecialtyIdRoute
-  '/app/specialty/search': typeof AppSpecialtySearchRoute
+  '/app/specialty/search': typeof AppSpecialtySearchRouteRouteWithChildren
   '/app/book-offline/': typeof AppBookOfflineIndexRoute
   '/app/component/': typeof AppComponentIndexRoute
   '/app/entry/': typeof AppEntryIndexRoute
@@ -470,6 +470,7 @@ export interface FileRoutesById {
   '/app/package/(commonLayout)/$id': typeof AppPackagecommonLayoutIdRoute
   '/app/profile/(editLayout)/edit': typeof AppProfileeditLayoutEditRoute
   '/app/profile/(editLayout)/medical-profiles': typeof AppProfileeditLayoutMedicalProfilesRoute
+  '/app/specialty/search/$specialtyId': typeof AppSpecialtySearchSpecialtyIdRoute
   '/app/appointments/(commonLayout)/': typeof AppAppointmentscommonLayoutIndexRoute
   '/app/book-appointment/(commonLayout)/': typeof AppBookAppointmentcommonLayoutIndexRoute
   '/app/doctor/(commonLayout)/': typeof AppDoctorcommonLayoutIndexRoute
@@ -503,7 +504,6 @@ export interface FileRouteTypes {
     | '/app/package'
     | '/app/profile'
     | '/app/search'
-    | '/app/specialty/$specialtyId'
     | '/app/specialty/search'
     | '/app/book-offline/'
     | '/app/component/'
@@ -522,6 +522,7 @@ export interface FileRouteTypes {
     | '/app/package/$id'
     | '/app/profile/edit'
     | '/app/profile/medical-profiles'
+    | '/app/specialty/search/$specialtyId'
     | '/app/appointments/'
     | '/app/book-appointment/'
     | '/app/doctor/'
@@ -542,7 +543,6 @@ export interface FileRouteTypes {
     | '/app/appointments'
     | '/app/book-appointment/success'
     | '/app/profile'
-    | '/app/specialty/$specialtyId'
     | '/app/specialty/search'
     | '/app/book-offline'
     | '/app/component'
@@ -560,6 +560,7 @@ export interface FileRouteTypes {
     | '/app/package/$id'
     | '/app/profile/edit'
     | '/app/profile/medical-profiles'
+    | '/app/specialty/search/$specialtyId'
     | '/app/book-appointment'
     | '/app/doctor'
     | '/app/hospital'
@@ -591,7 +592,6 @@ export interface FileRouteTypes {
     | '/app/profile/(commonLayout)'
     | '/app/profile/(editLayout)'
     | '/app/search/(commonLayout)'
-    | '/app/specialty/$specialtyId'
     | '/app/specialty/search'
     | '/app/book-offline/'
     | '/app/component/'
@@ -610,6 +610,7 @@ export interface FileRouteTypes {
     | '/app/package/(commonLayout)/$id'
     | '/app/profile/(editLayout)/edit'
     | '/app/profile/(editLayout)/medical-profiles'
+    | '/app/specialty/search/$specialtyId'
     | '/app/appointments/(commonLayout)/'
     | '/app/book-appointment/(commonLayout)/'
     | '/app/doctor/(commonLayout)/'
@@ -727,14 +728,7 @@ declare module '@tanstack/react-router' {
       id: '/app/specialty/search'
       path: '/search'
       fullPath: '/app/specialty/search'
-      preLoaderRoute: typeof AppSpecialtySearchRouteImport
-      parentRoute: typeof AppSpecialtyRouteRoute
-    }
-    '/app/specialty/$specialtyId': {
-      id: '/app/specialty/$specialtyId'
-      path: '/$specialtyId'
-      fullPath: '/app/specialty/$specialtyId'
-      preLoaderRoute: typeof AppSpecialtySpecialtyIdRouteImport
+      preLoaderRoute: typeof AppSpecialtySearchRouteRouteImport
       parentRoute: typeof AppSpecialtyRouteRoute
     }
     '/app/search/(commonLayout)': {
@@ -869,6 +863,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/appointments/'
       preLoaderRoute: typeof AppAppointmentscommonLayoutIndexRouteImport
       parentRoute: typeof AppAppointmentscommonLayoutRouteRoute
+    }
+    '/app/specialty/search/$specialtyId': {
+      id: '/app/specialty/search/$specialtyId'
+      path: '/$specialtyId'
+      fullPath: '/app/specialty/search/$specialtyId'
+      preLoaderRoute: typeof AppSpecialtySearchSpecialtyIdRouteImport
+      parentRoute: typeof AppSpecialtySearchRouteRoute
     }
     '/app/profile/(editLayout)/medical-profiles': {
       id: '/app/profile/(editLayout)/medical-profiles'
@@ -1020,15 +1021,27 @@ const AppHomeRouteRouteWithChildren = AppHomeRouteRoute._addFileChildren(
   AppHomeRouteRouteChildren,
 )
 
+interface AppSpecialtySearchRouteRouteChildren {
+  AppSpecialtySearchSpecialtyIdRoute: typeof AppSpecialtySearchSpecialtyIdRoute
+}
+
+const AppSpecialtySearchRouteRouteChildren: AppSpecialtySearchRouteRouteChildren =
+  {
+    AppSpecialtySearchSpecialtyIdRoute: AppSpecialtySearchSpecialtyIdRoute,
+  }
+
+const AppSpecialtySearchRouteRouteWithChildren =
+  AppSpecialtySearchRouteRoute._addFileChildren(
+    AppSpecialtySearchRouteRouteChildren,
+  )
+
 interface AppSpecialtyRouteRouteChildren {
-  AppSpecialtySpecialtyIdRoute: typeof AppSpecialtySpecialtyIdRoute
-  AppSpecialtySearchRoute: typeof AppSpecialtySearchRoute
+  AppSpecialtySearchRouteRoute: typeof AppSpecialtySearchRouteRouteWithChildren
   AppSpecialtyIndexRoute: typeof AppSpecialtyIndexRoute
 }
 
 const AppSpecialtyRouteRouteChildren: AppSpecialtyRouteRouteChildren = {
-  AppSpecialtySpecialtyIdRoute: AppSpecialtySpecialtyIdRoute,
-  AppSpecialtySearchRoute: AppSpecialtySearchRoute,
+  AppSpecialtySearchRouteRoute: AppSpecialtySearchRouteRouteWithChildren,
   AppSpecialtyIndexRoute: AppSpecialtyIndexRoute,
 }
 

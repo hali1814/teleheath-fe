@@ -21,19 +21,19 @@ export default function BookingOffline() {
       title: t('bookingOffline.bookByHospital'),
       description: t('bookingOffline.bookByHospitalDescription'),
       icon: 'hospital',
-      href: `/app/hospital?country=${country}`,
+      href: country ? `/app/hospital?country=${country}` : '/app/hospital',
     },
     {
       title: t('bookingOffline.bookByMedicalPackage'),
       description: t('bookingOffline.bookByMedicalPackageDescription'),
       icon: 'medical_web_service_solid',
-      href: `/app/package?country=${country}`,
+      href: country ? `/app/package?country=${country}` : '/app/package',
     },
     {
       title: t('bookingOffline.bookByDoctor'),
       description: t('bookingOffline.bookByDoctorDescription'),
       icon: 'user_doctor_solid',
-      href: `/app/doctor?country=${country}`,
+      href: country ? `/app/doctor?country=${country}` : '/app/doctor',
     },
   ]
 

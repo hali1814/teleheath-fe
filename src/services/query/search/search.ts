@@ -1,18 +1,19 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
-import type { HospitalDetailResponse } from '../hospital/hospital-detail'
-import type { DoctorDetailResponse } from '../doctor/doctor-detail'
-import type { PackageDetailResponse } from '../package/package-detail'
+import type { ListHospitalsResponse } from '../hospital/list-hospitals'
+import type { ListDoctorResponse } from '../doctor/list-doctor'
+import type { ListPackagesResponse } from '../package/list-packages'
 
 interface SearchRequest {
   keyword: string
   type: string
+  specialtyId?: number
 }
 
 export interface SearchResponse {
-  hospitals: HospitalDetailResponse[]
-  doctors: DoctorDetailResponse[]
-  packages: PackageDetailResponse[]
+  hospitals: ListHospitalsResponse[]
+  doctors: ListDoctorResponse[]
+  packages: ListPackagesResponse[]
 }
 
 const getSearch = async (params: SearchRequest, signal: AbortSignal) => {
