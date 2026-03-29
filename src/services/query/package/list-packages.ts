@@ -4,9 +4,12 @@ import { http, type HttpCommonResponse } from '#/services/network/http-request'
 import type { Package } from '#/types/package'
 
 interface ListPackagesRequest extends IPagingRequest {
+  keyword?: string
   country?: string
-  hospital?: string
-  price?: string
+  hospitalId?: string
+  minPrice?: number
+  maxPrice?: number
+  specialized?: boolean
 }
 
 export interface ListPackagesResponse extends IPagingResponse<Package> {}

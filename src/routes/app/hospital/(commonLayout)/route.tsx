@@ -8,7 +8,6 @@ export const Route = createFileRoute('/app/hospital/(commonLayout)')({
 function RouteComponent() {
   return (
     <div>
-      <Header title="Hospitals" />
       <Outlet />
     </div>
   )

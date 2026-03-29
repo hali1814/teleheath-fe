@@ -15,13 +15,17 @@ export const useSearchStore = create<SearchStore>()(
       recentSearches: [],
 
       addRecent: (query) => {
-        if (!query.trim()) return
+        const trimmed = query.trim()
+        if (trimmed.length === 0) return
 
         const current = get().recentSearches
+        const lower = trimmed.toLowerCase()
 
-        const filtered = current.filter((q) => q !== query)
+        const filtered = current.filter(
+          (q) => q.trim().toLowerCase() !== lower,
+        )
 
-        const updated = [query, ...filtered].slice(0, 10)
+        const updated = [trimmed, ...filtered].slice(0, 5)
 
         set({ recentSearches: updated })
       },
@@ -41,6 +45,18 @@ export const useSearchStore = create<SearchStore>()(
       partialize: (state) => ({
         recentSearches: state.recentSearches,
       }),
+      merge: (persisted, current) => {
+        const p = persisted as Partial<SearchStore> | undefined
+        const list = p?.recentSearches
+        if (Array.isArray(list) && list.length > 5) {
+          return {
+            ...current,
+            ...p,
+            recentSearches: list.slice(0, 5),
+          }
+        }
+        return { ...current, ...p }
+      },
     },
   ),
 )
