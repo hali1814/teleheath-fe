@@ -107,21 +107,28 @@ export default function DateInputBase({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           showCloseButton={false}
-          className="w-fit max-w-[calc(100vw-32px)] border-0 bg-transparent p-0 shadow-none"
+          aria-describedby={undefined}
+          className={cn(
+            'flex w-fit max-w-[calc(100vw-32px)] flex-col border-0 bg-transparent p-0 shadow-none',
+            /* Ghi đè layout grid mặc định — tránh ô lịch bị co chiều cao, hàng cuối “tràn” khỏi nền trắng trên mobile */
+            'max-h-[min(90dvh,100svh)] overflow-y-auto overflow-x-hidden',
+          )}
         >
           <DialogTitle className="sr-only">Select date</DialogTitle>
           <DialogDescription className="sr-only">Select date</DialogDescription>
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={(date) => {
-              if (!date) return
-              commitValue(dayjs(date).format('YYYY-MM-DD'))
-              setOpen(false)
-            }}
-            className="rounded-lg bg-white"
-            captionLayout="dropdown"
-          />
+          <div className="shrink-0 rounded-xl bg-white shadow-sm">
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={(date) => {
+                if (!date) return
+                commitValue(dayjs(date).format('YYYY-MM-DD'))
+                setOpen(false)
+              }}
+              className="rounded-xl bg-transparent"
+              captionLayout="dropdown"
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </div>
