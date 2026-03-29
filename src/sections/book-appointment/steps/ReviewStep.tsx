@@ -449,12 +449,14 @@ export function ReviewStep() {
         </div>
 
         <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
-          <div className="flex-col gap-[4px]">
-            <Text size="lg_16" className="leading-[1.2] font-semibold">
-              Services
-            </Text>
-            <Text size="sm_12" className="leading-[1.3] text-muted-foreground">
-              Choose the additional service you want to purchase.
+          <Text size="lg_16" className="leading-[1.2] font-semibold">
+            Add-on services
+          </Text>
+          <div className="flex items-center gap-[8px] px-[10px] py-[6px] rounded-[8px] bg-[#F0B13312]">
+            <Icon name="warning" className="w-[16px] h-[16px] text-[#F0B133]" />
+            <Text size="sm_12" className="flex-1 leading-[1.3] text-[#FB9324]">
+              Prices are shown for reference only. Users pay directly to the
+              provider, not through the app.
             </Text>
           </div>
           {services.map((service) => (
@@ -479,43 +481,47 @@ export function ReviewStep() {
           ))}
         </div>
 
-        <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
-          <Text size="lg_16" className="font-semibold leading-[1.2]">
-            Payment Details
-          </Text>
-          <div className="flex items-center justify-between">
-            <Text className="leading-normal text-muted-foreground">
-              Consultation Fee
+        {feeInfo.totalAmount > 0 && (
+          <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
+            <Text size="lg_16" className="font-semibold leading-[1.2]">
+              Payment Details
             </Text>
-            <Text className="leading-normal font-medium text-[#333333]">
-              {formatPrice(feeInfo.consultationFee)}
-            </Text>
-          </div>
-          {feeInfo.serviceFee > 0 && (
-            <div className="flex items-center justify-between">
-              <Text className="leading-normal text-muted-foreground">
-                Service Fee
+            {feeInfo.consultationFee > 0 && (
+              <div className="flex items-center justify-between">
+                <Text className="leading-normal text-muted-foreground">
+                  Consultation Fee
+                </Text>
+                <Text className="leading-normal font-medium text-[#333333]">
+                  {formatPrice(feeInfo.consultationFee)}
+                </Text>
+              </div>
+            )}
+            {feeInfo.serviceFee > 0 && (
+              <div className="flex items-center justify-between">
+                <Text className="leading-normal text-muted-foreground">
+                  Service Fee
+                </Text>
+                <Text className="leading-normal font-medium text-[#333333]">
+                  {formatPrice(feeInfo.serviceFee)}
+                </Text>
+              </div>
+            )}
+            <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
+              <Text
+                size="lg_16"
+                className="font-semibold leading-[1.2] text-[#333333]"
+              >
+                Total Amount
               </Text>
-              <Text className="leading-normal font-medium text-[#333333]">
-                {formatPrice(feeInfo.serviceFee)}
+              <Text
+                size="xl_18"
+                className="leading-normal font-semibold text-primary"
+              >
+                {formatPrice(feeInfo.totalAmount)}
               </Text>
             </div>
-          )}
-          <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
-            <Text
-              size="lg_16"
-              className="font-semibold leading-[1.2] text-[#333333]"
-            >
-              Total Amount
-            </Text>
-            <Text
-              size="xl_18"
-              className="leading-normal font-semibold text-primary"
-            >
-              {formatPrice(feeInfo.totalAmount)}
-            </Text>
           </div>
-        </div>
+        )}
 
         {feeInfo.totalAmount > 0 && (
           <div className="flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white">

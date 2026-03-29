@@ -48,6 +48,7 @@ export default function ProfileFormModal({
           containerClassName="pb-0 px-0"
           isUserProfile={false}
           idMember={defaultValues?.id}
+          onSuccess={() => onOpenChange(false)}
           customButton={(handleSaveProfile) => (
             <div className="flex justify-between items-center mt-[30px] gap-[20px]">
               <Button

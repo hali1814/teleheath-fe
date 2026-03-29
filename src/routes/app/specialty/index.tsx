@@ -22,10 +22,11 @@ function RouteComponent() {
   })
   const specialties = data?.data ?? []
 
-  const handleClick = (id: number) => {
+  const handleClick = (id: number, name: string) => {
     navigate({
-      to: '/app/specialty/$specialtyId',
+      to: '/app/specialty/search/$specialtyId',
       params: { specialtyId: id.toString() },
+      search: { specialtyName: name },
     })
   }
 
@@ -39,13 +40,13 @@ function RouteComponent() {
           onSearch={(value) => setQuery(value)}
           onClear={() => setQuery('')}
         />
-        <div className="grid grid-cols-3 mt-[10px]">
+        <div className="grid grid-cols-3 mt-[10px] gap-y-[36px]">
           {specialties.length > 0 &&
             specialties.map((specialty) => (
               <SpecialtyItem
                 key={specialty.id}
                 {...specialty}
-                onClick={() => handleClick(specialty.id)}
+                onClick={() => handleClick(specialty.id, specialty.name)}
               />
             ))}
         </div>

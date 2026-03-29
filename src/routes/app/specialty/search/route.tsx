@@ -1,9 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/app/specialty/search')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>Hello "/app/specialty/search"!</div>
+  return (
+    <div>
+      <Outlet />
+    </div>
+  )
 }

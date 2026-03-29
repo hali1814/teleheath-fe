@@ -3,6 +3,7 @@ import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 interface SuggestionRequest {
   keyword: string
+  specialtyId?: string
 }
 
 export interface SuggestionItem {

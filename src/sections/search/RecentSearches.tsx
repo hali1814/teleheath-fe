@@ -1,7 +1,6 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
-import { useSearchStore } from '#/stores/search'
 
 const RecentSearchesItem = ({
   text,
@@ -40,13 +39,15 @@ const RecentSearchesItem = ({
 
 export default function RecentSearches({
   onSelect,
+  recentSearches,
+  onRemove,
+  onClear,
 }: {
   onSelect: (text: string) => void
+  recentSearches: string[]
+  onRemove: (text: string) => void
+  onClear: () => void
 }) {
-  const recentSearches = useSearchStore((s) => s.recentSearches)
-  const removeRecent = useSearchStore((s) => s.removeRecent)
-  const clearRecent = useSearchStore((s) => s.clearRecent)
-
   return (
     <div className="flex flex-col gap-[16px] p-[16px]">
       <div className="flex items-center justify-between">
@@ -60,7 +61,7 @@ export default function RecentSearches({
           <button
             type="button"
             className="border-0 bg-transparent p-0 cursor-pointer"
-            onClick={clearRecent}
+            onClick={onClear}
           >
             <Text
               size="base_14"
@@ -78,7 +79,7 @@ export default function RecentSearches({
               key={text}
               text={text}
               onSelect={() => onSelect(text)}
-              onRemove={() => removeRecent(text)}
+              onRemove={() => onRemove(text)}
             />
           ))}
         </div>

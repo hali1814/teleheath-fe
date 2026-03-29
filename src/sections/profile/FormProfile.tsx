@@ -42,6 +42,7 @@ export interface FormProfileProps {
   isUserProfile: boolean
   customButton?: (handleSaveProfile: () => void) => React.ReactNode
   containerClassName?: string
+  onSuccess?: () => void
 }
 
 interface FormValues {
@@ -64,6 +65,7 @@ export default function FormProfile({
   idMember,
   isUserProfile,
   customButton,
+  onSuccess,
 }: FormProfileProps) {
   const { control, setValue } = useForm<FormValues>({
     defaultValues: {
@@ -372,7 +374,7 @@ export default function FormProfile({
     if (!res) return
     if (res.success) {
       toast.success(t('profileUpdated'))
-      router.history.back()
+      onSuccess ? onSuccess() : router.history.back()
       if (isUserProfile) {
         setProfile(res.data)
       }
