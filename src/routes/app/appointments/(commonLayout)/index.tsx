@@ -25,6 +25,7 @@ function RouteComponent() {
         fromDate: dayjs().format('YYYY-MM-DD'),
         sortDir: 'DESC',
       },
+      staleTime: 0,
     })
 
   const groupedAppointments = useMemo(() => {
