@@ -54,6 +54,7 @@ export function ScheduleStep() {
       },
       enabled: !!branch?.branchId && !!dateParam && bookingType === 'HOSPITAL',
       placeholderData: keepPreviousData,
+      staleTime: 0,
     })
 
   const { data: { data: schedulesDoctor } = { data: emptySchedules } } =
@@ -65,6 +66,7 @@ export function ScheduleStep() {
       },
       enabled: !!doctor?.doctorId && !!dateParam && bookingType === 'DOCTOR',
       placeholderData: keepPreviousData,
+      staleTime: 0,
     })
 
   const { data: { data: schedulesPackage } = { data: emptySchedules } } =
@@ -75,6 +77,7 @@ export function ScheduleStep() {
       },
       enabled: !!packageData?.id && !!dateParam && bookingType === 'PACKAGE',
       placeholderData: keepPreviousData,
+      staleTime: 0,
     })
 
   const schedules =
