@@ -11,7 +11,7 @@ export type AppointmentStatus =
   | 'NO_SHOW'
 
 export interface MyAppointmentsRequest extends IPagingRequest {
-  status?: AppointmentStatus
+  status?: string
   fromDate?: string
   toDate?: string
 }
