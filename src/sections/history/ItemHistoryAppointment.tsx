@@ -104,6 +104,7 @@ export default function ItemHistoryAppointment({
         router.navigate({
           to: '/app/appointments/$id',
           params: { id: item.id.toString() },
+          search: { type: 'history' },
         })
       }
     >

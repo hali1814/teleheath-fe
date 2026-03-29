@@ -296,6 +296,8 @@
     "no": "Không",
     "yes": "Có",
     "detailBannerCancelled": "Lý do hủy",
-    "detailBannerCompleted": "Cuộc hẹn này đã kết thúc."
+    "detailBannerCompleted": "Cuộc hẹn này đã kết thúc.",
+    "medicalFileOpenInNewTab": "Mở trong tab mới",
+    "medicalFilePreviewUnsupported": "Không xem trước được loại file này trong app. Hãy mở bằng \"Mở trong tab mới\"."
   }
 }

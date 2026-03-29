@@ -71,6 +71,7 @@ function RouteComponent() {
       page: 0,
       size: 1805,
     },
+    staleTime: 0,
   })
 
   const filteredItems = useMemo(

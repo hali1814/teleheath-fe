@@ -296,6 +296,8 @@
     "no": "ទេ",
     "yes": "បាទ/ចាស",
     "detailBannerCancelled": "មូលហេតុនៃការលុបចោល",
-    "detailBannerCompleted": "ការណាត់ជួបនេះបានបញ្ចប់រួចហើយ។"
+    "detailBannerCompleted": "ការណាត់ជួបនេះបានបញ្ចប់រួចហើយ។",
+    "medicalFileOpenInNewTab": "បើកក្នុងផ្ទាំងថ្មី",
+    "medicalFilePreviewUnsupported": "មិនអាចមើលជាមុនបានទេ។ សូមបើកតាម \"បើកក្នុងផ្ទាំងថ្មី\"។"
   }
 }

@@ -3,19 +3,37 @@ import LoadingBlocking from '#/components/LoadingBlocking'
 import Text from '#/components/text'
 import AppointmentInformation from '#/sections/appointment/AppointmentInformation'
 import Header from '#/sections/appointment/Header'
+import MedicalRecords from '#/sections/appointment/MedicalRecords'
+import PaymentSection from '#/sections/appointment/PaymentSection'
+import SelectedServices from '#/sections/appointment/SelectedServices'
 import { useGetAppointmentDetailsQuery } from '#/services/query/appointment/apoiments-details'
 import { createFileRoute, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { z } from 'zod'
+
+/** Query: `?type=appointment` | `?type=history` (mặc định `appointment`) */
+const appointmentDetailSearchSchema = z.object({
+  type: z.enum(['appointment', 'history']).optional().default('appointment'),
+})
+
+export type AppointmentDetailSearch = z.infer<
+  typeof appointmentDetailSearchSchema
+>
 
 export const Route = createFileRoute('/app/appointments/(detailLayout)/$id')({
+  validateSearch: (search): AppointmentDetailSearch =>
+    appointmentDetailSearchSchema.parse(search),
   component: RouteComponent,
 })
 
 function RouteComponent() {
   const { id } = useParams({ from: '/app/appointments/(detailLayout)/$id' })
+  const { type } = Route.useSearch()
   const { t } = useTranslation(['appointment'])
   const { data: appointmentData, isLoading } = useGetAppointmentDetailsQuery({
     params: { id: parseInt(id) },
+    staleTime: 0,
+    gcTime: 0,
   })
 
   const status = appointmentData?.data?.status
@@ -23,7 +41,7 @@ function RouteComponent() {
   const showCompletedBanner = status === 'COMPLETED'
 
   return (
-    <div className="p-4 pb-20">
+    <div className="p-4 pb-20" data-entry-source={type}>
       {(showCancelledBanner || showCompletedBanner) && (
         <div className="mb-4 flex items-start gap-3 rounded-[12px] bg-[#FFF1F0] px-4 py-3">
           <Icon
@@ -47,7 +65,14 @@ function RouteComponent() {
       )}
       <Header appointment={appointmentData?.data} />
       <AppointmentInformation appointment={appointmentData?.data} />
-
+      <SelectedServices services={appointmentData?.data?.services} />
+      <MedicalRecords
+        medicalFiles={appointmentData?.data?.medicalFiles}
+        notes={appointmentData?.data?.notes}
+      />
+      {type === 'history' && (
+        <PaymentSection appointment={appointmentData?.data} />
+      )}
       {appointmentData?.data?.status === 'CONFIRMED' && (
         <div
           className="mt-4 flex flex-col gap-[12px]

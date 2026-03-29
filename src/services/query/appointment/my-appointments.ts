@@ -61,7 +61,16 @@ interface AppointmentMedicalPackage {
 interface AppointmentPayment {
   id: string
   status: string
+  method: string
+  refId: string
+  amount: number
+  currency: string
   transactionId: string
+  transFee: number
+  transAmount: number
+  transTotalAmount: number
+  paidAt: string
+  createdAt: string
 }
 
 interface AppointmentMedicalFile {

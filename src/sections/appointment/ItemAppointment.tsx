@@ -105,6 +105,7 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
         router.navigate({
           to: '/app/appointments/$id',
           params: { id: appointment.id.toString() },
+          search: { type: 'appointment' },
         })
       }
     >
