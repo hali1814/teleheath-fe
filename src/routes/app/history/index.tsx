@@ -128,7 +128,7 @@ function RouteComponent() {
 
       {showEmpty ? (
         <div className="min-h-0 flex-1 overflow-y-auto">
-          <EmptyAppointment />
+          <EmptyAppointment variant="history" />
         </div>
       ) : (
         <div
