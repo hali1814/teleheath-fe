@@ -7,6 +7,7 @@ import { LANGUAGE_STORAGE_KEY, type AppLanguage } from '@/i18n'
 import { useEffect, useMemo, useState } from 'react'
 import FlagKhmer from '#/assets/icons/profile/flag-cambodia.svg?react'
 import FlagEnglish from '#/assets/icons/profile/flag-england.svg?react'
+import FlagVietnam from '#/assets/icons/profile/vi.svg?react'
 
 interface BottomSheetTranslateProps {
   open: boolean
@@ -26,16 +27,15 @@ export function BottomSheetTranslate({
     [i18n.language, i18n.resolvedLanguage],
   )
 
-  const visibleLanguages = useMemo<AppLanguage[]>(() => ['km', 'en'], [])
+  const visibleLanguages = useMemo<AppLanguage[]>(() => ['km', 'en', 'vi'], [])
 
-  const [selectedLanguage, setSelectedLanguage] = useState<AppLanguage>(() => {
-    // Tạm thời ẩn VI: nếu đang là VI thì map về KM để hiển thị đúng selected.
-    return currentLanguage === 'vi' ? 'km' : currentLanguage
-  })
+  const [selectedLanguage, setSelectedLanguage] = useState<AppLanguage>(
+    () => currentLanguage,
+  )
 
   useEffect(() => {
     if (!open) return
-    setSelectedLanguage(currentLanguage === 'vi' ? 'km' : currentLanguage)
+    setSelectedLanguage(currentLanguage)
   }, [open, currentLanguage])
 
   return (
@@ -134,6 +134,7 @@ function LanguageOption({
       <span className="inline-flex items-center justify-center shrink-0">
         {code === 'km' ? <FlagKhmer aria-hidden="true" /> : null}
         {code === 'en' ? <FlagEnglish aria-hidden="true" /> : null}
+        {code === 'vi' ? <FlagVietnam aria-hidden="true" /> : null}
       </span>
       {/* <Icon name={flagName} className="h-3 w-[18px] shrink-0" /> */}
       <Text size="base_14" className="font-normal text-[#666666]">
