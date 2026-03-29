@@ -140,7 +140,6 @@ export function ReviewStep() {
     setData,
     calcFeeInfo,
   } = useBookingStore()
-  console.log(doctor)
 
   const { data } = useGetListServiceQuery({
     params: {
@@ -492,14 +491,16 @@ export function ReviewStep() {
               {formatPrice(feeInfo.consultationFee)}
             </Text>
           </div>
-          <div className="flex items-center justify-between">
-            <Text className="leading-normal text-muted-foreground">
-              Service Fee
-            </Text>
-            <Text className="leading-normal font-medium text-[#333333]">
-              {formatPrice(feeInfo.serviceFee)}
-            </Text>
-          </div>
+          {feeInfo.serviceFee > 0 && (
+            <div className="flex items-center justify-between">
+              <Text className="leading-normal text-muted-foreground">
+                Service Fee
+              </Text>
+              <Text className="leading-normal font-medium text-[#333333]">
+                {formatPrice(feeInfo.serviceFee)}
+              </Text>
+            </div>
+          )}
           <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
             <Text
               size="lg_16"

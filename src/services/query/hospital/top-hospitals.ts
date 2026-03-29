@@ -2,7 +2,9 @@ import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 import type { Hospital } from '#/types/hospital'
 
-interface TopHospitalsRequest {}
+interface TopHospitalsRequest {
+  country?: string
+}
 
 const getTopHospitals = async (
   params: TopHospitalsRequest,

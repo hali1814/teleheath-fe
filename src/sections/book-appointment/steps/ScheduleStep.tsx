@@ -6,11 +6,12 @@ import { SlotTimeList } from '../SlotTimeList'
 import type { ListScheduleByBranchResponse } from '#/services/query/schedule/list-schedule-by-branch'
 import { useGetListScheduleByBranchQuery } from '#/services/query/schedule/list-schedule-by-branch'
 import { keepPreviousData } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useLayoutEffect, useMemo } from 'react'
 import { checkEmptySchedule } from '#/utils/schedule.util'
 import { EmptyState } from '#/sections/search'
 import { useGetListScheduleByDoctorQuery } from '#/services/query/schedule/list-schedule-by-doctor'
 import { useGetListScheduleByPackageQuery } from '#/services/query/schedule/list-schedule-by-package'
+import { startOfToday } from 'date-fns'
 
 const emptySchedules: ListScheduleByBranchResponse = {
   morning: [],
@@ -29,6 +30,15 @@ export function ScheduleStep() {
     setData,
     packageData,
   } = useBookingStore()
+
+  useLayoutEffect(() => {
+    if (appointmentDate != null) return
+    setData({
+      appointmentDate: startOfToday(),
+      startTime: '',
+      endTime: '',
+    })
+  }, [appointmentDate, setData])
 
   const dateParam =
     appointmentDate != null

@@ -14,43 +14,63 @@ import type { AppLanguage } from '#/i18n'
 type PackageCardProps = {
   className?: string
   hideBookAppointment?: boolean
-  sizeThumbnail?: 'sm' | 'md'
+  sizeThumbnail?: 'full' | 'fixed'
+  truncateName?: boolean
 } & Package
 
 export default function PackageCard({
   className,
   hideBookAppointment = false,
-  sizeThumbnail = 'md',
+  sizeThumbnail = 'fixed',
+  truncateName = false,
   ...packageData
 }: PackageCardProps) {
-  const { id, name, countries, price, imageUrl } = packageData
+  const { id, name, countries, price, imageUrl, hospital } = packageData
   const { t, i18n } = useTranslation(['common'])
 
   const thumbnailSize =
-    sizeThumbnail === 'sm' ? 'w-[68px] h-[68px]' : 'w-[108px] h-[108px]'
+    sizeThumbnail === 'fixed'
+      ? 'w-[92px] h-[92px]'
+      : 'w-full h-full aspect-square'
 
   return (
     <Link
       to="/app/package/$id"
       params={{ id: id.toString() }}
       className={cn(
+        'w-full flex shrink-0 gap-4 rounded-[12px] p-[16px] bg-white',
+        sizeThumbnail === 'fixed' ? 'flex-row' : 'flex-col',
         className,
-        'w-full flex items-center gap-4 rounded-[12px] p-[16px] bg-white',
       )}
     >
-      <div>
-        <Image
-          src={imageUrl}
-          alt={name}
-          className={cn(
-            thumbnailSize,
-            'rounded-[8px] border border-dust-red-1',
-          )}
-        />
-      </div>
+      <Image
+        src={imageUrl}
+        alt={name}
+        className={cn(thumbnailSize, 'rounded-[8px] border border-dust-red-1')}
+      />
       <div className="flex-1 flex flex-col gap-2">
-        <Text size="base_14" className="font-semibold leading-[1.2]">
+        <Text
+          size="base_14"
+          className={cn(
+            'font-semibold leading-[1.2]',
+            truncateName ? 'truncate' : '',
+          )}
+        >
           {name}
+        </Text>
+        <Text
+          size="sm_12"
+          className={cn(
+            'font-medium leading-[1.3] text-primary',
+            truncateName ? 'truncate' : '',
+          )}
+        >
+          {getLocalizedTextByLang(
+            hospital.nameVi,
+            hospital.nameKh,
+            hospital.nameEn,
+            i18n.language as AppLanguage,
+          )}
         </Text>
         <LocationBadge
           location={getLocalizedTextByLang(

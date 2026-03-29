@@ -13,65 +13,142 @@ import type { FilterPackage } from '#/routes/app/package/(commonLayout)'
 import { useGetCountryListQuery } from '#/services/query/country/country-list'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { type AppLanguage } from '#/i18n'
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
+import { ALL_PAGINATION } from '#/const/pagination'
+import { PACKAGE_PRICE_RANGE_OPTIONS } from '#/sections/package/package-filter-price'
 
+const emptyFilter = (): FilterPackage => ({
+  country: '',
+  hospitalId: '',
+  priceRange: '',
+})
+
+/**
+ * Draft: ref (không setState mỗi lần chọn) + remount (`fieldKey`).
+ * `defaultsSource`: sau Clear cần default rỗng; khi mở modal lấy từ `appliedFilter`.
+ */
 export default function ModalFilterPackage({
   open,
   onOpenChange,
-  filter,
-  setFilter,
+  appliedFilter,
+  onApply,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  filter: FilterPackage
-  setFilter: (filter: FilterPackage) => void
+  appliedFilter: FilterPackage
+  onApply: (filter: FilterPackage) => void
 }) {
   const { t, i18n } = useTranslation(['package', 'common'])
+
+  const draftCountry = useRef('')
+  const draftHospitalId = useRef('')
+  const draftPriceRange = useRef('')
+
+  const [fieldKey, setFieldKey] = useState(0)
+  /** null = dùng appliedFilter làm default; non-null = default cho lần remount (vd. Clear) */
+  const [defaultsSource, setDefaultsSource] = useState<FilterPackage | null>(
+    null,
+  )
+
+  const [, rerender] = useReducer((x: number) => x + 1, 0)
+
+  useEffect(() => {
+    if (!open) return
+    setDefaultsSource(null)
+    draftCountry.current = appliedFilter.country
+    draftHospitalId.current = appliedFilter.hospitalId
+    draftPriceRange.current = appliedFilter.priceRange
+    setFieldKey((k) => k + 1)
+  }, [open, appliedFilter])
 
   const { data: countryList } = useGetCountryListQuery({
     params: {},
   })
 
-  const handleClearAllFilters = () => {
-    setFilter({ country: '', hospital: '', price: '' })
+  const { data: hospitalList } = useGetListHospitalsQuery({
+    params: {
+      ...ALL_PAGINATION,
+    },
+  })
+
+  const effectiveDefaults = defaultsSource ?? appliedFilter
+
+  const handleClearDraft = () => {
+    const cleared = emptyFilter()
+    setDefaultsSource(cleared)
+    draftCountry.current = ''
+    draftHospitalId.current = ''
+    draftPriceRange.current = ''
+    setFieldKey((k) => k + 1)
+    rerender()
   }
 
-  const handleApplyFilters = () => {
-    console.log(filter)
+  const handleApply = () => {
+    onApply({
+      country: draftCountry.current,
+      hospitalId: draftHospitalId.current,
+      priceRange: draftPriceRange.current,
+    })
+    onOpenChange(false)
   }
 
-  const isDisabled = !filter.country && !filter.hospital && !filter.price
+  const draftIsEmpty =
+    !draftCountry.current &&
+    !draftHospitalId.current &&
+    !draftPriceRange.current
+
+  const hospitalOptions = useMemo(() => {
+    if (!hospitalList?.data?.content) return []
+    return hospitalList?.data?.content?.map((hospital) => ({
+      label: getLocalizedTextByLang(
+        hospital.nameVi,
+        null,
+        hospital.nameEn,
+        i18n.language as AppLanguage,
+      ),
+      value: hospital.hospitalId,
+    }))
+  }, [hospitalList])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
         aria-describedby={undefined}
-        className="gap-[20px] px-[20px] py-[24px] bg-white"
+        className="gap-[20px] bg-white px-[20px] py-[24px]"
       >
         <DialogHeader>
           <div className="flex items-center justify-between">
             <div className="hidden">
-              <DialogTitle></DialogTitle>
+              <DialogTitle />
             </div>
             <Text size="lg_16" className="font-semibold leading-[1.2]">
               {t('filter.title')}
             </Text>
-            <Icon
-              name="close"
-              className="w-[14px] h-[14px]"
-              color="#B3B3B3"
+            <button
+              type="button"
+              className="flex size-8 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:bg-muted"
               onClick={() => onOpenChange(false)}
-            />
+              aria-label={t('common:actions.close', { defaultValue: 'Close' })}
+            >
+              <Icon
+                name="close"
+                className="h-[14px] w-[14px]"
+                color="#B3B3B3"
+              />
+            </button>
           </div>
         </DialogHeader>
-        <div className="flex flex-col gap-[12px]">
+        <div key={fieldKey} className="flex flex-col gap-[12px]">
           <div className="flex flex-col gap-[8px]">
             <Text>{t('filter.country')}</Text>
             <InputSelect
-              value={filter.country}
-              onValueChange={(value) =>
-                setFilter({ ...filter, country: value })
-              }
+              defaultValue={effectiveDefaults.country || undefined}
+              onValueChange={(value) => {
+                draftCountry.current = value
+                rerender()
+              }}
               placeholder={t('filter.country')}
               options={
                 countryList?.data.map((country) => ({
@@ -89,49 +166,46 @@ export default function ModalFilterPackage({
           <div className="flex flex-col gap-[8px]">
             <Text>{t('filter.hospital')}</Text>
             <InputSelect
-              value={filter.hospital}
-              onValueChange={(value) =>
-                setFilter({ ...filter, hospital: value })
-              }
+              defaultValue={effectiveDefaults.hospitalId || undefined}
+              onValueChange={(value) => {
+                draftHospitalId.current = value
+                rerender()
+              }}
               placeholder={t('filter.hospital')}
-              options={[
-                { label: 'Hospital 1', value: 'hospital-1' },
-                { label: 'Hospital 2', value: 'hospital-2' },
-              ]}
+              options={hospitalOptions}
             />
           </div>
           <div className="flex flex-col gap-[8px]">
             <Text>{t('filter.priceRange')}</Text>
             <InputSelect
-              value={filter.price}
-              onValueChange={(value) => setFilter({ ...filter, price: value })}
+              defaultValue={effectiveDefaults.priceRange || undefined}
+              onValueChange={(value) => {
+                draftPriceRange.current = value
+                rerender()
+              }}
               placeholder={t('filter.priceRange')}
-              options={[
-                { label: 'Under 100$', value: '0-100' },
-                { label: '100 - 300$', value: '100-300' },
-                { label: '300 - 500$', value: '300-500' },
-                { label: 'Above 500$', value: '500' },
-              ]}
+              options={PACKAGE_PRICE_RANGE_OPTIONS}
             />
           </div>
         </div>
-        <div className="flex justify-between items-center gap-[8px] pt-[10px]">
+        <div className="flex items-center justify-between gap-[8px] pt-[10px]">
           <Button
+            type="button"
             variant="ghost"
             className="p-0"
-            onClick={handleClearAllFilters}
-            disabled={isDisabled}
+            onClick={handleClearDraft}
+            disabled={draftIsEmpty}
           >
-            <Text className="text-[#A8071A] leading-normal font-medium">
+            <Text className="font-medium leading-normal text-[#A8071A]">
               {t('common:actions.clearAllFilters')}
             </Text>
           </Button>
           <Button
-            className="h-[45px] px-[32px] py-[12px] rounded-[40px]"
-            disabled={isDisabled}
-            onClick={handleApplyFilters}
+            type="button"
+            className="h-[45px] rounded-[40px] px-[32px] py-[12px]"
+            onClick={handleApply}
           >
-            <Text className="leading-normal font-medium text-white">
+            <Text className="font-medium leading-normal text-white">
               {t('common:actions.apply')}
             </Text>
           </Button>

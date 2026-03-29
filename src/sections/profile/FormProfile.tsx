@@ -35,11 +35,13 @@ import type { HttpCommonResponse } from '#/services/network/http-request'
 import type { PatientProfileResponse } from '#/services/query/profile/getProfile'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import type { AppLanguage } from '#/i18n'
+import { cn } from '#/lib/utils'
 
 export interface FormProfileProps {
   idMember?: number
   isUserProfile: boolean
   customButton?: (handleSaveProfile: () => void) => React.ReactNode
+  containerClassName?: string
 }
 
 interface FormValues {
@@ -58,6 +60,7 @@ interface FormValues {
 }
 
 export default function FormProfile({
+  containerClassName,
   idMember,
   isUserProfile,
   customButton,
@@ -446,7 +449,7 @@ export default function FormProfile({
   }, [familyList?.data?.patients, formValues.relationship, t])
 
   return (
-    <div className="pt-4 pb-20 px-4">
+    <div className={cn('pt-4 pb-20 px-4', containerClassName)}>
       <div className="mt-6">
         <UploadAvatar
           value={formValues.avatarUrl}

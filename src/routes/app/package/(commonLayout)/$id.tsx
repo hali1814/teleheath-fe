@@ -10,6 +10,7 @@ import Text from '#/components/text'
 import { Icon } from '#/components/icon'
 import { useTranslation } from 'react-i18next'
 import { useGetPackageDetailQuery } from '#/services/query/package/package-detail'
+import { Header } from '#/sections/home'
 
 export const Route = createFileRoute('/app/package/(commonLayout)/$id')({
   component: RouteComponent,
@@ -22,14 +23,15 @@ function RouteComponent() {
   const { data: { data: packageData } = { data: null } } =
     useGetPackageDetailQuery({
       params: {
-        packageId: id,
+        packageId: parseInt(id),
       },
     })
 
-  const branches = packageData?.hospitals
+  const branches = packageData?.hospital?.branches
 
   return (
     <>
+      <Header title="Package Details" />
       <Image
         src={packageData?.imageUrl}
         alt="package-detail"

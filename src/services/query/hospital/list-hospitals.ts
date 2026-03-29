@@ -3,7 +3,10 @@ import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 import type { Hospital } from '#/types/hospital'
 
-interface ListHospitalsRequest extends IPagingRequest {}
+interface ListHospitalsRequest extends IPagingRequest {
+  keyword?: string
+  country?: string
+}
 
 export interface ListHospitalsResponse extends IPagingResponse<Hospital> {}
 

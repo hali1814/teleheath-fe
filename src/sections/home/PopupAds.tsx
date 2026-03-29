@@ -2,6 +2,7 @@ import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Modal from '#/components/Modal'
 import Text from '#/components/text'
+import { Link } from '@tanstack/react-router'
 
 export default function PopupAds({
   isOpen,
@@ -58,7 +59,9 @@ export default function PopupAds({
             hospitals and specialists.
           </Text>
 
-          <button
+          <Link
+            to="/app/book-appointment"
+            search={{ country: 'VN' }}
             className="w-full rounded-[40px] bg-primary py-[12px]"
             style={{
               boxShadow: '0px 2px 6px 0px #E22A364D',
@@ -66,11 +69,11 @@ export default function PopupAds({
           >
             <Text
               size="base_14"
-              className="font-semibold text-white leading-[1.2] uppercase"
+              className="text-center font-semibold text-white leading-[1.2] uppercase"
             >
               Book now
             </Text>
-          </button>
+          </Link>
         </div>
       </div>
     </Modal>

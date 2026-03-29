@@ -2,11 +2,17 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import type { Specialty } from '#/types/specialty'
 
-export default function SpecialtyItem(props: Specialty) {
+export default function SpecialtyItem({
+  onClick,
+  ...props
+}: Specialty & { onClick?: () => void }) {
   const { name, iconUrl } = props
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center gap-[8px]">
+    <div
+      className="flex-1 flex flex-col items-center justify-center gap-[8px]"
+      onClick={onClick}
+    >
       <div className="w-[56px] h-[56px] flex items-center justify-center rounded-full bg-[#D331311A]">
         <Image
           src={iconUrl}
@@ -16,7 +22,7 @@ export default function SpecialtyItem(props: Specialty) {
       </div>
       <Text
         size="xs_10"
-        className="font-medium leading-none tracking-[3%] text-[#475569] uppercase"
+        className="text-center font-medium leading-none tracking-[3%] text-[#475569] uppercase"
       >
         {name}
       </Text>

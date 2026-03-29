@@ -6,6 +6,7 @@ import {
   DoctorEducationCertifications,
   DoctorActions,
 } from '#/sections/doctor'
+import { Header } from '#/sections/home'
 import { useGetDoctorDetailQuery } from '#/services/query/doctor/doctor-detail'
 import { createFileRoute, useParams } from '@tanstack/react-router'
 
@@ -24,34 +25,37 @@ function RouteComponent() {
     })
 
   return (
-    <div className="flex flex-col items-center gap-[16px] p-[16px] pb-[165px]">
-      <DoctorInfoHeader
-        avatarUrl={doctorData?.avatarUrl ?? ''}
-        nameVi={doctorData?.nameVi ?? ''}
-        nameKh={doctorData?.nameKh ?? ''}
-        nameEn={doctorData?.nameEn ?? ''}
-        specialties={doctorData?.specialties ?? []}
-        experienceYears={doctorData?.experienceYears ?? 0}
-      />
-      <DoctorConsultationFee
-        consultationFee={doctorData?.consultationFee ?? 0}
-      />
-      <AboutDoctor
-        bioVi={doctorData?.bioVi ?? ''}
-        bioKh={doctorData?.bioKh ?? ''}
-        bioEn={doctorData?.bioEn ?? ''}
-      />
-      <DoctorCurrentLocation
-        hospitalName={doctorData?.hospitalName ?? 'Tam Anh Hospital'}
-        address={
-          doctorData?.address ??
-          '2B Pho Quang Street, Ward 2, Tan Binh District, Ho Chi Minh City, Vietnam'
-        }
-      />
-      <DoctorEducationCertifications
-        certifications={doctorData?.certifications ?? ''}
-      />
-      <DoctorActions />
-    </div>
+    <>
+      <Header title="Doctor Details" />
+      <div className="flex flex-col items-center gap-[16px] p-[16px] pb-[120px]">
+        <DoctorInfoHeader
+          avatarUrl={doctorData?.avatarUrl ?? ''}
+          nameVi={doctorData?.nameVi ?? ''}
+          nameKh={doctorData?.nameKh ?? ''}
+          nameEn={doctorData?.nameEn ?? ''}
+          specialties={doctorData?.specialties ?? []}
+          experienceYears={doctorData?.experienceYears ?? 0}
+        />
+        <DoctorConsultationFee
+          consultationFee={doctorData?.consultationFee ?? 0}
+        />
+        <AboutDoctor
+          bioVi={doctorData?.bioVi ?? ''}
+          bioKh={doctorData?.bioKh ?? ''}
+          bioEn={doctorData?.bioEn ?? ''}
+        />
+        {doctorData?.branches && doctorData?.branches?.length > 0 && (
+          <DoctorCurrentLocation
+            hospitalName={doctorData?.branches[0].nameVi ?? ''}
+            address={doctorData?.branches[0].address ?? ''}
+            branches={doctorData?.branches ?? []}
+          />
+        )}
+        <DoctorEducationCertifications
+          certifications={doctorData?.certifications ?? ''}
+        />
+        <DoctorActions />
+      </div>
+    </>
   )
 }

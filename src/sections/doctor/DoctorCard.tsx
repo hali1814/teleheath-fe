@@ -35,6 +35,7 @@ export default function DoctorCard({
   } = doctor
   const avatarSize =
     variant === 'vertical' ? 'w-[86px] h-[86px]' : 'w-[103px] h-[103px]'
+
   if (variant === 'horizontal') {
     return (
       <Link

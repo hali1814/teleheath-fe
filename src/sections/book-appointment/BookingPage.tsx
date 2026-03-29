@@ -12,6 +12,7 @@ import type { BookingRouteContext } from './booking-context'
 import type { BookingStepConfig } from './booking-steps'
 import { StepLayout } from './StepLayout'
 import { useGetHospitalDetailQuery } from '#/services/query/hospital/hospital-detail'
+import { DATE_TIME_TYPE, formatDate } from '#/utils'
 
 export default function BookingPage({
   steps,
@@ -39,6 +40,7 @@ export default function BookingPage({
       setData({
         bookingType: 'DOCTOR',
         doctor: res.data,
+        thumbnailUrl: res.data?.avatarUrl,
       })
     },
     [setData],
@@ -49,6 +51,7 @@ export default function BookingPage({
       setData({
         bookingType: 'HOSPITAL',
         hospital: res.data,
+        thumbnailUrl: res.data?.logoUrl,
       })
     },
     [setData],
@@ -59,6 +62,7 @@ export default function BookingPage({
       setData({
         bookingType: 'PACKAGE',
         packageData: res.data,
+        thumbnailUrl: res.data?.imageUrl,
       })
     },
     [setData],
@@ -131,7 +135,10 @@ export default function BookingPage({
       packageId,
       bookingType,
       patientProfileId: store.patientProfile.id,
-      appointmentDate: store.appointmentDate,
+      appointmentDate: formatDate(
+        store.appointmentDate,
+        DATE_TIME_TYPE.YYYY_MM_DD,
+      ),
       startTime: store.startTime,
       endTime: store.endTime,
       notes: store.notes,

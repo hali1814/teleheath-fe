@@ -2,9 +2,14 @@ import type { IconName } from '#/components/icon'
 import Text from '#/components/text'
 import { useTranslation } from 'react-i18next'
 import BookingItem from './BookingItem'
+import { useSearch } from '@tanstack/react-router'
 
 export default function BookingOffline() {
   const { t } = useTranslation(['book-appointment'])
+  const search = useSearch({
+    from: '/app/book-appointment/(commonLayout)',
+  })
+  const { country } = search as { country: string }
 
   const BOOKING_OFFLINE_ITEMS: {
     title: string
@@ -16,19 +21,19 @@ export default function BookingOffline() {
       title: t('bookingOffline.bookByHospital'),
       description: t('bookingOffline.bookByHospitalDescription'),
       icon: 'hospital',
-      href: '/app/hospital',
+      href: `/app/hospital?country=${country}`,
     },
     {
       title: t('bookingOffline.bookByMedicalPackage'),
       description: t('bookingOffline.bookByMedicalPackageDescription'),
       icon: 'medical_web_service_solid',
-      href: '/app/package',
+      href: `/app/package?country=${country}`,
     },
     {
       title: t('bookingOffline.bookByDoctor'),
       description: t('bookingOffline.bookByDoctorDescription'),
       icon: 'user_doctor_solid',
-      href: '/app/doctor',
+      href: `/app/doctor?country=${country}`,
     },
   ]
 

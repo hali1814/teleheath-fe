@@ -29,7 +29,7 @@ export const Route = createFileRoute('/app/home/')({
 function RouteComponent() {
   const { t } = useTranslation(['home', 'common'])
   const router = useRouter()
-  const { activeCountry, setActiveCountry } = useAppStore()
+  const { activeCountry } = useAppStore()
 
   useGetProfileQuery({
     params: {},
@@ -44,7 +44,9 @@ function RouteComponent() {
   })
 
   const { data } = useGetTopHospitalsQuery({
-    params: {},
+    params: {
+      country: activeCountry,
+    },
   })
   const topHospitalsData = data?.data || []
 
@@ -60,7 +62,11 @@ function RouteComponent() {
       data: { content: [] },
     },
   } = useGetListPackagesQuery({
-    params: SPECIALIZED_PACKAGE_PAGINATION,
+    params: {
+      ...SPECIALIZED_PACKAGE_PAGINATION,
+      specialized: true,
+      country: activeCountry,
+    },
   })
 
   const {
@@ -71,6 +77,7 @@ function RouteComponent() {
     params: {
       ...FEATURED_DOCTOR_PAGINATION,
       topOnly: true,
+      country: activeCountry,
     },
   })
 

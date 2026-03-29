@@ -6,7 +6,7 @@ export interface BookAppointmentRequest {
   doctorId: string
   specialtyId: number
   packageId?: number
-  appointmentDate: Date
+  appointmentDate: string
   startTime: string
   endTime: string
   bookingType: 'HOSPITAL' | 'PACKAGE' | 'DOCTOR'

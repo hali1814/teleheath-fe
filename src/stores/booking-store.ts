@@ -48,6 +48,7 @@ export type BookingState = {
     serviceFee: number
     totalAmount: number
   }
+  thumbnailUrl?: string
 
   setStep: (step: number) => void
   next: () => void
@@ -63,7 +64,6 @@ export type BookingState = {
 
 export const useBookingStore = create<BookingState>((set) => ({
   step: 0,
-  appointmentDate: new Date(),
   serviceIds: [],
   medicalFiles: [],
   feeInfo: defaultFeeInfo,
@@ -137,5 +137,6 @@ export const useBookingStore = create<BookingState>((set) => ({
       notes: undefined,
       medicalHistory: undefined,
       paymentMethod: undefined,
+      thumbnailUrl: undefined,
     }),
 }))

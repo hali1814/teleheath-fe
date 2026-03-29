@@ -5,11 +5,14 @@ import type { Doctor } from '#/types/doctor'
 
 interface ListDoctorRequest extends IPagingRequest {
   country?: string
-  specialty?: string
+  /** ID chuyên khoa */
+  specialty?: number
   gender?: string
-  experienceYears?: string
+  minExperience?: number
+  maxExperience?: number
   consultationType?: string
-  priceRange?: string
+  minPrice?: number
+  maxPrice?: number
   keyword?: string
   topOnly?: boolean
 }

@@ -16,8 +16,8 @@ export default function PackageList({
   const { t } = useTranslation(['common'])
 
   return (
-    <div className="w-full flex flex-col gap-4 px-[16px]">
-      <div className="flex items-center justify-between">
+    <div className="w-full flex flex-col gap-4">
+      <div className="flex items-center justify-between px-[16px]">
         <Text size="base_14" className="font-semibold leading-[1.2]">
           {title}
         </Text>
@@ -31,10 +31,16 @@ export default function PackageList({
         </Link>
       </div>
 
-      <div className="w-full flex flex-col gap-[14px]">
+      <div className="w-full flex gap-[14px] overflow-x-auto pl-[16px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {packages.map((p) => (
-          <PackageCard key={p.id} {...p} />
+          <PackageCard
+            key={p.id}
+            {...p}
+            className="w-[60%] max-w-[300px]"
+            sizeThumbnail="full"
+          />
         ))}
+        <div className="w-[16px]" />
       </div>
     </div>
   )
