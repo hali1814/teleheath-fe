@@ -33,7 +33,7 @@ export default function InputSelect<TFieldValues extends FieldValues>({
   return (
     <InputSelectBase
       {...props}
-      value={field.value}
+      value={field.value || undefined}
       defaultValue={defaultValue as string | undefined}
       onValueChange={onChange}
     />

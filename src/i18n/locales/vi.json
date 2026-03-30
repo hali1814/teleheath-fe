@@ -156,7 +156,9 @@
     "patientId": "Mã bệnh nhân",
     "useAccountInformationTitle": "Dùng thông tin tài khoản?",
     "useAccountInformationMessage": "Thông tin bạn đã nhập sẽ được thay thế bằng thông tin tài khoản.",
-    "invalidEmail": "Email không đúng định dạng."
+    "invalidEmail": "Email không đúng định dạng.",
+    "fileTooLargeTitle": "Ảnh/Tệp quá lớn",
+    "fileTooLargeDescription": "Vui lòng tải tệp nhỏ hơn {{size}}MB."
   },
   "hospital": {
     "title": "Bệnh viện",

@@ -6,16 +6,24 @@ import { Spinner } from '#/components/ui/spinner'
 import { useUploadImageMutation } from '#/services/query/upload/use-upload-image-mutate'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import Avatar from './Avatar'
 
 export interface UploadAvatarProps {
   /** Gọi sau khi upload thành công, trả về URL file từ server. */
   onChange?: (fileUrl: string) => void
   value?: string
+  disabled?: boolean
 }
 
-export default function UploadAvatar({ onChange, value }: UploadAvatarProps) {
+export default function UploadAvatar({
+  onChange,
+  value,
+  disabled = false,
+}: UploadAvatarProps) {
   const { t } = useTranslation(['profile'])
+  const MAX_AVATAR_SIZE_MB = 1
+  const MAX_AVATAR_SIZE_BYTES = MAX_AVATAR_SIZE_MB * 1024 * 1024
   const [avatarUrl, setAvatarUrl] = useState<string | null>(value ?? null)
   const [sheetOpen, setSheetOpen] = useState(false)
   const cameraInputRef = useRef<HTMLInputElement>(null)
@@ -46,9 +54,23 @@ export default function UploadAvatar({ onChange, value }: UploadAvatarProps) {
       const file = e.target.files?.[0]
       e.target.value = ''
       if (!file) return
+      if (file.size > MAX_AVATAR_SIZE_BYTES) {
+        toast.error(
+          t('fileTooLargeTitle', {
+            ns: 'profile',
+          }),
+          {
+            description: t('fileTooLargeDescription', {
+              ns: 'profile',
+              size: MAX_AVATAR_SIZE_MB,
+            }),
+          },
+        )
+        return
+      }
       await uploadFile(file)
     },
-    [uploadFile],
+    [uploadFile, t],
   )
 
   const openInputAfterSheetClose = (
@@ -82,7 +104,7 @@ export default function UploadAvatar({ onChange, value }: UploadAvatarProps) {
 
       <button
         type="button"
-        disabled={isPending}
+        disabled={isPending || disabled}
         onClick={() => setSheetOpen(true)}
         className="relative flex h-[128px] w-[128px] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-[#D331311A] p-0 disabled:opacity-60"
         aria-label={t('uploadPhoto')}

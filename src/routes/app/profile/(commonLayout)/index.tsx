@@ -74,7 +74,7 @@ function RouteComponent() {
 
             <InfoRow
               label={t('dateOfBirth')}
-              value={formatDate(user?.dateOfBirth ?? '')}
+              value={formatDate(user?.dateOfBirth) || '--'}
             />
             <InfoRow
               label={t('gender')}
@@ -82,11 +82,11 @@ function RouteComponent() {
                 user?.gender === 'MALE' ? t('genderMale') : t('genderFemale')
               }
             />
-            <InfoRow label={t('phoneNumber')} value={user?.phone ?? ''} />
-            <InfoRow label={t('email')} value={user?.email ?? ''} />
+            <InfoRow label={t('phoneNumber')} value={user?.phone ?? '--'} />
+            <InfoRow label={t('email')} value={user?.email ?? '--'} />
             <InfoRow
               label={t('address')}
-              value={concatAddress(user?.address)}
+              value={user?.address ? concatAddress(user?.address) : '--'}
             />
           </CardContent>
         </Card>

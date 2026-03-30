@@ -53,7 +53,7 @@ function RouteComponent() {
       )}
 
       {/* stricky save button */}
-      <div className="fixed inset-x-4 bottom-4">
+      <div className="fixed inset-x-0 bottom-0 bg-background px-4 pb-4">
         <Button
           type="button"
           variant="secondary"

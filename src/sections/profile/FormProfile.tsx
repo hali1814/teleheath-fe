@@ -43,6 +43,7 @@ export interface FormProfileProps {
   customButton?: (handleSaveProfile: () => void) => React.ReactNode
   containerClassName?: string
   onSuccess?: () => void
+  pyPassCheckViewMode?: boolean
 }
 
 interface FormValues {
@@ -66,6 +67,7 @@ export default function FormProfile({
   isUserProfile,
   customButton,
   onSuccess,
+  pyPassCheckViewMode = false,
 }: FormProfileProps) {
   const { control, setValue } = useForm<FormValues>({
     defaultValues: {
@@ -94,6 +96,12 @@ export default function FormProfile({
   const city = useWatch({ control, name: 'city' })
   const district = useWatch({ control, name: 'district' })
   const formValues = useWatch({ control })
+  const [editModeMemberFamily, setEditModeMemberFamily] = useState<
+    'edit' | 'view'
+  >('view')
+
+  const isViewMode =
+    editModeMemberFamily === 'view' && Boolean(idMember) && !pyPassCheckViewMode
 
   const countriesQuery = useGetCountriesQuery({
     params: {},
@@ -452,7 +460,7 @@ export default function FormProfile({
 
   return (
     <div className={cn('pt-4 pb-20 px-4', containerClassName)}>
-      <div className="mt-6">
+      <div className={cn('mt-6', isViewMode && 'pointer-events-none')}>
         <UploadAvatar
           value={formValues.avatarUrl}
           onChange={(fileUrl) => {
@@ -477,6 +485,7 @@ export default function FormProfile({
           label={t('fullName')}
           placeholder={t('fullName')}
           isRequired
+          disabled={isViewMode}
         />
 
         <DateInput
@@ -484,6 +493,7 @@ export default function FormProfile({
           name="dateOfBirth"
           label={t('dateOfBirth')}
           isRequired
+          disabled={isViewMode}
         />
 
         <GenderInput
@@ -492,6 +502,7 @@ export default function FormProfile({
           defaultValue="MALE"
           label={t('gender')}
           isRequired
+          disabled={isViewMode}
         />
         <div className="flex flex-col gap-1">
           <Text size="base_14" className="text-text-secondary font-normal">
@@ -513,6 +524,8 @@ export default function FormProfile({
               ref={() => {}}
               type="tel"
               inputMode="tel"
+              disabled={isViewMode}
+              readOnly={isViewMode}
               placeholder={t('phoneNumber')}
               className="h-full w-full bg-transparent px-3 text-base text-[#1A1A1A] outline-none placeholder:text-muted-foreground"
             />
@@ -524,6 +537,7 @@ export default function FormProfile({
           name="email"
           label={t('email')}
           placeholder={t('email')}
+          disabled={isViewMode}
         />
 
         {idMember || !isUserProfile ? (
@@ -534,6 +548,7 @@ export default function FormProfile({
             placeholder={t('relationship')}
             label={t('relationship')}
             isRequired
+            disabled={isViewMode}
             onChangeCallback={(value) => {
               if (value === 'SELF') {
                 setIsUseAccountInfoDialogOpen(true)
@@ -548,6 +563,7 @@ export default function FormProfile({
           options={countryOptions}
           placeholder={t('country')}
           label={t('country')}
+          disabled={isViewMode}
           emptyMessage={countryEmptyMessage}
           onChangeCallback={() => {
             setValue('city', '')
@@ -562,7 +578,7 @@ export default function FormProfile({
           options={cityOptions}
           placeholder={t('city')}
           label={t('city')}
-          disabled={!country}
+          disabled={isViewMode || !country}
           emptyMessage={cityEmptyMessage}
           onChangeCallback={() => {
             setValue('district', '')
@@ -576,7 +592,7 @@ export default function FormProfile({
           options={districtOptions}
           placeholder={t('district')}
           label={t('district')}
-          disabled={!country || !city}
+          disabled={isViewMode || !country || !city}
           emptyMessage={districtEmptyMessage}
           onChangeCallback={() => {
             setValue('precinct', '')
@@ -589,7 +605,7 @@ export default function FormProfile({
           options={precinctOptions}
           placeholder={t('precinct')}
           label={t('precinct')}
-          disabled={!country || !city || !district}
+          disabled={isViewMode || !country || !city || !district}
           emptyMessage={precinctEmptyMessage}
         />
 
@@ -598,13 +614,14 @@ export default function FormProfile({
           name="street"
           label={t('street')}
           placeholder={t('street')}
+          disabled={isViewMode}
         />
       </div>
       {/* // */}
       {!!customButton ? (
         customButton(handleSaveProfile)
       ) : (
-        <div className="fixed inset-x-4 bottom-4">
+        <div className="fixed inset-x-0 bottom-0 bg-background px-4 pb-4">
           {!idMember && (
             <Button
               type="button"
@@ -631,7 +648,24 @@ export default function FormProfile({
             </Button>
           )}
 
-          {idMember && (
+          {idMember && editModeMemberFamily === 'edit' && (
+            <Button
+              type="button"
+              variant="secondary"
+              className="h-[45px] w-full rounded-full"
+              onClick={handleSaveProfile}
+              disabled={!isUserProfile ? isAddingNewProfile : isUpdatingProfile}
+            >
+              <Text
+                size="base_14"
+                className="w-full text-center font-medium text-white"
+              >
+                {t('save')}
+              </Text>
+            </Button>
+          )}
+
+          {idMember && editModeMemberFamily === 'view' && (
             <div className="flex items-center gap-[10px]">
               <Button
                 type="button"
@@ -649,7 +683,7 @@ export default function FormProfile({
                 type="button"
                 variant="secondary"
                 className="h-[45px] flex-1 rounded-[40px] bg-primary px-3 py-[12px] hover:bg-primary"
-                onClick={handleSaveProfile}
+                onClick={() => setEditModeMemberFamily('edit')}
                 disabled={isUpdatingProfile}
               >
                 <Text size="base_14" className="font-medium text-white">
