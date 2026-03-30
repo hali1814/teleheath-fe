@@ -156,7 +156,9 @@
     "patientId": "លេខសម្គាល់អ្នកជំងឺ",
     "useAccountInformationTitle": "ប្រើព័ត៌មានគណនី?",
     "useAccountInformationMessage": "ព័ត៌មានដែលអ្នកបានបញ្ចូល នឹងត្រូវបានជំនួសដោយព័ត៌មានគណនី។",
-    "invalidEmail": "អ៊ីមែលមិនមានទម្រង់ត្រឹមត្រូវ។"
+    "invalidEmail": "អ៊ីមែលមិនមានទម្រង់ត្រឹមត្រូវ។",
+    "fileTooLargeTitle": "រូបភាព/ឯកសារធំពេក",
+    "fileTooLargeDescription": "សូមអាប់ឡូដឯកសារដែលតូចជាង {{size}}MB។"
   },
   "hospital": {
     "title": "កម្ពុជា",
