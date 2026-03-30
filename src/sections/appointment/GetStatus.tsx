@@ -27,6 +27,7 @@ export default function GetStatus({ status }: { status: string }) {
     PENDING: t('pending'),
     WAITING_CONFIRM: t('waitingConfirm'),
   }
+  //
 
   return (
     <span
