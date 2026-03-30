@@ -157,7 +157,9 @@
     "patientId": "Patient ID",
     "useAccountInformationTitle": "Use account information?",
     "useAccountInformationMessage": "Your entered information will be replaced with account details.",
-    "invalidEmail": "Invalid email format."
+    "invalidEmail": "Invalid email format.",
+    "fileTooLargeTitle": "Image/File too large",
+    "fileTooLargeDescription": "Please upload a file smaller than {{size}}MB."
   },
   "hospital": {
     "title": "Hospitals",
