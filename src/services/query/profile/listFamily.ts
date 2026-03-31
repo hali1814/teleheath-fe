@@ -3,7 +3,9 @@ import { useMutation, type UseMutationOptions } from '#/hooks/use-mutation'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 import type { PatientProfileResponse } from './getProfile'
 
-interface ListFamilyRequest {}
+interface ListFamilyRequest {
+  name?: string
+}
 
 export interface ListFamilyPatient {
   id: number

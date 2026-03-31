@@ -186,6 +186,7 @@
       "title": "Lọc",
       "country": "Quốc gia",
       "hospital": "Bệnh viện",
+      "specialty": "Chuyên khoa",
       "priceRange": "Khoảng giá"
     }
   },

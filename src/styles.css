@@ -263,8 +263,51 @@ a {
   will-change: transform;
 }
 
+@keyframes float-chat-ai-icon {
+  0% {
+    transform: rotate(0deg);
+    filter: drop-shadow(0 0 0 rgba(211, 49, 49, 0));
+  }
+
+  25% {
+    transform: rotate(-15deg);
+    filter: drop-shadow(0 0 20px rgba(211, 49, 49, 0.3));
+  }
+
+  50% {
+    transform: rotate(0deg);
+    filter: drop-shadow(0 0 0 rgba(211, 49, 49, 0));
+  }
+
+  75% {
+    transform: rotate(15deg);
+    filter: drop-shadow(0 0 20px rgba(211, 49, 49, 0.3));
+  }
+
+  100% {
+    transform: rotate(0deg);
+    filter: drop-shadow(0 0 0 rgba(211, 49, 49, 0));
+  }
+}
+
+.float-chat-ai {
+  isolation: isolate;
+}
+
+.float-chat-ai__icon {
+  position: relative;
+  border-radius: 9999px;
+  transform-origin: 50% 50%;
+  will-change: transform, filter;
+  animation: float-chat-ai-icon 1200ms ease-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .search-bar-placeholder-track--scroll {
+    animation: none;
+  }
+
+  .float-chat-ai__icon {
     animation: none;
   }
 }

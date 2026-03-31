@@ -33,7 +33,7 @@ export interface Package {
   durationMinutes: number
   imageUrl: string
   countries: Country[]
-  hospital: Hospital
+  hospital?: Hospital | null
   inclusions: PackageInclusion[]
   active: boolean
 }

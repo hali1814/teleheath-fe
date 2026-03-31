@@ -31,15 +31,15 @@ function parseSearchNumber(v: unknown): number | undefined {
 }
 
 /**
- * URL khớp tham số API: specialty (number), min/max experience & price.
- * Modal vẫn dùng FilterDoctor (string keys cho select).
+ * URL khớp tham số API: specialtyId (number), min/max experience & price.
+ * Modal dùng FilterDoctor cho UI state.
  */
 const doctorSearchSchema = z
   .object({
     country: z.string().optional(),
-    specialty: z.unknown().optional(),
+    hospitalId: z.string().optional(),
+    specialtyId: z.unknown().optional(),
     gender: z.string().optional(),
-    consultationType: z.string().optional(),
     minExperience: z.unknown().optional(),
     maxExperience: z.unknown().optional(),
     minPrice: z.unknown().optional(),
@@ -47,9 +47,9 @@ const doctorSearchSchema = z
   })
   .transform((s) => ({
     country: optionalTrim(s.country),
-    specialty: parseSearchNumber(s.specialty),
+    hospitalId: optionalTrim(s.hospitalId),
+    specialtyId: parseSearchNumber(s.specialtyId),
     gender: optionalTrim(s.gender),
-    consultationType: optionalTrim(s.consultationType),
     minExperience: parseSearchNumber(s.minExperience),
     maxExperience: parseSearchNumber(s.maxExperience),
     minPrice: parseSearchNumber(s.minPrice),
@@ -60,10 +60,10 @@ export type DoctorSearch = z.infer<typeof doctorSearchSchema>
 
 export interface FilterDoctor {
   country: string
-  specialty: string
+  hospitalId: string
+  specialtyId?: number
   gender: string
   experienceYears: string
-  consultationType: string
   priceRange: string
 }
 
@@ -76,10 +76,10 @@ export const Route = createFileRoute('/app/doctor/(commonLayout)/')({
 function searchToFilter(s: DoctorSearch): FilterDoctor {
   return {
     country: s.country ?? '',
-    specialty: s.specialty != null ? String(s.specialty) : '',
+    hospitalId: s.hospitalId ?? '',
+    specialtyId: s.specialtyId,
     gender: s.gender ?? '',
     experienceYears: experienceMinMaxToKey(s.minExperience, s.maxExperience),
-    consultationType: s.consultationType ?? '',
     priceRange: minMaxToPriceRangeKey(s.minPrice, s.maxPrice),
   }
 }
@@ -104,11 +104,11 @@ function RouteComponent() {
       ...ALL_PAGINATION,
       keyword: debouncedKeyword || undefined,
       ...(search.country ? { country: search.country } : {}),
-      ...(search.specialty != null ? { specialty: search.specialty } : {}),
-      ...(search.gender ? { gender: search.gender } : {}),
-      ...(search.consultationType
-        ? { consultationType: search.consultationType }
+      ...(search.hospitalId ? { hospitalId: search.hospitalId } : {}),
+      ...(search.specialtyId != null
+        ? { specialtyId: search.specialtyId }
         : {}),
+      ...(search.gender ? { gender: search.gender } : {}),
       ...(search.minExperience != null
         ? { minExperience: search.minExperience }
         : {}),
@@ -123,10 +123,10 @@ function RouteComponent() {
 
   const activeFilterCount = [
     appliedFilter.country,
-    appliedFilter.specialty,
+    appliedFilter.hospitalId,
+    appliedFilter.specialtyId,
     appliedFilter.gender,
     appliedFilter.experienceYears,
-    appliedFilter.consultationType,
     appliedFilter.priceRange,
   ].filter(Boolean).length
 
@@ -135,20 +135,14 @@ function RouteComponent() {
     const { minExperience, maxExperience } = experienceKeyToMinMax(
       filter.experienceYears,
     )
-    const specialtyNum = filter.specialty.trim()
-      ? Number(filter.specialty)
-      : undefined
 
     navigate({
       to: '/app/doctor',
       search: {
         country: filter.country || undefined,
-        specialty:
-          specialtyNum !== undefined && Number.isFinite(specialtyNum)
-            ? specialtyNum
-            : undefined,
+        hospitalId: filter.hospitalId || undefined,
+        specialtyId: filter.specialtyId || undefined,
         gender: filter.gender || undefined,
-        consultationType: filter.consultationType || undefined,
         minExperience,
         maxExperience,
         minPrice,
