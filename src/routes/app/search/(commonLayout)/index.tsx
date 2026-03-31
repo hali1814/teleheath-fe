@@ -14,6 +14,7 @@ import { Spinner } from '#/components/ui/spinner'
 import { useGetSuggestionQuery } from '#/services/query/search/suggestion'
 import { useGetSearchQuery } from '#/services/query/search/search'
 import { useSearchStore } from '#/stores/search'
+import LoadingState from '#/components/LoadingState'
 
 export const Route = createFileRoute('/app/search/(commonLayout)/')({
   component: RouteComponent,
@@ -32,14 +33,17 @@ function RouteComponent() {
   const { recentSearches, addRecent, removeRecent, clearRecent } =
     useSearchStore()
 
-  const { data: { data: { suggestions } } = { data: { suggestions: [] } } } =
-    useGetSuggestionQuery({
-      params: {
-        keyword: debouncedQuery,
-      },
-      enabled: debouncedQuery.length > 2,
-      placeholderData: keepPreviousData,
-    })
+  const {
+    data: { data: { suggestions } } = { data: { suggestions: [] } },
+    isFetching: isFetchingSuggestions,
+    isFetched: isFetchedSuggestions,
+  } = useGetSuggestionQuery({
+    params: {
+      keyword: debouncedQuery,
+    },
+    enabled: debouncedQuery.length > 0,
+    placeholderData: keepPreviousData,
+  })
 
   const {
     data: { data: searchData } = {
@@ -84,7 +88,7 @@ function RouteComponent() {
   const handleSelect = (text: string) => {
     setQuery(text)
     const trimmed = text.trim()
-    if (trimmed.length <= 2) {
+    if (trimmed.length <= 0) {
       setSearchKeyword(null)
       setStatus('EMPTY')
       return
@@ -113,15 +117,11 @@ function RouteComponent() {
           onSelect={handleSelect}
         />
       )}
-      {status === 'LOADING' && (
-        <div className="h-full w-full flex items-center justify-center">
-          <Spinner className="w-4 h-4" />
-        </div>
-      )}
+      {status === 'LOADING' && <LoadingState />}
       {status === 'RESULT' && (
         <>
           <SearchTabs value={tab} onChange={setTab} />
-          <SearchResults data={searchResults} tab={tab} />
+          <SearchResults data={searchResults} tab={tab} query={query} />
         </>
       )}
       {status === 'EMPTY' && (

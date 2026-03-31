@@ -98,6 +98,11 @@ export default function HospitalCard({
                   )
             }
             className="text-muted-foreground leading-[1.3]"
+            iconSize={
+              variantButton === 'solid'
+                ? 'w-[16px] h-[16px]'
+                : 'w-[12px] h-[12px]'
+            }
             textSize={textSizeLocation}
           />
         </div>

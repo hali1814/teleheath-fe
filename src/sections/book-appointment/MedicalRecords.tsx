@@ -15,6 +15,27 @@ function formatFileSize(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
+const ALLOWED_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'pdf'])
+
+function getFileExtension(file: File): string {
+  const name = file.name ?? ''
+  const dotIdx = name.lastIndexOf('.')
+  if (dotIdx === -1) return ''
+  return name.slice(dotIdx + 1).toLowerCase()
+}
+
+function isAllowedFile(file: File): boolean {
+  const ext = getFileExtension(file)
+  if (ALLOWED_EXTENSIONS.has(ext)) return true
+  // Fallback theo MIME type (một số môi trường có thể thiếu ext)
+  const mime = file.type?.toLowerCase?.() ?? ''
+  return (
+    mime === 'image/png' ||
+    mime === 'image/jpeg' ||
+    mime === 'application/pdf'
+  )
+}
+
 const MedicalFileItem = ({
   name,
   sizeLabel,
@@ -81,6 +102,10 @@ export function MedicalRecords() {
 
     const accepted: File[] = []
     for (const file of Array.from(list)) {
+      if (!isAllowedFile(file)) {
+        toast.error(`${file.name} is not allowed. Only PNG, JPG, PDF.`)
+        continue
+      }
       if (file.size > MAX_FILE_BYTES) {
         toast.error(`${file.name} exceeds 10MB`)
         continue
@@ -138,7 +163,7 @@ export function MedicalRecords() {
           id={medicalFileInputId}
           type="file"
           className="sr-only"
-          accept="image/*,application/pdf,.pdf,.jpg,.jpeg,.png,.heic,.heif"
+          accept=".png,.jpg,.jpeg,.pdf,application/pdf,image/png,image/jpeg"
           multiple
           onChange={handleFileChange}
         />

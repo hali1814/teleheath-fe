@@ -5,6 +5,7 @@ import { useBookingStore } from '#/stores/booking-store'
 import type { Branch } from '#/types/hospital'
 import { useEffect, useMemo } from 'react'
 import { LocationCard } from '../LocationCard'
+import LoadingState from '#/components/LoadingState'
 
 const EMPTY_BRANCHES: Branch[] = []
 
@@ -53,15 +54,21 @@ export function LocationStep({ type }: { type: LocationStepType }) {
       <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
         Select Location
       </Text>
-      {branches.length > 0 &&
-        branches.map((item) => (
-          <LocationCard
-            key={item.branchId}
-            selected={branch?.branchId === item.branchId}
-            onClick={() => setData({ branch: item })}
-            {...item}
-          />
-        ))}
+      {hospitalBranchesQuery.isLoading || doctorBranchesQuery.isLoading ? (
+        <LoadingState />
+      ) : (
+        <>
+          {branches.length > 0 &&
+            branches.map((item) => (
+              <LocationCard
+                key={item.branchId}
+                selected={branch?.branchId === item.branchId}
+                onClick={() => setData({ branch: item })}
+                {...item}
+              />
+            ))}
+        </>
+      )}
     </div>
   )
 }

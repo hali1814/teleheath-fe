@@ -14,14 +14,16 @@ import { useGetCountryListQuery } from '#/services/query/country/country-list'
 import { type AppLanguage } from '#/i18n'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
+import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
 import { useEffect, useMemo, useState } from 'react'
+import { ALL_PAGINATION } from '#/const/pagination'
 
 const emptyFilter = (): FilterDoctor => ({
   country: '',
-  specialty: '',
+  hospitalId: '',
+  specialtyId: undefined,
   gender: '',
   experienceYears: '',
-  consultationType: '',
   priceRange: '',
 })
 
@@ -60,6 +62,12 @@ export default function ModalFilterDoctor({
       enabled: open,
     })
 
+  const { data: hospitalList } = useGetListHospitalsQuery({
+    params: {
+      ...ALL_PAGINATION,
+    },
+  })
+
   const handleClearDraft = () => {
     setDraft(emptyFilter())
   }
@@ -71,10 +79,10 @@ export default function ModalFilterDoctor({
 
   const draftIsEmpty =
     !draft.country &&
-    !draft.specialty &&
+    !draft.hospitalId &&
+    !draft.specialtyId &&
     !draft.gender &&
     !draft.experienceYears &&
-    !draft.consultationType &&
     !draft.priceRange
 
   const specialtyOptions = useMemo(() => {
@@ -83,6 +91,19 @@ export default function ModalFilterDoctor({
       value: specialty.id.toString(),
     }))
   }, [specialtiesData])
+
+  const hospitalOptions = useMemo(() => {
+    if (!hospitalList?.data?.content) return []
+    return hospitalList.data.content.map((hospital) => ({
+      label: getLocalizedTextByLang(
+        hospital.nameVi,
+        null,
+        hospital.nameEn,
+        i18n.language as AppLanguage,
+      ),
+      value: hospital.hospitalId,
+    }))
+  }, [hospitalList, i18n.language])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -136,13 +157,24 @@ export default function ModalFilterDoctor({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
+            <Text>Hospital</Text>
+            <InputSelect
+              placeholder="Hospital"
+              options={hospitalOptions}
+              value={draft.hospitalId}
+              onValueChange={(value) =>
+                setDraft((prev) => ({ ...prev, hospitalId: value }))
+              }
+            />
+          </div>
+          <div className="flex flex-col gap-[8px]">
             <Text>{t('filter.specialty')}</Text>
             <InputSelect
               placeholder={t('filter.specialty')}
               options={specialtyOptions}
-              value={draft.specialty}
+              value={draft.specialtyId?.toString()}
               onValueChange={(value) =>
-                setDraft((prev) => ({ ...prev, specialty: value }))
+                setDraft((prev) => ({ ...prev, specialtyId: Number(value) }))
               }
             />
           </div>
@@ -173,20 +205,6 @@ export default function ModalFilterDoctor({
               value={draft.experienceYears}
               onValueChange={(value) =>
                 setDraft((prev) => ({ ...prev, experienceYears: value }))
-              }
-            />
-          </div>
-          <div className="flex flex-col gap-[8px]">
-            <Text>{t('filter.consultationType')}</Text>
-            <InputSelect
-              placeholder={t('filter.consultationType')}
-              options={[
-                { label: 'In-person', value: 'IN_PERSON' },
-                { label: 'Online consultation', value: 'ONLINE' },
-              ]}
-              value={draft.consultationType}
-              onValueChange={(value) =>
-                setDraft((prev) => ({ ...prev, consultationType: value }))
               }
             />
           </div>

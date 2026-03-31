@@ -84,7 +84,7 @@ export const useBookingStore = create<BookingState>((set) => ({
       const next = {
         consultationFee,
         serviceFee,
-        totalAmount: consultationFee + serviceFee,
+        totalAmount: consultationFee,
       }
       const p = s.feeInfo
       if (

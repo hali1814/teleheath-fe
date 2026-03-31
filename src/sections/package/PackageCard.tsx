@@ -66,17 +66,17 @@ export default function PackageCard({
           )}
         >
           {getLocalizedTextByLang(
-            hospital.nameVi,
-            hospital.nameKh,
-            hospital.nameEn,
+            hospital?.nameVi ?? '',
+            hospital?.nameKh ?? null,
+            hospital?.nameEn ?? '',
             i18n.language as AppLanguage,
           )}
         </Text>
         <LocationBadge
           location={getLocalizedTextByLang(
-            countries[0].nameVi,
+            countries?.[0]?.nameVi ?? '',
             null,
-            countries[0].nameEn,
+            countries?.[0]?.nameEn ?? '',
             i18n.language as AppLanguage,
           )}
           className="text-muted-foreground leading-[1.3]"

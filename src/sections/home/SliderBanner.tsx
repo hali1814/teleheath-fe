@@ -13,6 +13,7 @@ import {
 
 const scrollbarHide =
   '[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
+const AUTO_PLAY_INTERVAL_MS = 5000
 
 export type CarouselImageItem = {
   id: string | number
@@ -158,6 +159,15 @@ export default function Carousel({
       behavior: 'smooth',
     })
   }, [])
+
+  useEffect(() => {
+    if (slideCount <= 1) return
+    const timer = window.setInterval(() => {
+      const next = activeIndex + 1 >= slideCount ? 0 : activeIndex + 1
+      scrollToIndex(next)
+    }, AUTO_PLAY_INTERVAL_MS)
+    return () => window.clearInterval(timer)
+  }, [activeIndex, slideCount, scrollToIndex])
 
   const content =
     items && items.length > 0
