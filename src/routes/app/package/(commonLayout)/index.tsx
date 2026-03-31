@@ -33,12 +33,14 @@ const packageSearchSchema = z
   .object({
     country: z.string().optional(),
     hospitalId: z.string().optional(),
+    specialtyId: z.unknown().optional(),
     minPrice: z.unknown().optional(),
     maxPrice: z.unknown().optional(),
   })
   .transform((s) => ({
     country: s.country?.trim() || undefined,
     hospitalId: s.hospitalId?.trim() || undefined,
+    specialtyId: parseSearchInt(s.specialtyId),
     minPrice: parseSearchInt(s.minPrice),
     maxPrice: parseSearchInt(s.maxPrice),
   }))
@@ -50,6 +52,7 @@ export interface FilterPackage {
   hospitalId: string
   /** key preset khoảng giá (vd. `0-100`, `500`) — Apply → min/max URL */
   priceRange: string
+  specialtyId?: number
 }
 
 export const Route = createFileRoute('/app/package/(commonLayout)/')({
@@ -63,6 +66,7 @@ function searchToFilter(s: PackageSearch): FilterPackage {
     country: s.country ?? '',
     hospitalId: s.hospitalId ?? '',
     priceRange: minMaxToPriceRangeKey(s.minPrice, s.maxPrice),
+    specialtyId: s.specialtyId,
   }
 }
 
@@ -86,6 +90,9 @@ function RouteComponent() {
       keyword: debouncedKeyword,
       ...(search.country ? { country: search.country } : {}),
       ...(search.hospitalId ? { hospitalId: search.hospitalId } : {}),
+      ...(search.specialtyId != null
+        ? { specialtyId: search.specialtyId }
+        : {}),
       ...(search.minPrice !== undefined ? { minPrice: search.minPrice } : {}),
       ...(search.maxPrice !== undefined ? { maxPrice: search.maxPrice } : {}),
     },
@@ -98,6 +105,7 @@ function RouteComponent() {
   const activeFilterCount = [
     appliedFilter.country,
     appliedFilter.hospitalId,
+    appliedFilter.specialtyId != null ? 'specialty' : '',
     hasPriceFilter ? 'price' : '',
   ].filter(Boolean).length
 
@@ -108,6 +116,7 @@ function RouteComponent() {
       search: {
         country: filter.country || undefined,
         hospitalId: filter.hospitalId || undefined,
+        specialtyId: filter.specialtyId,
         minPrice,
         maxPrice,
       },

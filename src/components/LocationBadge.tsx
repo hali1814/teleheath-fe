@@ -18,13 +18,16 @@ export default function LocationBadge({
   const textColor = disabled ? 'text-primary/50' : 'text-primary'
 
   return (
-    <div className="flex items-center gap-[4px]">
+    <div className="flex items-start gap-[4px]">
       <Icon
         name="map_marker"
         color={textColor}
         className={cn(iconSize, 'text-primary')}
       />
-      <Text size={textSize} className={cn(textColor, className, 'flex-1')}>
+      <Text
+        size={textSize}
+        className={cn(textColor, className, 'leading-[1.3] flex-1')}
+      >
         {location}
       </Text>
     </div>

@@ -14,12 +14,14 @@ type DoctorCardProps = {
   className?: string
   variant?: 'vertical' | 'horizontal'
   hideBookAppointment?: boolean
+  sizeAvatar?: string
 } & Doctor
 
 export default function DoctorCard({
   className,
   variant = 'vertical',
   hideBookAppointment = false,
+  sizeAvatar,
   ...doctor
 }: DoctorCardProps) {
   const { t, i18n } = useTranslation(['common'])
@@ -33,8 +35,11 @@ export default function DoctorCard({
     specialties,
     country,
   } = doctor
-  const avatarSize =
-    variant === 'vertical' ? 'w-[86px] h-[86px]' : 'w-[103px] h-[103px]'
+  const avatarSize = sizeAvatar
+    ? sizeAvatar
+    : variant === 'vertical'
+      ? 'w-[86px] h-[86px]'
+      : 'w-[103px] h-[103px]'
 
   if (variant === 'horizontal') {
     return (
@@ -88,9 +93,9 @@ export default function DoctorCard({
             >
               {experienceYears} Years Experience •{' '}
               {getLocalizedTextByLang(
-                country.nameVi,
+                country?.nameVi ?? '',
                 null,
-                country.nameEn,
+                country?.nameEn ?? '',
                 i18n.language as AppLanguage,
               )}
             </Text>
@@ -145,9 +150,9 @@ export default function DoctorCard({
       <div className="w-full flex flex-col items-center gap-[8px]">
         <LocationBadge
           location={getLocalizedTextByLang(
-            country.nameVi,
+            country?.nameVi ?? '',
             null,
-            country.nameEn,
+            country?.nameEn ?? '',
             i18n.language as AppLanguage,
           )}
           className="text-muted-foreground leading-[1.3]"

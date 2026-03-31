@@ -7,6 +7,7 @@ interface ListPackagesRequest extends IPagingRequest {
   keyword?: string
   country?: string
   hospitalId?: string
+  specialtyId?: number
   minPrice?: number
   maxPrice?: number
   specialized?: boolean

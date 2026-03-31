@@ -1,5 +1,6 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
+import EmptyState from './EmptyState'
 
 const highlight = (text: string, query: string) => {
   if (!query) return [text]
@@ -57,11 +58,22 @@ export default function Suggestions({
 }) {
   return (
     <div className="flex flex-col gap-[4px] px-[16px] py-[12px]">
-      {items.map((item) => (
-        <SuggestionItem key={item.text} rawText={item.text} onSelect={onSelect}>
-          {highlight(item.text, query)}
-        </SuggestionItem>
-      ))}
+      {items.length > 0 ? (
+        items.map((item) => (
+          <SuggestionItem
+            key={item.text}
+            rawText={item.text}
+            onSelect={onSelect}
+          >
+            {highlight(item.text, query)}
+          </SuggestionItem>
+        ))
+      ) : (
+        <EmptyState>
+          No suggestions found for{' '}
+          <span className="italic">&quot;{query}&quot;</span>
+        </EmptyState>
+      )}
     </div>
   )
 }

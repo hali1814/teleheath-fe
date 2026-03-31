@@ -57,7 +57,7 @@ export default function InputSelect({
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent position="popper" className="rounded-[8px]">
-          <SelectGroup>
+          <SelectGroup className="max-w-full">
             {options.length === 0 && emptyMessage ? (
               <div className="px-3 py-3 text-center">
                 <Text

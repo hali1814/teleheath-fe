@@ -1,8 +1,10 @@
 import SearchBar from '#/components/SearchBar'
 import useDebounce from '#/hooks/use-debounce'
 import { Header } from '#/sections/home'
+import { EmptyState } from '#/sections/search'
 import SpecialtyItem from '#/sections/specialty/SpecialtyItem'
 import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
+import { keepPreviousData } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
@@ -18,6 +20,7 @@ function RouteComponent() {
     params: {
       keyword: debouncedQuery,
     },
+    placeholderData: keepPreviousData,
   })
   const specialties = data?.data ?? []
 
@@ -31,12 +34,15 @@ function RouteComponent() {
           onSearch={(value) => setQuery(value)}
           onClear={() => setQuery('')}
         />
-        <div className="grid grid-cols-3 mt-[10px] gap-y-[36px]">
-          {specialties.length > 0 &&
-            specialties.map((specialty) => (
+        {specialties.length > 0 ? (
+          <div className="grid grid-cols-3 mt-[10px] gap-y-[36px]">
+            {specialties.map((specialty) => (
               <SpecialtyItem key={specialty.id} {...specialty} />
             ))}
-        </div>
+          </div>
+        ) : (
+          <EmptyState>No specialties found.</EmptyState>
+        )}
       </div>
     </>
   )

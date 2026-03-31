@@ -1,7 +1,7 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
-import { useGetDetailPaymentQuery } from '#/services/query/payment/detail-payment'
+import { useGetAppointmentDetailsQuery } from '#/services/query/appointment/apoiments-details'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 
@@ -17,11 +17,11 @@ function RouteComponent() {
   })
 
   const { data: { data: detailPayment } = { data: null } } =
-    useGetDetailPaymentQuery({
-      params: { appointmentId },
+    useGetAppointmentDetailsQuery({
+      params: { id: parseInt(appointmentId) },
       enabled: !!appointmentId,
     })
-
+  console.log(detailPayment)
   return (
     <div className="relative mt-[60px] px-[15px]">
       <div className="flex flex-col items-center justify-center gap-[16px]">
@@ -46,7 +46,7 @@ function RouteComponent() {
           </div>
           <Text size="sm_12" className="leading-[1.3] text-muted-foreground">
             {formatDate(
-              detailPayment?.paidAt,
+              detailPayment?.createdAt,
               DATE_TIME_TYPE.MMM_DD_YYYY_HH_mm_A,
             )}
           </Text>

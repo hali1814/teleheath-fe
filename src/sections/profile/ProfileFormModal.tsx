@@ -24,10 +24,10 @@ export default function ProfileFormModal({
       <DialogContent
         showCloseButton={false}
         aria-describedby={undefined}
-        className="gap-[20px] px-[20px] py-[24px] bg-white max-h-[80vh] overflow-y-auto no-scrollbar"
+        className="gap-[20px] p-0 bg-white max-h-[80vh] overflow-y-auto no-scrollbar"
       >
         <DialogHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between px-[20px] pt-[24px]">
             <div className="hidden">
               <DialogTitle></DialogTitle>
             </div>
@@ -45,12 +45,12 @@ export default function ProfileFormModal({
           </div>
         </DialogHeader>
         <FormProfile
-          containerClassName="pb-0 px-0"
+          containerClassName="px-[20px] pt-[24px] pb-0"
           isUserProfile={false}
           idMember={defaultValues?.id}
           onSuccess={() => onOpenChange(false)}
           customButton={(handleSaveProfile) => (
-            <div className="flex justify-between items-center mt-[30px] gap-[20px]">
+            <div className="sticky bottom-0 left-0 right-0 flex justify-between items-center pt-[20px] pb-[24px] gap-[20px] bg-white">
               <Button
                 variant="secondary"
                 className="h-[45px] flex-1 rounded-full bg-[#F2F2F2]"

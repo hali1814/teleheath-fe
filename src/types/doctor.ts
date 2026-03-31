@@ -14,7 +14,7 @@ export type HospitalStatus = 'ACTIVE' | 'INACTIVE'
 export interface Doctor {
   doctorId: string
   hospitalId: string
-  country: Country
+  country: Country | null
   branches: Branch[]
   avatarUrl: string
   nameVi: string

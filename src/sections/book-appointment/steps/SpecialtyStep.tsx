@@ -7,13 +7,14 @@ import { useState } from 'react'
 import useDebounce from '#/hooks/use-debounce'
 import { keepPreviousData } from '@tanstack/react-query'
 import { useGetSpecialtiesByHospitalQuery } from '#/services/query/hospital/specialties-by-hospital'
+import LoadingState from '#/components/LoadingState'
 
 export function SpecialtyStep() {
   const { hospital, specialty, setData } = useBookingStore()
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce(search, 300)
 
-  const { data } = useGetSpecialtiesByHospitalQuery({
+  const { data, isLoading, isFetching } = useGetSpecialtiesByHospitalQuery({
     params: {
       hospitalId: hospital?.hospitalId ?? '',
       keyword: debouncedSearch,
@@ -35,24 +36,30 @@ export function SpecialtyStep() {
         Select Specialty
       </Text>
       <div className="flex flex-wrap gap-2">
-        {specialties.length > 0 ? (
-          specialties.map((item) => (
-            <SpecialtyChip
-              key={item.id}
-              name={item.name}
-              icon={item.iconUrl}
-              size="md"
-              clickable
-              selected={specialty?.id === item.id}
-              onClick={() => setData({ specialty: item })}
-            />
-          ))
+        {isLoading || isFetching || !hospital?.hospitalId ? (
+          <LoadingState className="h-[300px]" />
         ) : (
-          <EmptyState>
-            <Text className="text-center leading-normal text-muted-foreground">
-              No specialties found. Please try again.
-            </Text>
-          </EmptyState>
+          <>
+            {specialties.length > 0 ? (
+              specialties.map((item) => (
+                <SpecialtyChip
+                  key={item.id}
+                  name={item.name}
+                  icon={item.iconUrl}
+                  size="md"
+                  clickable
+                  selected={specialty?.id === item.id}
+                  onClick={() => setData({ specialty: item })}
+                />
+              ))
+            ) : (
+              <EmptyState className="h-full">
+                <Text className="text-center leading-normal text-muted-foreground">
+                  No specialties found. Please try again.
+                </Text>
+              </EmptyState>
+            )}
+          </>
         )}
       </div>
     </div>

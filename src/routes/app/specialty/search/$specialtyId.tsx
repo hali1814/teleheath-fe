@@ -1,11 +1,12 @@
+import LoadingState from '#/components/LoadingState'
 import SearchBar from '#/components/SearchBar'
-import { Spinner } from '#/components/ui/spinner'
 import useDebounce from '#/hooks/use-debounce'
 import { Header } from '#/sections/home'
 import { SearchTabs, SearchResults, EmptyState } from '#/sections/search'
-import { useGetSearchQuery } from '#/services/query/search/search'
+import { useGetSearchSpecialtyQuery } from '#/services/query/search/search-specialty'
+import { filterSpecialtySearchByKeyword } from '#/utils/specialty-search-filter.util'
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import z from 'zod'
 
 const specialtySearchSchema = z.object({
@@ -35,20 +36,32 @@ function RouteComponent() {
     data: { data: searchData } = {
       data: { hospitals: [], doctors: [], packages: [] },
     },
-  } = useGetSearchQuery({
+  } = useGetSearchSpecialtyQuery({
     params: {
-      keyword: searchKeyword ?? '',
-      type: 'ALL',
       specialtyId: Number(specialtyId),
     },
     enabled: Number.isFinite(Number(specialtyId)),
   })
 
-  const searchResults = {
-    hospitals: searchData.hospitals,
-    doctors: searchData.doctors,
-    packages: searchData.packages,
-  }
+  const apiBuckets = useMemo(
+    () => ({
+      hospitals: searchData?.hospitals ?? [],
+      doctors: searchData?.doctors ?? [],
+      packages: searchData?.packages ?? [],
+    }),
+    [searchData],
+  )
+
+  const rawTotalCount =
+    apiBuckets.hospitals.length +
+    apiBuckets.doctors.length +
+    apiBuckets.packages.length
+
+  /** Filter theo keyword trên FE (API chỉ gọi 1 lần theo specialtyId) */
+  const searchResults = useMemo(
+    () => filterSpecialtySearchByKeyword(apiBuckets, searchKeyword),
+    [apiBuckets, searchKeyword],
+  )
 
   const handleSearch = (value: string) => {
     setQuery(value)
@@ -74,11 +87,7 @@ function RouteComponent() {
           onClear={() => setQuery('')}
         />
       </div>
-      {(isLoading || isFetching) && (
-        <div className="h-full w-full flex items-center justify-center">
-          <Spinner className="w-4 h-4" />
-        </div>
-      )}
+      {(isLoading || isFetching) && <LoadingState />}
       {!isLoading && !isFetching && counts.all > 0 && (
         <>
           <SearchTabs
@@ -87,7 +96,13 @@ function RouteComponent() {
             variant="round"
             counts={counts}
           />
-          <SearchResults data={searchResults} tab={tab} />
+          <SearchResults
+            data={searchResults}
+            tab={tab}
+            query={searchKeyword}
+            hideCount
+            hideBookAppointment={false}
+          />
         </>
       )}
       {!isLoading && !isFetching && counts.all === 0 && (
@@ -99,7 +114,9 @@ function RouteComponent() {
             counts={counts}
           />
           <EmptyState>
-            {searchKeyword ? (
+            {rawTotalCount === 0 ? (
+              'No data available'
+            ) : searchKeyword ? (
               <>
                 No results for{' '}
                 <span className="italic">&quot;{searchKeyword}&quot;</span>

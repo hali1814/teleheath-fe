@@ -187,6 +187,7 @@
       "title": "Filter",
       "country": "Country",
       "hospital": "Hospital",
+      "specialty": "Specialty",
       "priceRange": "Price Range"
     }
   },
