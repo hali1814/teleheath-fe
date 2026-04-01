@@ -35,6 +35,7 @@ export default function HospitalList({
           <HospitalCard
             key={hospital.hospitalId}
             className="w-[60%] max-w-[300px]"
+            showBadge={false}
             {...hospital}
           />
         ))}

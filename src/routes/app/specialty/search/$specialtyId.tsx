@@ -82,6 +82,7 @@ function RouteComponent() {
       <Header title={specialtyName} />
       <div className="px-[16px] pt-[16px]">
         <SearchBar
+          placeholder="Search for hospitals, doctor, packages"
           value={query}
           onSearch={handleSearch}
           onClear={() => setQuery('')}
