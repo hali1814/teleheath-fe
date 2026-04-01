@@ -49,7 +49,15 @@ export default function HospitalCard({
   const textSizeLocation = size === 'sm' ? 'xs_10' : 'sm_12'
   const heightButton = size === 'sm' ? 'h-[32px]' : 'h-[36px]'
 
-  const hospitalAddress = JSON.parse(address ?? '{}').fullAddress
+  let hospitalAddress = address
+  if (typeof hospitalAddress === 'string') {
+    try {
+      const parsed = JSON.parse(hospitalAddress)
+      hospitalAddress = parsed.fullAddress
+    } catch {
+      // not JSON, keep as-is
+    }
+  }
 
   return (
     <Link
