@@ -2,6 +2,7 @@ import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
+import { useGetListNotificationQuery } from '#/services/query/notification/list-notification'
 import { Link, useRouter } from '@tanstack/react-router'
 
 export default function Header({
@@ -14,6 +15,14 @@ export default function Header({
   isCenter?: boolean
 }) {
   const router = useRouter()
+
+  const { data } = useGetListNotificationQuery({
+    params: {
+      statuses: 'QUEUED',
+    },
+  })
+
+  const notifications = data?.data ?? []
 
   return (
     <header className="sticky top-0 z-50 h-[62px] border-b-[0.5px] border-[#FFE8E6] bg-background">
@@ -30,7 +39,7 @@ export default function Header({
             />
             <Badge className="absolute -top-1 -right-1 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
               <Text size="xs_10" className="leading-[1.3] text-white">
-                0
+                {notifications.length}
               </Text>
             </Badge>
           </Link>

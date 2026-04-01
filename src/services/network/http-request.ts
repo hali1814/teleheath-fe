@@ -94,6 +94,31 @@ export const http = {
   },
 
   /**
+   * PATCH request to partially update resource
+   * @template T - Response data type (can be any type)
+   * @param endpoint - API endpoint (e.g., '/users/123')
+   * @param requestBody - Data to patch (optional)
+   * @param requestConfig - Additional axios config (optional)
+   * @returns Promise with API response data
+   */
+  patch: async <T>(
+    endpoint: string,
+    requestBody?: object,
+    requestConfig?: AxiosRequestConfig,
+  ): Promise<HttpCommonResponse<T>> => {
+    const cleanedData = cleanParams(requestBody || {})
+
+    const response = await axiosInstance.patch<HttpCommonResponse<T>>(
+      endpoint,
+      cleanedData,
+      {
+        ...requestConfig,
+      },
+    )
+    return response.data
+  },
+
+  /**
    * DELETE request to remove resource
    * @template T - Response data type (can be any type)
    * @param endpoint - API endpoint (e.g., '/users/123', '/products/456')
@@ -182,6 +207,30 @@ export const http = {
     const cleanedData = cleanParams(requestBody || {})
 
     const response = await axiosInstance.put<HttpCommonResponse<T>>(
+      endpoint,
+      cleanedData,
+      requestConfig,
+    )
+    return response.data
+  },
+
+  /**
+   * PATCH request with custom config (without default baseURL)
+   * Use this when you need to call external APIs or override baseURL
+   * @template T - Response data type (can be any type)
+   * @param endpoint - API endpoint
+   * @param requestBody - Data to patch (optional)
+   * @param requestConfig - Custom axios config
+   * @returns Promise with API response data
+   */
+  patchConfig: async <T>(
+    endpoint: string,
+    requestBody?: object,
+    requestConfig?: AxiosRequestConfig,
+  ): Promise<HttpCommonResponse<T>> => {
+    const cleanedData = cleanParams(requestBody || {})
+
+    const response = await axiosInstance.patch<HttpCommonResponse<T>>(
       endpoint,
       cleanedData,
       requestConfig,

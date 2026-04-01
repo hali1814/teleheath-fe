@@ -1,3 +1,4 @@
+import i18n, { type AppLanguage } from '#/i18n'
 import { getRouter } from '#/router-instance'
 import { clearProfile } from '#/stores/profile'
 import { clearTokens, getToken } from '#/stores/token'
@@ -37,6 +38,10 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const token = getToken()
+    const language = i18n.language as AppLanguage
+    if (language) {
+      config.headers['Accept-Language'] = language
+    }
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }

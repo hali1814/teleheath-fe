@@ -10,6 +10,7 @@ type Props = {
   isHome?: boolean
   isAutoScroll?: boolean
   onSearch?: (query: string) => void
+  onSubmit?: () => void
   onClick?: () => void
   onClear?: () => void
 }
@@ -128,6 +129,7 @@ export default function SearchBar({
   isHome = false,
   isAutoScroll = false,
   onSearch,
+  onSubmit,
   onClick,
   onClear,
 }: Props) {
@@ -154,6 +156,12 @@ export default function SearchBar({
           value={value}
           placeholder={placeholder}
           onChange={(e) => onSearch?.(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              onSubmit?.()
+            }
+          }}
           className="
             flex-1 min-w-0 bg-transparent outline-none
             text-[14px] leading-normal truncate

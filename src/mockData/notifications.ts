@@ -1,13 +1,10 @@
-import type { NotificationCardProps } from '#/sections/notification/NotificationCard'
-
 const now = Date.now()
 
 export const notificationsMock = [
   // Unread
   {
     id: 'n1',
-    color: 'green',
-    icon: 'bell_check',
+    type: 'completed',
     title: 'Appointment Completed',
     description:
       'Your appointment on 20/03/2026 at Vinmec International Hospital is complete. Thank you for using Telehealth.',
@@ -16,8 +13,7 @@ export const notificationsMock = [
   },
   {
     id: 'n2',
-    color: 'green',
-    icon: 'bell_check',
+    type: 'completed',
     title: 'Online Consultation Completed',
     description:
       'Your online consultation with Dr. Nguyen Van A has ended. Thank you for using Telehealth.',
@@ -26,8 +22,7 @@ export const notificationsMock = [
   },
   {
     id: 'n3',
-    color: 'red',
-    icon: 'appointment_cancelled',
+    type: 'cancelled',
     title: 'Appointment Cancelled',
     description:
       'Your appointment scheduled on 22/03/2026 at Tam Anh Hospital has been successfully cancelled.',
@@ -36,8 +31,7 @@ export const notificationsMock = [
   },
   {
     id: 'n4',
-    color: 'cyan',
-    icon: 'check_circle',
+    type: 'appointment',
     title: 'Booking Request Received',
     description:
       'Your appointment request has been received. Our customer care team will contact you within 30 minutes to confirm your booking.',
@@ -47,8 +41,7 @@ export const notificationsMock = [
   // Read
   {
     id: 'n5',
-    color: 'blue',
-    icon: 'bell_check',
+    type: 'reminder',
     title: 'Online Consultation Starts Soon',
     description:
       'Your online consultation with Dr. Tran Thi B will start in 15 minutes. Tap here to join the session.',
@@ -57,8 +50,7 @@ export const notificationsMock = [
   },
   {
     id: 'n6',
-    color: 'orange',
-    icon: 'video',
+    type: 'reminder',
     title: 'Hospital Appointment Reminder',
     description:
       'You have an appointment at 115 People’s Hospital on 25/03/2026 at 10:00 AM. Please arrive 15 minutes early.',
@@ -67,8 +59,7 @@ export const notificationsMock = [
   },
   {
     id: 'n7',
-    color: 'green',
-    icon: 'notification_active',
+    type: 'completed',
     title: 'Prescription Ready',
     description:
       'Your prescription from your last visit is ready. You can view and download it in Medical Records.',
@@ -77,12 +68,11 @@ export const notificationsMock = [
   },
   {
     id: 'n8',
-    color: 'cyan',
-    icon: 'check_circle',
+    type: 'completed',
     title: 'Lab Results Available',
     description:
       'Your lab results from 18/03/2026 are now available. Tap to review the summary in your health profile.',
     time: new Date(now - 3 * 24 * 60 * 60 * 1000),
     isRead: true,
   },
-] satisfies (NotificationCardProps & { id: string })[]
+]

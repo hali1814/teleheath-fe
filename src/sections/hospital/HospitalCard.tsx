@@ -24,7 +24,7 @@ export default function HospitalCard({
   className,
   size = 'sm',
   variantButton = 'outline',
-  showBadge = false,
+  showBadge = true,
   hideBookAppointment = false,
   showAddress = false,
   ...hospital
@@ -48,6 +48,8 @@ export default function HospitalCard({
   const iconColor = variantButton === 'solid' ? 'white' : 'var(--primary)'
   const textSizeLocation = size === 'sm' ? 'xs_10' : 'sm_12'
   const heightButton = size === 'sm' ? 'h-[32px]' : 'h-[36px]'
+
+  const hospitalAddress = JSON.parse(address ?? '{}').fullAddress
 
   return (
     <Link
@@ -80,7 +82,7 @@ export default function HospitalCard({
                 i18n.language as AppLanguage,
               )}
             </Text>
-            {emergencySupport && (
+            {showBadge && emergencySupport && (
               <Badge className="bg-[#DCFCE7] text-[#15803D] px-[8px] py-[4px] rounded-[6px]">
                 Open 24/7
               </Badge>
@@ -89,7 +91,7 @@ export default function HospitalCard({
           <LocationBadge
             location={
               showAddress
-                ? address
+                ? hospitalAddress
                 : getLocalizedTextByLang(
                     country.nameVi,
                     null,

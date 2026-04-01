@@ -10,7 +10,6 @@ import {
 import { keepPreviousData } from '@tanstack/react-query'
 import { useState } from 'react'
 import useDebounce from '#/hooks/use-debounce'
-import { Spinner } from '#/components/ui/spinner'
 import { useGetSuggestionQuery } from '#/services/query/search/suggestion'
 import { useGetSearchQuery } from '#/services/query/search/search'
 import { useSearchStore } from '#/stores/search'
@@ -35,8 +34,6 @@ function RouteComponent() {
 
   const {
     data: { data: { suggestions } } = { data: { suggestions: [] } },
-    isFetching: isFetchingSuggestions,
-    isFetched: isFetchedSuggestions,
   } = useGetSuggestionQuery({
     params: {
       keyword: debouncedQuery,
@@ -99,9 +96,17 @@ function RouteComponent() {
     addRecent(trimmed)
   }
 
+  const handleSubmitSearch = () => {
+    handleSelect(query)
+  }
+
   return (
     <>
-      <SearchInput value={query} onSearch={handleSearch} />
+      <SearchInput
+        value={query}
+        onSearch={handleSearch}
+        onSubmit={handleSubmitSearch}
+      />
       {status === 'IDLE' && (
         <RecentSearches
           onSelect={handleSelect}
