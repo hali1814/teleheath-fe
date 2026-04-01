@@ -1,7 +1,10 @@
 import { Icon, type IconName } from '#/components/icon'
 import Text from '#/components/text'
 import { cn } from '#/lib/utils'
+import type { ListNotificationResponse } from '#/services/query/notification/list-notification'
+import { useMarkReadNotificationMutation } from '#/services/query/notification/mark-read-notification'
 import { formatTimeAgo } from '#/utils/time.util'
+import { useNavigate } from '@tanstack/react-router'
 
 const MAPPING_COLOR = {
   green: '#34D36C',
@@ -11,37 +14,61 @@ const MAPPING_COLOR = {
   orange: '#D46B08',
 }
 
-const MAPPING_ICON = {
-  bell_check: 'bell_check',
-  appointment_cancelled: 'send_cancel_filled',
-  check_circle: 'check_circle_solid',
-  video: 'video_solid',
-  notification_active: 'notification_active',
-} as const satisfies Record<string, IconName>
-
-export interface NotificationCardProps {
-  color: keyof typeof MAPPING_COLOR
-  icon: keyof typeof MAPPING_ICON
-  title: string
-  description: string
-  time: Date | string | number
-  isRead?: boolean
-}
+const mappingType = {
+  appointment: {
+    icon: 'check_circle_solid',
+    color: 'cyan',
+  },
+  cancelled: {
+    icon: 'send_cancel_filled',
+    color: 'red',
+  },
+  reminder: {
+    icon: 'notification_active',
+    color: 'orange',
+  },
+  completed: {
+    icon: 'bell_check',
+    color: 'green',
+  },
+} as const satisfies Record<
+  string,
+  { icon: IconName; color: keyof typeof MAPPING_COLOR }
+>
 
 export default function NotificationCard({
-  color,
-  icon,
+  notifId,
   title,
-  description,
-  time,
-  isRead = false,
-}: NotificationCardProps) {
-  const colorCode = MAPPING_COLOR[color]
+  appointmentId,
+  body,
+  type,
+  status,
+  sentAt,
+}: ListNotificationResponse) {
+  const navigate = useNavigate()
+  const isRead = status === 'READ'
+  const colorCode =
+    MAPPING_COLOR[mappingType[type as keyof typeof mappingType].color]
   const accentBg = `${colorCode}1A`
   const bgContainer = isRead ? 'bg-background' : 'bg-[#FFF4F4]'
 
+  const { mutateAsync: markReadNotification } =
+    useMarkReadNotificationMutation()
+
+  const handleClick = async () => {
+    if (!isRead) {
+      await markReadNotification({ notifId })
+    }
+    navigate({
+      to: '/app/appointments/$id',
+      search: { type: 'appointment' as const },
+      params: { id: appointmentId.toString() },
+    })
+  }
+
   return (
-    <div
+    <button
+      onClick={handleClick}
       className={cn(
         'w-full flex gap-3 p-[16px] border border-secondary/5',
         bgContainer,
@@ -53,7 +80,9 @@ export default function NotificationCard({
           style={{ backgroundColor: accentBg }}
         >
           <Icon
-            name={MAPPING_ICON[icon]}
+            name={
+              mappingType[type as keyof typeof mappingType].icon as IconName
+            }
             className="w-[20px] h-[20px] -rotate-45"
             style={{ color: colorCode }}
           />
@@ -79,7 +108,7 @@ export default function NotificationCard({
           </div>
 
           <Text size="sm_12" className="leading-[1.3] text-muted-foreground">
-            {description}
+            {body}
           </Text>
         </div>
       </div>
@@ -89,8 +118,8 @@ export default function NotificationCard({
         className="font-medium leading-[1.3]"
         style={{ color: isRead ? '#94A3B8' : colorCode }}
       >
-        {formatTimeAgo(time)}
+        {formatTimeAgo(sentAt)}
       </Text>
-    </div>
+    </button>
   )
 }
