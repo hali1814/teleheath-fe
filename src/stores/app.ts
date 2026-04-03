@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
 
 type AppStore = {
   popup: boolean
@@ -9,18 +8,10 @@ type AppStore = {
 }
 
 export const useAppStore = create<AppStore>()(
-  persist(
-    (set) => ({
-      popup: true,
-      setPopup: (popup) => set({ popup: popup }),
-      activeCountry: 'VN',
-      setActiveCountry: (country) => set({ activeCountry: country }),
-    }),
-    {
-      name: 'app-storage',
-      partialize: (state) => ({
-        activeCountry: state.activeCountry,
-      }),
-    },
-  ),
+  (set) => ({
+    popup: true,
+    setPopup: (popup) => set({ popup: popup }),
+    activeCountry: 'VN',
+    setActiveCountry: (country) => set({ activeCountry: country }),
+  }),
 )

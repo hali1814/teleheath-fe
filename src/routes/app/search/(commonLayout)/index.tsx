@@ -32,15 +32,14 @@ function RouteComponent() {
   const { recentSearches, addRecent, removeRecent, clearRecent } =
     useSearchStore()
 
-  const {
-    data: { data: { suggestions } } = { data: { suggestions: [] } },
-  } = useGetSuggestionQuery({
-    params: {
-      keyword: debouncedQuery,
-    },
-    enabled: debouncedQuery.length > 0,
-    placeholderData: keepPreviousData,
-  })
+  const { data: { data: { suggestions } } = { data: { suggestions: [] } } } =
+    useGetSuggestionQuery({
+      params: {
+        keyword: debouncedQuery,
+      },
+      enabled: debouncedQuery.length > 0,
+      placeholderData: keepPreviousData,
+    })
 
   const {
     data: { data: searchData } = {
@@ -51,7 +50,7 @@ function RouteComponent() {
       keyword: searchKeyword ?? '',
       type: 'ALL',
     },
-    enabled: searchKeyword !== null && searchKeyword.trim().length > 2,
+    enabled: searchKeyword !== null && searchKeyword.trim().length > 0,
     onSuccess: ({ data }) => {
       if (
         data.hospitals.length > 0 ||
