@@ -53,13 +53,7 @@ function doctorSearchBlob(d: unknown): string {
       .filter(Boolean)
       .join(' ')
   }
-  return [
-    o.nameVi,
-    o.nameEn,
-    o.nameKh,
-    spec,
-    countryBlob(o.country),
-  ]
+  return [o.nameVi, o.nameEn, o.nameKh, spec, countryBlob(o.country)]
     .map((x) => (typeof x === 'string' ? x : x != null ? String(x) : ''))
     .filter(Boolean)
     .join(' ')
@@ -77,13 +71,7 @@ function packageSearchBlob(p: unknown): string {
   if (h) {
     hosp = [h.nameVi, h.nameEn, h.nameKh].filter(Boolean).join(' ')
   }
-  return [
-    o.name,
-    o.description,
-    o.category,
-    countries,
-    hosp,
-  ]
+  return [o.name, o.description, o.category, countries, hosp]
     .map((x) => (typeof x === 'string' ? x : x != null ? String(x) : ''))
     .filter(Boolean)
     .join(' ')
