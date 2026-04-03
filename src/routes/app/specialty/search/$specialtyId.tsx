@@ -57,7 +57,7 @@ function RouteComponent() {
     apiBuckets.doctors.length +
     apiBuckets.packages.length
 
-  /** Filter theo keyword trên FE (API chỉ gọi 1 lần theo specialtyId)f */ 3
+  /** Filter theo keyword trên FE (API chỉ gọi 1 lần theo specialtyI3d)f */ 3
   const searchResults = useMemo(
     () => filterSpecialtySearchByKeyword(apiBuckets, searchKeyword),
     [apiBuckets, searchKeyword],
