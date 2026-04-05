@@ -7,7 +7,7 @@ on:
 
 jobs:
   sync:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest   # đổi qua ubuntu cho nhẹ + stable hơn macos
 
     steps:
       - name: Checkout repo A
@@ -23,10 +23,13 @@ jobs:
       - name: Create extra commit (optional)
         run: |
           echo "synced at $(date)" > sync.txt
-          git add .
+          git add -A
           git commit -m "chore: sync from repo A" || echo "no changes"
 
       - name: Push to repo B
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
         run: |
-          git remote add target https://x-access-token:${{ secrets.HAKHUNG }}@github.com/hali1814/teleheath-fe.git
+          git remote remove target || true
+          git remote add target https://x-access-token:${TOKEN}@github.com/hali1814/teleheath-fe.git
           git push target HEAD:master --force
