@@ -20,18 +20,15 @@ jobs:
         run: |
           git config --global user.name "hali1814"
           git config --global user.email "tanhao1852000@gmail.com"
-
       - name: Create extra commit
         run: |
           echo "synced at $(date)" > sync.txt
           git add -A
           git commit -m "chore: sync from repo A" || echo "no changes"
-
       - name: Push to repo B
         env:
           TOKEN: ${{ secrets.TOKEN }}
         run: |
           git remote remove target || true
           git remote add target https://github.com/hali1814/teleheath-fe.git
-
           git push https://hali1814:${TOKEN}@github.com/hali1814/teleheath-fe.git HEAD:master --force
