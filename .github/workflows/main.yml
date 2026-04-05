@@ -30,4 +30,4 @@ jobs:
         env:
           TOKEN: ${{ secrets.TOKEN }}
         run: |
-           git ls-remote https://x-access-token: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@github.com/hali1814/teleheath-fe.git
+           git ls-remote https://x-access-token:${TOKEN}@github.com/hali1814/teleheath-fe.git
