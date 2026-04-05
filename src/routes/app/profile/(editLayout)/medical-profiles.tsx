@@ -37,14 +37,11 @@ function RouteComponent() {
               <ProfileItem
                 key={member.id}
                 avatarSrc={member.avatarUrl ?? undefined}
-                name={member.name}
+                name={member.fullName ?? ''}
                 relationshipLabel={relationshipLabel}
-                patientIdLabel={`PATIENT ID: #${member.patientCode ?? '--'}`}
-                dateOfBirth={formatDate(
-                  member.dateOfBirth,
-                  DATE_TIME_TYPE.MMM_DD_YYYY,
-                )}
-                phone={member.phone}
+                patientIdLabel={`PATIENT ID: #${member.profileCode ?? '--'}`}
+                dateOfBirth={formatDate(member.dob, DATE_TIME_TYPE.MMM_DD_YYYY)}
+                phone={member.contactNumber ?? ''}
                 id={member.id}
               />
             )

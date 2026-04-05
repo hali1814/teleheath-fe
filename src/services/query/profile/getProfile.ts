@@ -6,10 +6,11 @@ export interface GetProfileRequest {}
 export interface PatientProfileResponse {
   id: number
   camId?: string | null
-  name: string
+  fullName: string
   phone: string
   email: string
   dateOfBirth: string
+  dob?: string | null
   gender: string
   address?: {
     countryCode?: string | null
@@ -27,9 +28,11 @@ export interface PatientProfileResponse {
   nationality?: string | null
   idCard?: string | null
   patientCode?: string | null
+  profileCode?: string | null
   relationship: string
   patientStatus?: string
   owner?: boolean
+  contactNumber?: string | null
 }
 
 const getProfile = async (_params: GetProfileRequest, signal: AbortSignal) => {
