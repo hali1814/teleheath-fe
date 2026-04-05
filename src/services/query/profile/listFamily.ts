@@ -18,6 +18,10 @@ export interface ListFamilyPatient {
   email: string | null
   address?: PatientProfileResponse['address']
   patientCode?: string | null
+  profileCode?: string | null
+  fullName?: string | null
+  dob?: string | null
+  contactNumber?: string | null
 }
 
 export interface ListFamilyResponse {

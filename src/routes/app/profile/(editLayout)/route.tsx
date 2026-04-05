@@ -12,10 +12,10 @@ function RouteComponent() {
   const search = useSearch({ strict: false })
 
   const title = useMemo(() => {
-    if (!search?.addNew && !search?.idMember) {
+    if (search?.isUserProfile && !search?.idMember) {
       return t('profileInformation')
     }
-    if (search?.addNew) {
+    if (!search?.isUserProfile && !search?.idMember) {
       return t('patientProfile')
     }
     if (search?.idMember) {

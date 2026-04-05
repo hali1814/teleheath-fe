@@ -9,8 +9,8 @@ export interface UpdateProfileAddress extends NonNullable<
 > {}
 
 export interface UpdateProfileRequest {
-  name: string
-  dateOfBirth: string
+  fullName?: string
+  dob?: string
   gender: string
   phone: string
   email: string

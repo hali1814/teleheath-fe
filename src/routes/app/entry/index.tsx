@@ -11,6 +11,7 @@ import { Spinner } from '#/components/ui/spinner'
 import { useAuthCamIDMutation } from '#/services/query/auth/authCamID'
 import { useProfileStore } from '#/stores/profile'
 import { setTokens } from '#/stores/token'
+import i18n from '#/i18n'
 
 export const Route = createFileRoute('/app/entry/')({
   component: RouteComponent,
@@ -28,6 +29,7 @@ function RouteComponent() {
   ////
 
   const code = searchParams.get('token')
+  const lang = searchParams.get('lang')
 
   const [isVerifying, setIsVerifying] = useState(true)
   const { mutate: authCamID } = useAuthCamIDMutation({
@@ -54,6 +56,15 @@ function RouteComponent() {
     if (!code) setIsVerifying(false)
 
     authCamID({ partnerToken: code! })
+
+    if (lang) {
+      // lang is km or en
+      if (lang === 'km') {
+        i18n.changeLanguage('km')
+      } else {
+        i18n.changeLanguage('en')
+      }
+    }
   }, [])
 
   if (!isVerifying) {
