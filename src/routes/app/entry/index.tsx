@@ -61,7 +61,7 @@ function RouteComponent() {
       // lang is km or en
       if (lang === 'km') {
         i18n.changeLanguage('km')
-      } else {
+      } else if (lang === 'en') {
         i18n.changeLanguage('en')
       }
     }
