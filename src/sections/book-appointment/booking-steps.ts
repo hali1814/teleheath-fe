@@ -7,6 +7,8 @@ import {
   PatientStep,
 } from '#/sections/book-appointment/steps'
 import { ReviewStep } from '#/sections/book-appointment/steps/ReviewStep'
+import { RoomStep } from './steps/RoomStep'
+import { ServiceStep } from './steps/ServiceStep'
 
 export type BookingStepConfig = {
   title: string
@@ -26,6 +28,11 @@ export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
     validate: (s) => !!s.branch,
   },
   {
+    title: 'Select room',
+    component: () => RoomStep({ type: 'HOSPITAL' }),
+    validate: (s) => !!s.room,
+  },
+  {
     title: 'Select schedule',
     component: ScheduleStep,
     validate: (s) => !!s.appointmentDate && !!s.startTime && !!s.endTime,
@@ -34,6 +41,11 @@ export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
     title: 'Select Patient & Medical Records',
     component: PatientStep,
     validate: (s) => !!s.patientProfile,
+  },
+  {
+    title: 'Select add-on services',
+    component: ServiceStep,
+    validate: (s) => !!s.serviceIds.length,
   },
   {
     title: 'Review & Confirm',

@@ -5,6 +5,7 @@ import type { Doctor } from '#/types/doctor'
 import type { Specialty } from '#/types/specialty'
 import { create } from 'zustand'
 import type { Package } from '#/types/package'
+import type { Room } from '#/services/query/branch/list-room'
 
 export type FileRowStatus = 'uploading' | 'success' | 'error'
 
@@ -25,6 +26,7 @@ export type BookingState = {
   step: number
   hospital?: Partial<Hospital>
   branch?: Branch
+  room?: Room
   doctor?: Partial<Doctor>
   specialty?: Specialty
   packageData?: Package

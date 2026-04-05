@@ -39,7 +39,7 @@ const PatientProfileItem = ({
                 size="2xl_20"
                 className="font-semibold leading-normal text-[#A8071A80] uppercase"
               >
-                {patient.name.slice(0, 2)}
+                {patient?.fullName?.slice(0, 2)}
               </Text>
             </AvatarFallback>
           </Avatar>
