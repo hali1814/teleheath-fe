@@ -33,8 +33,8 @@ function RouteComponent() {
         <div className="absolute  top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
           <Avatar
             src={user?.avatarUrl}
-            alt={user?.name ?? ''}
-            initials={getInitialsFromName(user?.name)}
+            alt={user?.fullName ?? ''}
+            initials={getInitialsFromName(user?.fullName)}
             onCameraClick={() => {}}
           />
         </div>
@@ -42,7 +42,7 @@ function RouteComponent() {
           size="4xl_24"
           className="font-semibold text-text-primary absolute left-1/2 -translate-x-1/2  -translate-y-1/2 bottom-[-15px]"
         >
-          {user?.name}
+          {user?.fullName}
         </Text>
       </div>
 

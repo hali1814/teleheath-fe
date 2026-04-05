@@ -279,12 +279,12 @@ export default function FormProfile({
     data: patientProfile,
   } = useGetPatientProfileMutation({
     onSuccess: (data) => {
-      setValue('fullName', data.data.name ?? '')
-      setValue('dateOfBirth', data.data.dateOfBirth ?? '')
+      setValue('fullName', data.data.fullName ?? '')
+      setValue('dateOfBirth', data.data.dateOfBirth || data.data.dob || '')
       setValue('gender', (data.data.gender as GenderValue) ?? 'MALE')
-      setValue('phoneNumber', data.data.phone ?? '')
+      setValue('phoneNumber', data.data.phone || data.data.contactNumber || '')
       setValue('email', data.data.email ?? '')
-      setValue('country', data.data.address?.countryCode ?? '')
+      setValue('country', data.data.nationality ?? '')
       setValue('avatarUrl', data.data.avatarUrl ?? '')
       setValue('city', data.data.address?.cityId?.toString() ?? '')
       setValue('district', data.data.address?.districtId?.toString() ?? '')
@@ -295,12 +295,12 @@ export default function FormProfile({
   })
 
   const fillProfileInfoToForm = () => {
-    setValue('fullName', user?.name ?? '')
+    setValue('fullName', user?.fullName ?? '')
     setValue('dateOfBirth', user?.dateOfBirth ?? '')
     setValue('gender', (user?.gender as GenderValue) ?? 'MALE')
-    setValue('phoneNumber', user?.phone ?? '')
+    setValue('phoneNumber', user?.phone || user?.contactNumber || '')
     setValue('email', user?.email ?? '')
-    setValue('country', user?.address?.countryCode ?? '')
+    setValue('country', user?.nationality ?? '')
     setValue('avatarUrl', user?.avatarUrl ?? '')
     setValue('city', user?.address?.cityId?.toString() ?? '')
     setValue('district', user?.address?.districtId?.toString() ?? '')
@@ -336,7 +336,7 @@ export default function FormProfile({
 
     const request = {
       name: formValues.fullName!,
-      dateOfBirth: formValues.dateOfBirth!,
+      dob: formValues.dateOfBirth!,
       gender: formValues.gender!,
       phone: formValues.phoneNumber?.startsWith('+855')
         ? formValues.phoneNumber
@@ -474,7 +474,9 @@ export default function FormProfile({
           size="lg_16"
           className="text-primary font-medium mt-2 text-center"
         >
-          {t('patientId')}: #{patientProfile?.data?.patientCode}
+          {t('patientId')}: #
+          {patientProfile?.data?.patientCode ||
+            patientProfile?.data?.profileCode}
         </Text>
       )}
 
