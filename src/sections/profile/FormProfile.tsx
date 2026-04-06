@@ -296,7 +296,7 @@ export default function FormProfile({
 
   const fillProfileInfoToForm = () => {
     setValue('fullName', user?.fullName ?? '')
-    setValue('dateOfBirth', user?.dateOfBirth ?? '')
+    setValue('dateOfBirth', user?.dob || user?.dateOfBirth || '')
     setValue('gender', (user?.gender as GenderValue) ?? 'MALE')
     setValue('phoneNumber', user?.phone || user?.contactNumber || '')
     setValue('email', user?.email ?? '')

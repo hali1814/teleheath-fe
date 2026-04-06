@@ -74,7 +74,7 @@ function RouteComponent() {
 
             <InfoRow
               label={t('dateOfBirth')}
-              value={formatDate(user?.dateOfBirth) || '--'}
+              value={formatDate(user?.dob) || '--'}
             />
             <InfoRow
               label={t('gender')}
