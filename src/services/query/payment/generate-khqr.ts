@@ -2,7 +2,7 @@ import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 interface GenerateKhqrRequest {
-  appointmentId: string
+  bookingToken: string
 }
 
 export interface GenerateKhqrResponse {

@@ -88,7 +88,7 @@ export default function BookingPage({
 
   const { mutate: bookAppointment } = useBookAppointmentMutation({
     onSuccess: ({ data }) => {
-      if (!data.id) return
+      if (!data.bookingToken) return
       if (store.feeInfo.totalAmount === 0) {
         navigate({
           to: '/app/book-appointment/success/$appointmentId',
@@ -98,7 +98,7 @@ export default function BookingPage({
       }
       navigate({
         to: '/app/payment/khqr/$appointmentId',
-        params: { appointmentId: data.id },
+        params: { appointmentId: data.bookingToken },
       })
     },
   })
@@ -149,6 +149,8 @@ export default function BookingPage({
         .map((x) => x.fileId)
         .filter((x) => x !== undefined),
       thumbnailUrl: store.thumbnailUrl,
+      addonServiceIds: store.servicePartners?.map((p) => p.addonServiceId),
+      roomId: store.room?.id,
     })
   }
 

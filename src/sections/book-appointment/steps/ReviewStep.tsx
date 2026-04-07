@@ -4,7 +4,6 @@ import Text from '#/components/text'
 import { Checkbox } from '#/components/ui/checkbox'
 import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
-import { useGetListServiceQuery } from '#/services/query/services/list-service'
 import { useBookingStore } from '#/stores/booking-store'
 import type { Service } from '#/types/hospital'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
@@ -13,40 +12,18 @@ import { formatPrice } from '#/utils/price.util'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ModalDetailService } from '../ModalDetailService'
-import { useGetListServiceByBranchQuery } from '#/services/query/services/list-service-by-branch'
-import { useGetListServiceByPackageQuery } from '#/services/query/services/list-service-by-package'
-
-const EMPTY_SERVICES: Service[] = []
+import type { Partner } from '#/types/service'
 
 const ServiceItem = ({
   service,
-  selected,
-  onClick,
   onDetailClick,
 }: {
-  service: Service
-  selected: boolean
-  onClick: () => void
+  service: Partner
   onDetailClick: () => void
 }) => {
   return (
-    <div className="flex items-center gap-[16px]">
-      <Checkbox
-        className="w-[20px] h-[20px] text-white border-secondary/20"
-        checked={selected}
-        onClick={onClick}
-      />
-      <div className="flex-1 flex-col gap-[6px]">
-        <Text className="leading-normal text-muted-foreground">
-          {service.name}
-        </Text>
-        <Text
-          size="sm_12"
-          className="leading-[1.2] font-semibold text-[#333333]"
-        >
-          {formatPrice(service.price)}
-        </Text>
-      </div>
+    <div className="flex items-center justify-between gap-[16px]">
+      <Text className="leading-normal">{service.name}</Text>
       <button
         className="flex items-center gap-[4px] px-[8px] py-[6px] rounded-[6px] bg-dust-red-1"
         onClick={onDetailClick}
@@ -139,30 +116,10 @@ export function ReviewStep() {
     paymentMethod,
     bookingType,
     feeInfo,
+    servicePartners,
     setData,
     calcFeeInfo,
   } = useBookingStore()
-
-  const { data: branchServices } = useGetListServiceByBranchQuery({
-    params: {
-      branchId: branch?.branchId ?? '',
-    },
-    enabled:
-      !!branch?.branchId &&
-      (bookingType === 'HOSPITAL' || bookingType === 'DOCTOR'),
-  })
-
-  const { data: packageServices } = useGetListServiceByPackageQuery({
-    params: {
-      packageId: packageData?.id ?? 0,
-    },
-    enabled: !!packageData?.id && bookingType === 'PACKAGE',
-  })
-
-  const services =
-    bookingType === 'HOSPITAL' || bookingType === 'DOCTOR'
-      ? (branchServices?.data ?? EMPTY_SERVICES)
-      : (packageServices?.data ?? EMPTY_SERVICES)
 
   const consultationFee =
     bookingType === 'DOCTOR'
@@ -172,9 +129,8 @@ export function ReviewStep() {
         : (branch?.depositFee ?? 0)
 
   useEffect(() => {
-    const list = services ?? EMPTY_SERVICES
-    calcFeeInfo(list, consultationFee)
-  }, [calcFeeInfo, consultationFee, services, serviceIds.join(',')])
+    calcFeeInfo([], consultationFee)
+  }, [calcFeeInfo, consultationFee, serviceIds.join(',')])
 
   return (
     <>
@@ -396,7 +352,7 @@ export function ReviewStep() {
                 size="base_14"
                 className="leading-normal font-medium text-[#333333]"
               >
-                {branch?.address}
+                {branch?.detailedAddress}
               </Text>
             </div>
           </div>
@@ -418,7 +374,7 @@ export function ReviewStep() {
                 size="base_14"
                 className="leading-normal font-medium text-[#333333]"
               >
-                {patientProfile?.name}
+                {patientProfile?.fullName}
               </Text>
             </div>
           </div>
@@ -462,38 +418,36 @@ export function ReviewStep() {
           )}
         </div>
 
-        <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
-          <Text size="lg_16" className="leading-[1.2] font-semibold">
-            Add-on services
-          </Text>
-          <div className="flex items-center gap-[8px] px-[10px] py-[6px] rounded-[8px] bg-[#F0B13312]">
-            <Icon name="warning" className="w-[16px] h-[16px] text-[#F0B133]" />
-            <Text size="sm_12" className="flex-1 leading-[1.3] text-[#FB9324]">
-              Prices are shown for reference only. Users pay directly to the
-              provider, not through the app.
+        {servicePartners && servicePartners.length > 0 && (
+          <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
+            <Text size="lg_16" className="leading-[1.2] font-semibold">
+              Add-on services
             </Text>
+            <div className="flex items-center gap-[8px] px-[10px] py-[6px] rounded-[8px] bg-[#F0B13312]">
+              <Icon
+                name="warning"
+                className="w-[16px] h-[16px] text-[#F0B133]"
+              />
+              <Text
+                size="sm_12"
+                className="flex-1 leading-[1.3] text-[#FB9324]"
+              >
+                Prices are shown for reference only. Users pay directly to the
+                provider, not through the app.
+              </Text>
+            </div>
+            {servicePartners?.map((service) => (
+              <ServiceItem
+                key={service.id}
+                service={service}
+                onDetailClick={() => {
+                  setSelectedService(service)
+                  setOpenDetailService(true)
+                }}
+              />
+            ))}
           </div>
-          {services.map((service) => (
-            <ServiceItem
-              key={service.id}
-              service={service}
-              selected={serviceIds.includes(service.id)}
-              onClick={() => {
-                if (serviceIds.includes(service.id)) {
-                  setData({
-                    serviceIds: serviceIds.filter((s) => s !== service.id),
-                  })
-                } else {
-                  setData({ serviceIds: [...serviceIds, service.id] })
-                }
-              }}
-              onDetailClick={() => {
-                setSelectedService(service)
-                setOpenDetailService(true)
-              }}
-            />
-          ))}
-        </div>
+        )}
 
         {feeInfo.totalAmount > 0 && (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">

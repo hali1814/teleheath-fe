@@ -1,11 +1,11 @@
 import type { ListFamilyPatient } from '#/services/query/profile/listFamily'
-import type { ListServiceResponse } from '#/services/query/services/list-service'
 import type { Branch, Hospital, Service } from '#/types/hospital'
 import type { Doctor } from '#/types/doctor'
 import type { Specialty } from '#/types/specialty'
 import { create } from 'zustand'
 import type { Package } from '#/types/package'
 import type { Room } from '#/services/query/branch/list-room'
+import type { Partner } from '#/types/service'
 
 export type FileRowStatus = 'uploading' | 'success' | 'error'
 
@@ -51,6 +51,7 @@ export type BookingState = {
     totalAmount: number
   }
   thumbnailUrl?: string
+  servicePartners?: Partner[]
 
   setStep: (step: number) => void
   next: () => void
@@ -124,10 +125,12 @@ export const useBookingStore = create<BookingState>((set) => ({
     set({
       step: 0,
       serviceIds: [],
+      servicePartners: undefined,
       medicalFiles: [],
       feeInfo: defaultFeeInfo,
       hospital: undefined,
       branch: undefined,
+      room: undefined,
       doctor: undefined,
       specialty: undefined,
       packageData: undefined,

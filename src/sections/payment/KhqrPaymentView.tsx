@@ -35,7 +35,7 @@ export function KhqrPaymentView({ appointmentId }: { appointmentId: string }) {
   const { reset } = useBookingStore()
   const { data, isLoading, isError, refetch, isFetching } =
     useGenerateKhqrQuery({
-      params: { appointmentId },
+      params: { bookingToken: appointmentId },
       enabled: !!appointmentId,
     })
 

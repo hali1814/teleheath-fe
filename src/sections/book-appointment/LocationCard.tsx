@@ -16,7 +16,7 @@ export function LocationCard({
   onClick,
 }: {
   className?: string
-  branchId: string
+  branchId: string | number
   nameVi: string
   nameKh: string
   nameEn: string

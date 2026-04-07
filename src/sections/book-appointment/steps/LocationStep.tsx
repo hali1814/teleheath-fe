@@ -16,7 +16,7 @@ export function LocationStep({ type }: { type: LocationStepType }) {
     useBookingStore()
 
   const hospitalBranchesQuery = useGetListBranchesQuery({
-    params: { hospitalId: hospital?.hospitalId ?? '' },
+    params: { hospitalId: hospital?.hospitalId?.toString() ?? '' },
     enabled: type === 'HOSPITAL' && !!hospital?.hospitalId,
   })
 
@@ -61,10 +61,14 @@ export function LocationStep({ type }: { type: LocationStepType }) {
           {branches.length > 0 &&
             branches.map((item) => (
               <LocationCard
-                key={item.branchId}
+                key={String(item.branchId)}
                 selected={branch?.branchId === item.branchId}
                 onClick={() => setData({ branch: item })}
-                {...item}
+                branchId={String(item.branchId)}
+                nameVi={item.nameVi}
+                nameKh={item.nameKh}
+                nameEn={item.nameEn}
+                address={item.detailedAddress}
               />
             ))}
         </>

@@ -6,10 +6,28 @@ export interface Room {
   roomCode: string
   name: string
   specialtyId: number
+  doctors: RoomDoctor[]
+}
+
+interface RoomDoctor {
+  doctorId: number
+  name: string
+  photoUrl: string
+  qualifications: string
+  consultationFee: number
+  specialties: {
+    id: number
+    name: string
+    nameEn: string
+    nameVi: string
+    nameKh: string
+    description: string
+    iconUrl: string
+  }[]
 }
 
 interface ListRoomRequest {
-  branchId: string
+  branchId: number
   specialtyId?: number
 }
 

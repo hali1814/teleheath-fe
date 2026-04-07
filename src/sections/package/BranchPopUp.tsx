@@ -95,7 +95,7 @@ export default function BranchPopUp({
                 branch.nameEn,
                 i18n.language as AppLanguage,
               )}
-              address={branch.address}
+              address={branch.detailedAddress}
             />
           ))}
           <div className="flex justify-end">

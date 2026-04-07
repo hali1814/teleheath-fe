@@ -15,12 +15,15 @@ interface Branch {
   phone: string
   email: string
   working_hours: {
-    day: string
-    open: boolean
-    openTime: string | null
-    closeTime: string | null
+    dayOfWeek: string
+    morningStart: string | null
+    morningEnd: string | null
+    afternoonStart: string | null
+    afternoonEnd: string | null
+    closed: boolean
   }[]
-  emergencySupport: boolean
+  emergency24h: boolean
+  googleMapsEmbed: string
 }
 
 const BranchCard = ({
@@ -29,7 +32,8 @@ const BranchCard = ({
   phone,
   email,
   working_hours,
-  emergencySupport,
+  emergency24h,
+  googleMapsEmbed,
 }: Branch) => {
   const { t, i18n } = useTranslation(['hospital', 'common'])
 
@@ -37,7 +41,13 @@ const BranchCard = ({
     <div className="flex flex-col gap-[16px] px-[16px] py-[20px] rounded-[12px] bg-white">
       <div className="flex items-center justify-between">
         <Text className="font-medium leading-normal">{name}</Text>
-        <div className="flex items-center gap-[4px]">
+        <button
+          className="flex items-center gap-[4px]"
+          onClick={() => {
+            if (!googleMapsEmbed) return
+            window.open(googleMapsEmbed, '_blank')
+          }}
+        >
           <Icon
             name="map_outline"
             className="w-[16px] h-[16px] text-dust-red-8"
@@ -48,7 +58,7 @@ const BranchCard = ({
           >
             {t('operatingHours.map')}
           </Text>
-        </div>
+        </button>
       </div>
       <div className="flex items-center gap-[8px]">
         <Icon
@@ -93,42 +103,6 @@ const BranchCard = ({
             {t('operatingHours.title')}
           </Text>
         </div>
-        {/* <div className="flex justify-between items-center">
-          <Text
-            size="sm_12"
-            className="font-normal leading-[1.3] text-muted-foreground"
-          >
-            {t('operatingHours.mon_sat')}
-          </Text>
-          <Text size="sm_12" className="font-medium leading-[1.3]">
-            {parsed_working_hours.mon_sat}
-          </Text>
-        </div>
-        <div className="flex justify-between items-center">
-          <Text
-            size="sm_12"
-            className="font-normal leading-[1.3] text-muted-foreground"
-          >
-            {t('operatingHours.sun')}
-          </Text>
-          <Text
-            size="sm_12"
-            className="font-medium leading-[1.3] uppercase text-dust-red-8"
-          >
-            {parsed_working_hours.sun}
-          </Text>
-        </div>
-        <div className="flex justify-between items-center">
-          <Text
-            size="sm_12"
-            className="font-normal leading-[1.3] text-muted-foreground"
-          >
-            {t('operatingHours.emergency')}
-          </Text>
-          <Text size="sm_12" className="font-medium leading-[1.3]">
-            {parsed_working_hours.emergency}
-          </Text>
-        </div> */}
         {Object.entries(
           formatWorkingHours(working_hours, i18n.language as AppLanguage),
         ).map(([label, value], index) => (
@@ -151,7 +125,7 @@ const BranchCard = ({
             </Text>
           </div>
         ))}
-        {emergencySupport && (
+        {emergency24h && (
           <div className="flex justify-between items-center">
             <Text
               size="sm_12"
@@ -195,11 +169,12 @@ export default function BranchList({ hospitalId }: { hospitalId: string }) {
               <BranchCard
                 key={index}
                 name={branch.nameVi}
-                address={branch.address}
-                phone={branch.hotline}
-                email={branch.email}
+                address={branch.detailedAddress}
+                phone={branch.contactNumber1}
+                email={branch.workEmail}
                 working_hours={branch.workingHours}
-                emergencySupport={branch.emergencySupport}
+                emergency24h={branch.emergency24h}
+                googleMapsEmbed={branch.googleMapsEmbed}
               />
             ))}
             {branches.length > LIMIT_BRANCH && !expanded && (

@@ -2,8 +2,8 @@ import { useMutation, type UseMutationOptions } from '#/hooks/use-mutation'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 export interface BookAppointmentRequest {
-  branchId: string
-  doctorId: string
+  branchId: number
+  doctorId: number
   specialtyId: number
   packageId?: number
   appointmentDate: string
@@ -16,6 +16,8 @@ export interface BookAppointmentRequest {
   serviceIds?: number[]
   medicalFileIds?: string[]
   thumbnailUrl?: string
+  roomId?: number
+  addonServiceIds?: number[]
 }
 
 /** Điều chỉnh theo response thực tế của API. */

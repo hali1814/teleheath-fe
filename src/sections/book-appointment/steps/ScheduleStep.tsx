@@ -12,6 +12,7 @@ import { EmptyState } from '#/sections/search'
 import { useGetListScheduleByDoctorQuery } from '#/services/query/schedule/list-schedule-by-doctor'
 import { useGetListScheduleByPackageQuery } from '#/services/query/schedule/list-schedule-by-package'
 import { startOfToday } from 'date-fns'
+import { useGetListScheduleByRoomQuery } from '#/services/query/schedule/list-schedule-by-room'
 
 const emptySchedules: ListScheduleByBranchResponse = {
   morning: [],
@@ -22,6 +23,7 @@ export function ScheduleStep() {
   const {
     bookingType,
     branch,
+    room,
     specialty,
     doctor,
     appointmentDate,
@@ -46,13 +48,13 @@ export function ScheduleStep() {
       : undefined
 
   const { data: { data: schedulesBranch } = { data: emptySchedules } } =
-    useGetListScheduleByBranchQuery({
+    useGetListScheduleByRoomQuery({
       params: {
-        branchId: branch?.branchId ?? '',
-        specialtyId: specialty?.id ?? 1,
+        roomId: room?.id ?? 0,
+        doctorId: doctor?.doctorId ?? 0,
         date: dateParam,
       },
-      enabled: !!branch?.branchId && !!dateParam && bookingType === 'HOSPITAL',
+      enabled: !!room?.id && !!dateParam && bookingType === 'HOSPITAL',
       placeholderData: keepPreviousData,
       staleTime: 0,
     })
@@ -60,9 +62,9 @@ export function ScheduleStep() {
   const { data: { data: schedulesDoctor } = { data: emptySchedules } } =
     useGetListScheduleByDoctorQuery({
       params: {
-        doctorId: doctor?.doctorId ?? '',
+        doctorId: doctor?.doctorId ?? 0,
         date: dateParam,
-        branchId: branch?.branchId ?? '',
+        branchId: branch?.branchId ?? 0,
       },
       enabled: !!doctor?.doctorId && !!dateParam && bookingType === 'DOCTOR',
       placeholderData: keepPreviousData,

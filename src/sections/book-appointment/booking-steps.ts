@@ -45,7 +45,7 @@ export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
   {
     title: 'Select add-on services',
     component: ServiceStep,
-    validate: (s) => !!s.serviceIds.length,
+    validate: () => true,
   },
   {
     title: 'Review & Confirm',
