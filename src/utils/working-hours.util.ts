@@ -1,41 +1,51 @@
 import type { AppLanguage } from '#/i18n'
 
 type WorkingHour = {
-  day: string
-  open: boolean
-  openTime: string | null
-  closeTime: string | null
+  dayOfWeek: string
+  morningStart: string | null
+  morningEnd: string | null
+  afternoonStart: string | null
+  afternoonEnd: string | null
+  closed: boolean
 }
 
-const DAY_ORDER = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+const DAY_ORDER = [
+  'MONDAY',
+  'TUESDAY',
+  'WEDNESDAY',
+  'THURSDAY',
+  'FRIDAY',
+  'SATURDAY',
+  'SUNDAY',
+]
 
 const DAY_LABELS: Record<AppLanguage, Record<string, string>> = {
   en: {
-    Mo: 'Mon',
-    Tu: 'Tue',
-    We: 'Wed',
-    Th: 'Thu',
-    Fr: 'Fri',
-    Sa: 'Sat',
-    Su: 'Sun',
+    MONDAY: 'Mon',
+    TUESDAY: 'Tue',
+    WEDNESDAY: 'Wed',
+    THURSDAY: 'Thu',
+    FRIDAY: 'Fri',
+    SATURDAY: 'Sat',
+    SUNDAY: 'Sun',
   },
   vi: {
-    Mo: 'Th 2',
-    Tu: 'Th 3',
-    We: 'Th 4',
-    Th: 'Th 5',
-    Fr: 'Th 6',
-    Sa: 'Th 7',
-    Su: 'CN',
+    MONDAY: 'Th 2',
+    TUESDAY: 'Th 3',
+    WEDNESDAY: 'Th 4',
+    THURSDAY: 'Th 5',
+    FRIDAY: 'Th 6',
+    SATURDAY: 'Th 7',
+    SUNDAY: 'CN',
   },
   km: {
-    Mo: 'ចន្ទ',
-    Tu: 'អង្គារ',
-    We: 'ពុធ',
-    Th: 'ព្រហស្បតិ៍',
-    Fr: 'សុក្រ',
-    Sa: 'សៅរ៍',
-    Su: 'អាទិត្យ',
+    MONDAY: 'ចន្ទ',
+    TUESDAY: 'អង្គារ',
+    WEDNESDAY: 'ពុធ',
+    THURSDAY: 'ព្រហស្បតិ៍',
+    FRIDAY: 'សុក្រ',
+    SATURDAY: 'សៅរ៍',
+    SUNDAY: 'អាទិត្យ',
   },
 }
 
@@ -52,12 +62,12 @@ export const formatWorkingHours = (
   const labels = DAY_LABELS[language]
 
   const sorted = [...data].sort(
-    (a, b) => DAY_ORDER.indexOf(a.day) - DAY_ORDER.indexOf(b.day),
+    (a, b) => DAY_ORDER.indexOf(a.dayOfWeek) - DAY_ORDER.indexOf(b.dayOfWeek),
   )
 
   const getKey = (d: WorkingHour) => {
-    if (!d.open) return 'CLOSED'
-    return `${d.openTime}-${d.closeTime}`
+    if (d.closed) return 'CLOSED'
+    return formatTimeRange(d) ?? 'CLOSED'
   }
 
   const result: Record<string, string> = {}
@@ -69,15 +79,15 @@ export const formatWorkingHours = (
     const first = tempGroup[0]
     const key = getKey(first)
 
-    const startDay = labels[tempGroup[0].day]
-    const endDay = labels[tempGroup[tempGroup.length - 1].day]
+    const startDay = labels[tempGroup[0].dayOfWeek] ?? tempGroup[0].dayOfWeek
+    const endDay =
+      labels[tempGroup[tempGroup.length - 1].dayOfWeek] ??
+      tempGroup[tempGroup.length - 1].dayOfWeek
 
     const dayRange = tempGroup.length === 1 ? startDay : `${startDay}-${endDay}`
 
     const value =
-      key === 'CLOSED'
-        ? CLOSED_LABEL[language]
-        : `${first.openTime} - ${first.closeTime}`
+      key === 'CLOSED' ? CLOSED_LABEL[language] : (formatTimeRange(first) ?? '')
 
     result[dayRange] = value
     tempGroup = []
@@ -103,6 +113,18 @@ export const formatWorkingHours = (
   pushGroup()
 
   return result
+}
+
+const formatTimeRange = (hour: WorkingHour) => {
+  const starts = [hour.morningStart, hour.afternoonStart].filter(Boolean) as string[]
+  const ends = [hour.morningEnd, hour.afternoonEnd].filter(Boolean) as string[]
+
+  if (!starts.length || !ends.length) return null
+
+  const earliestOpen = starts.reduce((acc, curr) => (curr < acc ? curr : acc))
+  const latestClose = ends.reduce((acc, curr) => (curr > acc ? curr : acc))
+
+  return `${earliestOpen} - ${latestClose}`
 }
 
 export const isClosedLabel = (value: string, language: AppLanguage) => {

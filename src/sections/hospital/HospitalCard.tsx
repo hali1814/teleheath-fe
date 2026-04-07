@@ -36,8 +36,8 @@ export default function HospitalCard({
     nameKh,
     country,
     thumbnailUrl,
-    address,
-    emergencySupport,
+    detailedAddress,
+    emergency24h,
   } = hospital
   const { t, i18n } = useTranslation(['common'])
   const imgHeight = size === 'sm' ? 'h-[96px]' : 'h-[180px]'
@@ -49,20 +49,10 @@ export default function HospitalCard({
   const textSizeLocation = size === 'sm' ? 'xs_10' : 'sm_12'
   const heightButton = size === 'sm' ? 'h-[32px]' : 'h-[36px]'
 
-  let hospitalAddress = address
-  if (typeof hospitalAddress === 'string') {
-    try {
-      const parsed = JSON.parse(hospitalAddress)
-      hospitalAddress = parsed.fullAddress
-    } catch {
-      // not JSON, keep as-is
-    }
-  }
-
   return (
     <Link
       to="/app/hospital/$id"
-      params={{ id: hospitalId }}
+      params={{ id: hospitalId.toString() }}
       className={cn(
         'w-full flex flex-col shrink-0 rounded-[12px] border-none bg-white',
         className,
@@ -90,7 +80,7 @@ export default function HospitalCard({
                 i18n.language as AppLanguage,
               )}
             </Text>
-            {showBadge && emergencySupport && (
+            {showBadge && emergency24h && (
               <Badge className="bg-[#DCFCE7] text-[#15803D] px-[8px] py-[4px] rounded-[6px]">
                 Open 24/7
               </Badge>
@@ -99,7 +89,7 @@ export default function HospitalCard({
           <LocationBadge
             location={
               showAddress
-                ? hospitalAddress
+                ? detailedAddress
                 : getLocalizedTextByLang(
                     country.nameVi,
                     null,
@@ -120,7 +110,7 @@ export default function HospitalCard({
           <Button className={cn('w-full', heightButton, bgColor)} asChild>
             <Link
               to="/app/book-appointment/hospital/$hospitalId"
-              params={{ hospitalId }}
+              params={{ hospitalId: hospitalId.toString() }}
             >
               <Icon
                 name="book_appointment"

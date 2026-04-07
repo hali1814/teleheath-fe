@@ -1,25 +1,23 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { cn } from '#/lib/utils'
+import type { Room } from '#/services/query/branch/list-room'
 
 export function RoomCard({
   className,
-  id,
-  roomCode,
-  name,
-  specialtyId,
   selected = false,
   onClick,
+  room,
 }: {
   className?: string
-  id: number
-  roomCode: string
-  name: string
-  specialtyId: number
   selected?: boolean
   onClick?: () => void
+  room: Room
 }) {
   const borderColor = selected ? 'border-primary' : 'border-dust-red-1'
+  const { name, doctors } = room
+
+  const doctor = doctors[0]
 
   return (
     <div
@@ -39,7 +37,7 @@ export function RoomCard({
             size="sm_12"
             className="font-normal leading-[1.3] text-muted-foreground"
           >
-            {roomCode}
+            {doctor?.name}
           </Text>
         </div>
       </div>

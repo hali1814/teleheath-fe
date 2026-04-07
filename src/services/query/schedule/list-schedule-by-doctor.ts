@@ -2,8 +2,8 @@ import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 interface ListScheduleByDoctorRequest {
-  doctorId: string
-  branchId?: string
+  doctorId: number
+  branchId?: number
   date?: string
 }
 

@@ -14,7 +14,8 @@ export interface Amenity {
 
 export interface Partner {
   id: number
-  serviceType: string
+  addonServiceId: number
+  addonServiceName: string
   name: string
   nameVi: string
   nameEn: string
@@ -22,6 +23,7 @@ export interface Partner {
   photoUrl: string
   country: string
   distanceFromHospital: string
+  address: string
   serviceTypeId: number
   typeName: string
   price: number

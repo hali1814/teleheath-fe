@@ -2,59 +2,77 @@ import type { Specialty } from './specialty'
 import type { Country } from './country'
 
 export interface WorkingHour {
-  day: 'Mo' | 'Tu' | 'We' | 'Th' | 'Fr' | 'Sa' | 'Su'
-  open: boolean
-  openTime: string | null
-  closeTime: string | null
+  dayOfWeek: string
+  morningStart: string | null
+  morningEnd: string | null
+  afternoonStart: string | null
+  afternoonEnd: string | null
+  closed: boolean
 }
 
 export type HospitalStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING'
 
 export interface Hospital {
-  hospitalId: string
+  hospitalId: number
+  name: string
   nameVi: string
   nameKh: string
   nameEn: string
   country: Country
-  address: string
-  lat: number
-  lng: number
-  thumbnailUrl: string
   logoUrl: string
+  thumbnailUrl: string
   website: string
-  description: string
+  about: string
   aboutEn: string
+  aboutVi: string
   aboutKh: string
-  gallery: string[]
-  workingHours: {
-    day: string
-    open: boolean
-    openTime: string
-    closeTime: string
-  }[]
-  timezone: string
   status: string
+  isFeatured: boolean
   specialties: Specialty[]
-  emergencySupport: boolean
+  gallery: string[]
+  branches: Branch[]
+  branchId: number
+  isHeadquarters: boolean
+  contactNumber1: string
+  workEmail: string
+  province: string
+  detailedAddress: string
+  googleMapsEmbed: string
+  depositRequired: boolean
+  depositFee: number
+  emergency24h: boolean
 }
 
 export interface Branch {
-  branchId: string
-  hospitalId: string
+  branchId: number
+  hospitalId: number
+  isHeadquarters: boolean
+  name: string
   nameVi: string
   nameKh: string
   nameEn: string
-  hotline: string
-  email: string
-  address: string
-  lat: number
-  lng: number
+  country: Country
+  province: {
+    id: number
+    nameVi: string
+    nameEn: string
+  }
+  district: {
+    id: number
+    nameVi: string
+    nameEn: string
+  }
+  street: string
+  detailedAddress: string
+  contactNumber1: string
+  workEmail: string
+  googleMapsEmbed: string
   workingHours: WorkingHour[]
-  status: 'ACTIVE' | 'INACTIVE' | string
+  status: string
+  consultationFee: number
   depositRequired: boolean
-  depositFee: number | null
-  emergencySupport: boolean
-  additionalServices: Service[]
+  depositFee: number
+  emergency24h: boolean
 }
 
 export interface Service {

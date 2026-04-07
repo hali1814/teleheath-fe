@@ -4,6 +4,7 @@ import LoadingState from '#/components/LoadingState'
 import { useGetListRoomQuery } from '#/services/query/branch/list-room'
 import { EmptyState } from '#/sections/search'
 import { RoomCard } from '../RoomCard'
+import { useEffect } from 'react'
 
 export type Type = 'HOSPITAL' | 'DOCTOR' | 'PACKAGE'
 
@@ -12,13 +13,30 @@ export function RoomStep({ type }: { type: Type }) {
 
   const { data: rooms, isLoading } = useGetListRoomQuery({
     params: {
-      branchId: branch?.branchId ?? '',
+      branchId: branch?.branchId ?? 0,
       specialtyId: specialty?.id ?? undefined,
     },
     enabled: !!branch?.branchId && !!specialty?.id && type === 'HOSPITAL',
   })
 
-  console.log(rooms)
+  useEffect(() => {
+    if (!rooms || rooms.length !== 1) return
+
+    const only = rooms[0]
+    if (room?.id === only.id) return
+
+    setData({
+      room: only,
+      doctor: only.doctors[0]
+        ? {
+            doctorId: String(only.doctors[0].doctorId),
+            nameVi: only.doctors[0].name,
+            avatarUrl: only.doctors[0].photoUrl,
+          }
+        : undefined,
+    })
+    next()
+  }, [rooms, room, setData, next])
 
   if (!rooms) return <EmptyState>No rooms found</EmptyState>
 
@@ -34,10 +52,21 @@ export function RoomStep({ type }: { type: Type }) {
           {rooms?.length > 0 &&
             rooms?.map((item) => (
               <RoomCard
-                key={item.id}
+                key={String(item.id)}
                 selected={room?.id === item.id}
-                onClick={() => setData({ room: item })}
-                {...item}
+                onClick={() =>
+                  setData({
+                    room: item,
+                    doctor: item.doctors[0]
+                      ? {
+                          doctorId: String(item.doctors[0].doctorId),
+                          nameVi: item.doctors[0].name,
+                          avatarUrl: item.doctors[0].photoUrl,
+                        }
+                      : undefined,
+                  })
+                }
+                room={item}
               />
             ))}
         </>

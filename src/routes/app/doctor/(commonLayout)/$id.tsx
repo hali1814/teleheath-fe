@@ -47,7 +47,7 @@ function RouteComponent() {
         {doctorData?.branches && doctorData?.branches?.length > 0 && (
           <DoctorCurrentLocation
             hospitalName={doctorData?.branches[0].nameVi ?? ''}
-            address={doctorData?.branches[0].address ?? ''}
+            address={doctorData?.branches[0].detailedAddress ?? ''}
             branches={doctorData?.branches ?? []}
           />
         )}
