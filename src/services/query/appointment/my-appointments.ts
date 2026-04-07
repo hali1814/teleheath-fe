@@ -50,6 +50,7 @@ interface AppointmentBookedFor {
 interface AppointmentSpecialty {
   id: number
   name: string
+  iconUrl: string
 }
 
 interface AppointmentMedicalPackage {

@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import GetStatus from './GetStatus'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
+import Image from '#/components/image'
 
 interface AppointmentInformationProps {
   appointment?: MyAppointmentItem
@@ -95,8 +96,7 @@ export default function AppointmentInformation({
             size="base_14"
             className="font-normal leading-[150%] text-text-primary"
           >
-            {JSON.parse(appointment?.branch?.address ?? '{}')?.fullAddress ||
-              ''}
+            {appointment?.branch?.address}
           </Text>
           <div className="mt-[2px] flex items-center gap-1">
             <Icon
@@ -170,7 +170,15 @@ export default function AppointmentInformation({
 
       {isHospital && (
         <div className="flex items-center gap-2 mt-4 bg-[#F8FAFC] p-3 rounded-[8px]">
-          <Icon name="medical_appointment" className="size-4" />
+          {appointment?.specialty?.iconUrl ? (
+            <Image
+              src={appointment?.specialty?.iconUrl ?? ''}
+              alt="specialty"
+              className="size-4"
+            />
+          ) : (
+            <Icon name="medical_appointment" className="size-4" />
+          )}
           <Text
             size="base_14"
             className="font-medium leading-[21px] text-text-primary"
