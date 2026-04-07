@@ -9,6 +9,7 @@ import { useCallback, useEffect, useRef } from 'react'
 // import { showToast } from '@shared/utils'
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 /**
  * -------------------------------------------------------------------------
@@ -76,6 +77,8 @@ export const useQuery = <TResponse, TTransformed = TResponse, TRequest = void>({
   // ---------------------------------------------------------------------
   const queryClient = useQueryClient()
   const queryKeyRef = useRef<QueryKey>(otherOpts.queryKey)
+  //get language
+  const { i18n } = useTranslation()
 
   // Exclude callback props before passing to TanStack useQuery
   const tanstackOptions = otherOpts as Omit<
@@ -85,6 +88,7 @@ export const useQuery = <TResponse, TTransformed = TResponse, TRequest = void>({
 
   const queryResult = useQueryRQ<TResponse, QueryError, TTransformed>({
     ...tanstackOptions,
+    queryKey: [...(otherOpts.queryKey ?? []), i18n.language],
   })
 
   // Trigger callbacks and error toast via side-effects
