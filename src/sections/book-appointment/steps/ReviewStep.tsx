@@ -1,38 +1,96 @@
 import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
-import { Checkbox } from '#/components/ui/checkbox'
 import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
 import { useBookingStore } from '#/stores/booking-store'
-import type { Service } from '#/types/hospital'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { formatPrice } from '#/utils/price.util'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ModalDetailService } from '../ModalDetailService'
-import type { Partner } from '#/types/service'
+import type { ServiceType } from '#/types/service'
+import TextInputBase from '#/components/input/TextInputBase'
+
+const PICK_UP_SERVICE_ID = 1
+
+const formatTimeInput = (value: string) => {
+  const digits = value.replace(/\D/g, '').slice(0, 4)
+
+  if (digits.length <= 2) {
+    return digits
+  }
+
+  const hour = Math.min(Number(digits.slice(0, 2) || '0'), 23)
+  const minuteRaw = digits.slice(2)
+
+  if (minuteRaw.length === 1) {
+    return `${hour.toString().padStart(2, '0')}:${minuteRaw}`
+  }
+
+  const minute = Math.min(Number(minuteRaw || '0'), 59)
+  return `${hour.toString().padStart(2, '0')}:${minute
+    .toString()
+    .padStart(2, '0')}`
+}
 
 const ServiceItem = ({
   service,
   onDetailClick,
 }: {
-  service: Partner
+  service: ServiceType
   onDetailClick: () => void
 }) => {
+  const { pickupTime, pickupDate, pickupNote, setData } = useBookingStore()
+
   return (
-    <div className="flex items-center justify-between gap-[16px]">
-      <Text className="leading-normal">{service.name}</Text>
-      <button
-        className="flex items-center gap-[4px] px-[8px] py-[6px] rounded-[6px] bg-dust-red-1"
-        onClick={onDetailClick}
-      >
-        <Icon name="eye_outline" className="w-[16px] h-[16px] text-primary" />
-        <Text size="sm_12" className="leading-[1.3] font-medium text-primary">
-          Details
-        </Text>
-      </button>
+    <div className="flex flex-col gap-[8px]">
+      <div className="flex items-center justify-between gap-[16px]">
+        <Text className="leading-normal">{service.typeName}</Text>
+        <button
+          className="flex items-center gap-[4px] px-[8px] py-[6px] rounded-[6px] bg-dust-red-1"
+          onClick={onDetailClick}
+        >
+          <Icon name="eye_outline" className="w-[16px] h-[16px] text-primary" />
+          <Text size="sm_12" className="leading-[1.3] font-medium text-primary">
+            Details
+          </Text>
+        </button>
+      </div>
+      {service.id === PICK_UP_SERVICE_ID && (
+        <>
+          <TextInputBase
+            label="Time to pick-up"
+            placeholder="00:00"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9:]*"
+            maxLength={5}
+            value={pickupTime}
+            onChange={(e) =>
+              setData({ pickupTime: formatTimeInput(e.target.value) })
+            }
+            onBlur={(e) => {
+              const formatted = formatTimeInput(e.target.value)
+              const isValid = /^([01]\d|2[0-3]):([0-5]\d)$/.test(formatted)
+              setData({ pickupTime: isValid ? formatted : '' })
+            }}
+          />
+          <TextInputBase
+            label="Address to pick-up"
+            placeholder="Address to pick-up"
+            value={pickupDate}
+            onChange={(e) => setData({ pickupDate: e.target.value })}
+          />
+          <TextInputBase
+            label="Note"
+            placeholder="Example: Number of seats"
+            value={pickupNote}
+            onChange={(e) => setData({ pickupNote: e.target.value })}
+          />
+        </>
+      )}
     </div>
   )
 }
@@ -99,9 +157,9 @@ const paymentMethods = [
 export function ReviewStep() {
   const { i18n } = useTranslation()
   const [openDetailService, setOpenDetailService] = useState(false)
-  const [selectedService, setSelectedService] = useState<Service | undefined>(
-    undefined,
-  )
+  const [selectedService, setSelectedService] = useState<
+    ServiceType | undefined
+  >(undefined)
   const {
     branch,
     specialty,
@@ -112,13 +170,12 @@ export function ReviewStep() {
     appointmentDate,
     startTime,
     endTime,
-    serviceIds,
     paymentMethod,
     bookingType,
     feeInfo,
-    servicePartners,
-    setData,
+    addonServiceTypes,
     calcFeeInfo,
+    setData,
   } = useBookingStore()
 
   const consultationFee =
@@ -129,8 +186,8 @@ export function ReviewStep() {
         : (branch?.depositFee ?? 0)
 
   useEffect(() => {
-    calcFeeInfo([], consultationFee)
-  }, [calcFeeInfo, consultationFee, serviceIds.join(',')])
+    calcFeeInfo(consultationFee)
+  }, [addonServiceTypes, calcFeeInfo, consultationFee])
 
   return (
     <>
@@ -142,12 +199,7 @@ export function ReviewStep() {
                 BOOK BY HOSPITAL
               </Text>
               <Text className="leading-[1.2] font-semibold text-[#333333]">
-                {getLocalizedTextByLang(
-                  hospital?.nameVi ?? '',
-                  hospital?.nameKh ?? '',
-                  hospital?.nameEn ?? '',
-                  i18n.language as AppLanguage,
-                )}
+                {hospital?.name}
               </Text>
             </div>
             <div
@@ -418,7 +470,7 @@ export function ReviewStep() {
           )}
         </div>
 
-        {servicePartners && servicePartners.length > 0 && (
+        {addonServiceTypes && addonServiceTypes.length > 0 && (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
             <Text size="lg_16" className="leading-[1.2] font-semibold">
               Add-on services
@@ -436,20 +488,25 @@ export function ReviewStep() {
                 provider, not through the app.
               </Text>
             </div>
-            {servicePartners?.map((service) => (
-              <ServiceItem
-                key={service.id}
-                service={service}
-                onDetailClick={() => {
-                  setSelectedService(service)
-                  setOpenDetailService(true)
-                }}
-              />
+            {addonServiceTypes?.map((service, index) => (
+              <>
+                <ServiceItem
+                  key={service.id}
+                  service={service}
+                  onDetailClick={() => {
+                    setSelectedService(service)
+                    setOpenDetailService(true)
+                  }}
+                />
+                {index < addonServiceTypes.length - 1 && (
+                  <div className="h-[0.5px] bg-[#E6E6E6]" />
+                )}
+              </>
             ))}
           </div>
         )}
 
-        {feeInfo.totalAmount > 0 && (
+        {consultationFee > 0 && (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
             <Text size="lg_16" className="font-semibold leading-[1.2]">
               Payment Details
@@ -460,7 +517,7 @@ export function ReviewStep() {
                   Consultation Fee
                 </Text>
                 <Text className="leading-normal font-medium text-[#333333]">
-                  {formatPrice(feeInfo.consultationFee)}
+                  {formatPrice(consultationFee)}
                 </Text>
               </div>
             )}
@@ -485,13 +542,13 @@ export function ReviewStep() {
                 size="xl_18"
                 className="leading-normal font-semibold text-primary"
               >
-                {formatPrice(feeInfo.totalAmount)}
+                {formatPrice(consultationFee)}
               </Text>
             </div>
           </div>
         )}
 
-        {feeInfo.totalAmount > 0 && (
+        {consultationFee > 0 && (
           <div className="flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white">
             <Text size="lg_16" className="font-semibold leading-[1.2]">
               Payment Methods
@@ -509,18 +566,9 @@ export function ReviewStep() {
         )}
       </div>
       <ModalDetailService
-        service={selectedService}
+        serviceType={selectedService}
         open={openDetailService}
         onOpenChange={setOpenDetailService}
-        onSelectService={() => {
-          setData({
-            serviceIds: selectedService
-              ? [...serviceIds, selectedService.id]
-              : serviceIds,
-          })
-          setSelectedService(undefined)
-          setOpenDetailService(false)
-        }}
       />
     </>
   )

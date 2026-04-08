@@ -3,6 +3,7 @@ import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 interface ListScheduleByPackageRequest {
   packageId: number
+  branchId: number
   date?: string
 }
 
@@ -30,6 +31,7 @@ const getListScheduleByPackage = async (
     `/packages/${params.packageId}/schedules`,
     {
       date: params.date,
+      branchId: params.branchId,
     },
     {
       signal,

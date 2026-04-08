@@ -25,14 +25,7 @@ function countryBlob(c: unknown): string {
 function hospitalSearchBlob(h: unknown): string {
   const o = asRecord(h)
   if (!o) return ''
-  return [
-    o.nameVi,
-    o.nameEn,
-    o.nameKh,
-    o.address,
-    o.description,
-    countryBlob(o.country),
-  ]
+  return [o.name]
     .map((x) => (typeof x === 'string' ? x : x != null ? String(x) : ''))
     .filter(Boolean)
     .join(' ')
@@ -71,7 +64,7 @@ function packageSearchBlob(p: unknown): string {
   if (h) {
     hosp = [h.nameVi, h.nameEn, h.nameKh].filter(Boolean).join(' ')
   }
-  return [o.name, o.description, o.category, countries, hosp]
+  return [o.name]
     .map((x) => (typeof x === 'string' ? x : x != null ? String(x) : ''))
     .filter(Boolean)
     .join(' ')

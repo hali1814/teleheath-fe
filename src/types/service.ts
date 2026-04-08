@@ -29,3 +29,36 @@ export interface Partner {
   price: number
   amenities: Amenity[]
 }
+
+export interface ServiceType {
+  id: number
+  isBest: boolean
+  typeName: string
+  originalPrice: number
+  price: number
+  promotionPrice: number
+  description: string
+  addonServiceId: number
+  addonServiceName: string
+  partnerId: number
+  partnerName: string
+  partner: {
+    id: number
+    name: string
+    nameVi: string
+    nameEn: string
+    nameKh: string
+    photoUrl: string
+    country: {
+      code: string
+      nameVi: string
+      nameEn: string
+    }[]
+    address: string
+    distanceFromHospital: string
+  }
+  amenities: {
+    name: string
+    iconUrl: string
+  }[]
+}

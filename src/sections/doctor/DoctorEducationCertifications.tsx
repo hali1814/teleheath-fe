@@ -14,9 +14,18 @@ const EducationCertificationItem = ({ title }: { title: string }) => {
   )
 }
 
+interface Education {
+  id: number
+  certification: string
+  medicalSchool: string
+  graduationYear: number
+}
+
 export default function DoctorEducationCertifications({
-  certifications,
-}: Pick<Doctor, 'certifications'>) {
+  educations,
+}: {
+  educations: Education[]
+}) {
   const { t } = useTranslation(['doctor', 'common'])
   return (
     <div className="w-full flex flex-col gap-[16px] py-[16px]">
@@ -24,10 +33,14 @@ export default function DoctorEducationCertifications({
         {t('educationCertifications')}
       </Text>
       <div className="flex flex-col gap-[12px]">
-        {certifications.split(',').map((certification) => (
+        {educations.map((education) => (
           <EducationCertificationItem
-            key={certification}
-            title={certification}
+            key={education.id}
+            title={Object.values({
+              certification: education.certification,
+              medicalSchool: education.medicalSchool,
+              graduationYear: education.graduationYear,
+            }).join(', ')}
           />
         ))}
       </div>

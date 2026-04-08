@@ -3,8 +3,8 @@ import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
 export interface BookAppointmentRequest {
   branchId: number
-  doctorId: number
-  specialtyId: number
+  doctorId?: number
+  specialtyId?: number
   packageId?: number
   appointmentDate: string
   startTime: string
@@ -18,11 +18,15 @@ export interface BookAppointmentRequest {
   thumbnailUrl?: string
   roomId?: number
   addonServiceIds?: number[]
+  pickupTime?: string
+  pickupDate?: string
+  pickupNote?: string
 }
 
 /** Điều chỉnh theo response thực tế của API. */
 export interface BookAppointmentResponse {
-  id: string
+  bookingToken: string
+  appointmentCode: string
 }
 
 export const bookAppointment = async (

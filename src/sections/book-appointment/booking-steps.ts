@@ -73,6 +73,11 @@ export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
     validate: (s) => !!s.patientProfile,
   },
   {
+    title: 'Select add-on services',
+    component: ServiceStep,
+    validate: () => true,
+  },
+  {
     title: 'Review & Confirm',
     component: ReviewStep,
     validate: (s) =>
@@ -96,6 +101,11 @@ export const BOOKING_STEPS_PACKAGE: BookingStepConfig[] = [
     title: 'Select Patient & Medical Records',
     component: PatientStep,
     validate: (s) => !!s.patientProfile,
+  },
+  {
+    title: 'Select add-on services',
+    component: ServiceStep,
+    validate: () => true,
   },
   {
     title: 'Review & Confirm',
