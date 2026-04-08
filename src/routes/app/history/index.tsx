@@ -18,6 +18,7 @@ import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appoi
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
 import { cn } from '#/lib/utils'
 import { groupAppointmentsByMonth } from '#/utils/history'
+import LoadingState from '#/components/LoadingState'
 
 export const Route = createFileRoute('/app/history/')({
   component: RouteComponent,
@@ -104,8 +105,35 @@ function RouteComponent() {
 
   const showEmpty = !isLoading && rows.length === 0
 
+  if (isLoading) {
+    return (
+      <>
+        <header className="sticky top-0 z-50 grid h-[62px] shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b-[0.5px] border-[#FFE8E6] bg-background px-4 py-5">
+          <div />
+          <Text size="lg_16" className="font-medium text-text-primary">
+            {title}
+          </Text>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="relative flex size-9 items-center justify-center rounded-md"
+              onClick={openFilterModal}
+              aria-label={t('appointment:filter')}
+            >
+              <Icon name="filter" className="size-5" color="#B3B3B3" />
+              <span className="absolute top-0 left-[16px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#DB1A21] px-0.5 text-[10px] font-semibold leading-none text-white">
+                {filterBadgeCount}
+              </span>
+            </button>
+          </div>
+        </header>
+        <LoadingState />
+      </>
+    )
+  }
+
   return (
-    <div className="flex h-[100dvh] flex-col overflow-hidden">
+    <>
       <header className="sticky top-0 z-50 grid h-[62px] shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b-[0.5px] border-[#FFE8E6] bg-background px-4 py-5">
         <div />
         <Text size="lg_16" className="font-medium text-text-primary">
@@ -126,68 +154,69 @@ function RouteComponent() {
         </div>
       </header>
 
-      {showEmpty ? (
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <EmptyAppointment variant="history" />
-        </div>
-      ) : (
-        <div
-          ref={parentRef}
-          className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 pt-4"
-        >
-          <div
-            className="relative w-full"
-            style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
-          >
-            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-              const row = rows[virtualRow.index]
-
-              return (
-                <div
-                  key={virtualRow.key}
-                  data-index={virtualRow.index}
-                  ref={rowVirtualizer.measureElement}
-                  className="absolute left-0 top-0 w-full pb-3"
-                  style={{ transform: `translateY(${virtualRow.start}px)` }}
-                >
-                  {row.kind === 'title' ? (
-                    <div className="flex items-center gap-2">
-                      <Text
-                        size="base_14"
-                        className={cn(
-                          'text-[14px] font-medium uppercase leading-none tracking-[0.03em]',
-                          row.isCurrentMonth
-                            ? 'text-[#A8071A]'
-                            : 'text-[#64748B]',
-                        )}
-                      >
-                        {row.title}
-                      </Text>
-                      {row.isCurrentMonth ? (
-                        <span
-                          className="size-[6px] shrink-0 rounded-full bg-[#A8071A]"
-                          aria-hidden
-                        />
-                      ) : null}
-                    </div>
-                  ) : (
-                    <ItemHistoryAppointment item={row.item} />
-                  )}
-                </div>
-              )
-            })}
+      <div className="flex flex-col overflow-hidden pb-[90px]">
+        {showEmpty ? (
+          <div className="min-h-0 flex-1 overflow-y-auto">
+            <EmptyAppointment variant="history" />
           </div>
-        </div>
-      )}
+        ) : (
+          <div
+            ref={parentRef}
+            className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 pt-4"
+          >
+            <div
+              className="relative w-full"
+              style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+            >
+              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                const row = rows[virtualRow.index]
 
-      <ModalHistoryFilter
-        open={filterOpen}
-        onOpenChange={setFilterOpen}
-        filter={draftFilter}
-        onFilterChange={setDraftFilter}
-        onApply={handleApplyFilters}
-      />
-      <LoadingBlocking isLoading={isLoading} />
-    </div>
+                return (
+                  <div
+                    key={virtualRow.key}
+                    data-index={virtualRow.index}
+                    ref={rowVirtualizer.measureElement}
+                    className="absolute left-0 top-0 w-full pb-3"
+                    style={{ transform: `translateY(${virtualRow.start}px)` }}
+                  >
+                    {row.kind === 'title' ? (
+                      <div className="flex items-center gap-2">
+                        <Text
+                          size="base_14"
+                          className={cn(
+                            'text-[14px] font-medium uppercase leading-none tracking-[0.03em]',
+                            row.isCurrentMonth
+                              ? 'text-[#A8071A]'
+                              : 'text-[#64748B]',
+                          )}
+                        >
+                          {row.title}
+                        </Text>
+                        {row.isCurrentMonth ? (
+                          <span
+                            className="size-[6px] shrink-0 rounded-full bg-[#A8071A]"
+                            aria-hidden
+                          />
+                        ) : null}
+                      </div>
+                    ) : (
+                      <ItemHistoryAppointment item={row.item} />
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        <ModalHistoryFilter
+          open={filterOpen}
+          onOpenChange={setFilterOpen}
+          filter={draftFilter}
+          onFilterChange={setDraftFilter}
+          onApply={handleApplyFilters}
+        />
+      </div>
+    </>
   )
 }

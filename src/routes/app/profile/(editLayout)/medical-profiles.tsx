@@ -8,6 +8,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { formatDate, DATE_TIME_TYPE } from '#/utils'
 import LoadingBlocking from '#/components/LoadingBlocking'
+import LoadingState from '#/components/LoadingState'
 
 export const Route = createFileRoute(
   '/app/profile/(editLayout)/medical-profiles',
@@ -23,6 +24,10 @@ function RouteComponent() {
   })
 
   const familyMembers = familyList?.data?.patients ?? []
+
+  if (isFetching) {
+    return <LoadingState />
+  }
 
   return (
     <div className="px-4 pb-20">
@@ -68,7 +73,6 @@ function RouteComponent() {
           </Text>
         </Button>
       </div>
-      <LoadingBlocking isLoading={isFetching} />
     </div>
   )
 }
