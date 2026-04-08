@@ -11,10 +11,10 @@ function RouteComponent() {
   const { t } = useTranslation(['appointment'])
   const title = t('title')
   return (
-    <div className="pb-[100px]">
+    <>
       <Header title={title} isCenter />
       <Outlet />
       <BottomNavigation />
-    </div>
+    </>
   )
 }

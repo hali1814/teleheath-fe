@@ -1,5 +1,6 @@
 import { Icon } from '#/components/icon'
 import LoadingBlocking from '#/components/LoadingBlocking'
+import LoadingState from '#/components/LoadingState'
 import Text from '#/components/text'
 import AppointmentInformation from '#/sections/appointment/AppointmentInformation'
 import Header from '#/sections/appointment/Header'
@@ -39,6 +40,10 @@ function RouteComponent() {
   const status = appointmentData?.data?.status
   const showCancelledBanner = status === 'CANCELLED'
   const showCompletedBanner = status === 'COMPLETED'
+
+  if (isLoading) {
+    return <LoadingState />
+  }
 
   return (
     <div className="p-4 pb-20" data-entry-source={type}>
@@ -108,7 +113,6 @@ function RouteComponent() {
         </div>
       )}
       {/* <AppointmentHospitalDetail /> */}
-      <LoadingBlocking isLoading={isLoading} />
     </div>
   )
 }

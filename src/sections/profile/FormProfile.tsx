@@ -36,6 +36,7 @@ import type { PatientProfileResponse } from '#/services/query/profile/getProfile
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
+import LoadingState from '#/components/LoadingState'
 
 export interface FormProfileProps {
   idMember?: number
@@ -458,6 +459,16 @@ export default function FormProfile({
     return relationshipOptions
   }, [familyList?.data?.patients, formValues.relationship, t])
 
+  if (
+    isAddingNewProfile ||
+    isUpdatingProfile ||
+    isDeletingProfile ||
+    isUpdatingPatientProfile ||
+    isGettingPatientProfile
+  ) {
+    return <LoadingState />
+  }
+
   return (
     <div className={cn('pt-4 pb-20 px-4', containerClassName)}>
       <div className={cn('mt-6', isViewMode && 'pointer-events-none')}>
@@ -718,15 +729,6 @@ export default function FormProfile({
           fillProfileInfoToForm()
           setIsUseAccountInfoDialogOpen(false)
         }}
-      />
-      <LoadingBlocking
-        isLoading={
-          isAddingNewProfile ||
-          isUpdatingProfile ||
-          isDeletingProfile ||
-          isUpdatingPatientProfile ||
-          isGettingPatientProfile
-        }
       />
     </div>
   )

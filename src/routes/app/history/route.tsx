@@ -8,9 +8,9 @@ export const Route = createFileRoute('/app/history')({
 
 function RouteComponent() {
   return (
-    <div className="pb-[100px]">
+    <>
       <Outlet />
       <BottomNavigation />
-    </div>
+    </>
   )
 }

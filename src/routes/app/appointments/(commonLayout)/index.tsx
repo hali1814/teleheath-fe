@@ -8,6 +8,7 @@ import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appoi
 import LoadingBlocking from '#/components/LoadingBlocking'
 import { groupAppointmentsByUpcomingWindow } from '#/utils'
 import dayjs from 'dayjs'
+import LoadingState from '#/components/LoadingState'
 
 export const Route = createFileRoute('/app/appointments/(commonLayout)/')({
   component: RouteComponent,
@@ -59,11 +60,7 @@ function RouteComponent() {
   })
 
   if (isLoadingAppointments) {
-    return (
-      <div className="relative mt-4 min-h-[min(320px,calc(100dvh-200px))]">
-        <LoadingBlocking isLoading />
-      </div>
-    )
+    return <LoadingState />
   }
 
   /*
@@ -75,10 +72,7 @@ function RouteComponent() {
   }
 
   return (
-    <div
-      ref={parentRef}
-      className="mt-4 max-h-[calc(100dvh-200px)] overflow-y-auto px-4 pb-4"
-    >
+    <div ref={parentRef} className="mt-4 overflow-y-auto px-4 pb-[90px]">
       <div
         className="relative w-full"
         style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
