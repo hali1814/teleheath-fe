@@ -4,7 +4,6 @@ import { useGetPackageDetailQuery } from '#/services/query/package/package-detai
 import type { HttpCommonResponse } from '#/services/network/http-request'
 import { useBookingStore } from '#/stores/booking-store'
 import type { Doctor } from '#/types/doctor'
-import type { Hospital } from '#/types/hospital'
 import type { Package } from '#/types/package'
 import { useNavigate } from '@tanstack/react-router'
 import { useCallback } from 'react'
@@ -13,6 +12,7 @@ import type { BookingStepConfig } from './booking-steps'
 import { StepLayout } from './StepLayout'
 import { useGetHospitalDetailQuery } from '#/services/query/hospital/hospital-detail'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
+import type { Hospital } from '#/entities/hospitalEntity'
 
 export default function BookingPage({
   steps,
@@ -91,66 +91,88 @@ export default function BookingPage({
       if (!data.bookingToken) return
       if (store.feeInfo.totalAmount === 0) {
         navigate({
-          to: '/app/book-appointment/success/$appointmentId',
-          params: { appointmentId: data.id },
+          to: '/app/book-appointment/success/$appointmentCode',
+          params: { appointmentCode: data.appointmentCode },
         })
         return
       }
       navigate({
-        to: '/app/payment/khqr/$appointmentId',
-        params: { appointmentId: data.bookingToken },
+        to: '/app/payment/khqr/$bookingToken',
+        params: { bookingToken: data.bookingToken },
       })
     },
   })
 
   const handleSubmit = () => {
-    if (
-      !store.branch?.branchId ||
-      !store.branch.hospitalId ||
-      !store.patientProfile?.id ||
-      !store.appointmentDate ||
-      !store.startTime ||
-      !store.endTime
-    )
-      return
-
-    const bookingType =
-      context.flow === 'HOSPITAL'
-        ? 'HOSPITAL'
-        : context.flow === 'DOCTOR'
-          ? 'DOCTOR'
-          : 'PACKAGE'
-
-    const doctorId = store.doctor?.doctorId ?? ''
-
-    const packageId =
-      context.flow === 'PACKAGE' && packageParam
-        ? Number(packageParam)
-        : undefined
+    let bookingType: 'HOSPITAL' | 'DOCTOR' | 'PACKAGE' = 'HOSPITAL'
+    switch (context.flow) {
+      case 'HOSPITAL':
+        bookingType = 'HOSPITAL'
+        if (
+          !store.hospital?.hospitalId ||
+          !store.specialty?.id ||
+          !store.branch?.branchId ||
+          !store.room?.id ||
+          !store.doctor?.doctorId ||
+          !store.patientProfile?.id ||
+          !store.appointmentDate ||
+          !store.startTime ||
+          !store.endTime
+        )
+          return
+        break
+      case 'DOCTOR':
+        bookingType = 'DOCTOR'
+        if (
+          !store.doctor?.doctorId ||
+          !store.branch?.branchId ||
+          !store.patientProfile?.id ||
+          !store.appointmentDate ||
+          !store.startTime ||
+          !store.endTime
+        )
+          return
+        break
+      case 'PACKAGE':
+        bookingType = 'PACKAGE'
+        if (
+          !store.packageData?.id ||
+          !store.branch?.branchId ||
+          !store.patientProfile?.id ||
+          !store.appointmentDate ||
+          !store.startTime ||
+          !store.endTime
+        )
+          return
+        break
+    }
 
     bookAppointment({
       branchId: store.branch.branchId,
-      doctorId,
-      specialtyId: store.specialty?.id ?? 1,
-      packageId,
-      bookingType,
-      patientProfileId: store.patientProfile.id,
+      roomId: store.room?.id,
+      doctorId: store.doctor?.doctorId,
+      specialtyId: store.specialty?.id,
+      packageId: store.packageData?.id,
       appointmentDate: formatDate(
         store.appointmentDate,
         DATE_TIME_TYPE.YYYY_MM_DD,
       ),
       startTime: store.startTime,
       endTime: store.endTime,
+      bookingType,
+      patientProfileId: store.patientProfile.id,
+      thumbnailUrl: store.thumbnailUrl,
       notes: store.notes,
       medicalHistory: store.medicalHistory,
-      serviceIds: store.serviceIds,
       medicalFileIds: store.medicalFiles
         .filter((x) => x.status === 'success')
         .map((x) => x.fileId)
         .filter((x) => x !== undefined),
-      thumbnailUrl: store.thumbnailUrl,
-      addonServiceIds: store.servicePartners?.map((p) => p.addonServiceId),
-      roomId: store.room?.id,
+      serviceIds: store.serviceIds,
+      addonServiceIds: store.addonServiceTypes?.map((x) => x.id),
+      pickupTime: store.pickupTime,
+      pickupDate: store.pickupDate,
+      pickupNote: store.pickupNote,
     })
   }
 

@@ -29,14 +29,14 @@ function isTerminalPaymentStatus(status: string) {
   ].includes(s)
 }
 
-export function KhqrPaymentView({ appointmentId }: { appointmentId: string }) {
+export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   const router = useRouter()
   const navigate = useNavigate()
   const { reset } = useBookingStore()
   const { data, isLoading, isError, refetch, isFetching } =
     useGenerateKhqrQuery({
-      params: { bookingToken: appointmentId },
-      enabled: !!appointmentId,
+      params: { bookingToken },
+      enabled: !!bookingToken,
     })
 
   const khqr = data?.data
@@ -50,12 +50,12 @@ export function KhqrPaymentView({ appointmentId }: { appointmentId: string }) {
       if (data.status === 'SUCCESS') {
         reset()
         navigate({
-          to: '/app/book-appointment/success/$appointmentId',
-          params: { appointmentId },
+          to: '/app/book-appointment/success/$appointmentCode',
+          params: { appointmentCode: data.appointmentCode },
         })
       }
     },
-    [khqr, router, reset, navigate, appointmentId],
+    [khqr, router, reset, navigate, data?.appointmentCode],
   )
 
   useCheckStatusPaymentQuery({

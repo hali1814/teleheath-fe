@@ -76,6 +76,7 @@ export function ScheduleStep() {
       params: {
         packageId: packageData?.id ?? 0,
         date: dateParam,
+        branchId: branch?.branchId ?? 0,
       },
       enabled: !!packageData?.id && !!dateParam && bookingType === 'PACKAGE',
       placeholderData: keepPreviousData,
@@ -99,7 +100,7 @@ export function ScheduleStep() {
       schedules?.morning.map((item) => ({
         startTime: item.startTime,
         endTime: item.endTime,
-        doctor: item.doctors[0],
+        doctor: item.doctors?.[0],
         status: item.status,
       })) ?? []
     )
@@ -110,7 +111,7 @@ export function ScheduleStep() {
       schedules?.afternoon.map((item) => ({
         startTime: item.startTime,
         endTime: item.endTime,
-        doctor: item.doctors[0],
+        doctor: item.doctors?.[0],
         status: item.status,
       })) ?? []
     )

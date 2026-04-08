@@ -1,30 +1,36 @@
 import { Icon } from '#/components/icon'
 import Image from '#/components/image'
+import LocationBadge from '#/components/LocationBadge'
 import Text from '#/components/text'
 import { Avatar, AvatarImage } from '#/components/ui/avatar'
+import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
-import type { Amenity, Partner } from '#/types/service'
+import type { Amenity, ServiceType } from '#/types/service'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { formatPrice } from '#/utils/price.util'
+import { useTranslation } from 'react-i18next'
 
 export const ServiceCard = ({
   service,
   selected,
   disabled = false,
   onClick,
+  onDetailClick,
 }: {
-  service: Partner
+  service: ServiceType
   selected: boolean
   disabled?: boolean
   onClick: () => void
+  onDetailClick: () => void
 }) => {
-  const { name, photoUrl, price, amenities, typeName } = service
+  const { i18n } = useTranslation()
+  const { typeName, originalPrice, price, amenities, isBest } = service
 
   return (
     <div
       className={cn(
         'relative flex flex-col gap-[12px] px-[16px] py-[12px] rounded-[12px] bg-white border border-[#D331311A]',
-        selected &&
-          'border-[#ED2630] shadow-[0_0_0_1px_#ED2630]',
+        selected && 'border-[#ED2630] shadow-[0_0_0_1px_#ED2630]',
         disabled &&
           'opacity-50 pointer-events-none cursor-not-allowed select-none',
       )}
@@ -39,19 +45,25 @@ export const ServiceCard = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-[12px]">
           <Avatar>
-            <AvatarImage src={photoUrl} alt={name} />
+            <AvatarImage
+              src={service.partner.photoUrl}
+              alt={service.partner.name}
+            />
           </Avatar>
           <Text
             size="xs_10"
             className="font-extrabold leading-[1.2] text-muted-foreground"
           >
-            {name}
+            {service.partner.name}
           </Text>
         </div>
         <button
           type="button"
           className="flex items-center gap-[4px] px-[8px] py-[6px] rounded-[6px] bg-dust-red-1"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation()
+            onDetailClick()
+          }}
         >
           <Icon name="eye_outline" className="w-[16px] h-[16px] text-primary" />
           <Text size="sm_12" className="leading-[1.3] font-medium text-primary">
@@ -67,7 +79,7 @@ export const ServiceCard = ({
           size="xs_10"
           className="leading-[15px] tracking-[1px] text-[#707977]"
         >
-          Starting from
+          Price around
         </Text>
         <Text
           size="sm_12"
@@ -97,7 +109,20 @@ export const ServiceCard = ({
             </div>
           ))}
       </div>
-      {false && (
+      <div className="flex justify-end">
+        <LocationBadge
+          location={getLocalizedTextByLang(
+            service.partner.country[0].nameVi,
+            null,
+            service.partner.country[0].nameEn,
+            i18n.language as AppLanguage,
+          )}
+          textSize="xs_10"
+          className="leading-[1.3] text-muted-foreground"
+          iconSize="w-[14px] h-[14px]"
+        />
+      </div>
+      {isBest && (
         <div className="absolute -top-2.5 left-0">
           <Image
             src="/best-service.svg"

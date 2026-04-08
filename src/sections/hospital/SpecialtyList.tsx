@@ -8,7 +8,7 @@ import type { Specialty } from '#/types/specialty'
 export default function SpecialtyList({
   specialties,
 }: {
-  specialties: Specialty[]
+  specialties: Pick<Specialty, 'id' | 'name' | 'iconUrl'>[]
 }) {
   const contentKey = specialties.map((s) => s.id).join(',')
   const {

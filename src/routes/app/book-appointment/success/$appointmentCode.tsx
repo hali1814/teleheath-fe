@@ -1,27 +1,20 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
-import { useGetAppointmentDetailsQuery } from '#/services/query/appointment/apoiments-details'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
-  '/app/book-appointment/success/$appointmentId',
+  '/app/book-appointment/success/$appointmentCode',
 )({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { appointmentId } = useParams({
-    from: '/app/book-appointment/success/$appointmentId',
+  const { appointmentCode } = useParams({
+    from: '/app/book-appointment/success/$appointmentCode',
   })
 
-  const { data: { data: detailPayment } = { data: null } } =
-    useGetAppointmentDetailsQuery({
-      params: { id: parseInt(appointmentId) },
-      enabled: !!appointmentId,
-    })
-  console.log(detailPayment)
   return (
     <div className="relative mt-[60px] px-[15px]">
       <div className="flex flex-col items-center justify-center gap-[16px]">
@@ -40,13 +33,13 @@ function RouteComponent() {
           <div className="flex items-center gap-[8px]">
             <Text className="font-medium leading-normal text-muted-foreground">
               Booking ID:{' '}
-              <span className="text-dust-red-8">#{appointmentId}</span>
+              <span className="text-dust-red-8">#{appointmentCode}</span>
             </Text>
             <Icon name="copy" className="w-[16px] h-[16px] text-dust-red-8" />
           </div>
           <Text size="sm_12" className="leading-[1.3] text-muted-foreground">
             {formatDate(
-              detailPayment?.createdAt,
+              new Date().toISOString(),
               DATE_TIME_TYPE.MMM_DD_YYYY_HH_mm_A,
             )}
           </Text>

@@ -2,28 +2,15 @@ import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
 import { Avatar, AvatarImage } from '#/components/ui/avatar'
-import type i18n from '#/i18n'
-import type { AppLanguage } from '#/i18n'
+import type { Hospital } from '#/entities/hospitalEntity'
 import { getDomainWebsite } from '#/utils'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
-import { useTranslation } from 'react-i18next'
 
 export default function HospitalDetailHeader({
-  nameVi,
-  nameKh,
-  nameEn,
-  website,
-  thumbnailUrl,
-  logoUrl,
+  hospital,
 }: {
-  nameVi: string
-  nameKh: string
-  nameEn: string
-  website: string
-  thumbnailUrl: string
-  logoUrl: string
+  hospital: Pick<Hospital, 'thumbnailUrl' | 'logoUrl' | 'name' | 'website'>
 }) {
-  const { i18n } = useTranslation()
+  const { thumbnailUrl, logoUrl, name, website } = hospital
 
   return (
     <div className="relative w-full mb-[55px]">
@@ -39,12 +26,7 @@ export default function HospitalDetailHeader({
           </Avatar>
           <div className="flex flex-col gap-[12px]">
             <Text size="2xl_20" className="font-semibold leading-normal">
-              {getLocalizedTextByLang(
-                nameVi,
-                nameKh,
-                nameEn,
-                i18n.language as AppLanguage,
-              )}
+              {name}
             </Text>
             <div className="flex items-center gap-[6px]">
               <Icon name="plump_web" className="w-[16px] h-[16px]" />

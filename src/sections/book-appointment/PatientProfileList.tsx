@@ -31,7 +31,7 @@ const PatientProfileItem = ({
           >
             <AvatarImage
               src={patient.avatarUrl ?? undefined}
-              alt={patient.name}
+              alt={patient.fullName ?? ''}
               className="w-[68px] h-[68px]"
             />
             <AvatarFallback className="w-[68px] h-[68px] bg-[linear-gradient(135deg,#FFEFEF_0%,#FFA7A7_100%)]">
@@ -54,7 +54,7 @@ const PatientProfileItem = ({
         </div>
         <div>
           <Text className="text-center font-medium leading-normal">
-            {patient.name}
+            {patient.fullName}
           </Text>
           <div
             onClick={(e) => {

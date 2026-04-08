@@ -76,12 +76,16 @@ export default function DoctorCard({
               i18n.language as AppLanguage,
             )}
           </Text>
-          <Text
-            size="sm_12"
-            className="font-normal text-secondary leading-[1.3]"
-          >
-            {specialties?.length > 0 ? specialties[0]?.name : ''}
-          </Text>
+          {specialties?.length > 0 &&
+            specialties.map((specialty) => (
+              <Text
+                size="sm_12"
+                className="flex items-center gap-[8px] font-normal text-muted-foreground leading-[1.3]"
+              >
+                <div className="size-[4px] rounded-full bg-muted-foreground" />
+                {specialty.name}
+              </Text>
+            ))}
           <div className="flex items-center gap-[6px]">
             <Icon
               name="work_history_outline"
@@ -166,12 +170,16 @@ export default function DoctorCard({
             i18n.language as AppLanguage,
           )}
         </Text>
-        <Text
-          size="xs_10"
-          className="font-medium text-muted-foreground leading-normal"
-        >
-          {specialties?.length > 0 ? specialties[0]?.name : ''}
-        </Text>
+        {specialties?.length > 0 &&
+          specialties.map((specialty) => (
+            <Text
+              size="xs_10"
+              className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
+            >
+              <div className="size-[4px] rounded-full bg-muted-foreground" />
+              {specialty.name}
+            </Text>
+          ))}
         {!hideBookAppointment && (
           <Button className="w-full h-[32px] bg-dust-red-1" asChild>
             <Link
