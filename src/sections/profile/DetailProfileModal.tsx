@@ -50,7 +50,7 @@ export default function DetailProfileModal({
             {patient.avatarUrl ? (
               <Image
                 src={patient.avatarUrl}
-                alt={patient.name}
+                alt={patient.fullName ?? ''}
                 className="h-full w-full object-cover"
               />
             ) : (
@@ -60,7 +60,7 @@ export default function DetailProfileModal({
 
           <div className="mt-2 flex items-center gap-3">
             <Text size="2xl_20" className="font-semibold text-text-primary">
-              {patient.name}
+              {patient.fullName}
             </Text>
           </div>
 
@@ -75,7 +75,7 @@ export default function DetailProfileModal({
               size="xs_10"
               className="font-medium text-[#D43129] leading-none"
             >
-              {patient.patientCode}
+              {patient.profileCode}
             </Text>
           </div>
         </div>
@@ -91,7 +91,7 @@ export default function DetailProfileModal({
                 {t('profile:dateOfBirth')}
               </Text>
               <Text size="base_14" className="font-normal text-[#333333]">
-                {patient.dateOfBirth ?? '--'}
+                {patient.dob ?? '--'}
               </Text>
             </div>
 
@@ -100,7 +100,7 @@ export default function DetailProfileModal({
                 {t('profile:phoneNumber')}
               </Text>
               <Text size="base_14" className="font-normal text-[#333333]">
-                {patient.phone ?? '--'}
+                {patient.contactNumber ?? '--'}
               </Text>
             </div>
 

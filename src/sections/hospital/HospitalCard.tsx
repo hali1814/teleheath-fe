@@ -7,9 +7,7 @@ import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
-import type { Hospital } from '#/types/hospital'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
-import type { AppLanguage } from '#/i18n'
+import type { Hospital } from '#/entities/hospitalEntity'
 
 type HospitalCardProps = {
   className?: string
@@ -29,17 +27,9 @@ export default function HospitalCard({
   showAddress = false,
   ...hospital
 }: HospitalCardProps) {
-  const {
-    hospitalId,
-    nameVi,
-    nameEn,
-    nameKh,
-    country,
-    thumbnailUrl,
-    detailedAddress,
-    emergency24h,
-  } = hospital
-  const { t, i18n } = useTranslation(['common'])
+  const { hospitalId, thumbnailUrl, name, emergency24h, country, address } =
+    hospital
+  const { t } = useTranslation(['common'])
   const imgHeight = size === 'sm' ? 'h-[96px]' : 'h-[180px]'
   const textSize = size === 'sm' ? 'sm_12' : 'lg_16'
   const gap = size === 'sm' ? 'gap-[8px]' : 'gap-[10px]'
@@ -73,12 +63,7 @@ export default function HospitalCard({
                 size === 'sm' ? 'truncate' : '',
               )}
             >
-              {getLocalizedTextByLang(
-                nameVi,
-                nameKh,
-                nameEn,
-                i18n.language as AppLanguage,
-              )}
+              {name}
             </Text>
             {showBadge && emergency24h && (
               <Badge className="bg-[#DCFCE7] text-[#15803D] px-[8px] py-[4px] rounded-[6px]">
@@ -87,16 +72,7 @@ export default function HospitalCard({
             )}
           </div>
           <LocationBadge
-            location={
-              showAddress
-                ? detailedAddress
-                : getLocalizedTextByLang(
-                    country.nameVi,
-                    null,
-                    country.nameEn,
-                    i18n.language as AppLanguage,
-                  )
-            }
+            location={showAddress ? address : country}
             className="text-muted-foreground leading-[1.3]"
             iconSize={
               variantButton === 'solid'

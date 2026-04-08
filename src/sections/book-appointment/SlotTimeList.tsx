@@ -61,7 +61,7 @@ export function SlotTimeList({
       return (
         selectedSlot?.startTime === slot.startTime &&
         selectedSlot?.endTime === slot.endTime &&
-        selectedSlot?.doctor.doctorId === slot.doctor.doctorId
+        selectedSlot?.doctor?.doctorId === slot.doctor?.doctorId
       )
     },
     [selectedSlot],

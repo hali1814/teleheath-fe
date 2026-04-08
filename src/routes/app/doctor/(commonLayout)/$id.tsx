@@ -39,11 +39,13 @@ function RouteComponent() {
         <DoctorConsultationFee
           consultationFee={doctorData?.consultationFee ?? 0}
         />
-        <AboutDoctor
-          bioVi={doctorData?.bioVi ?? ''}
-          bioKh={doctorData?.bioKh ?? ''}
-          bioEn={doctorData?.bioEn ?? ''}
-        />
+        {(doctorData?.bioVi || doctorData?.bioKh || doctorData?.bioEn) && (
+          <AboutDoctor
+            bioVi={doctorData?.bioVi ?? ''}
+            bioKh={doctorData?.bioKh ?? ''}
+            bioEn={doctorData?.bioEn ?? ''}
+          />
+        )}
         {doctorData?.branches && doctorData?.branches?.length > 0 && (
           <DoctorCurrentLocation
             hospitalName={doctorData?.branches[0].nameVi ?? ''}
@@ -51,9 +53,11 @@ function RouteComponent() {
             branches={doctorData?.branches ?? []}
           />
         )}
-        <DoctorEducationCertifications
-          certifications={doctorData?.certifications ?? ''}
-        />
+        {doctorData?.educations && doctorData?.educations?.length > 0 && (
+          <DoctorEducationCertifications
+            educations={doctorData?.educations ?? []}
+          />
+        )}
         <DoctorActions />
       </div>
     </>

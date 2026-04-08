@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { HospitalCard } from '#/sections/hospital'
 import Text from '#/components/text'
 import { useTranslation } from 'react-i18next'
-import type { Hospital } from '#/types/hospital'
+import type { Hospital } from '#/entities/hospitalEntity'
 
 export default function HospitalList({
   title,
