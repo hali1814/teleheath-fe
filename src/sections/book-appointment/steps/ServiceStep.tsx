@@ -13,6 +13,8 @@ import { Icon } from '#/components/icon'
 import { Badge } from '#/components/ui/badge'
 import { useSearch } from '@tanstack/react-router'
 import ModalFilterServiceType from '../ModalFilterServiceType'
+import { EmptyState } from '#/sections/search'
+import LoadingState from '#/components/LoadingState'
 
 export function ServiceStep() {
   const [openFilter, setOpenFilter] = useState(false)
@@ -24,19 +26,21 @@ export function ServiceStep() {
   >(undefined)
   const [country, setCountry] = useState<string | undefined>(undefined)
 
-  const { data: addonServices } = useGetListAddonServicesByBranchQuery({
-    params: {
-      branchId: branch?.branchId ?? 0,
-    },
-    enabled: !!branch?.branchId,
-  })
+  const { data: addonServices, isLoading: isAddonServicesLoading } =
+    useGetListAddonServicesByBranchQuery({
+      params: {
+        branchId: branch?.branchId ?? 0,
+      },
+      enabled: !!branch?.branchId,
+    })
 
-  const { data: serviceTypes } = useGetListServiceTypeQuery({
-    params: {
-      addonServiceIds: serviceIds ?? [],
-    },
-    enabled: (serviceIds?.length ?? 0) > 0,
-  })
+  const { data: serviceTypes, isLoading: isServiceTypesLoading } =
+    useGetListServiceTypeQuery({
+      params: {
+        addonServiceIds: serviceIds ?? [],
+      },
+      enabled: (serviceIds?.length ?? 0) > 0,
+    })
 
   const addonServiceIds = useMemo(
     () => (addonServices?.data ?? []).map((service) => service.id),
@@ -153,52 +157,65 @@ export function ServiceStep() {
           ))}
         </div>
 
-        {filteredServiceTypes.length > 0 && (
+        {isAddonServicesLoading || isServiceTypesLoading ? (
+          <LoadingState className="h-[200px]" />
+        ) : (
           <>
-            {filteredServiceTypes.map((serviceType) => {
-              const pickedForAddon = addonServiceTypes?.find(
-                (p) => p.addonServiceId === serviceType.addonServiceId,
-              )
-              const selectionDisabled =
-                pickedForAddon != null && pickedForAddon.id !== serviceType.id
+            {filteredServiceTypes.length > 0 ? (
+              <>
+                {filteredServiceTypes.map((serviceType) => {
+                  const pickedForAddon = addonServiceTypes?.find(
+                    (p) => p.addonServiceId === serviceType.addonServiceId,
+                  )
+                  const selectionDisabled =
+                    pickedForAddon != null &&
+                    pickedForAddon.id !== serviceType.id
 
-              return (
-                <ServiceCard
-                  key={serviceType.id}
-                  service={serviceType}
-                  selected={
-                    addonServiceTypes?.some((p) => p.id === serviceType.id) ??
-                    false
-                  }
-                  disabled={selectionDisabled}
-                  onClick={() => {
-                    const current = addonServiceTypes ?? []
-                    const already = current.some((p) => p.id === serviceType.id)
+                  return (
+                    <ServiceCard
+                      key={serviceType.id}
+                      service={serviceType}
+                      selected={
+                        addonServiceTypes?.some(
+                          (p) => p.id === serviceType.id,
+                        ) ?? false
+                      }
+                      disabled={selectionDisabled}
+                      onClick={() => {
+                        const current = addonServiceTypes ?? []
+                        const already = current.some(
+                          (p) => p.id === serviceType.id,
+                        )
 
-                    if (already) {
-                      setData({
-                        addonServiceTypes: current.filter(
-                          (p) => p.id !== serviceType.id,
-                        ),
-                      })
-                      return
-                    }
+                        if (already) {
+                          setData({
+                            addonServiceTypes: current.filter(
+                              (p) => p.id !== serviceType.id,
+                            ),
+                          })
+                          return
+                        }
 
-                    // Mỗi addon service chỉ 1 partner: bỏ partner khác cùng addonServiceId rồi chọn partner này
-                    const withoutSameAddon = current.filter(
-                      (p) => p.addonServiceId !== serviceType.addonServiceId,
-                    )
-                    setData({
-                      addonServiceTypes: [...withoutSameAddon, serviceType],
-                    })
-                  }}
-                  onDetailClick={() => {
-                    setSelectedService(serviceType)
-                    setOpenDetailService(true)
-                  }}
-                />
-              )
-            })}
+                        // Mỗi addon service chỉ 1 partner: bỏ partner khác cùng addonServiceId rồi chọn partner này
+                        const withoutSameAddon = current.filter(
+                          (p) =>
+                            p.addonServiceId !== serviceType.addonServiceId,
+                        )
+                        setData({
+                          addonServiceTypes: [...withoutSameAddon, serviceType],
+                        })
+                      }}
+                      onDetailClick={() => {
+                        setSelectedService(serviceType)
+                        setOpenDetailService(true)
+                      }}
+                    />
+                  )
+                })}
+              </>
+            ) : (
+              <EmptyState className="h-auto">No services found</EmptyState>
+            )}
           </>
         )}
       </div>
