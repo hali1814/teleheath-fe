@@ -11,6 +11,7 @@ import {
   useGetListScheduleByDoctorQuery,
   type ListScheduleByDoctorResponse,
 } from '#/services/query/schedule/list-schedule-by-doctor'
+import { useTranslation } from 'react-i18next'
 
 const emptySchedules: ListScheduleByDoctorResponse = {
   morning: [],
@@ -18,6 +19,7 @@ const emptySchedules: ListScheduleByDoctorResponse = {
 }
 
 export function ScheduleStepByDoctor() {
+  const { t } = useTranslation(['book-appointment'])
   const { doctor, appointmentDate, startTime, endTime, setData, branch } =
     useBookingStore()
 
@@ -79,7 +81,7 @@ export function ScheduleStepByDoctor() {
   return (
     <div className="flex flex-col gap-[16px] px-[16px]">
       <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
-        Select Date
+        {t('schedule.selectDate')}
       </Text>
       <CalendarSchedule
         selected={appointmentDate ?? null}
@@ -91,11 +93,11 @@ export function ScheduleStepByDoctor() {
           size="lg_16"
           className="font-semibold leading-[1.2] text-[#333333]"
         >
-          Available Time Slots
+          {t('schedule.availableTimeSlots')}
         </Text>
         {!isEmptySchedule && (
           <Text size="sm_12" className="leading-[1.3] text-[#999999]">
-            Choose a time that works for you on{' '}
+            {t('schedule.chooseTimePrefix')}{' '}
             <span className="font-bold">{selectedDateLabel}</span>
           </Text>
         )}
@@ -103,7 +105,7 @@ export function ScheduleStepByDoctor() {
       {!isEmptySchedule ? (
         <>
           <SlotTimeList
-            title="Morning sessions"
+            title={t('schedule.morningSessions')}
             slotTimes={slotTimesMorning}
             selectedSlot={{
               startTime: startTime ?? '',
@@ -130,7 +132,7 @@ export function ScheduleStepByDoctor() {
             }
           />
           <SlotTimeList
-            title="Afternoon sessions"
+            title={t('schedule.afternoonSessions')}
             slotTimes={slotTimesAfternoon}
             selectedSlot={{
               startTime: startTime ?? '',
@@ -162,7 +164,7 @@ export function ScheduleStepByDoctor() {
       ) : (
         <EmptyState className="h-auto max-w-[300px] mx-auto">
           <Text className="text-center leading-normal text-muted-foreground">
-            No appointments available on this date. Please choose another date.
+            {t('schedule.noSlotsThisDate')}
           </Text>
         </EmptyState>
       )}

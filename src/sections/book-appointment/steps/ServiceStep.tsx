@@ -15,8 +15,10 @@ import { useSearch } from '@tanstack/react-router'
 import ModalFilterServiceType from '../ModalFilterServiceType'
 import { EmptyState } from '#/sections/search'
 import LoadingState from '#/components/LoadingState'
+import { useTranslation } from 'react-i18next'
 
 export function ServiceStep() {
+  const { t } = useTranslation(['book-appointment'])
   const [openFilter, setOpenFilter] = useState(false)
   const { addonServiceTypes, serviceIds, setData, branch } = useBookingStore()
   const [search, setSearch] = useState('')
@@ -104,7 +106,7 @@ export function ServiceStep() {
       <div className="flex min-w-0 w-full flex-col gap-[16px] px-[16px]">
         <div className="flex items-center gap-[10px]">
           <SearchBar
-            placeholder="Search for services"
+            placeholder={t('serviceStep.searchPlaceholder')}
             value={search}
             onSearch={(value) => setSearch(value)}
             onClear={() => setSearch('')}
@@ -113,7 +115,7 @@ export function ServiceStep() {
             type="button"
             className="relative flex shrink-0 items-center justify-center"
             onClick={() => setOpenFilter(true)}
-            aria-label="Filter"
+            aria-label={t('serviceStep.filterAriaLabel')}
           >
             <Icon name="filter" className="text-icon" />
             <Badge className="absolute -top-2 -right-2 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
@@ -214,7 +216,9 @@ export function ServiceStep() {
                 })}
               </>
             ) : (
-              <EmptyState className="h-auto">No services found</EmptyState>
+              <EmptyState className="h-auto">
+                {t('serviceStep.empty')}
+              </EmptyState>
             )}
           </>
         )}

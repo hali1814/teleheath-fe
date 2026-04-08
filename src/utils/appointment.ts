@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
+import type { TFunction } from 'i18next'
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
-
-type TranslateFn = (key: string) => string
 
 type UpcomingBucket = 'today' | 'tomorrow' | 'thisWeek' | 'nextWeek' | 'later'
 
@@ -34,9 +33,11 @@ const formatDayMonth = (date: Date, locale: string) => {
 }
 
 export function getUpcomingAppointmentLabels(
-  t?: TranslateFn,
+  t?: TFunction,
 ): UpcomingAppointmentLabels {
   if (!t) return FALLBACK_LABELS
+
+  const tr = t as (key: string) => string
 
   const todayKey = 'appointment:today'
   const tomorrowKey = 'appointment:tomorrow'
@@ -44,11 +45,11 @@ export function getUpcomingAppointmentLabels(
   const nextWeekKey = 'appointment:nextWeek'
   const laterKey = 'appointment:later'
 
-  const today = t(todayKey)
-  const tomorrow = t(tomorrowKey)
-  const thisWeek = t(thisWeekKey)
-  const nextWeek = t(nextWeekKey)
-  const later = t(laterKey)
+  const today = tr(todayKey)
+  const tomorrow = tr(tomorrowKey)
+  const thisWeek = tr(thisWeekKey)
+  const nextWeek = tr(nextWeekKey)
+  const later = tr(laterKey)
 
   return {
     today: today === todayKey ? FALLBACK_LABELS.today : today,

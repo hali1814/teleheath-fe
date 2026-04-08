@@ -6,8 +6,10 @@ import { useGetListNotificationQuery } from '#/services/query/notification/list-
 import { useMarkReadAllNotificationMutation } from '#/services/query/notification/mark-read-all-notification'
 import LoadingBlocking from '#/components/LoadingBlocking'
 import LoadingState from '#/components/LoadingState'
+import { useTranslation } from 'react-i18next'
 
 export default function NotificationList() {
+  const { t } = useTranslation(['common', 'search'])
   const { data, isLoading } = useGetListNotificationQuery({
     params: {},
   })
@@ -32,7 +34,7 @@ export default function NotificationList() {
           size="sm_12"
           className="font-medium leading-[1.3] text-dust-red-8"
         >
-          Mark all as read
+          {t('markAllAsRead')}
         </Text>
       </button>
       <div>
@@ -48,7 +50,7 @@ export default function NotificationList() {
                 />
               ))
             ) : (
-              <EmptyState>No notifications found</EmptyState>
+              <EmptyState>{t('search:empty.notifications')}</EmptyState>
             )}
           </>
         )}

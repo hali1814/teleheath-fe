@@ -41,7 +41,7 @@ export const Route = createFileRoute('/app/hospital/(commonLayout)/')({
 })
 
 function RouteComponent() {
-  const { t } = useTranslation(['hospital', 'common'])
+  const { t } = useTranslation(['hospital', 'common', 'search'])
   const navigate = useNavigate()
   const search = Route.useSearch()
 
@@ -78,7 +78,7 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title="Hospitals" />
+      <Header title={t('hospital:title')} />
       <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
         <SearchBar
           placeholder={t('searchPlaceholder')}
@@ -101,7 +101,7 @@ function RouteComponent() {
             ))}
           </>
         ) : (
-          <EmptyState>No hospitals found</EmptyState>
+          <EmptyState>{t('search:empty.hospitals')}</EmptyState>
         )}
       </div>
     </>

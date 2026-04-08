@@ -22,7 +22,7 @@ export default function DoctorCard({
   sizeAvatar,
   ...doctor
 }: DoctorCardProps) {
-  const { t } = useTranslation(['common'])
+  const { t } = useTranslation(['doctor', 'common'])
   const {
     doctorId,
     avatarUrl,
@@ -83,7 +83,7 @@ export default function DoctorCard({
               size="xs_10"
               className="font-normal text-muted-foreground leading-[1.3]"
             >
-              {experienceYears} Years Experience • {countryName}
+              {t('experienceYears', { years: experienceYears })} • {countryName}
             </Text>
           </div>
           {!hideBookAppointment && (
@@ -101,7 +101,7 @@ export default function DoctorCard({
                   size="sm_12"
                   className="font-medium leading-[1.3] text-primary"
                 >
-                  {t('actions.bookAppointment')}
+                  {t('common:actions.bookAppointment')}
                 </Text>
               </Link>
             </Button>
@@ -163,7 +163,7 @@ export default function DoctorCard({
                 size="sm_12"
                 className="font-medium leading-[1.3] text-primary"
               >
-                {t('actions.bookAppointment')}
+                {t('common:actions.bookAppointment')}
               </Text>
             </Link>
           </Button>

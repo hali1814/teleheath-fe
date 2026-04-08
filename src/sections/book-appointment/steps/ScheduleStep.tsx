@@ -13,6 +13,7 @@ import { useGetListScheduleByDoctorQuery } from '#/services/query/schedule/list-
 import { useGetListScheduleByPackageQuery } from '#/services/query/schedule/list-schedule-by-package'
 import { startOfToday } from 'date-fns'
 import { useGetListScheduleByRoomQuery } from '#/services/query/schedule/list-schedule-by-room'
+import { useTranslation } from 'react-i18next'
 
 const emptySchedules: ListScheduleByBranchResponse = {
   morning: [],
@@ -20,6 +21,7 @@ const emptySchedules: ListScheduleByBranchResponse = {
 }
 
 export function ScheduleStep() {
+  const { t } = useTranslation(['book-appointment'])
   const {
     bookingType,
     branch,
@@ -74,11 +76,12 @@ export function ScheduleStep() {
   const { data: { data: schedulesPackage } = { data: emptySchedules } } =
     useGetListScheduleByPackageQuery({
       params: {
-        packageId: packageData?.id ?? 0,
+        packageId: packageData?.packageId ?? 0,
         date: dateParam,
         branchId: branch?.branchId ?? 0,
       },
-      enabled: !!packageData?.id && !!dateParam && bookingType === 'PACKAGE',
+      enabled:
+        !!packageData?.packageId && !!dateParam && bookingType === 'PACKAGE',
       placeholderData: keepPreviousData,
       staleTime: 0,
     })
@@ -122,7 +125,7 @@ export function ScheduleStep() {
   return (
     <div className="flex flex-col gap-[16px] px-[16px]">
       <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
-        Select Date
+        {t('schedule.selectDate')}
       </Text>
       <CalendarSchedule
         selected={appointmentDate ?? null}
@@ -136,11 +139,11 @@ export function ScheduleStep() {
           size="lg_16"
           className="font-semibold leading-[1.2] text-[#333333]"
         >
-          Available Time Slots
+          {t('schedule.availableTimeSlots')}
         </Text>
         {!isEmptySchedule && (
           <Text size="sm_12" className="leading-[1.3] text-[#999999]">
-            Choose a time that works for you on{' '}
+            {t('schedule.chooseTimePrefix')}{' '}
             <span className="font-bold">{selectedDateLabel}</span>
           </Text>
         )}
@@ -149,7 +152,7 @@ export function ScheduleStep() {
         <>
           {schedules?.morning.length > 0 && (
             <SlotTimeList
-              title="Morning sessions"
+              title={t('schedule.morningSessions')}
               slotTimes={slotTimesMorning}
               selectedSlot={{
                 startTime: startTime ?? '',
@@ -176,7 +179,7 @@ export function ScheduleStep() {
           )}
           {schedules?.afternoon.length > 0 && (
             <SlotTimeList
-              title="Afternoon sessions"
+              title={t('schedule.afternoonSessions')}
               slotTimes={slotTimesAfternoon}
               selectedSlot={{
                 startTime: startTime ?? '',
@@ -205,7 +208,7 @@ export function ScheduleStep() {
       ) : (
         <EmptyState className="h-auto max-w-[300px] mx-auto">
           <Text className="text-center leading-normal text-muted-foreground">
-            No appointments available on this date. Please choose another date.
+            {t('schedule.noSlotsThisDate')}
           </Text>
         </EmptyState>
       )}

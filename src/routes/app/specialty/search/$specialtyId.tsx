@@ -2,11 +2,17 @@ import LoadingState from '#/components/LoadingState'
 import SearchBar from '#/components/SearchBar'
 import useDebounce from '#/hooks/use-debounce'
 import { Header } from '#/sections/home'
-import { SearchTabs, SearchResults, EmptyState } from '#/sections/search'
+import {
+  SearchTabs,
+  SearchResults,
+  EmptyState,
+  TransNoResultsFor,
+} from '#/sections/search'
 import { useGetSearchSpecialtyQuery } from '#/services/query/search/search-specialty'
 import { filterSpecialtySearchByKeyword } from '#/utils/specialty-search-filter.util'
 import { createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import z from 'zod'
 
 const specialtySearchSchema = z.object({
@@ -23,6 +29,7 @@ export const Route = createFileRoute('/app/specialty/search/$specialtyId')({
 export type Tab = 'ALL' | 'HOSPITAL' | 'DOCTOR' | 'PACKAGE'
 
 function RouteComponent() {
+  const { t } = useTranslation(['search', 'common'])
   const { specialtyId } = Route.useParams()
   const { specialtyName } = Route.useSearch()
   const [query, setQuery] = useState('')
@@ -57,7 +64,7 @@ function RouteComponent() {
     apiBuckets.doctors.length +
     apiBuckets.packages.length
 
-  /** Filter theo keyword trên FE (API chỉ gọi 1 lần theo specialtyI3d)f */ 3
+  /** Filter theo keyword trên FE (API chỉ gọi 1 lần theo specialtyId) */
   const searchResults = useMemo(
     () => filterSpecialtySearchByKeyword(apiBuckets, searchKeyword),
     [apiBuckets, searchKeyword],
@@ -82,7 +89,7 @@ function RouteComponent() {
       <Header title={specialtyName} />
       <div className="px-[16px] pt-[16px]">
         <SearchBar
-          placeholder="Search for hospitals, doctor, packages"
+          placeholder={t('specialtySearchPlaceholder')}
           value={query}
           onSearch={handleSearch}
           onClear={() => setQuery('')}
@@ -115,16 +122,13 @@ function RouteComponent() {
             counts={counts}
           />
           <EmptyState>
-            {rawTotalCount === 0 ? (
-              'No data available'
-            ) : searchKeyword ? (
-              <>
-                No results for{' '}
-                <span className="italic">&quot;{searchKeyword}&quot;</span>
-              </>
-            ) : (
-              'No data available'
-            )}
+            {rawTotalCount === 0
+              ? t('common:noDataAvailable')
+              : searchKeyword
+                ? (
+                    <TransNoResultsFor query={searchKeyword} />
+                  )
+                : t('common:noDataAvailable')}
           </EmptyState>
         </>
       )}

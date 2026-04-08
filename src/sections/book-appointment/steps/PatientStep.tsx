@@ -7,8 +7,10 @@ import { useState } from 'react'
 import useDebounce from '#/hooks/use-debounce'
 import { keepPreviousData } from '@tanstack/react-query'
 import LoadingState from '#/components/LoadingState'
+import { useTranslation } from 'react-i18next'
 
 export function PatientStep() {
+  const { t } = useTranslation(['book-appointment'])
   const { patientProfile, setData } = useBookingStore()
   const [searchQuery, setSearchQuery] = useState('')
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
@@ -27,7 +29,7 @@ export function PatientStep() {
     <div className="flex flex-col gap-[16px] ">
       <div className="px-[16px]">
         <SearchBar
-          placeholder="Search patient profile"
+          placeholder={t('patientStep.searchPlaceholder')}
           value={searchQuery}
           onSearch={(value) => setSearchQuery(value)}
           onClear={() => setSearchQuery('')}

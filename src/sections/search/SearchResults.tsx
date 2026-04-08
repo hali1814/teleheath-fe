@@ -1,4 +1,5 @@
 import Text from '#/components/text'
+import { useTranslation } from 'react-i18next'
 import type { Doctor } from '#/entities/doctorEntity'
 import type { Hospital } from '#/entities/hospitalEntity'
 import type { Tab } from '#/routes/app/search/(commonLayout)'
@@ -6,6 +7,7 @@ import { DoctorCard } from '../doctor'
 import { HospitalCard } from '../hospital'
 import { PackageCard } from '../package'
 import EmptyState from './EmptyState'
+import { TransNoResultsFor } from './TransSearchEmptyMessages'
 import type { Package } from '#/entities/packageEntity'
 
 const Section = ({
@@ -21,6 +23,7 @@ const Section = ({
   isActive?: boolean
   hideCount?: boolean
 }) => {
+  const { t } = useTranslation(['search'])
   return (
     <div className="flex flex-col gap-[16px] px-[16px]">
       {!hideCount && (
@@ -30,7 +33,7 @@ const Section = ({
               size="base_14"
               className="font-medium text-muted-foreground leading-normal"
             >
-              {count} results found.
+              {t('resultsFound', { count })}
             </Text>
           ) : (
             <Text
@@ -60,6 +63,7 @@ export default function SearchResults({
   hideCount?: boolean
   hideBookAppointment?: boolean
 }) {
+  const { t } = useTranslation(['search'])
   const { hospitals, doctors, packages } = data
 
   if (tab === 'HOSPITAL') {
@@ -67,7 +71,7 @@ export default function SearchResults({
       <div className="flex flex-col gap-4 py-4">
         {hospitals.length > 0 ? (
           <Section
-            title="Hospitals"
+            title={t('tabs.hospitals')}
             count={hospitals.length}
             isActive={true}
             hideCount={hideCount}
@@ -86,7 +90,7 @@ export default function SearchResults({
           </Section>
         ) : (
           <EmptyState>
-            No results for <span className="italic">&quot;{query}&quot;</span>
+            <TransNoResultsFor query={query} />
           </EmptyState>
         )}
       </div>
@@ -98,7 +102,7 @@ export default function SearchResults({
       <div className="flex flex-col gap-4 py-4">
         {doctors.length > 0 ? (
           <Section
-            title="Doctors"
+            title={t('tabs.doctors')}
             count={doctors.length}
             isActive={true}
             hideCount={hideCount}
@@ -117,7 +121,7 @@ export default function SearchResults({
           </Section>
         ) : (
           <EmptyState>
-            No results for <span className="italic">&quot;{query}&quot;</span>
+            {t('noResultsFor', { query })}
           </EmptyState>
         )}
       </div>
@@ -129,7 +133,7 @@ export default function SearchResults({
       <div className="flex flex-col gap-4 py-4">
         {packages.length > 0 ? (
           <Section
-            title="Packages"
+            title={t('tabs.packages')}
             count={packages.length}
             isActive={true}
             hideCount={hideCount}
@@ -145,7 +149,7 @@ export default function SearchResults({
           </Section>
         ) : (
           <EmptyState>
-            No results for <span className="italic">&quot;{query}&quot;</span>
+            <TransNoResultsFor query={query} />
           </EmptyState>
         )}
       </div>
@@ -156,7 +160,7 @@ export default function SearchResults({
     return (
       <div className="flex flex-col gap-4 py-4">
         {hospitals.length > 0 && (
-          <Section title="Hospitals" count={hospitals.length}>
+          <Section title={t('tabs.hospitals')} count={hospitals.length}>
             {hospitals.map((item: Hospital) => (
               <HospitalCard
                 key={item.hospitalId}
@@ -172,7 +176,7 @@ export default function SearchResults({
         )}
 
         {doctors.length > 0 && (
-          <Section title="Doctors" count={doctors.length}>
+          <Section title={t('tabs.doctors')} count={doctors.length}>
             {doctors.map((item: Doctor) => (
               <DoctorCard
                 key={item.doctorId}
@@ -188,7 +192,7 @@ export default function SearchResults({
         )}
 
         {packages.length > 0 && (
-          <Section title="Packages" count={packages.length}>
+          <Section title={t('tabs.packages')} count={packages.length}>
             {packages.map((item: Package) => (
               <PackageCard
                 key={item.packageId}

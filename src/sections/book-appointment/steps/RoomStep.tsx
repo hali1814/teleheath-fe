@@ -3,12 +3,14 @@ import { useBookingStore } from '#/stores/booking-store'
 import LoadingState from '#/components/LoadingState'
 import { useGetListRoomQuery } from '#/services/query/branch/list-room'
 import { EmptyState } from '#/sections/search'
+import { useTranslation } from 'react-i18next'
 import { RoomCard } from '../RoomCard'
 import { useEffect } from 'react'
 
 export type Type = 'HOSPITAL' | 'DOCTOR' | 'PACKAGE'
 
 export function RoomStep({ type }: { type: Type }) {
+  const { t } = useTranslation(['book-appointment'])
   const { branch, room, setData, specialty, next } = useBookingStore()
 
   const { data: rooms, isLoading } = useGetListRoomQuery({
@@ -43,7 +45,7 @@ export function RoomStep({ type }: { type: Type }) {
   return (
     <div className="flex flex-col gap-[16px] px-[16px]">
       <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
-        Select Room
+        {t('roomStep.title')}
       </Text>
       {isLoading ? (
         <LoadingState />

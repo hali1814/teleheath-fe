@@ -7,9 +7,7 @@ const EducationCertificationItem = ({ title }: { title: string }) => {
   return (
     <div className="flex items-start gap-[12px]">
       <Icon name="seal_check" className="w-[20px] h-[20px] text-primary" />
-      <div className="flex flex-col gap-[8px]">
-        <Text className="leading-normal">{title}</Text>
-      </div>
+      <Text className="flex-1 leading-normal">{title}</Text>
     </div>
   )
 }

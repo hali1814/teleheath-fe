@@ -86,7 +86,7 @@ function searchToFilter(s: DoctorSearch): FilterDoctor {
 
 function RouteComponent() {
   const [open, setOpen] = useState(false)
-  const { t } = useTranslation(['doctor', 'common'])
+  const { t } = useTranslation(['doctor', 'common', 'search'])
   const navigate = useNavigate()
   const search = Route.useSearch()
 
@@ -154,7 +154,7 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title="Doctors" />
+      <Header title={t('doctor:title')} />
       <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
         <div className="flex items-center gap-[10px]">
           <SearchBar
@@ -188,7 +188,7 @@ function RouteComponent() {
             ))}
           </>
         ) : (
-          <EmptyState>No doctors found</EmptyState>
+          <EmptyState>{t('search:empty.doctors')}</EmptyState>
         )}
       </div>
       <ModalFilterDoctor
