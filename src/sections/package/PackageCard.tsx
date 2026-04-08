@@ -7,9 +7,7 @@ import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
-import type { Package } from '#/types/package'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
-import type { AppLanguage } from '#/i18n'
+import type { Package } from '#/entities/packageEntity'
 
 type PackageCardProps = {
   className?: string
@@ -25,8 +23,9 @@ export default function PackageCard({
   truncateName = false,
   ...packageData
 }: PackageCardProps) {
-  const { id, name, countries, price, imageUrl, hospital } = packageData
-  const { t, i18n } = useTranslation(['common'])
+  const { packageId, name, countryName, price, imageUrl, hospitalName } =
+    packageData
+  const { t } = useTranslation(['common'])
 
   const thumbnailSize =
     sizeThumbnail === 'fixed'
@@ -36,7 +35,7 @@ export default function PackageCard({
   return (
     <Link
       to="/app/package/$id"
-      params={{ id: id.toString() }}
+      params={{ id: packageId.toString() }}
       className={cn(
         'w-full flex shrink-0 gap-4 rounded-[12px] p-[16px] bg-white',
         sizeThumbnail === 'fixed' ? 'flex-row' : 'flex-col',
@@ -65,20 +64,10 @@ export default function PackageCard({
             truncateName ? 'truncate' : '',
           )}
         >
-          {getLocalizedTextByLang(
-            hospital?.nameVi ?? '',
-            hospital?.nameKh ?? null,
-            hospital?.nameEn ?? '',
-            i18n.language as AppLanguage,
-          )}
+          {hospitalName}
         </Text>
         <LocationBadge
-          location={getLocalizedTextByLang(
-            countries?.[0]?.nameVi ?? '',
-            null,
-            countries?.[0]?.nameEn ?? '',
-            i18n.language as AppLanguage,
-          )}
+          location={countryName}
           className="text-muted-foreground leading-[1.3]"
           textSize="xs_10"
         />
@@ -89,7 +78,7 @@ export default function PackageCard({
           <Button className="w-full h-[32px] bg-dust-red-1" asChild>
             <Link
               to="/app/book-appointment/package/$packageId"
-              params={{ packageId: id.toString() }}
+              params={{ packageId: packageId.toString() }}
             >
               <Icon
                 name="book_appointment"

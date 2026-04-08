@@ -1,11 +1,14 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
-import type { ListDoctorResponse } from '../doctor/list-doctor'
-import type { ListPackagesResponse } from '../package/list-packages'
-import type { SearchResponse } from './search'
-import type { Hospital as ApiHospital } from '#/types/hospital'
 import type { Hospital } from '#/entities/hospitalEntity'
 import { mapApiHospital } from '#/mappers/hospitalMapper'
+import type { ApiDoctor } from '#/dto/doctorDto'
+import type { ApiPackage } from '#/dto/packageDto'
+import { mapApiDoctor } from '#/mappers/doctorMapper'
+import { mapApiPackage } from '#/mappers/packageMapper'
+import type { ApiHospital } from '#/dto/hospitalDto'
+import type { Doctor } from '#/entities/doctorEntity'
+import type { Package } from '#/entities/packageEntity'
 
 interface SearchRequest {
   specialtyId: number
@@ -13,14 +16,14 @@ interface SearchRequest {
 
 interface SearchSpecialtyApiResponse {
   hospitals: ApiHospital[]
-  doctors: ListDoctorResponse[]
-  packages: ListPackagesResponse[]
+  doctors: ApiDoctor[]
+  packages: ApiPackage[]
 }
 
 export interface SearchSpecialtyResponse {
   hospitals: Hospital[]
-  doctors: ListDoctorResponse[]
-  packages: ListPackagesResponse[]
+  doctors: Doctor[]
+  packages: Package[]
 }
 
 const getSearchSpecialty = async (
@@ -39,17 +42,30 @@ const getSearchSpecialty = async (
     mapApiHospital(hospital),
   )
 
+  const mappedDoctors = response.data.doctors.map((doctor: ApiDoctor) =>
+    mapApiDoctor(doctor),
+  )
+
+  const mappedPackages = response.data.packages.map((packageItem: ApiPackage) =>
+    mapApiPackage(packageItem),
+  )
+
   return {
     ...response,
     data: {
       ...response.data,
       hospitals: mappedHospitals,
+      doctors: mappedDoctors,
+      packages: mappedPackages,
     },
   }
 }
 
 export const useGetSearchSpecialtyQuery = (
-  options: UseQueryOptions<HttpCommonResponse<SearchResponse>, SearchRequest>,
+  options: UseQueryOptions<
+    HttpCommonResponse<SearchSpecialtyResponse>,
+    SearchRequest
+  >,
 ) => {
   return useQuery({
     queryKey: ['search-specialty', options.params],

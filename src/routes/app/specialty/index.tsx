@@ -37,7 +37,7 @@ function RouteComponent() {
         {specialties.length > 0 ? (
           <div className="grid grid-cols-3 mt-[10px] gap-y-[36px]">
             {specialties.map((specialty) => (
-              <SpecialtyItem key={specialty.id} {...specialty} />
+              <SpecialtyItem key={specialty.specialtyId} {...specialty} />
             ))}
           </div>
         ) : (

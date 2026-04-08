@@ -17,7 +17,6 @@ export type ModalDetailServiceTypeProps = {
   serviceType?: ServiceType
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSelectService?: () => void
   className?: string
 }
 
@@ -27,7 +26,7 @@ function SectionHeading({ children }: { children: ReactNode }) {
       <div className="w-[16px] h-[16px] flex items-center justify-center rounded-full bg-dust-red-1">
         <Icon name="check" className="w-[6px] h-[6px] text-primary" />
       </div>
-      <div className="flex flex-col gap-[10px]">{children}</div>
+      <div className="flex-1 flex flex-col gap-[10px]">{children}</div>
     </div>
   )
 }
@@ -36,7 +35,6 @@ export function ModalDetailServiceType({
   serviceType,
   open,
   onOpenChange,
-  onSelectService,
   className,
 }: ModalDetailServiceTypeProps) {
   const safeDescriptionHtml = useMemo(
@@ -109,12 +107,10 @@ export function ModalDetailServiceType({
                 <Text className="font-semibold leading-[1.2] text-[#333333]">
                   Amenities in the car
                 </Text>
-                <Text
-                  size="lg_16"
-                  className="leading-[1.2] font-semibold text-primary"
-                >
-                  {safeDescriptionHtml}
-                </Text>
+                <div
+                  className="prose prose-sm max-w-none [&_img]:my-[16px] [&_img]:rounded-[6px]"
+                  dangerouslySetInnerHTML={{ __html: safeDescriptionHtml }}
+                />
               </SectionHeading>
             )}
           </div>

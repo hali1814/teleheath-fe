@@ -9,9 +9,6 @@ import {
 import { useState } from 'react'
 import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
-import type { AppLanguage } from '#/i18n'
-import type { Branch } from '#/types/hospital'
 
 const BranchItem = ({ name, address }: { name: string; address: string }) => {
   return (
@@ -40,10 +37,14 @@ export default function BranchPopUp({
 }: {
   name: string
   branchCount: number
-  branches: Branch[]
+  branches: {
+    id: number
+    name: string
+    address: string
+  }[]
 }) {
   const [open, setOpen] = useState(false)
-  const { t, i18n } = useTranslation(['package', 'common'])
+  const { t } = useTranslation(['package', 'common'])
 
   return (
     <>
@@ -86,16 +87,11 @@ export default function BranchPopUp({
               />
             </div>
           </DialogHeader>
-          {branches.map((branch, index) => (
+          {branches.map((branch) => (
             <BranchItem
-              key={index}
-              name={getLocalizedTextByLang(
-                branch.nameVi,
-                null,
-                branch.nameEn,
-                i18n.language as AppLanguage,
-              )}
-              address={branch.detailedAddress}
+              key={branch.id}
+              name={branch.name}
+              address={branch.address}
             />
           ))}
           <div className="flex justify-end">

@@ -1,6 +1,8 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
-import type { Specialty } from '#/types/specialty'
+import type { ApiSpecialtyList } from '#/dto/specialtyDto'
+import type { Specialty } from '#/entities/specialtyEntity'
+import { mapApiSpecialty } from '#/mappers/specialtyMapper'
 
 interface ListSpecialtyRequest {
   hospitalId?: string
@@ -12,10 +14,18 @@ const getListSpecialty = async (
   params: ListSpecialtyRequest,
   signal: AbortSignal,
 ) => {
-  const response = await http.get<Specialty[]>(`/specialties`, params, {
+  const response = await http.get<ApiSpecialtyList>(`/specialties`, params, {
     signal,
   })
-  return response
+
+  const mappedData = response.data.map((specialty) =>
+    mapApiSpecialty(specialty),
+  )
+
+  return {
+    ...response,
+    data: mappedData,
+  }
 }
 
 export const useGetListSpecialtyQuery = (

@@ -128,7 +128,7 @@ export default function ModalFilterPackage({
   const specialtyOptions = useMemo(() => {
     return specialtiesData.map((specialty) => ({
       label: specialty.name,
-      value: specialty.id.toString(),
+      value: specialty.specialtyId.toString(),
     }))
   }, [specialtiesData])
 

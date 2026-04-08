@@ -3,22 +3,11 @@ import { useClampExpand } from '#/hooks/use-clamp-expand'
 import { cn } from '#/lib/utils'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useTranslation } from 'react-i18next'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
-import type { AppLanguage } from '#/i18n'
-import type { Doctor } from '#/types/doctor'
+import type { Doctor } from '#/entities/doctorEntity'
+import i18n from '#/i18n'
 
-export default function AboutDoctor({
-  bioVi,
-  bioKh,
-  bioEn,
-}: Pick<Doctor, 'bioVi' | 'bioKh' | 'bioEn'>) {
-  const { t, i18n } = useTranslation(['doctor', 'common'])
-  const bio = getLocalizedTextByLang(
-    bioVi,
-    bioKh,
-    bioEn,
-    i18n.language as AppLanguage,
-  )
+export default function AboutDoctor({ bio }: Pick<Doctor, 'bio'>) {
+  const { t } = useTranslation(['doctor', 'common'])
   const {
     ref: bodyRef,
     expanded,

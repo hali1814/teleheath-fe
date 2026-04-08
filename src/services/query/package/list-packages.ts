@@ -1,7 +1,9 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
-import type { Package } from '#/types/package'
+import type { Package } from '#/entities/packageEntity'
+import type { ApiPackageList } from '#/dto/packageDto'
+import { mapApiPackage } from '#/mappers/packageMapper'
 
 interface ListPackagesRequest extends IPagingRequest {
   keyword?: string
@@ -13,21 +15,28 @@ interface ListPackagesRequest extends IPagingRequest {
   specialized?: boolean
 }
 
-export interface ListPackagesResponse extends IPagingResponse<Package> {}
-
 const getListPackages = async (
   params: ListPackagesRequest,
   signal: AbortSignal,
 ) => {
-  const response = await http.get<ListPackagesResponse>('/packages', params, {
+  const response = await http.get<ApiPackageList>('/packages', params, {
     signal,
   })
-  return response
+
+  const mappedData = response.data.content.map((item) => mapApiPackage(item))
+
+  return {
+    ...response,
+    data: {
+      ...response.data,
+      content: mappedData,
+    },
+  }
 }
 
 export const useGetListPackagesQuery = (
   options: UseQueryOptions<
-    HttpCommonResponse<ListPackagesResponse>,
+    HttpCommonResponse<IPagingResponse<Package>>,
     ListPackagesRequest
   >,
 ) => {

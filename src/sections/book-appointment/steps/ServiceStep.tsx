@@ -223,10 +223,6 @@ export function ServiceStep() {
         serviceType={selectedService}
         open={openDetailService}
         onOpenChange={setOpenDetailService}
-        onSelectService={() => {
-          setSelectedService(undefined)
-          setOpenDetailService(false)
-        }}
       />
       <ModalFilterServiceType
         open={openFilter}

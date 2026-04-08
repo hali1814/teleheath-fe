@@ -1,7 +1,5 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
-import type { AppLanguage } from '#/i18n'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { useTranslation } from 'react-i18next'
 
 const IncludedItem = ({ name }: { name: string }) => {
@@ -20,35 +18,20 @@ const IncludedItem = ({ name }: { name: string }) => {
   )
 }
 
-interface CheckupType {
-  id: number
-  nameEn: string
-  nameVi: string
-  nameKh: string
-}
-
 export default function WhatIsIncluded({
   checkupTypes,
 }: {
-  checkupTypes: CheckupType[]
+  checkupTypes: string[]
 }) {
-  const { t, i18n } = useTranslation(['package'])
+  const { t } = useTranslation(['package'])
 
   return (
     <div className="flex flex-col gap-[16px]">
       <Text size="lg_16" className="font-semibold leading-[1.2]">
         {t('whatIsIncluded')}
       </Text>
-      {checkupTypes.map((item) => (
-        <IncludedItem
-          key={item.id}
-          name={getLocalizedTextByLang(
-            item.nameVi,
-            null,
-            item.nameEn,
-            i18n.language as AppLanguage,
-          )}
-        />
+      {checkupTypes.map((item, index) => (
+        <IncludedItem key={index} name={item} />
       ))}
     </div>
   )

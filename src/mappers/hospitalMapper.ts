@@ -1,6 +1,6 @@
+import type { ApiHospital } from '#/dto/hospitalDto'
 import type { Hospital } from '#/entities/hospitalEntity'
 import type { AppLanguage } from '#/i18n'
-import type { Hospital as ApiHospital } from '#/types/hospital'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { formatWorkingHours } from '#/utils/working-hours.util'
 

@@ -27,7 +27,7 @@ function RouteComponent() {
       },
     })
 
-  const branches = packageData?.hospital?.branches
+  const branches = packageData?.branches
 
   return (
     <>
@@ -42,15 +42,15 @@ function RouteComponent() {
           name={packageData?.name ?? ''}
           price={packageData?.price ?? 0}
           description={packageData?.description ?? ''}
-          countries={packageData?.countries ?? []}
+          countryName={packageData?.countryName ?? ''}
         />
         <BranchPopUp
-          name={packageData?.hospital?.name ?? ''}
+          name={packageData?.hospitalName ?? ''}
           branchCount={branches?.length ?? 0}
           branches={branches ?? []}
         />
         {packageData?.checkupTypes && packageData?.checkupTypes?.length > 0 && (
-          <WhatIsIncluded checkupTypes={packageData.checkupTypes} />
+          <WhatIsIncluded checkupTypes={packageData?.checkupTypes ?? []} />
         )}
         <div className="fixed bottom-0 left-0 right-0 px-[20px] pt-[10px] pb-[35px] bg-background">
           <Button
