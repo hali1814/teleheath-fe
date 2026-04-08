@@ -48,6 +48,7 @@ export default function ProfileFormModal({
           containerClassName="px-[20px] pt-[24px] pb-0"
           isUserProfile={false}
           idMember={defaultValues?.id}
+          pyPassCheckViewMode
           onSuccess={() => onOpenChange(false)}
           customButton={(handleSaveProfile) => (
             <div className="sticky bottom-0 left-0 right-0 flex justify-between items-center pt-[20px] pb-[24px] gap-[20px] bg-white">
