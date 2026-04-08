@@ -37,7 +37,6 @@ function RouteComponent() {
     params: {},
     onSuccess: (data) => {
       if (data.success) {
-        console.log(data.data)
         useProfileStore.getState().setProfile(data.data)
       }
     },

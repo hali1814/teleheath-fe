@@ -49,9 +49,17 @@ export default function DoctorInfoHeader({
             i18n.language as AppLanguage,
           )}
         </Text>
-        <Text size="lg_16" className="font-medium text-primary leading-normal">
-          {specialties.length > 0 ? specialties[0].name : ''}
-        </Text>
+        <div className="grid grid-cols-1 gap-[8px]">
+          {specialties.map((specialty) => (
+            <Text
+              size="lg_16"
+              className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
+            >
+              <div className="size-[6px] rounded-full bg-muted-foreground" />{' '}
+              {specialty.name}
+            </Text>
+          ))}
+        </div>
         <Badge className="h-[30px] flex items-center gap-[8px] px-[12px] py-[4px] rounded-full bg-[#FFEAE8]">
           <Icon
             name="work_history_outline"

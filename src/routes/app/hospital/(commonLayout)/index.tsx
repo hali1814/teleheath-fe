@@ -74,6 +74,8 @@ function RouteComponent() {
     placeholderData: keepPreviousData,
   })
 
+  console.log(hospitalsData)
+
   return (
     <>
       <Header title="Hospitals" />

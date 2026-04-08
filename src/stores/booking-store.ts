@@ -5,7 +5,7 @@ import type { Specialty } from '#/types/specialty'
 import { create } from 'zustand'
 import type { Package } from '#/types/package'
 import type { Room } from '#/services/query/branch/list-room'
-import type { Partner } from '#/types/service'
+import type { ServiceType } from '#/types/service'
 
 export type FileRowStatus = 'uploading' | 'success' | 'error'
 
@@ -37,7 +37,8 @@ export type BookingState = {
   endTime?: string
   notes?: string
   medicalHistory?: string
-  serviceIds: number[]
+  serviceIds?: number[]
+  addonServiceTypes?: ServiceType[]
   /** UUID từ API upload file (medical records) */
   medicalFiles: MedicalFileRow[]
   paymentMethod?: {
@@ -51,14 +52,16 @@ export type BookingState = {
     totalAmount: number
   }
   thumbnailUrl?: string
-  servicePartners?: Partner[]
+  pickupTime?: string
+  pickupDate?: string
+  pickupNote?: string
 
   setStep: (step: number) => void
   next: () => void
   back: () => void
   setData: (data: Partial<BookingState>) => void
   /** Truyền danh sách dịch vụ từ API (vd list-service) để tính phí theo `serviceIds`. */
-  calcFeeInfo: (services: Service[], consultationFee: number) => void
+  calcFeeInfo: (consultationFee: number) => void
   appendMedicalFile: (id: string, file: File) => void
   updateMedicalFile: (id: string, fileId: string, status: FileRowStatus) => void
   removeMedicalFile: (id: string) => void
@@ -68,6 +71,7 @@ export type BookingState = {
 export const useBookingStore = create<BookingState>((set) => ({
   step: 0,
   serviceIds: [],
+  addonServiceTypes: [],
   medicalFiles: [],
   feeInfo: defaultFeeInfo,
 
@@ -77,12 +81,12 @@ export const useBookingStore = create<BookingState>((set) => ({
 
   setData: (data) => set((s) => ({ ...s, ...data })),
 
-  calcFeeInfo: (services: Service[], consultationFee: number) =>
+  calcFeeInfo: (consultationFee: number) =>
     set((s) => {
-      const serviceFee = s.serviceIds.reduce((acc, serviceId) => {
-        const price = services.find((svc) => svc.id === serviceId)?.price ?? 0
-        return acc + price
-      }, 0)
+      const serviceFee =
+        s.addonServiceTypes?.reduce((acc, addonServiceType) => {
+          return acc + addonServiceType.price
+        }, 0) ?? 0
 
       const next = {
         consultationFee,
@@ -125,7 +129,7 @@ export const useBookingStore = create<BookingState>((set) => ({
     set({
       step: 0,
       serviceIds: [],
-      servicePartners: undefined,
+      addonServiceTypes: [],
       medicalFiles: [],
       feeInfo: defaultFeeInfo,
       hospital: undefined,
@@ -143,5 +147,8 @@ export const useBookingStore = create<BookingState>((set) => ({
       medicalHistory: undefined,
       paymentMethod: undefined,
       thumbnailUrl: undefined,
+      pickupTime: undefined,
+      pickupDate: undefined,
+      pickupNote: undefined,
     }),
 }))

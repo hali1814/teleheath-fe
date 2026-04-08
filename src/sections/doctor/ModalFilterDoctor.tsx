@@ -95,15 +95,10 @@ export default function ModalFilterDoctor({
   const hospitalOptions = useMemo(() => {
     if (!hospitalList?.data?.content) return []
     return hospitalList.data.content.map((hospital) => ({
-      label: getLocalizedTextByLang(
-        hospital.nameVi,
-        null,
-        hospital.nameEn,
-        i18n.language as AppLanguage,
-      ),
-      value: hospital.hospitalId,
+      label: hospital.name,
+      value: hospital.hospitalId.toString(),
     }))
-  }, [hospitalList, i18n.language])
+  }, [hospitalList])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

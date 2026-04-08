@@ -9,28 +9,24 @@ import { Icon } from '#/components/icon'
 import InputSelect from '#/components/input/InputSelect'
 import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
-import type { FilterPackage } from '#/routes/app/package/(commonLayout)'
 import { useGetCountryListQuery } from '#/services/query/country/country-list'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { type AppLanguage } from '#/i18n'
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
-import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
-import { ALL_PAGINATION } from '#/const/pagination'
-import { PACKAGE_PRICE_RANGE_OPTIONS } from '#/sections/package/package-filter-price'
+import { useEffect, useReducer, useRef, useState } from 'react'
 
-const emptyFilter = (): FilterPackage => ({
+interface FilterServiceType {
+  country: string
+}
+
+const emptyFilter = (): FilterServiceType => ({
   country: '',
-  hospitalId: '',
-  priceRange: '',
-  specialtyId: undefined,
 })
 
 /**
  * Draft: ref (không setState mỗi lần chọn) + remount (`fieldKey`).
  * `defaultsSource`: sau Clear cần default rỗng; khi mở modal lấy từ `appliedFilter`.
  */
-export default function ModalFilterPackage({
+export default function ModalFilterServiceType({
   open,
   onOpenChange,
   appliedFilter,
@@ -38,21 +34,17 @@ export default function ModalFilterPackage({
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  appliedFilter: FilterPackage
-  onApply: (filter: FilterPackage) => void
+  appliedFilter: FilterServiceType
+  onApply: (filter: FilterServiceType) => void
 }) {
-  const { t, i18n } = useTranslation(['package', 'common'])
+  const { t, i18n } = useTranslation(['common'])
 
   const draftCountry = useRef('')
-  const draftHospitalId = useRef('')
-  const draftSpecialtyId = useRef('')
-  const draftPriceRange = useRef('')
 
   const [fieldKey, setFieldKey] = useState(0)
   /** null = dùng appliedFilter làm default; non-null = default cho lần remount (vd. Clear) */
-  const [defaultsSource, setDefaultsSource] = useState<FilterPackage | null>(
-    null,
-  )
+  const [defaultsSource, setDefaultsSource] =
+    useState<FilterServiceType | null>(null)
 
   const [, rerender] = useReducer((x: number) => x + 1, 0)
 
@@ -60,10 +52,6 @@ export default function ModalFilterPackage({
     if (!open) return
     setDefaultsSource(null)
     draftCountry.current = appliedFilter.country
-    draftHospitalId.current = appliedFilter.hospitalId
-    draftSpecialtyId.current =
-      appliedFilter.specialtyId != null ? String(appliedFilter.specialtyId) : ''
-    draftPriceRange.current = appliedFilter.priceRange
     setFieldKey((k) => k + 1)
   }, [open, appliedFilter])
 
@@ -71,66 +59,24 @@ export default function ModalFilterPackage({
     params: {},
   })
 
-  const { data: hospitalList } = useGetListHospitalsQuery({
-    params: {
-      ...ALL_PAGINATION,
-    },
-  })
-
-  const { data: { data: specialtiesData = [] } = { data: [] } } =
-    useGetListSpecialtyQuery({
-      params: {},
-      enabled: open,
-    })
-
   const effectiveDefaults = defaultsSource ?? appliedFilter
 
   const handleClearDraft = () => {
     const cleared = emptyFilter()
     setDefaultsSource(cleared)
     draftCountry.current = ''
-    draftHospitalId.current = ''
-    draftSpecialtyId.current = ''
-    draftPriceRange.current = ''
     setFieldKey((k) => k + 1)
     rerender()
   }
 
   const handleApply = () => {
-    const sid = draftSpecialtyId.current.trim()
-    const specialtyIdParsed = Number(sid)
     onApply({
       country: draftCountry.current,
-      hospitalId: draftHospitalId.current,
-      priceRange: draftPriceRange.current,
-      specialtyId:
-        sid !== '' && Number.isFinite(specialtyIdParsed)
-          ? specialtyIdParsed
-          : undefined,
     })
     onOpenChange(false)
   }
 
-  const draftIsEmpty =
-    !draftCountry.current &&
-    !draftHospitalId.current &&
-    !draftSpecialtyId.current &&
-    !draftPriceRange.current
-
-  const hospitalOptions = useMemo(() => {
-    if (!hospitalList?.data?.content) return []
-    return hospitalList?.data?.content?.map((hospital) => ({
-      label: hospital.name,
-      value: hospital.hospitalId.toString(),
-    }))
-  }, [hospitalList])
-
-  const specialtyOptions = useMemo(() => {
-    return specialtiesData.map((specialty) => ({
-      label: specialty.name,
-      value: specialty.id.toString(),
-    }))
-  }, [specialtiesData])
+  const draftIsEmpty = !draftCountry.current
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -145,7 +91,7 @@ export default function ModalFilterPackage({
               <DialogTitle />
             </div>
             <Text size="lg_16" className="font-semibold leading-[1.2]">
-              {t('filter.title')}
+              Filter
             </Text>
             <button
               type="button"
@@ -163,14 +109,14 @@ export default function ModalFilterPackage({
         </DialogHeader>
         <div key={fieldKey} className="flex flex-col gap-[12px]">
           <div className="flex flex-col gap-[8px]">
-            <Text>{t('filter.country')}</Text>
+            <Text>Country</Text>
             <InputSelect
               defaultValue={effectiveDefaults.country || undefined}
               onValueChange={(value) => {
                 draftCountry.current = value
                 rerender()
               }}
-              placeholder={t('filter.country')}
+              placeholder="Country"
               options={
                 countryList?.data.map((country) => ({
                   label: getLocalizedTextByLang(
@@ -182,46 +128,6 @@ export default function ModalFilterPackage({
                   value: country.code,
                 })) ?? []
               }
-            />
-          </div>
-          <div className="flex flex-col gap-[8px]">
-            <Text>{t('filter.hospital')}</Text>
-            <InputSelect
-              defaultValue={effectiveDefaults.hospitalId || undefined}
-              onValueChange={(value) => {
-                draftHospitalId.current = value
-                rerender()
-              }}
-              placeholder={t('filter.hospital')}
-              options={hospitalOptions}
-            />
-          </div>
-          <div className="flex flex-col gap-[8px]">
-            <Text>{t('filter.specialty')}</Text>
-            <InputSelect
-              defaultValue={
-                effectiveDefaults.specialtyId != null
-                  ? String(effectiveDefaults.specialtyId)
-                  : undefined
-              }
-              onValueChange={(value) => {
-                draftSpecialtyId.current = value
-                rerender()
-              }}
-              placeholder={t('filter.specialty')}
-              options={specialtyOptions}
-            />
-          </div>
-          <div className="flex flex-col gap-[8px]">
-            <Text>{t('filter.priceRange')}</Text>
-            <InputSelect
-              defaultValue={effectiveDefaults.priceRange || undefined}
-              onValueChange={(value) => {
-                draftPriceRange.current = value
-                rerender()
-              }}
-              placeholder={t('filter.priceRange')}
-              options={PACKAGE_PRICE_RANGE_OPTIONS}
             />
           </div>
         </div>

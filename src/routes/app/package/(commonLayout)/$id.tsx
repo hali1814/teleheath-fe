@@ -45,12 +45,12 @@ function RouteComponent() {
           countries={packageData?.countries ?? []}
         />
         <BranchPopUp
-          name={packageData?.name ?? ''}
+          name={packageData?.hospital?.name ?? ''}
           branchCount={branches?.length ?? 0}
           branches={branches ?? []}
         />
-        {packageData?.inclusions && packageData?.inclusions?.length > 0 && (
-          <WhatIsIncluded includedItems={packageData.inclusions} />
+        {packageData?.checkupTypes && packageData?.checkupTypes?.length > 0 && (
+          <WhatIsIncluded checkupTypes={packageData.checkupTypes} />
         )}
         <div className="fixed bottom-0 left-0 right-0 px-[20px] pt-[10px] pb-[35px] bg-background">
           <Button
