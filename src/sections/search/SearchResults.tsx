@@ -1,9 +1,12 @@
 import Text from '#/components/text'
+import type { Doctor } from '#/entities/doctorEntity'
+import type { Hospital } from '#/entities/hospitalEntity'
 import type { Tab } from '#/routes/app/search/(commonLayout)'
 import { DoctorCard } from '../doctor'
 import { HospitalCard } from '../hospital'
 import { PackageCard } from '../package'
 import EmptyState from './EmptyState'
+import type { Package } from '#/entities/packageEntity'
 
 const Section = ({
   title,
@@ -69,9 +72,9 @@ export default function SearchResults({
             isActive={true}
             hideCount={hideCount}
           >
-            {hospitals.map((item: any) => (
+            {hospitals.map((item: Hospital) => (
               <HospitalCard
-                key={item.id}
+                key={item.hospitalId}
                 {...item}
                 size="md"
                 showBadge={true}
@@ -100,9 +103,9 @@ export default function SearchResults({
             isActive={true}
             hideCount={hideCount}
           >
-            {doctors.map((item: any) => (
+            {doctors.map((item: Doctor) => (
               <DoctorCard
-                key={item.id}
+                key={item.doctorId}
                 {...item}
                 variant="horizontal"
                 hideBookAppointment={hideBookAppointment}
@@ -131,9 +134,9 @@ export default function SearchResults({
             isActive={true}
             hideCount={hideCount}
           >
-            {packages.map((item: any) => (
+            {packages.map((item: Package) => (
               <PackageCard
-                key={item.id}
+                key={item.packageId}
                 {...item}
                 hideBookAppointment={hideBookAppointment}
                 sizeThumbnail="fixed"
@@ -154,9 +157,9 @@ export default function SearchResults({
       <div className="flex flex-col gap-4 py-4">
         {hospitals.length > 0 && (
           <Section title="Hospitals" count={hospitals.length}>
-            {hospitals.map((item: any) => (
+            {hospitals.map((item: Hospital) => (
               <HospitalCard
-                key={item.id}
+                key={item.hospitalId}
                 {...item}
                 size="md"
                 showBadge={true}
@@ -170,9 +173,9 @@ export default function SearchResults({
 
         {doctors.length > 0 && (
           <Section title="Doctors" count={doctors.length}>
-            {doctors.map((item: any) => (
+            {doctors.map((item: Doctor) => (
               <DoctorCard
-                key={item.id}
+                key={item.doctorId}
                 {...item}
                 variant="horizontal"
                 hideBookAppointment={hideBookAppointment}
@@ -186,9 +189,9 @@ export default function SearchResults({
 
         {packages.length > 0 && (
           <Section title="Packages" count={packages.length}>
-            {packages.map((item: any) => (
+            {packages.map((item: Package) => (
               <PackageCard
-                key={item.id}
+                key={item.packageId}
                 {...item}
                 hideBookAppointment={hideBookAppointment}
                 sizeThumbnail="fixed"

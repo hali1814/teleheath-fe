@@ -169,7 +169,7 @@ export default function BookingPage({
         .map((x) => x.fileId)
         .filter((x) => x !== undefined),
       serviceIds: store.serviceIds,
-      addonServiceIds: store.addonServiceTypes?.map((x) => x.id),
+      addonServiceTypeIds: store.addonServiceTypes?.map((x) => x.id),
       pickupTime: store.pickupTime,
       pickupDate: store.pickupDate,
       pickupNote: store.pickupNote,

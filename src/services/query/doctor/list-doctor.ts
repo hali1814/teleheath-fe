@@ -1,7 +1,9 @@
+import type { ApiDoctorList } from '#/dto/doctorDto'
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
+import { mapApiDoctor } from '#/mappers/doctorMapper'
 import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
+import type { Doctor } from '#/entities/doctorEntity'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
-import type { Doctor } from '#/types/doctor'
 
 interface ListDoctorRequest extends IPagingRequest {
   country?: string
@@ -17,21 +19,28 @@ interface ListDoctorRequest extends IPagingRequest {
   topOnly?: boolean
 }
 
-export interface ListDoctorResponse extends IPagingResponse<Doctor> {}
-
 const getListDoctor = async (
   params: ListDoctorRequest,
   signal: AbortSignal,
 ) => {
-  const response = await http.get<ListDoctorResponse>('/doctors', params, {
+  const response = await http.get<ApiDoctorList>('/doctors', params, {
     signal,
   })
-  return response
+
+  const mappedData = response.data.content.map((api) => mapApiDoctor(api))
+
+  return {
+    ...response,
+    data: {
+      ...response.data,
+      content: mappedData,
+    },
+  }
 }
 
 export const useGetListDoctorQuery = (
   options: UseQueryOptions<
-    HttpCommonResponse<ListDoctorResponse>,
+    HttpCommonResponse<IPagingResponse<Doctor>>,
     ListDoctorRequest
   >,
 ) => {

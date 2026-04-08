@@ -18,6 +18,7 @@ import {
 import useDebounce from '#/hooks/use-debounce'
 import { keepPreviousData } from '@tanstack/react-query'
 import { EmptyState } from '#/sections/search'
+import type { Package } from '#/entities/packageEntity'
 
 function parseSearchInt(v: unknown): number | undefined {
   if (v === undefined || v === null || v === '') return undefined
@@ -151,8 +152,8 @@ function RouteComponent() {
         </div>
         {packagesData.length > 0 ? (
           <>
-            {packagesData.map((p) => (
-              <PackageCard key={p.id} {...p} truncateName={false} />
+            {packagesData.map((p: Package) => (
+              <PackageCard key={p.packageId} {...p} truncateName={false} />
             ))}
           </>
         ) : (

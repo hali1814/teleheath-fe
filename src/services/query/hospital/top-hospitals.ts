@@ -1,8 +1,8 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { mapApiHospital } from '#/mappers/hospitalMapper'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
-import type { Hospital as ApiHospital } from '#/types/hospital'
 import type { Hospital } from '#/entities/hospitalEntity'
+import type { ApiTopHospitals } from '#/dto/hospitalDto'
 
 interface TopHospitalsRequest {
   country?: string
@@ -12,7 +12,7 @@ const getTopHospitals = async (
   params: TopHospitalsRequest,
   signal: AbortSignal,
 ) => {
-  const response = await http.get<ApiHospital[]>('/hospitals/top', params, {
+  const response = await http.get<ApiTopHospitals>('/hospitals/top', params, {
     signal,
   })
 

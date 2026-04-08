@@ -2,28 +2,16 @@ import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
-import type { AppLanguage } from '#/i18n'
-import type { Doctor } from '#/types/doctor'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
+import type { Doctor } from '#/entities/doctorEntity'
 import { useTranslation } from 'react-i18next'
 
 export default function DoctorInfoHeader({
   avatarUrl,
-  nameVi,
-  nameKh,
-  nameEn,
+  name,
   specialties,
   experienceYears,
-}: Pick<
-  Doctor,
-  | 'avatarUrl'
-  | 'nameVi'
-  | 'nameKh'
-  | 'nameEn'
-  | 'specialties'
-  | 'experienceYears'
->) {
-  const { t, i18n } = useTranslation(['doctor', 'common'])
+}: Pick<Doctor, 'avatarUrl' | 'name' | 'specialties' | 'experienceYears'>) {
+  const { t } = useTranslation(['doctor', 'common'])
 
   return (
     <div className="flex flex-col items-center gap-[16px] p-[16px]">
@@ -31,32 +19,23 @@ export default function DoctorInfoHeader({
         <AvatarImage src={avatarUrl} alt="doctor-information" />
         <AvatarFallback>
           <Text size="2xl_20" className="font-semibold leading-[1.2] uppercase">
-            {getLocalizedTextByLang(
-              nameVi,
-              nameKh,
-              nameEn,
-              i18n.language as AppLanguage,
-            ).slice(0, 2)}
+            {name.slice(0, 2)}
           </Text>
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col items-center gap-[8px]">
         <Text size="4xl_24" className="font-semibold leading-normal">
-          {getLocalizedTextByLang(
-            nameVi,
-            nameKh,
-            nameEn,
-            i18n.language as AppLanguage,
-          )}
+          {name}
         </Text>
         <div className="grid grid-cols-1 gap-[8px]">
-          {specialties.map((specialty) => (
+          {specialties.map((specialty, index) => (
             <Text
+              key={`${name}-spec-${index}`}
               size="lg_16"
               className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
             >
               <div className="size-[6px] rounded-full bg-muted-foreground" />{' '}
-              {specialty.name}
+              {specialty}
             </Text>
           ))}
         </div>

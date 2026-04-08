@@ -2,7 +2,7 @@ import { PackageCard } from '#/sections/package'
 import { Link } from '@tanstack/react-router'
 import Text from '#/components/text'
 import { useTranslation } from 'react-i18next'
-import type { Package } from '#/types/package'
+import type { Package } from '#/entities/packageEntity'
 
 export default function PackageList({
   title,
@@ -34,7 +34,7 @@ export default function PackageList({
       <div className="w-full flex gap-[14px] overflow-x-auto pl-[16px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {packages.map((p) => (
           <PackageCard
-            key={p.id}
+            key={p.packageId}
             {...p}
             className="w-[60%] max-w-[300px]"
             sizeThumbnail="full"

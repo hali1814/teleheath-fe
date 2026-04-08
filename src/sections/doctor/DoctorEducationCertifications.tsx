@@ -1,6 +1,6 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
-import type { Doctor } from '#/types/doctor'
+import type { Doctor } from '#/entities/doctorEntity'
 import { useTranslation } from 'react-i18next'
 
 const EducationCertificationItem = ({ title }: { title: string }) => {
@@ -14,18 +14,9 @@ const EducationCertificationItem = ({ title }: { title: string }) => {
   )
 }
 
-interface Education {
-  id: number
-  certification: string
-  medicalSchool: string
-  graduationYear: number
-}
-
 export default function DoctorEducationCertifications({
   educations,
-}: {
-  educations: Education[]
-}) {
+}: Pick<Doctor, 'educations'>) {
   const { t } = useTranslation(['doctor', 'common'])
   return (
     <div className="w-full flex flex-col gap-[16px] py-[16px]">
@@ -33,15 +24,8 @@ export default function DoctorEducationCertifications({
         {t('educationCertifications')}
       </Text>
       <div className="flex flex-col gap-[12px]">
-        {educations.map((education) => (
-          <EducationCertificationItem
-            key={education.id}
-            title={Object.values({
-              certification: education.certification,
-              medicalSchool: education.medicalSchool,
-              graduationYear: education.graduationYear,
-            }).join(', ')}
-          />
+        {educations?.map((education, index) => (
+          <EducationCertificationItem key={index} title={education} />
         ))}
       </div>
     </div>

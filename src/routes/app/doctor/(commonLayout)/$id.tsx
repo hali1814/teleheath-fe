@@ -30,34 +30,23 @@ function RouteComponent() {
       <div className="flex flex-col items-center gap-[16px] p-[16px] pb-[120px]">
         <DoctorInfoHeader
           avatarUrl={doctorData?.avatarUrl ?? ''}
-          nameVi={doctorData?.nameVi ?? ''}
-          nameKh={doctorData?.nameKh ?? ''}
-          nameEn={doctorData?.nameEn ?? ''}
+          name={doctorData?.name ?? ''}
           specialties={doctorData?.specialties ?? []}
           experienceYears={doctorData?.experienceYears ?? 0}
         />
         <DoctorConsultationFee
           consultationFee={doctorData?.consultationFee ?? 0}
         />
-        {(doctorData?.bioVi || doctorData?.bioKh || doctorData?.bioEn) && (
-          <AboutDoctor
-            bioVi={doctorData?.bioVi ?? ''}
-            bioKh={doctorData?.bioKh ?? ''}
-            bioEn={doctorData?.bioEn ?? ''}
-          />
-        )}
+        {doctorData?.bio && <AboutDoctor bio={doctorData?.bio ?? ''} />}
         {doctorData?.branches && doctorData?.branches?.length > 0 && (
-          <DoctorCurrentLocation
-            hospitalName={doctorData?.branches[0].nameVi ?? ''}
-            address={doctorData?.branches[0].detailedAddress ?? ''}
-            branches={doctorData?.branches ?? []}
-          />
+          <DoctorCurrentLocation branches={doctorData?.branches ?? []} />
         )}
-        {doctorData?.educations && doctorData?.educations?.length > 0 && (
-          <DoctorEducationCertifications
-            educations={doctorData?.educations ?? []}
-          />
-        )}
+        {doctorData?.educations?.length &&
+          doctorData?.educations?.length > 0 && (
+            <DoctorEducationCertifications
+              educations={doctorData?.educations ?? []}
+            />
+          )}
         <DoctorActions />
       </div>
     </>

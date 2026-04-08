@@ -2,7 +2,7 @@ import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { mapApiHospital } from '#/mappers/hospitalMapper'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 import type { Hospital } from '#/entities/hospitalEntity'
-import type { Hospital as ApiHospital } from '#/types/hospital'
+import type { ApiHospital } from '#/dto/hospitalDto'
 
 interface HospitalDetailRequest {
   hospitalId: string

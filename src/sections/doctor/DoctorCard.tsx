@@ -6,9 +6,7 @@ import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import { Link } from '@tanstack/react-router'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
-import type { AppLanguage } from '#/i18n'
-import type { Doctor } from '#/types/doctor'
+import type { Doctor } from '#/entities/doctorEntity'
 
 type DoctorCardProps = {
   className?: string
@@ -24,16 +22,15 @@ export default function DoctorCard({
   sizeAvatar,
   ...doctor
 }: DoctorCardProps) {
-  const { t, i18n } = useTranslation(['common'])
+  const { t } = useTranslation(['common'])
   const {
     doctorId,
     avatarUrl,
-    nameVi,
-    nameKh,
-    nameEn,
+    name,
     experienceYears,
     specialties,
-    country,
+    consultationFee,
+    countryName,
   } = doctor
   const avatarSize = sizeAvatar
     ? sizeAvatar
@@ -45,7 +42,7 @@ export default function DoctorCard({
     return (
       <Link
         to="/app/doctor/$id"
-        params={{ id: doctorId }}
+        params={{ id: doctorId.toString() }}
         className={cn(
           'w-full flex flex-row items-center gap-[16px] shrink-0 rounded-[12px] border-none bg-white p-[16px]',
           className,
@@ -58,32 +55,23 @@ export default function DoctorCard({
               size="2xl_20"
               className="font-semibold leading-[1.2] uppercase"
             >
-              {getLocalizedTextByLang(
-                nameVi,
-                nameKh,
-                nameEn,
-                i18n.language as AppLanguage,
-              ).slice(0, 2)}
+              {name.slice(0, 2)}
             </Text>
           </AvatarFallback>
         </Avatar>
         <div className="w-full flex flex-col items-start gap-[8px]">
           <Text size="base_14" className="font-semibold leading-[1.2]">
-            {getLocalizedTextByLang(
-              nameVi,
-              nameKh,
-              nameEn,
-              i18n.language as AppLanguage,
-            )}
+            {name}
           </Text>
           {specialties?.length > 0 &&
-            specialties.map((specialty) => (
+            specialties.map((specialty, index) => (
               <Text
+                key={`${doctorId}-spec-h-${index}`}
                 size="sm_12"
                 className="flex items-center gap-[8px] font-normal text-muted-foreground leading-[1.3]"
               >
                 <div className="size-[4px] rounded-full bg-muted-foreground" />
-                {specialty.name}
+                {specialty}
               </Text>
             ))}
           <div className="flex items-center gap-[6px]">
@@ -95,20 +83,14 @@ export default function DoctorCard({
               size="xs_10"
               className="font-normal text-muted-foreground leading-[1.3]"
             >
-              {experienceYears} Years Experience •{' '}
-              {getLocalizedTextByLang(
-                country?.nameVi ?? '',
-                null,
-                country?.nameEn ?? '',
-                i18n.language as AppLanguage,
-              )}
+              {experienceYears} Years Experience • {countryName}
             </Text>
           </div>
           {!hideBookAppointment && (
             <Button className="w-full h-[32px] bg-dust-red-1" asChild>
               <Link
                 to="/app/book-appointment/doctor/$doctorId"
-                params={{ doctorId: doctorId }}
+                params={{ doctorId: doctorId.toString() }}
               >
                 <Icon
                   name="book_appointment"
@@ -132,7 +114,7 @@ export default function DoctorCard({
   return (
     <Link
       to="/app/doctor/$id"
-      params={{ id: doctorId }}
+      params={{ id: doctorId.toString() }}
       className={cn(
         'w-full flex flex-col items-center gap-[16px] shrink-0 rounded-[12px] border-none bg-white p-[16px]',
         className,
@@ -142,49 +124,35 @@ export default function DoctorCard({
         <AvatarImage src={avatarUrl} alt="doctor-card" />
         <AvatarFallback>
           <Text size="2xl_20" className="font-semibold leading-[1.2] uppercase">
-            {getLocalizedTextByLang(
-              nameVi,
-              nameKh,
-              nameEn,
-              i18n.language as AppLanguage,
-            ).slice(0, 2)}
+            {name.slice(0, 2)}
           </Text>
         </AvatarFallback>
       </Avatar>
       <div className="w-full flex flex-col items-center gap-[8px]">
         <LocationBadge
-          location={getLocalizedTextByLang(
-            country?.nameVi ?? '',
-            null,
-            country?.nameEn ?? '',
-            i18n.language as AppLanguage,
-          )}
+          location={countryName}
           className="text-muted-foreground leading-[1.3]"
           textSize="xs_10"
         />
         <Text size="base_14" className="font-semibold leading-[1.2]">
-          {getLocalizedTextByLang(
-            nameVi,
-            nameKh,
-            nameEn,
-            i18n.language as AppLanguage,
-          )}
+          {name}
         </Text>
         {specialties?.length > 0 &&
-          specialties.map((specialty) => (
+          specialties.map((specialty, index) => (
             <Text
+              key={`${doctorId}-spec-v-${index}`}
               size="xs_10"
               className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
             >
               <div className="size-[4px] rounded-full bg-muted-foreground" />
-              {specialty.name}
+              {specialty}
             </Text>
           ))}
         {!hideBookAppointment && (
           <Button className="w-full h-[32px] bg-dust-red-1" asChild>
             <Link
               to="/app/book-appointment/doctor/$doctorId"
-              params={{ doctorId: doctorId }}
+              params={{ doctorId: doctorId.toString() }}
             >
               <Icon
                 name="book_appointment"

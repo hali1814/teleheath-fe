@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { DoctorCard } from '#/sections/doctor'
 import Text from '#/components/text'
 import { useTranslation } from 'react-i18next'
-import type { Doctor } from '#/types/doctor'
+import type { Doctor } from '#/entities/doctorEntity'
 
 export default function DoctorLists({
   title,

@@ -2,7 +2,7 @@ import { t } from 'i18next'
 import SpecialtyItem from './SpecialtyItem'
 import Text from '#/components/text'
 import { Link } from '@tanstack/react-router'
-import type { Specialty } from '#/types/specialty'
+import type { Specialty } from '#/entities/specialtyEntity'
 
 export default function ListSpecialty({
   title,
@@ -31,7 +31,7 @@ export default function ListSpecialty({
 
       <div className="grid grid-cols-3 gap-y-[36px] py-[10px]">
         {specialties.map((specialty) => (
-          <SpecialtyItem key={specialty.id} {...specialty} />
+          <SpecialtyItem key={specialty.specialtyId} {...specialty} />
         ))}
       </div>
     </div>

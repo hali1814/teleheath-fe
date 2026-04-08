@@ -1,3 +1,4 @@
+import type { ApiHospitalList } from '#/dto/hospitalDto'
 import type { Hospital } from '#/entities/hospitalEntity'
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { mapApiHospital } from '#/mappers/hospitalMapper'
@@ -10,17 +11,15 @@ interface ListHospitalsRequest extends IPagingRequest {
   country?: string
 }
 
-export interface ListHospitalsResponse extends IPagingResponse<ApiHospital> {}
-
 const getListHospitals = async (
   params: ListHospitalsRequest,
   signal: AbortSignal,
 ) => {
-  const response = await http.get<ListHospitalsResponse>('/hospitals', params, {
+  const response = await http.get<ApiHospitalList>('/hospitals', params, {
     signal,
   })
 
-  const mappedData = response.data.content.map((hospital: ApiHospital) =>
+  const mappedData = response.data.content.map((hospital) =>
     mapApiHospital(hospital),
   )
 

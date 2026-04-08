@@ -1,15 +1,15 @@
 import Image from '#/components/image'
 import Text from '#/components/text'
-import type { Specialty } from '#/types/specialty'
+import type { Specialty } from '#/entities/specialtyEntity'
 import { Link } from '@tanstack/react-router'
 
-export default function SpecialtyItem({ ...props }: Specialty) {
-  const { id, name, iconUrl } = props
+export default function SpecialtyItem(props: Specialty) {
+  const { specialtyId, name, iconUrl } = props
 
   return (
     <Link
       to="/app/specialty/search/$specialtyId"
-      params={{ specialtyId: id.toString() }}
+      params={{ specialtyId: specialtyId.toString() }}
       search={{ specialtyName: name }}
       className="flex-1 flex flex-col items-center justify-center gap-[8px]"
     >

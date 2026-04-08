@@ -38,8 +38,9 @@ export function sanitizeTipTapHtml(html: string | null | undefined): string {
       'div',
       'mark',
       'hr',
+      'img',
     ],
-    ALLOWED_ATTR: ['href', 'target', 'rel', 'class'],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'src', 'alt'],
     ALLOW_DATA_ATTR: false,
   })
 }

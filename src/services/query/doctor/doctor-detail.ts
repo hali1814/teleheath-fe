@@ -1,6 +1,8 @@
+import type { ApiDoctor } from '#/dto/doctorDto'
+import type { Doctor } from '#/entities/doctorEntity'
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
+import { mapApiDoctor } from '#/mappers/doctorMapper'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
-import type { Doctor } from '#/types/doctor'
 
 interface DoctorDetailRequest {
   doctorId: string
@@ -10,10 +12,16 @@ const getDoctorDetail = async (
   params: DoctorDetailRequest,
   signal: AbortSignal,
 ) => {
-  const response = await http.get<Doctor>(`/doctors/${params.doctorId}`, {
+  const response = await http.get<ApiDoctor>(`/doctors/${params.doctorId}`, {
     signal,
   })
-  return response
+
+  const mappedData = mapApiDoctor(response.data)
+
+  return {
+    ...response,
+    data: mappedData,
+  }
 }
 
 export const useGetDoctorDetailQuery = (
