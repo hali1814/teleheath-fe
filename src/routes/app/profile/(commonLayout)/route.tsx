@@ -7,7 +7,7 @@ export const Route = createFileRoute('/app/profile/(commonLayout)')({
 
 function RouteComponent() {
   return (
-    <div className="pb-[100px]">
+    <div className="pb-[120px]">
       <Outlet />
       <BottomNavigation />
     </div>

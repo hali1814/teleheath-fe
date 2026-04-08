@@ -18,7 +18,7 @@ export const Route = createFileRoute('/app/hospital/(commonLayout)/$id')({
 })
 
 function RouteComponent() {
-  const { t } = useTranslation(['common'])
+  const { t } = useTranslation(['hospital', 'common'])
   const { id } = useParams({ from: '/app/hospital/(commonLayout)/$id' })
   const { data: { data: hospitalData } = { data: null } } =
     useGetHospitalDetailQuery({
@@ -31,7 +31,7 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title="Hospital Details" />
+      <Header title={t('hospital:detailTitle')} />
       <div className="pb-[100px]">
         <HospitalDetailHeader hospital={hospitalData} />
         <div className="flex flex-col gap-[16px] p-[16px]">

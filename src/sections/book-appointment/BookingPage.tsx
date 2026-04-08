@@ -88,8 +88,7 @@ export default function BookingPage({
 
   const { mutate: bookAppointment } = useBookAppointmentMutation({
     onSuccess: ({ data }) => {
-      if (!data.bookingToken) return
-      if (store.feeInfo.totalAmount === 0) {
+      if (!data.bookingToken) {
         navigate({
           to: '/app/book-appointment/success/$appointmentCode',
           params: { appointmentCode: data.appointmentCode },
@@ -136,7 +135,7 @@ export default function BookingPage({
       case 'PACKAGE':
         bookingType = 'PACKAGE'
         if (
-          !store.packageData?.id ||
+          !store.packageData?.packageId ||
           !store.branch?.branchId ||
           !store.patientProfile?.id ||
           !store.appointmentDate ||
@@ -152,7 +151,7 @@ export default function BookingPage({
       roomId: store.room?.id,
       doctorId: store.doctor?.doctorId,
       specialtyId: store.specialty?.id,
-      packageId: store.packageData?.id,
+      packageId: store.packageData?.packageId,
       appointmentDate: formatDate(
         store.appointmentDate,
         DATE_TIME_TYPE.YYYY_MM_DD,

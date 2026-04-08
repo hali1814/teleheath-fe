@@ -1,6 +1,7 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
+import { formatPrice } from '#/utils/price.util'
 import { useTranslation } from 'react-i18next'
 
 export interface SelectedServicesProps {
@@ -44,7 +45,7 @@ export default function SelectedServices({ services }: SelectedServicesProps) {
                   size="sm_12"
                   className="font-medium leading-4 text-text-primary"
                 >
-                  ${service.price}
+                  {formatPrice(service.price)}
                 </Text>
               ) : null}
             </div>

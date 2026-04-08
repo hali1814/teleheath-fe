@@ -17,7 +17,10 @@ import ModalHistoryFilter, {
 import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appointments'
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
 import { cn } from '#/lib/utils'
-import { groupAppointmentsByMonth } from '#/utils/history'
+import {
+  getAppointmentMonthLabels,
+  groupAppointmentsByMonth,
+} from '#/utils/history'
 import LoadingState from '#/components/LoadingState'
 
 export const Route = createFileRoute('/app/history/')({
@@ -40,6 +43,7 @@ function RouteComponent() {
   )
 
   const { t } = useTranslation(['common', 'appointment'])
+  const monthLabels = useMemo(() => getAppointmentMonthLabels(t), [t])
   const title = t('bottomNavigation.history')
 
   const { data: appointments, isLoading } = useGetMyAppointmentsQuery({
@@ -59,8 +63,8 @@ function RouteComponent() {
   )
 
   const groupedAppointments = useMemo(() => {
-    return groupAppointmentsByMonth(items)
-  }, [items])
+    return groupAppointmentsByMonth(items, monthLabels)
+  }, [items, monthLabels])
 
   const rows = useMemo(() => {
     return Object.entries(groupedAppointments).flatMap(([key, value]) => {

@@ -1,6 +1,11 @@
+import type { TFunction } from 'i18next'
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
 
-type TranslateFn = (key: string) => string
+/**
+ * `t` từ `useTranslation` — dynamic keys `appointment:months.*` không nằm trong typed overload,
+ * nên sau khi có `t` ta ép về hàm chuỗi để gọi an toàn.
+ */
+type MonthLabelTranslate = TFunction
 
 const FALLBACK_MONTHS = [
   'January',
@@ -41,7 +46,7 @@ export interface AppointmentMonthLabels {
  * Lấy bộ nhãn tháng đã dịch. Nếu chưa có i18n key sẽ fallback tiếng Anh.
  */
 export function getAppointmentMonthLabels(
-  t?: TranslateFn,
+  t?: MonthLabelTranslate,
 ): AppointmentMonthLabels {
   if (!t) {
     return {
@@ -50,14 +55,16 @@ export function getAppointmentMonthLabels(
     }
   }
 
+  const tr = t as (key: string) => string
+
   const months = MONTH_KEYS.map((monthKey, index) => {
     const key = `appointment:months.${monthKey}`
-    const translated = t(key)
+    const translated = tr(key)
     return translated === key ? FALLBACK_MONTHS[index] : translated
   })
 
   const thisMonthKey = 'appointment:thisMonth'
-  const thisMonthTranslated = t(thisMonthKey)
+  const thisMonthTranslated = tr(thisMonthKey)
 
   return {
     thisMonth:

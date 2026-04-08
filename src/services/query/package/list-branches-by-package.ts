@@ -3,7 +3,6 @@ import { http, type HttpCommonResponse } from '#/services/network/http-request'
 import type { Branch } from '#/types/hospital'
 
 interface ListBranchesByPackageRequest {
-  hospitalId: string
   packageId: number
 }
 
@@ -12,7 +11,7 @@ const getListBranchesByPackage = async (
   signal: AbortSignal,
 ) => {
   const response = await http.get<Branch[]>(
-    `/hospitals/${params.hospitalId}/packages/${params.packageId}/branches`,
+    `/packages/${params.packageId}/branches`,
     {},
     {
       signal,

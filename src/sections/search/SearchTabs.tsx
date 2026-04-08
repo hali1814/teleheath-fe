@@ -1,13 +1,15 @@
 import Text from '#/components/text'
 import { cn } from '#/lib/utils'
 import type { Tab } from '#/routes/app/search/(commonLayout)'
+import { useTranslation } from 'react-i18next'
 
-const tabs: { key: Tab; label: string }[] = [
-  { key: 'ALL', label: 'All' },
-  { key: 'HOSPITAL', label: 'Hospitals' },
-  { key: 'DOCTOR', label: 'Doctors' },
-  { key: 'PACKAGE', label: 'Packages' },
-]
+const tabs: { key: Tab; labelKey: 'all' | 'hospitals' | 'doctors' | 'packages' }[] =
+  [
+    { key: 'ALL', labelKey: 'all' },
+    { key: 'HOSPITAL', labelKey: 'hospitals' },
+    { key: 'DOCTOR', labelKey: 'doctors' },
+    { key: 'PACKAGE', labelKey: 'packages' },
+  ]
 
 type TabCounts = {
   all: number
@@ -36,6 +38,8 @@ export default function SearchTabs({
   value,
   onChange,
 }: SearchTabsProps) {
+  const { t } = useTranslation(['search'])
+
   return (
     <div
       className={cn(
@@ -64,7 +68,7 @@ export default function SearchTabs({
                   active ? 'text-primary' : 'text-text-secondary',
                 )}
               >
-                {tab.label}
+                {t(`tabs.${tab.labelKey}`)}
               </Text>
             </button>
           )
@@ -89,7 +93,7 @@ export default function SearchTabs({
                 active ? 'text-white' : 'text-muted-foreground',
               )}
             >
-              {`${tab.label} (${count})`}
+              {`${t(`tabs.${tab.labelKey}`)} (${count})`}
             </Text>
           </button>
         )

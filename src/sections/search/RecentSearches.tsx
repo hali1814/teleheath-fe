@@ -1,5 +1,6 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
+import { useTranslation } from 'react-i18next'
 import { Badge } from '#/components/ui/badge'
 
 const RecentSearchesItem = ({
@@ -11,6 +12,7 @@ const RecentSearchesItem = ({
   onSelect: () => void
   onRemove: () => void
 }) => {
+  const { t } = useTranslation(['search'])
   return (
     <Badge className="h-[36px] gap-[8px] rounded-full bg-secondary/5 px-[16px] py-[8px]">
       <button
@@ -29,7 +31,7 @@ const RecentSearchesItem = ({
           e.stopPropagation()
           onRemove()
         }}
-        aria-label={`Remove ${text}`}
+        aria-label={t('removeItemAria', { text })}
       >
         <Icon name="close" className="h-[8px] w-[8px] text-muted-foreground" />
       </button>
@@ -48,6 +50,7 @@ export default function RecentSearches({
   onRemove: (text: string) => void
   onClear: () => void
 }) {
+  const { t } = useTranslation(['search'])
   return (
     <div className="flex flex-col gap-[16px] p-[16px]">
       <div className="flex items-center justify-between">
@@ -55,7 +58,7 @@ export default function RecentSearches({
           size="lg_16"
           className="font-semibold leading-[1.2] text-[#333333]"
         >
-          Recent Searches
+          {t('recentSearches')}
         </Text>
         {recentSearches.length > 0 ? (
           <button
@@ -67,7 +70,7 @@ export default function RecentSearches({
               size="base_14"
               className="font-medium leading-normal text-primary"
             >
-              Clear
+              {t('clear')}
             </Text>
           </button>
         ) : null}
@@ -85,7 +88,7 @@ export default function RecentSearches({
         </div>
       ) : (
         <Text size="base_14" className="leading-normal text-muted-foreground">
-          No recent searches yet.
+          {t('noRecentYet')}
         </Text>
       )}
     </div>

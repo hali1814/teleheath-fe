@@ -9,12 +9,14 @@ import {
 import { Header } from '#/sections/home'
 import { useGetDoctorDetailQuery } from '#/services/query/doctor/doctor-detail'
 import { createFileRoute, useParams } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/app/doctor/(commonLayout)/$id')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const { t } = useTranslation(['doctor'])
   const { id } = useParams({ from: '/app/doctor/(commonLayout)/$id' })
 
   const { data: { data: doctorData } = { data: null } } =
@@ -26,7 +28,7 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title="Doctor Details" />
+      <Header title={t('detailTitle')} />
       <div className="flex flex-col items-center gap-[16px] p-[16px] pb-[120px]">
         <DoctorInfoHeader
           avatarUrl={doctorData?.avatarUrl ?? ''}

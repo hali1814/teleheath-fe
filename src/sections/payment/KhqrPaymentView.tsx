@@ -12,6 +12,7 @@ import { Icon } from '#/components/icon'
 import { formatPrice } from '#/utils/price.util'
 import { useBookingStore } from '#/stores/booking-store'
 import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const POLL_INTERVAL_MS = 10_000
 
@@ -30,6 +31,7 @@ function isTerminalPaymentStatus(status: string) {
 }
 
 export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
+  const { t } = useTranslation(['payment'])
   const router = useRouter()
   const navigate = useNavigate()
   const { reset } = useBookingStore()
@@ -78,12 +80,12 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
         {isLoading || isFetching ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-[16px]">
             <Spinner className="h-8 w-8 text-primary" />
-            <Text className="text-muted-foreground">Generating QR…</Text>
+            <Text className="text-muted-foreground">{t('generatingQr')}</Text>
           </div>
         ) : isError || !khqr ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-[16px]">
             <Text className="text-center text-muted-foreground">
-              Could not load payment QR. Please try again.
+              {t('loadQrError')}
             </Text>
             <Button
               type="button"
@@ -91,39 +93,41 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
               className="rounded-full"
               onClick={() => void refetch()}
             >
-              Retry
+              {t('retry')}
             </Button>
           </div>
         ) : (
           <>
             <Image
               src={`data:image/png;base64,${khqr.qrImage}`}
-              alt="KHQR Payment QR"
+              alt={t('khqrQrAlt')}
               className="h-[400px] w-[300px] object-cover"
             />
 
             <div className="flex flex-col items-center gap-[6px]">
               <Text className="font-semibold leading-[1.2] text-black">
-                Scan to Pay
+                {t('scanToPay')}
               </Text>
-              <Text className="leading-[1.2] text-black">or</Text>
+              <Text className="leading-[1.2] text-black">{t('or')}</Text>
             </div>
 
             <div className="flex flex-col items-center gap-[8px]">
               <div className="flex justify-center items-center gap-[8px]">
                 <Icon name="download" className="text-white" />
                 <Text className="leading-[1.2] text-[#11BFC6]">
-                  Download QR
+                  {t('downloadQr')}
                 </Text>
               </div>
               <Text className="max-w-[230px] text-center text-[#808080] leading-normal">
-                and upload to Mobile Banking app supporting KHQR
+                {t('khqrMobileBankingHint')}
               </Text>
             </div>
 
             <div className="w-full flex flex-col gap-[14px] p-[16px]">
               <div className="flex justify-between items-center">
-                <Text className="leading-normal text-[#282828]">Subtotal</Text>
+                <Text className="leading-normal text-[#282828]">
+                  {t('subtotal')}
+                </Text>
                 <Text className="leading-normal text-[#282828]">
                   {formatPrice(khqr.amount, true)} {khqr.currency}
                 </Text>
@@ -134,7 +138,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
                   size="lg_16"
                   className="font-semibold leading-[1.2] text-[#282828]"
                 >
-                  TOTAL
+                  {t('total')}
                 </Text>
                 <Text
                   size="lg_16"
@@ -152,7 +156,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
                 className="h-[45px] w-full border-primary text-primary rounded-[40px]"
               >
                 <Text className="font-medium leading-normal text-primary">
-                  Back
+                  {t('back')}
                 </Text>
               </Button>
             </div>

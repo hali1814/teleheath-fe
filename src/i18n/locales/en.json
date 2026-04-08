@@ -17,6 +17,8 @@
       "phone": "Phone number"
     },
     "noData": "No data",
+    "noDataAvailable": "No data available",
+    "markAllAsRead": "Mark all as read",
     "actions": {
       "cancel": "Cancel",
       "done": "Done",
@@ -28,8 +30,10 @@
       "clearAllFilters": "Clear all filters",
       "apply": "Apply",
       "onlineConsultation": "Online consultation",
-      "bookingOffline": "Booking offline"
+      "bookingOffline": "Booking offline",
+      "details": "Details"
     },
+    "notificationsTitle": "Notifications",
     "countries": {
       "all": "All",
       "vietnam": "Vietnam",
@@ -231,6 +235,62 @@
       "title": "Online Doctor",
       "bookByDoctor": "Online Doctor",
       "bookByDoctorDescription": "Online consultation via video call"
+    },
+    "schedule": {
+      "selectDate": "Select Date",
+      "availableTimeSlots": "Available Time Slots",
+      "chooseTimePrefix": "Choose a time that works for you on",
+      "morningSessions": "Morning sessions",
+      "afternoonSessions": "Afternoon sessions",
+      "noSlotsThisDate": "No appointments available on this date. Please choose another date."
+    },
+    "specialtyStep": {
+      "searchPlaceholder": "Search specialty",
+      "title": "Select Specialty",
+      "empty": "No specialties found. Please try again."
+    },
+    "serviceStep": {
+      "searchPlaceholder": "Search for services",
+      "empty": "No services found",
+      "filterAriaLabel": "Filter"
+    },
+    "roomStep": {
+      "empty": "No rooms found",
+      "title": "Select Room"
+    },
+    "patientStep": {
+      "searchPlaceholder": "Search patient profile"
+    },
+    "medicalRecords": {
+      "title": "Medical Records",
+      "intro": "Providing your medical history helps our specialists prepare for your visit.",
+      "uploadTitle": "Upload Medical Files",
+      "formatsHint": "PDF, JPG, PNG (Max 10MB)",
+      "selectFiles": "Select Files",
+      "describeManual": "Describe medical history manually",
+      "manualPlaceholder": "Tell us more about your symptoms or medical history...",
+      "additionalNotes": "Additional Notes",
+      "notesPlaceholder": "Any other information you'd like to share?",
+      "uploading": "Uploading…",
+      "uploadFailed": "Upload failed",
+      "uploadAriaLabel": "Upload medical files",
+      "removeFileAria": "Remove {{fileName}}",
+      "toastFileNotAllowed": "{{fileName}} is not allowed. Only PNG, JPG, PDF.",
+      "toastFileTooLarge": "{{fileName}} exceeds 10MB",
+      "toastUploadError": "Could not upload {{fileName}}"
+    },
+    "pickup": {
+      "timeLabel": "Time to pick-up",
+      "addressLabel": "Address to pick-up",
+      "noteLabel": "Note",
+      "placeholderTime": "00:00",
+      "placeholderAddress": "Address to pick-up",
+      "placeholderNote": "Example: Number of seats"
+    },
+    "paymentMethodName": {
+      "khqr": "KHQR",
+      "emoney": "EMoney",
+      "aba": "ABA Bank"
     }
   },
   "appointment": {
@@ -304,6 +364,68 @@
     "detailBannerCancelled": "Reason for cancellation",
     "detailBannerCompleted": "This appointment has already ended.",
     "medicalFileOpenInNewTab": "Open in new tab",
-    "medicalFilePreviewUnsupported": "This file type can't be previewed here. Open it in a new tab instead."
+    "medicalFilePreviewUnsupported": "This file type can't be previewed here. Open it in a new tab instead.",
+    "thisMonth": "This month",
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
+    "serviceFee": "Service Fee",
+    "selectedPackageTitle": "Selected Package",
+    "paymentMethodsHeading": "Payment Methods",
+    "specialtyWithName": "Specialty: {{name}}",
+    "consultationWithAmount": "Consultation: {{amount}}",
+    "addonServices": "Add-on services",
+    "addonPriceDisclaimer": "Prices are shown for reference only. Users pay directly to the provider, not through the app.",
+    "reviewBadgeBookByHospital": "BOOK BY HOSPITAL",
+    "reviewBadgeBookByDoctor": "BOOK BY DOCTOR",
+    "reviewBadgeBookByPackage": "BOOK BY PACKAGE"
+  },
+  "search": {
+    "tabs": {
+      "all": "All",
+      "hospitals": "Hospitals",
+      "doctors": "Doctors",
+      "packages": "Packages"
+    },
+    "resultsFound": "{{count}} results found.",
+    "noResultsFor": "No results for <italic>\"{{query}}\"</italic>",
+    "recentSearches": "Recent Searches",
+    "clear": "Clear",
+    "noSuggestionsFor": "No suggestions found for <italic>\"{{query}}\"</italic>",
+    "specialtySearchPlaceholder": "Search for hospitals, doctor, packages",
+    "specialtyIndexPlaceholder": "Search for specialties",
+    "empty": {
+      "specialties": "No specialties found.",
+      "hospitals": "No hospitals found",
+      "doctors": "No doctors found",
+      "packages": "No packages found",
+      "notifications": "No notifications found"
+    },
+    "removeItemAria": "Remove {{text}}",
+    "noRecentYet": "No recent searches yet."
+  },
+  "payment": {
+    "generatingQr": "Generating QR…",
+    "loadQrError": "Could not load payment QR. Please try again.",
+    "retry": "Retry",
+    "scanToPay": "Scan to Pay",
+    "or": "or",
+    "downloadQr": "Download QR",
+    "khqrMobileBankingHint": "and upload to Mobile Banking app supporting KHQR",
+    "subtotal": "Subtotal",
+    "total": "TOTAL",
+    "back": "Back",
+    "khqrQrAlt": "KHQR Payment QR"
   }
 }

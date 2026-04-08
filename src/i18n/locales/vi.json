@@ -17,6 +17,8 @@
       "phone": "So dien thoai"
     },
     "noData": "Không có dữ liệu",
+    "noDataAvailable": "Không có dữ liệu",
+    "markAllAsRead": "Đánh dấu tất cả đã đọc",
     "actions": {
       "cancel": "Hủy",
       "done": "Xong",
@@ -28,8 +30,10 @@
       "clearAllFilters": "Xóa tất cả lọc",
       "apply": "Áp dụng",
       "onlineConsultation": "Tư vấn online",
-      "bookingOffline": "Đặt lịch offline"
+      "bookingOffline": "Đặt lịch offline",
+      "details": "Chi tiết"
     },
+    "notificationsTitle": "Thông báo",
     "countries": {
       "all": "Tất cả",
       "vietnam": "Việt Nam",
@@ -86,6 +90,7 @@
       "bookNow": "Đặt lịch ngay!"
     },
     "topHospitals": "Bệnh viện hàng đầu",
+    "specialties": "Chuyên khoa",
     "specializedPackages": "Gói dịch vụ chuyên sâu",
     "featuredDoctors": "Bác sĩ nổi tiếng"
   },
@@ -230,6 +235,62 @@
       "title": "Đặt lịch online",
       "bookByDoctor": "Đặt lịch bác sĩ online",
       "bookByDoctorDescription": "Tư vấn online qua video call"
+    },
+    "schedule": {
+      "selectDate": "Chọn ngày",
+      "availableTimeSlots": "Khung giờ trống",
+      "chooseTimePrefix": "Chọn giờ phù hợp với bạn vào",
+      "morningSessions": "Buổi sáng",
+      "afternoonSessions": "Buổi chiều",
+      "noSlotsThisDate": "Không có lịch trống vào ngày này. Vui lòng chọn ngày khác."
+    },
+    "specialtyStep": {
+      "searchPlaceholder": "Tìm chuyên khoa",
+      "title": "Chọn chuyên khoa",
+      "empty": "Không tìm thấy chuyên khoa. Vui lòng thử lại."
+    },
+    "serviceStep": {
+      "searchPlaceholder": "Tìm dịch vụ",
+      "empty": "Không tìm thấy dịch vụ",
+      "filterAriaLabel": "Lọc"
+    },
+    "roomStep": {
+      "empty": "Không tìm thấy phòng",
+      "title": "Chọn phòng"
+    },
+    "patientStep": {
+      "searchPlaceholder": "Tìm hồ sơ bệnh nhân"
+    },
+    "medicalRecords": {
+      "title": "Hồ sơ y tế",
+      "intro": "Cung cấp tiền sử bệnh giúp chuyên gia chuẩn bị tốt hơn cho buổi khám của bạn.",
+      "uploadTitle": "Tải hồ sơ y tế",
+      "formatsHint": "PDF, JPG, PNG (Tối đa 10MB)",
+      "selectFiles": "Chọn tệp",
+      "describeManual": "Mô tả tiền sử bệnh bằng văn bản",
+      "manualPlaceholder": "Cho chúng tôi biết thêm về triệu chứng hoặc tiền sử bệnh...",
+      "additionalNotes": "Ghi chú thêm",
+      "notesPlaceholder": "Thông tin khác bạn muốn chia sẻ?",
+      "uploading": "Đang tải lên…",
+      "uploadFailed": "Tải lên thất bại",
+      "uploadAriaLabel": "Tải lên hồ sơ y tế",
+      "removeFileAria": "Xóa {{fileName}}",
+      "toastFileNotAllowed": "{{fileName}} không được phép. Chỉ PNG, JPG, PDF.",
+      "toastFileTooLarge": "{{fileName}} vượt quá 10MB",
+      "toastUploadError": "Không thể tải lên {{fileName}}"
+    },
+    "pickup": {
+      "timeLabel": "Giờ đón",
+      "addressLabel": "Địa chỉ đón",
+      "noteLabel": "Ghi chú",
+      "placeholderTime": "00:00",
+      "placeholderAddress": "Địa chỉ đón",
+      "placeholderNote": "Ví dụ: Số chỗ ngồi"
+    },
+    "paymentMethodName": {
+      "khqr": "KHQR",
+      "emoney": "EMoney",
+      "aba": "ABA Bank"
     }
   },
   "appointment": {
@@ -303,6 +364,68 @@
     "detailBannerCancelled": "Lý do hủy",
     "detailBannerCompleted": "Cuộc hẹn này đã kết thúc.",
     "medicalFileOpenInNewTab": "Mở trong tab mới",
-    "medicalFilePreviewUnsupported": "Không xem trước được loại file này trong app. Hãy mở bằng \"Mở trong tab mới\"."
+    "medicalFilePreviewUnsupported": "Không xem trước được loại file này trong app. Hãy mở bằng \"Mở trong tab mới\".",
+    "thisMonth": "Tháng này",
+    "months": {
+      "january": "Tháng 1",
+      "february": "Tháng 2",
+      "march": "Tháng 3",
+      "april": "Tháng 4",
+      "may": "Tháng 5",
+      "june": "Tháng 6",
+      "july": "Tháng 7",
+      "august": "Tháng 8",
+      "september": "Tháng 9",
+      "october": "Tháng 10",
+      "november": "Tháng 11",
+      "december": "Tháng 12"
+    },
+    "serviceFee": "Phí dịch vụ",
+    "selectedPackageTitle": "Gói đã chọn",
+    "paymentMethodsHeading": "Phương thức thanh toán",
+    "specialtyWithName": "Chuyên khoa: {{name}}",
+    "consultationWithAmount": "Tư vấn: {{amount}}",
+    "addonServices": "Dịch vụ bổ sung",
+    "addonPriceDisclaimer": "Giá chỉ mang tính tham khảo. Người dùng thanh toán trực tiếp với nhà cung cấp, không qua ứng dụng.",
+    "reviewBadgeBookByHospital": "ĐẶT THEO BỆNH VIỆN",
+    "reviewBadgeBookByDoctor": "ĐẶT THEO BÁC SĨ",
+    "reviewBadgeBookByPackage": "ĐẶT THEO GÓI"
+  },
+  "search": {
+    "tabs": {
+      "all": "Tất cả",
+      "hospitals": "Bệnh viện",
+      "doctors": "Bác sĩ",
+      "packages": "Gói dịch vụ"
+    },
+    "resultsFound": "Tìm thấy {{count}} kết quả.",
+    "noResultsFor": "Không có kết quả cho <italic>\"{{query}}\"</italic>",
+    "recentSearches": "Tìm kiếm gần đây",
+    "clear": "Xóa",
+    "noSuggestionsFor": "Không có gợi ý cho <italic>\"{{query}}\"</italic>",
+    "specialtySearchPlaceholder": "Tìm bệnh viện, bác sĩ, gói dịch vụ",
+    "specialtyIndexPlaceholder": "Tìm chuyên khoa",
+    "empty": {
+      "specialties": "Không tìm thấy chuyên khoa.",
+      "hospitals": "Không tìm thấy bệnh viện",
+      "doctors": "Không tìm thấy bác sĩ",
+      "packages": "Không tìm thấy gói dịch vụ",
+      "notifications": "Không có thông báo"
+    },
+    "removeItemAria": "Xóa {{text}}",
+    "noRecentYet": "Chưa có tìm kiếm gần đây."
+  },
+  "payment": {
+    "generatingQr": "Đang tạo mã QR…",
+    "loadQrError": "Không tải được mã QR thanh toán. Vui lòng thử lại.",
+    "retry": "Thử lại",
+    "scanToPay": "Quét để thanh toán",
+    "or": "hoặc",
+    "downloadQr": "Tải mã QR",
+    "khqrMobileBankingHint": "và tải lên ứng dụng ngân hàng di động hỗ trợ KHQR",
+    "subtotal": "Tạm tính",
+    "total": "TỔNG CỘNG",
+    "back": "Quay lại",
+    "khqrQrAlt": "Mã QR thanh toán KHQR"
   }
 }

@@ -8,8 +8,10 @@ import useDebounce from '#/hooks/use-debounce'
 import { keepPreviousData } from '@tanstack/react-query'
 import { useGetSpecialtiesByHospitalQuery } from '#/services/query/hospital/specialties-by-hospital'
 import LoadingState from '#/components/LoadingState'
+import { useTranslation } from 'react-i18next'
 
 export function SpecialtyStep() {
+  const { t } = useTranslation(['book-appointment'])
   const { hospital, specialty, setData } = useBookingStore()
   const [search, setSearch] = useState('')
   const debouncedSearch = useDebounce(search, 300)
@@ -27,13 +29,13 @@ export function SpecialtyStep() {
   return (
     <div className="flex flex-col gap-[16px] px-[16px]">
       <SearchBar
-        placeholder="Search specialty"
+        placeholder={t('specialtyStep.searchPlaceholder')}
         value={search}
         onSearch={setSearch}
         onClear={() => setSearch('')}
       />
       <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
-        Select Specialty
+        {t('specialtyStep.title')}
       </Text>
       <div className="flex flex-wrap gap-2">
         {isLoading || isFetching || !hospital?.hospitalId ? (
@@ -55,7 +57,7 @@ export function SpecialtyStep() {
             ) : (
               <EmptyState className="h-full">
                 <Text className="text-center leading-normal text-muted-foreground">
-                  No specialties found. Please try again.
+                  {t('specialtyStep.empty')}
                 </Text>
               </EmptyState>
             )}

@@ -37,7 +37,7 @@ export default function ModalFilterServiceType({
   appliedFilter: FilterServiceType
   onApply: (filter: FilterServiceType) => void
 }) {
-  const { t, i18n } = useTranslation(['common'])
+  const { t, i18n } = useTranslation(['common', 'package'])
 
   const draftCountry = useRef('')
 
@@ -91,7 +91,7 @@ export default function ModalFilterServiceType({
               <DialogTitle />
             </div>
             <Text size="lg_16" className="font-semibold leading-[1.2]">
-              Filter
+              {t('package:filter.title')}
             </Text>
             <button
               type="button"
@@ -109,14 +109,14 @@ export default function ModalFilterServiceType({
         </DialogHeader>
         <div key={fieldKey} className="flex flex-col gap-[12px]">
           <div className="flex flex-col gap-[8px]">
-            <Text>Country</Text>
+            <Text>{t('package:filter.country')}</Text>
             <InputSelect
               defaultValue={effectiveDefaults.country || undefined}
               onValueChange={(value) => {
                 draftCountry.current = value
                 rerender()
               }}
-              placeholder="Country"
+              placeholder={t('package:filter.country')}
               options={
                 countryList?.data.map((country) => ({
                   label: getLocalizedTextByLang(

@@ -6,6 +6,7 @@ import type { Branch } from '#/types/hospital'
 import { useEffect, useMemo } from 'react'
 import { LocationCard } from '../LocationCard'
 import LoadingState from '#/components/LoadingState'
+import { useGetListBranchesByPackageQuery } from '#/services/query/package/list-branches-by-package'
 
 const EMPTY_BRANCHES: Branch[] = []
 
@@ -25,6 +26,11 @@ export function LocationStep({ type }: { type: LocationStepType }) {
     enabled: type === 'DOCTOR' && !!doctor?.doctorId,
   })
 
+  const packageBranchesQuery = useGetListBranchesByPackageQuery({
+    params: { packageId: packageData?.packageId ?? 0 },
+    enabled: type === 'PACKAGE' && !!packageData?.packageId,
+  })
+
   const branches = useMemo((): Branch[] => {
     switch (type) {
       case 'HOSPITAL':
@@ -32,13 +38,13 @@ export function LocationStep({ type }: { type: LocationStepType }) {
       case 'DOCTOR':
         return doctorBranchesQuery.data?.data ?? EMPTY_BRANCHES
       case 'PACKAGE':
-        return packageData?.hospital?.branches ?? EMPTY_BRANCHES
+        return packageBranchesQuery.data?.data ?? EMPTY_BRANCHES
     }
   }, [
     type,
     hospitalBranchesQuery.data?.data,
     doctorBranchesQuery.data?.data,
-    packageData?.hospital?.branches,
+    packageBranchesQuery.data?.data,
   ])
 
   useEffect(() => {
@@ -54,7 +60,9 @@ export function LocationStep({ type }: { type: LocationStepType }) {
       <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
         Select Location
       </Text>
-      {hospitalBranchesQuery.isLoading || doctorBranchesQuery.isLoading ? (
+      {hospitalBranchesQuery.isLoading ||
+      doctorBranchesQuery.isLoading ||
+      packageBranchesQuery.isLoading ? (
         <LoadingState />
       ) : (
         <>

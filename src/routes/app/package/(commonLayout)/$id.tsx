@@ -17,7 +17,7 @@ export const Route = createFileRoute('/app/package/(commonLayout)/$id')({
 })
 
 function RouteComponent() {
-  const { t } = useTranslation(['common'])
+  const { t } = useTranslation(['package', 'common'])
   const { id } = useParams({ from: '/app/package/(commonLayout)/$id' })
 
   const { data: { data: packageData } = { data: null } } =
@@ -31,7 +31,7 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title="Package Details" />
+      <Header title={t('detailTitle')} />
       <Image
         src={packageData?.imageUrl ?? ''}
         alt={packageData?.name ?? ''}
@@ -66,7 +66,7 @@ function RouteComponent() {
                 className="w-[20px] h-[20px] text-white"
               />
               <Text className="leading-normal font-medium text-white">
-                {t('actions.bookAppointment')}
+                {t('common:actions.bookAppointment')}
               </Text>
             </Link>
           </Button>

@@ -7,7 +7,7 @@ import { useBookingStore } from '#/stores/booking-store'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { formatPrice } from '#/utils/price.util'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ModalDetailService } from '../ModalDetailService'
 import type { ServiceType } from '#/types/service'
@@ -42,6 +42,7 @@ const ServiceItem = ({
   service: ServiceType
   onDetailClick: () => void
 }) => {
+  const { t } = useTranslation(['book-appointment', 'common'])
   const { pickupTime, pickupDate, pickupNote, setData } = useBookingStore()
 
   return (
@@ -54,15 +55,15 @@ const ServiceItem = ({
         >
           <Icon name="eye_outline" className="w-[16px] h-[16px] text-primary" />
           <Text size="sm_12" className="leading-[1.3] font-medium text-primary">
-            Details
+            {t('common:actions.details')}
           </Text>
         </button>
       </div>
       {service.id === PICK_UP_SERVICE_ID && (
         <>
           <TextInputBase
-            label="Time to pick-up"
-            placeholder="00:00"
+            label={t('pickup.timeLabel')}
+            placeholder={t('pickup.placeholderTime')}
             type="text"
             inputMode="numeric"
             pattern="[0-9:]*"
@@ -78,14 +79,14 @@ const ServiceItem = ({
             }}
           />
           <TextInputBase
-            label="Address to pick-up"
-            placeholder="Address to pick-up"
+            label={t('pickup.addressLabel')}
+            placeholder={t('pickup.placeholderAddress')}
             value={pickupDate}
             onChange={(e) => setData({ pickupDate: e.target.value })}
           />
           <TextInputBase
-            label="Note"
-            placeholder="Example: Number of seats"
+            label={t('pickup.noteLabel')}
+            placeholder={t('pickup.placeholderNote')}
             value={pickupNote}
             onChange={(e) => setData({ pickupNote: e.target.value })}
           />
@@ -136,26 +137,8 @@ const PaymentMethodItem = ({
   )
 }
 
-const paymentMethods = [
-  {
-    id: 1,
-    name: 'KHQR',
-    logo: '/payment-method/khqr.png',
-  },
-  {
-    id: 2,
-    name: 'EMoney',
-    logo: '/payment-method/e-money.png',
-  },
-  {
-    id: 3,
-    name: 'ABA Bank',
-    logo: '/payment-method/aba-bank.png',
-  },
-]
-
 export function ReviewStep() {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation(['book-appointment', 'appointment'])
   const [openDetailService, setOpenDetailService] = useState(false)
   const [selectedService, setSelectedService] = useState<
     ServiceType | undefined
@@ -189,6 +172,27 @@ export function ReviewStep() {
     calcFeeInfo(consultationFee)
   }, [addonServiceTypes, calcFeeInfo, consultationFee])
 
+  const paymentMethods = useMemo(
+    () => [
+      {
+        id: 1,
+        name: t('paymentMethodName.khqr'),
+        logo: '/payment-method/khqr.png',
+      },
+      {
+        id: 2,
+        name: t('paymentMethodName.emoney'),
+        logo: '/payment-method/e-money.png',
+      },
+      {
+        id: 3,
+        name: t('paymentMethodName.aba'),
+        logo: '/payment-method/aba-bank.png',
+      },
+    ],
+    [t],
+  )
+
   return (
     <>
       <div className="flex flex-col gap-[16px] px-[16px]">
@@ -196,7 +200,7 @@ export function ReviewStep() {
           <div className="flex items-center px-[30px] py-[16px] rounded-[48px] bg-[#ED26300D] border-2 border-[#ED263033]">
             <div className="flex-1 flex flex-col gap-[6px]">
               <Text size="sm_12" color="secondary" className="leading-[1.3]">
-                BOOK BY HOSPITAL
+                {t('appointment:reviewBadgeBookByHospital')}
               </Text>
               <Text className="leading-[1.2] font-semibold text-[#333333]">
                 {hospital?.name}
@@ -220,7 +224,7 @@ export function ReviewStep() {
             <div className="flex items-center px-[30px] py-[16px] rounded-[48px] bg-[#ED26300D] border-2 border-[#ED263033]">
               <div className="flex-1 flex flex-col gap-[6px]">
                 <Text size="sm_12" color="secondary" className="leading-[1.3]">
-                  BOOK BY DOCTOR
+                  {t('appointment:reviewBadgeBookByDoctor')}
                 </Text>
                 <Text className="leading-[1.2] font-semibold text-[#333333]">
                   {getLocalizedTextByLang(
@@ -245,7 +249,7 @@ export function ReviewStep() {
 
             <div className="flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white">
               <Text size="lg_16" className="leading-[1.2] font-semibold">
-                Medical Professional
+                {t('appointment:medicalProfessional')}
               </Text>
               <div className="flex items-center gap-[16px]">
                 <Image
@@ -276,7 +280,9 @@ export function ReviewStep() {
                       className="w-[16px] h-[16px] text-primary"
                     />
                     <Text className="font-medium leading-normal text-[#333333]">
-                      Consultation: {formatPrice(doctor?.consultationFee ?? 0)}
+                      {t('appointment:consultationWithAmount', {
+                        amount: formatPrice(doctor?.consultationFee ?? 0),
+                      })}
                     </Text>
                   </div>
                 </div>
@@ -290,7 +296,7 @@ export function ReviewStep() {
             <div className="flex items-center px-[30px] py-[16px] rounded-[48px] bg-[#ED26300D] border-2 border-[#ED263033]">
               <div className="flex-1 flex flex-col gap-[6px]">
                 <Text size="sm_12" color="secondary" className="leading-[1.3]">
-                  BOOK BY PACKAGE
+                  {t('appointment:reviewBadgeBookByPackage')}
                 </Text>
                 <Text className="leading-[1.2] font-semibold text-[#333333]">
                   {getLocalizedTextByLang(
@@ -315,7 +321,7 @@ export function ReviewStep() {
 
             <div className="flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white">
               <Text size="lg_16" className="leading-[1.2] font-semibold">
-                Selected Package
+                {t('appointment:selectedPackageTitle')}
               </Text>
               <div className="flex items-center gap-[16px]">
                 <Image
@@ -354,7 +360,7 @@ export function ReviewStep() {
 
         <div className="flex flex-col gap-[16px] p-[16px] rounded-[16px] bg-white">
           <Text size="lg_16" className="leading-[1.2] font-semibold">
-            Appointment Information
+            {t('appointment:appointmentInformation')}
           </Text>
           <div className="flex items-start gap-[16px]">
             <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-[#ED2630]/10">
@@ -368,7 +374,7 @@ export function ReviewStep() {
                 size="base_14"
                 className="leading-normal text-muted-foreground"
               >
-                Hospital & Branch
+                {t('appointment:hospitalAndBranch')}
               </Text>
               <Text
                 size="lg_16"
@@ -398,7 +404,7 @@ export function ReviewStep() {
                 size="base_14"
                 className="leading-normal text-muted-foreground"
               >
-                Address
+                {t('appointment:address')}
               </Text>
               <Text
                 size="base_14"
@@ -420,7 +426,7 @@ export function ReviewStep() {
                 size="base_14"
                 className="leading-normal text-muted-foreground"
               >
-                Patient
+                {t('appointment:patient')}
               </Text>
               <Text
                 size="base_14"
@@ -437,7 +443,7 @@ export function ReviewStep() {
                 size="xs_10"
                 className="font-bold leading-[15px] text-dust-red-4 uppercase"
               >
-                Date
+                {t('appointment:date')}
               </Text>
               <Text className="leading-normal font-medium text-[#333333]">
                 {formatDate(appointmentDate, DATE_TIME_TYPE.MMM_DD_YYYY)}
@@ -448,7 +454,7 @@ export function ReviewStep() {
                 size="xs_10"
                 className="font-bold leading-[15px] text-dust-red-4 uppercase"
               >
-                Time
+                {t('appointment:time')}
               </Text>
               <Text className="leading-normal font-medium text-[#333333]">
                 {startTime} - {endTime}
@@ -464,7 +470,9 @@ export function ReviewStep() {
                 className="w-[20px] h-[20px]"
               />
               <Text className="flex-1 leading-normal font-medium">
-                Specialty: {specialty?.name}
+                {t('appointment:specialtyWithName', {
+                  name: specialty?.name ?? '',
+                })}
               </Text>
             </div>
           )}
@@ -473,7 +481,7 @@ export function ReviewStep() {
         {addonServiceTypes && addonServiceTypes.length > 0 && (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
             <Text size="lg_16" className="leading-[1.2] font-semibold">
-              Add-on services
+              {t('appointment:addonServices')}
             </Text>
             <div className="flex items-center gap-[8px] px-[10px] py-[6px] rounded-[8px] bg-[#F0B13312]">
               <Icon
@@ -484,8 +492,7 @@ export function ReviewStep() {
                 size="sm_12"
                 className="flex-1 leading-[1.3] text-[#FB9324]"
               >
-                Prices are shown for reference only. Users pay directly to the
-                provider, not through the app.
+                {t('appointment:addonPriceDisclaimer')}
               </Text>
             </div>
             {addonServiceTypes?.map((service, index) => (
@@ -509,12 +516,12 @@ export function ReviewStep() {
         {consultationFee > 0 && (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
             <Text size="lg_16" className="font-semibold leading-[1.2]">
-              Payment Details
+              {t('appointment:paymentDetails')}
             </Text>
             {feeInfo.consultationFee > 0 && (
               <div className="flex items-center justify-between">
                 <Text className="leading-normal text-muted-foreground">
-                  Consultation Fee
+                  {t('appointment:consultationFee')}
                 </Text>
                 <Text className="leading-normal font-medium text-[#333333]">
                   {formatPrice(consultationFee)}
@@ -524,7 +531,7 @@ export function ReviewStep() {
             {feeInfo.serviceFee > 0 && (
               <div className="flex items-center justify-between">
                 <Text className="leading-normal text-muted-foreground">
-                  Service Fee
+                  {t('appointment:serviceFee')}
                 </Text>
                 <Text className="leading-normal font-medium text-[#333333]">
                   {formatPrice(feeInfo.serviceFee)}
@@ -536,7 +543,7 @@ export function ReviewStep() {
                 size="lg_16"
                 className="font-semibold leading-[1.2] text-[#333333]"
               >
-                Total Amount
+                {t('appointment:totalAmount')}
               </Text>
               <Text
                 size="xl_18"
@@ -551,7 +558,7 @@ export function ReviewStep() {
         {consultationFee > 0 && (
           <div className="flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white">
             <Text size="lg_16" className="font-semibold leading-[1.2]">
-              Payment Methods
+              {t('appointment:paymentMethodsHeading')}
             </Text>
             {paymentMethods.map((method) => (
               <PaymentMethodItem

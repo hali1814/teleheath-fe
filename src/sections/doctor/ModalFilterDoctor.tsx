@@ -45,7 +45,7 @@ export default function ModalFilterDoctor({
   appliedFilter: FilterDoctor
   onApply: (filter: FilterDoctor) => void
 }) {
-  const { t, i18n } = useTranslation(['doctor', 'common'])
+  const { t, i18n } = useTranslation(['doctor', 'common', 'package'])
   const [draft, setDraft] = useState<FilterDoctor>(appliedFilter)
 
   useEffect(() => {
@@ -152,9 +152,9 @@ export default function ModalFilterDoctor({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Hospital</Text>
+            <Text>{t('package:filter.hospital')}</Text>
             <InputSelect
-              placeholder="Hospital"
+              placeholder={t('package:filter.hospital')}
               options={hospitalOptions}
               value={draft.hospitalId}
               onValueChange={(value) =>

@@ -17,6 +17,8 @@
       "phone": "លេខទូរស័ព្ទ"
     },
     "noData": "គ្មានទិន្នន័យ",
+    "noDataAvailable": "គ្មានទិន្នន័យ",
+    "markAllAsRead": "សម្គាល់ទាំងអស់ថាបានអាន",
     "actions": {
       "cancel": "បោះបង់",
       "done": "រួចរាល់",
@@ -28,8 +30,10 @@
       "clearAllFilters": "សង្គ្រោះចងការជ្រើសរើសចំណាំ",
       "apply": "បញ្ចូល",
       "onlineConsultation": "ការជ្រើសរើសចំណាំ",
-      "bookingOffline": "ការជ្រើសរើសចំណាំ"
+      "bookingOffline": "ការជ្រើសរើសចំណាំ",
+      "details": "ព័ត៌មានលម្អិត"
     },
+    "notificationsTitle": "ការជូនដំណឹង",
     "countries": {
       "all": "ទាំងអស់",
       "vietnam": "វៀតណាម",
@@ -86,6 +90,7 @@
       "bookNow": "ការជ្រើសរើសចំណាំ"
     },
     "topHospitals": "កម្ពុជា",
+    "specialties": "ឯកទេស",
     "specializedPackages": "ការជ្រើសរើសចំណាំ",
     "featuredDoctors": "ការជ្រើសរើសចំណាំ"
   },
@@ -230,6 +235,62 @@
       "title": "ការជ្រើសរើសចំណាំ",
       "bookByDoctor": "ការជ្រើសរើសចំណាំ",
       "bookByDoctorDescription": "ការជ្រើសរើសចំណាំ"
+    },
+    "schedule": {
+      "selectDate": "ជ្រើសរើសកាលបរិច្ឆេទ",
+      "availableTimeSlots": "ពេលវេលាទំនេរ",
+      "chooseTimePrefix": "ជ្រើសរើសពេលវេលាដែលសាកសមសម្រាប់អ្នកនៅ",
+      "morningSessions": "វគ្គព្រឹក",
+      "afternoonSessions": "វគ្គល្ងាច",
+      "noSlotsThisDate": "មិនមានការណាត់ជួបនៅថ្ងៃនេះទេ។ សូមជ្រើសរើសថ្ងៃផ្សេង។"
+    },
+    "specialtyStep": {
+      "searchPlaceholder": "ស្វែងរកឯកទេស",
+      "title": "ជ្រើសរើសឯកទេស",
+      "empty": "រកមិនឃើញឯកទេស។ សូមព្យាយាមម្តងទៀត។"
+    },
+    "serviceStep": {
+      "searchPlaceholder": "ស្វែងរកសេវាកម្ម",
+      "empty": "រកមិនឃើញសេវាកម្ម",
+      "filterAriaLabel": "តម្រង"
+    },
+    "roomStep": {
+      "empty": "រកមិនឃើញបន្ទប់",
+      "title": "ជ្រើសរើសបន្ទប់"
+    },
+    "patientStep": {
+      "searchPlaceholder": "ស្វែងរកប្រវត្តិអ្នកជំងឺ"
+    },
+    "medicalRecords": {
+      "title": "កំណត់ត្រាវេជ្ជសាស្ត្រ",
+      "intro": "ការផ្តល់ប្រវត្តិវេជ្ជសាស្ត្រជួយអ្នកឯកទេសរៀបចំសម្រាប់ការមកពិនិត្យរបស់អ្នក។",
+      "uploadTitle": "ផ្ទុកឯកសារវេជ្ជសាស្ត្រ",
+      "formatsHint": "PDF, JPG, PNG (អតិបរមា 10MB)",
+      "selectFiles": "ជ្រើសរើសឯកសារ",
+      "describeManual": "ពិពណ៌នាប្រវត្តិវេជ្ជសាស្ត្រដោយដៃ",
+      "manualPlaceholder": "ប្រាប់យើងបន្ថែមអំពីរោគសញ្ញាឬប្រវត្តិវេជ្ជសាស្ត្រ...",
+      "additionalNotes": "កំណត់ចំណាំបន្ថែម",
+      "notesPlaceholder": "ព័ត៌មានផ្សេងទៀតដែលអ្នកចង់ចែករំលែក?",
+      "uploading": "កំពុងផ្ទុក…",
+      "uploadFailed": "ផ្ទុកបរាជ័យ",
+      "uploadAriaLabel": "ផ្ទុកឯកសារវេជ្ជសាស្ត្រ",
+      "removeFileAria": "លុប {{fileName}}",
+      "toastFileNotAllowed": "{{fileName}} មិនត្រូវបានអនុញ្ញាតទេ។ មានតែ PNG, JPG, PDF។",
+      "toastFileTooLarge": "{{fileName}} លើស 10MB",
+      "toastUploadError": "មិនអាចផ្ទុក {{fileName}} បានទេ"
+    },
+    "pickup": {
+      "timeLabel": "ម៉ោងទៅយក",
+      "addressLabel": "អាសយដ្ឋានទៅយក",
+      "noteLabel": "កំណត់ចំណាំ",
+      "placeholderTime": "00:00",
+      "placeholderAddress": "អាសយដ្ឋានទៅយក",
+      "placeholderNote": "ឧទាហរណ៍៖ ចំនួនកៅអី"
+    },
+    "paymentMethodName": {
+      "khqr": "KHQR",
+      "emoney": "EMoney",
+      "aba": "ABA Bank"
     }
   },
   "appointment": {
@@ -303,6 +364,68 @@
     "detailBannerCancelled": "មូលហេតុនៃការលុបចោល",
     "detailBannerCompleted": "ការណាត់ជួបនេះបានបញ្ចប់រួចហើយ។",
     "medicalFileOpenInNewTab": "បើកក្នុងផ្ទាំងថ្មី",
-    "medicalFilePreviewUnsupported": "មិនអាចមើលជាមុនបានទេ។ សូមបើកតាម \"បើកក្នុងផ្ទាំងថ្មី\"។"
+    "medicalFilePreviewUnsupported": "មិនអាចមើលជាមុនបានទេ។ សូមបើកតាម \"បើកក្នុងផ្ទាំងថ្មី\"។",
+    "thisMonth": "ខែនេះ",
+    "months": {
+      "january": "មករា",
+      "february": "កុម្ភៈ",
+      "march": "មិនា",
+      "april": "មេសា",
+      "may": "ឧសភា",
+      "june": "មិថុនា",
+      "july": "កក្កដា",
+      "august": "សីហា",
+      "september": "កញ្ញា",
+      "october": "តុលា",
+      "november": "វិច្ឆិកា",
+      "december": "ធ្នូ"
+    },
+    "serviceFee": "ថ្លៃសេវា",
+    "selectedPackageTitle": "កញ្ចប់ដែលបានជ្រើសរើស",
+    "paymentMethodsHeading": "វិធីសាស្រ្តទូទាត់",
+    "specialtyWithName": "ឯកទេស៖ {{name}}",
+    "consultationWithAmount": "ការពិគ្រោះ៖ {{amount}}",
+    "addonServices": "សេវាកម្មបន្ថែម",
+    "addonPriceDisclaimer": "តម្លៃបង្ហាញសម្រាប់យោងតែប៉ុណ្ណោះ។ អ្នកប្រើប្រាស់បង់ផ្ទាល់ទៅអ្នកផ្តល់សេវា មិនមែនតាមកម្មវិធីទេ។",
+    "reviewBadgeBookByHospital": "កក់តាមមន្ទីរពេទ្យ",
+    "reviewBadgeBookByDoctor": "កក់តាមវេជ្ជបណ្ឌិត",
+    "reviewBadgeBookByPackage": "កក់តាមកញ្ចប់"
+  },
+  "search": {
+    "tabs": {
+      "all": "ទាំងអស់",
+      "hospitals": "មន្ទីរពេទ្យ",
+      "doctors": "វេជ្ជបណ្ឌិត",
+      "packages": "កញ្ចប់សេវា"
+    },
+    "resultsFound": "រកឃើញ {{count}} លទ្ធផល។",
+    "noResultsFor": "គ្មានលទ្ធផលសម្រាប់ <italic>\"{{query}}\"</italic>",
+    "recentSearches": "ការស្វែងរកថ្មីៗ",
+    "clear": "លុប",
+    "noSuggestionsFor": "គ្មានការណែនាំសម្រាប់ <italic>\"{{query}}\"</italic>",
+    "specialtySearchPlaceholder": "ស្វែងរកមន្ទីរពេទ្យ វេជ្ជបណ្ឌិត កញ្ចប់",
+    "specialtyIndexPlaceholder": "ស្វែងរកឯកទេស",
+    "empty": {
+      "specialties": "រកមិនឃើញឯកទេស។",
+      "hospitals": "រកមិនឃើញមន្ទីរពេទ្យ",
+      "doctors": "រកមិនឃើញវេជ្ជបណ្ឌិត",
+      "packages": "រកមិនឃើញកញ្ចប់",
+      "notifications": "គ្មានការជូនដំណឹង"
+    },
+    "removeItemAria": "លុប {{text}}",
+    "noRecentYet": "មិនទាន់មានការស្វែងរកថ្មីៗទេ។"
+  },
+  "payment": {
+    "generatingQr": "កំពុងបង្កើត QR…",
+    "loadQrError": "មិនអាចផ្ទុក QR ទូទាត់បានទេ។ សូមព្យាយាមម្តងទៀត។",
+    "retry": "ព្យាយាមម្តងទៀត",
+    "scanToPay": "ស្កេនដើម្បីបង់",
+    "or": "ឬ",
+    "downloadQr": "ទាញយក QR",
+    "khqrMobileBankingHint": "ហើយផ្ទុកឡើងទៅកម្មវិធីធនាគារចល័តដែលគាំទ្រ KHQR",
+    "subtotal": "សរុបរង",
+    "total": "សរុប",
+    "back": "ត្រឡប់ក្រោយ",
+    "khqrQrAlt": "QR ទូទាត់ KHQR"
   }
 }

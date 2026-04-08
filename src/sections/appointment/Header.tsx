@@ -99,7 +99,7 @@ export default function Header({ appointment }: AppointmentHeaderProps) {
                 size="base_14"
                 className="font-medium leading-[20px] text-text-primary"
               >
-                ${appointment?.medicalPackage?.price ?? 0}
+                {formatPrice(appointment?.medicalPackage?.price ?? 0)}
               </Text>
             </div>
           </div>

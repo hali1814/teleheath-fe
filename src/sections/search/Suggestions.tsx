@@ -1,6 +1,7 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import EmptyState from './EmptyState'
+import { TransNoSuggestionsFor } from './TransSearchEmptyMessages'
 
 const highlight = (text: string, query: string) => {
   if (!query) return [text]
@@ -70,8 +71,7 @@ export default function Suggestions({
         ))
       ) : (
         <EmptyState>
-          No suggestions found for{' '}
-          <span className="italic">&quot;{query}&quot;</span>
+          <TransNoSuggestionsFor query={query} />
         </EmptyState>
       )}
     </div>

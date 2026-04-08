@@ -7,12 +7,14 @@ import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-special
 import { keepPreviousData } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/app/specialty/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const { t } = useTranslation(['home', 'search'])
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 300)
 
@@ -26,10 +28,10 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title="Specialties" />
+      <Header title={t('home:specialties')} />
       <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
         <SearchBar
-          placeholder="Search for specialties"
+          placeholder={t('search:specialtyIndexPlaceholder')}
           value={query}
           onSearch={(value) => setQuery(value)}
           onClear={() => setQuery('')}
@@ -41,7 +43,7 @@ function RouteComponent() {
             ))}
           </div>
         ) : (
-          <EmptyState>No specialties found.</EmptyState>
+          <EmptyState>{t('search:empty.specialties')}</EmptyState>
         )}
       </div>
     </>

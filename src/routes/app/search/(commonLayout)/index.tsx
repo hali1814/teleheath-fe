@@ -6,6 +6,7 @@ import {
   SearchResults,
   SearchTabs,
   Suggestions,
+  TransNoResultsFor,
 } from '#/sections/search'
 import { keepPreviousData } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -132,7 +133,7 @@ function RouteComponent() {
         <>
           <SearchTabs value={tab} onChange={setTab} />
           <EmptyState>
-            No results for <span className="italic">&quot;{query}&quot;</span>
+            <TransNoResultsFor query={query} />
           </EmptyState>
         </>
       )}

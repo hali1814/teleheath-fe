@@ -73,7 +73,7 @@ function searchToFilter(s: PackageSearch): FilterPackage {
 
 function RouteComponent() {
   const [open, setOpen] = useState(false)
-  const { t } = useTranslation(['package'])
+  const { t } = useTranslation(['package', 'search'])
   const navigate = useNavigate()
   const search = Route.useSearch()
   const [keyword, setKeyword] = useState('')
@@ -127,7 +127,7 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title="Packages" />
+      <Header title={t('title')} />
       <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
         <div className="flex items-center gap-[10px]">
           <SearchBar
@@ -157,7 +157,7 @@ function RouteComponent() {
             ))}
           </>
         ) : (
-          <EmptyState>No packages found</EmptyState>
+          <EmptyState>{t('search:empty.packages')}</EmptyState>
         )}
       </div>
       <ModalFilterPackage
