@@ -109,6 +109,14 @@ axiosInstance.interceptors.response.use(
         return rejectAxiosError(error)
       }
 
+      // Refresh 401 must not enter the queue/retry branch: isRefreshing is still true,
+      // so we'd return a pending queue Promise and the outer await never rejects (no catch/finally).
+      if (originalRequest.url?.includes('/auth/token/refresh')) {
+        isRefreshing = false
+        processQueue(error, null)
+        return rejectAxiosError(error)
+      }
+
       // Thêm đoạn này
       if ((originalRequest as any)._retry) {
         handleLogoutClearData()
