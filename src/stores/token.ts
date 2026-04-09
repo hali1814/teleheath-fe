@@ -6,6 +6,8 @@ export type StoredTokens = {
   refreshToken: string | null
 }
 
+///
+
 function readStored(): StoredTokens {
   if (typeof localStorage === 'undefined') {
     return { accessToken: null, refreshToken: null }
