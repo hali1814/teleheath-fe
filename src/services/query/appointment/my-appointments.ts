@@ -31,6 +31,7 @@ interface AppointmentBranch {
   province: string
   address: string
   nameKh: string
+  googleMapsEmbed: string
 }
 
 interface AppointmentDoctor {
