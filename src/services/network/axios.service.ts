@@ -1,7 +1,12 @@
 import i18n, { type AppLanguage } from '#/i18n'
 import { getRouter } from '#/router-instance'
 import { clearProfile } from '#/stores/profile'
-import { clearTokens, getToken } from '#/stores/token'
+import {
+  clearTokens,
+  getRefreshToken,
+  getToken,
+  setTokens,
+} from '#/stores/token'
 import axios, {
   AxiosError,
   type AxiosResponse,
@@ -64,25 +69,96 @@ function rejectAxiosError(error: AxiosError) {
   )
 }
 
+let isRefreshing = false
+let failedQueue: {
+  resolve: (value: unknown) => void
+  reject: (reason?: any) => void
+}[] = []
+
+const processQueue = (error: AxiosError | null, token: string | null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error)
+    } else {
+      resolve(token)
+    }
+  })
+  failedQueue = []
+}
+
+const handleLogoutClearData = () => {
+  clearTokens()
+  clearProfile()
+  const r = getRouter()
+  if (r) {
+    void r.navigate({ to: '/app/entry', replace: true })
+  }
+}
+
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
     if (error?.response?.status === HttpStatusCode.Unauthorized) {
+      const originalRequest = error.config
       const path = typeof window !== 'undefined' ? window.location.pathname : ''
       if (path === '/app/entry' || path.startsWith('/app/entry/')) {
         return rejectAxiosError(error)
       }
 
-      clearTokens()
-      clearProfile()
-
-      const r = getRouter()
-      if (r) {
-        void r.navigate({ to: '/app/entry', replace: true })
-      } else if (typeof window !== 'undefined') {
-        window.location.assign('/app/entry')
+      if (!originalRequest) {
+        return rejectAxiosError(error)
       }
 
+      // Thêm đoạn này
+      if ((originalRequest as any)._retry) {
+        handleLogoutClearData()
+        return rejectAxiosError(error)
+      }
+
+      ;(originalRequest as any)._retry = true
+
+      if (getRefreshToken()) {
+        if (isRefreshing) {
+          return new Promise((resolve, reject) => {
+            failedQueue.push({ resolve, reject })
+          }).then((token) => {
+            originalRequest.headers['Authorization'] = 'Bearer ' + token
+            return axios(originalRequest)
+          })
+        }
+        isRefreshing = true
+        try {
+          const { data } = await axiosInstance.post('/auth/token/refresh', {
+            refreshToken: getRefreshToken(),
+          })
+
+          if (data.success) {
+            setTokens({
+              accessToken: data.data.accessToken,
+              refreshToken: data.data.refreshToken,
+            })
+
+            processQueue(null, data.data.accessToken)
+
+            originalRequest.headers['Authorization'] =
+              'Bearer ' + data.data.accessToken
+
+            return axios(originalRequest)
+          } else {
+            processQueue(error, null)
+            handleLogoutClearData()
+            return rejectAxiosError(error)
+          }
+        } catch (error) {
+          handleLogoutClearData()
+          processQueue(error as AxiosError, null)
+          return rejectAxiosError(error as AxiosError)
+        } finally {
+          isRefreshing = false
+        }
+      }
+
+      handleLogoutClearData()
       toast.error('Session expired', {
         description: 'Please login again.',
       })
