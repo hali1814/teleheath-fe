@@ -139,7 +139,7 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
             className={`h-[36px] gap-2 bg-[#FFF1F0]`}
             asChild
           >
-            <a href="https://maps.app.goo.gl/qyr2fdumqyVGx9AR6" target="_blank">
+            <a href={appointment.branch?.googleMapsEmbed ?? ''} target="_blank">
               <Icon name="map_blue" className="size-4" />
               <Text size="base_14" className="font-medium text-primary">
                 {t('getDirections')}
