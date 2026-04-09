@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 import GetStatus from './GetStatus'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import Image from '#/components/image'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
+import type { AppLanguage } from '#/i18n'
 
 interface AppointmentInformationProps {
   appointment?: MyAppointmentItem
@@ -74,9 +76,7 @@ export default function AppointmentInformation({
             size="base_14"
             className="font-normal leading-[21px] text-text-primary"
           >
-            {i18n.language === 'vi'
-              ? (appointment?.branch?.nameVi ?? '')
-              : (appointment?.branch?.nameEn ?? '')}
+            {appointment?.branch?.province}
           </Text>
         </div>
       </div>

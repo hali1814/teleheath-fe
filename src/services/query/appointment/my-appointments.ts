@@ -28,6 +28,7 @@ interface AppointmentBranch {
   branchId: string
   nameVi: string
   nameEn: string
+  province: string
   address: string
   nameKh: string
 }
