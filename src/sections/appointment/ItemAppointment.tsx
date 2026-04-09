@@ -133,13 +133,18 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
           <Button
             type="button"
             variant="ghost"
-            onClick={() => {}}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
             className={`h-[36px] gap-2 bg-[#FFF1F0]`}
+            asChild
           >
-            <Icon name="map_blue" className="size-4" />
-            <Text size="base_14" className="font-medium text-primary">
-              {t('getDirections')}
-            </Text>
+            <a href="https://maps.app.goo.gl/qyr2fdumqyVGx9AR6" target="_blank">
+              <Icon name="map_blue" className="size-4" />
+              <Text size="base_14" className="font-medium text-primary">
+                {t('getDirections')}
+              </Text>
+            </a>
           </Button>
         </div>
       </div>
