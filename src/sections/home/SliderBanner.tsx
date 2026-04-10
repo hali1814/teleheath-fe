@@ -1,5 +1,11 @@
 import Image from '#/components/image'
 import { cn } from '#/lib/utils'
+import {
+  useGetBannersQuery,
+  type BannersListRequest,
+} from '#/services/query/banner/list-banners'
+import { navigateBannerTarget } from '#/utils/banner-navigation.util'
+import { useRouter } from '@tanstack/react-router'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 import {
@@ -15,10 +21,14 @@ const scrollbarHide =
   '[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
 const AUTO_PLAY_INTERVAL_MS = 5000
 
+const BANNERS_QUERY_PARAMS: BannersListRequest = {}
+
 export type CarouselImageItem = {
   id: string | number
   src: string
   alt: string
+  /** Click slide (banner API: điều hướng theo navigationType / navigationTarget) */
+  onPress?: () => void
 }
 
 type CarouselProps = {
@@ -53,7 +63,7 @@ function getSlideCount(
  * Carousel cuộn ngang: mỗi card **full width** vùng nhìn thấy, `gap` giữa các slide (mặc định 8px),
  * chiều cao ảnh mặc định **180px**. Indicator: slide đang xem = pill; còn lại = chấm nhạt.
  */
-export default function Carousel({
+export function Carousel({
   className,
   trackClassName,
   gap = 8,
@@ -180,11 +190,26 @@ export default function Carousel({
               slideClassName,
             )}
           >
-            <Image
-              src={item.src}
-              alt={item.alt}
-              className={cn('h-full w-full object-cover', classNameImage)}
-            />
+            {item.onPress ? (
+              <button
+                type="button"
+                className="relative block h-full w-full cursor-pointer border-0 bg-transparent p-0"
+                onClick={item.onPress}
+                aria-label={item.alt}
+              >
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  className={cn('h-full w-full object-cover', classNameImage)}
+                />
+              </button>
+            ) : (
+              <Image
+                src={item.src}
+                alt={item.alt}
+                className={cn('h-full w-full object-cover', classNameImage)}
+              />
+            )}
           </CarouselSlide>
         ))
       : children
@@ -275,6 +300,56 @@ export default function Carousel({
       )}
     </div>
   )
+}
+
+type SliderBannerProps = Omit<
+  CarouselProps,
+  'items' | 'children'
+> & {
+  /** Ghi đè dữ liệu tĩnh (dev / story); mặc định lấy từ GET /banners */
+  items?: CarouselImageItem[]
+}
+
+/**
+ * Banner trang chủ: GET `/banners`, sort theo `sortOrder`, tap → INTERNAL/EXTERNAL.
+ */
+export default function SliderBanner({ items: itemsOverride, ...carouselProps }: SliderBannerProps) {
+  const router = useRouter()
+  const { data, isPending, isSuccess } = useGetBannersQuery({
+    params: BANNERS_QUERY_PARAMS,
+    staleTime: 1000 * 60 * 5,
+    isShowError: false,
+  })
+
+  const items = useMemo((): CarouselImageItem[] | undefined => {
+    if (itemsOverride?.length) return itemsOverride
+    if (!isSuccess || !data?.success) return undefined
+    const list = [...data.data].sort((a, b) => a.sortOrder - b.sortOrder)
+    return list.map((b) => ({
+      id: b.id,
+      src: b.imageUrl,
+      alt: `Banner ${b.id}`,
+      onPress: () =>
+        navigateBannerTarget(router, b.navigationTarget, b.navigationType),
+    }))
+  }, [itemsOverride, isSuccess, data, router])
+
+  if (isPending && !itemsOverride?.length) {
+    return (
+      <div
+        className={cn(
+          'w-full min-w-0 rounded-[16px] bg-muted/40 animate-pulse',
+          carouselProps.imageHeight ?? 'h-[180px]',
+          carouselProps.className,
+        )}
+        aria-hidden
+      />
+    )
+  }
+
+  if (!items?.length) return null
+
+  return <Carousel {...carouselProps} items={items} />
 }
 
 /** Mỗi card: full width track + snap + `data-carousel-slide` */

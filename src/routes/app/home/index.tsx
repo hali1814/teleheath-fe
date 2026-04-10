@@ -95,20 +95,7 @@ function RouteComponent() {
           onClick={() => router.navigate({ to: '/app/search' })}
         />
         {/* <MenuList /> */}
-        <SliderBanner
-          items={[
-            {
-              id: 1,
-              src: '/ads.png',
-              alt: 'Image 1',
-            },
-            {
-              id: 2,
-              src: '/thumbnail.png',
-              alt: 'Image 2',
-            },
-          ]}
-        />
+        <SliderBanner />
         {/* <PremiumService /> */}
         <CountryTab />
       </div>

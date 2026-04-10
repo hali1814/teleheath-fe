@@ -271,9 +271,18 @@ export function ReviewStep() {
                       i18n.language as AppLanguage,
                     )}
                   </Text>
-                  <Text size="sm_12" className="leading-[1.3] text-[#D33131]">
-                    {doctor?.specialties?.[0]?.name}
-                  </Text>
+                  {doctor?.specialties &&
+                    doctor?.specialties.length > 0 &&
+                    doctor?.specialties.map((specialty, index) => (
+                      <Text
+                        key={`${doctor?.doctorId}-spec-h-${index}`}
+                        size="sm_12"
+                        className="flex items-center gap-[8px] font-normal text-muted-foreground leading-[1.3]"
+                      >
+                        <div className="size-[4px] rounded-full bg-muted-foreground" />
+                        {specialty}
+                      </Text>
+                    ))}
                   <div className="flex items-center gap-[8px]">
                     <Icon
                       name="money"
@@ -387,9 +396,14 @@ export function ReviewStep() {
                   i18n.language as AppLanguage,
                 )}
               </Text>
-              {/* <Text className="leading-normal text-[#333333]">
-              {branch?.address}
-            </Text> */}
+              <Text className="leading-normal text-[#333333]">
+                {getLocalizedTextByLang(
+                  branch?.province?.nameVi ?? '',
+                  null,
+                  branch?.province?.nameEn ?? '',
+                  i18n.language as AppLanguage,
+                )}
+              </Text>
             </div>
           </div>
           <div className="flex items-start gap-[16px]">
