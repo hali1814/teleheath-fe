@@ -35,11 +35,20 @@ interface AppointmentBranch {
 }
 
 interface AppointmentDoctor {
-  doctorId: string
+  doctorId: number
+  name: string
   nameVi: string
+  nameKh: string
   nameEn: string
   avatarUrl: string
-  nameKh: string
+  specialties: {
+    id: number
+    name: string
+    nameVi: string
+    nameKh: string
+    nameEn: string
+    iconUrl: string
+  }[]
 }
 
 interface AppointmentBookedFor {

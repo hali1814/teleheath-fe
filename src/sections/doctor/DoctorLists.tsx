@@ -36,6 +36,7 @@ export default function DoctorLists({
             key={doctor.doctorId}
             {...doctor}
             className="w-[60%] max-w-[300px]"
+            truncateName={true}
           />
         ))}
         <div className="w-[16px]" />

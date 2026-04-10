@@ -65,8 +65,8 @@ export interface Education {
 
 export interface ApiDoctor {
   doctorId: number
-  hospitalId: number
-  country: Country
+  hospitalId: number | null
+  country: Country | null
   branches: Branch[]
   avatarUrl: string
   name: string

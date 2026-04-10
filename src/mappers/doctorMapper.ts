@@ -26,12 +26,14 @@ export const mapApiDoctor = (
     api?.specialties?.length > 0
       ? api.specialties.map((specialty) => specialty.name)
       : [],
-  countryName: getLocalizedTextByLang(
-    api.country.nameVi,
-    null,
-    api.country.nameEn,
-    language,
-  ),
+  countryName: api.country
+    ? getLocalizedTextByLang(
+        api.country.nameVi,
+        null,
+        api.country.nameEn,
+        language,
+      )
+    : '',
   experienceYears: api.experienceYears,
   consultationFee: api.consultationFee,
   bio: api.bio,
