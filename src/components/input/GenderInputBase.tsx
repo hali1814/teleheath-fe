@@ -21,6 +21,7 @@ export interface GenderInputBaseProps extends Omit<
 export default function GenderInputBase({
   label = '',
   isRequired = false,
+  msgError,
   value,
   defaultValue = 'MALE',
   onValueChange,
@@ -31,7 +32,7 @@ export default function GenderInputBase({
   const currentValue = value ?? defaultValue
 
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
+    <div className={cn('flex flex-col gap-1', className)}>
       {label ? (
         <Text size="base_14" className="text-text-secondary font-normal">
           {label}
@@ -40,7 +41,7 @@ export default function GenderInputBase({
       ) : null}
 
       <div
-        className="flex w-full gap-1 rounded-md border border-[#D331311A] bg-[#D331310D] p-1"
+        className={cn("flex w-full gap-1 rounded-md border bg-[#D331310D] p-1", !!msgError ? 'border-red-600' : 'border-[#D331311A]')}
         role="group"
         aria-label={label}
       >
@@ -90,6 +91,11 @@ export default function GenderInputBase({
           </Text>
         </Button>
       </div>
+      {!!msgError && (
+        <Text size="sm_12" className="text-red-600">
+          {msgError}
+        </Text>
+      )}
     </div>
   )
 }

@@ -1,10 +1,12 @@
 import { Input } from '#/components/ui/input'
+import { cn } from '#/lib/utils'
 import type { TextInputProps } from '#/types/input'
 import Text from '../text'
 
 export default function TextInputBase({
   label = '',
   isRequired = false,
+  msgError,
   ...props
 }: TextInputProps) {
   return (
@@ -17,8 +19,16 @@ export default function TextInputBase({
       )}
       <Input
         {...props}
-        className=" bg-white border-dust-red-1 border h-[45px] text-base"
+        className={cn(
+          ' bg-white border h-[45px] text-base',
+          !!msgError ? 'border-red-600' : 'border-dust-red-1',
+        )}
       />
+      {!!msgError && (
+        <Text size="sm_12" className="text-red-600">
+          {msgError}
+        </Text>
+      )}
     </div>
   )
 }

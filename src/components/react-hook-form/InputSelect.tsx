@@ -20,7 +20,10 @@ export default function InputSelect<TFieldValues extends FieldValues>({
   onChangeCallback,
   ...props
 }: InputSelectProps<TFieldValues>) {
-  const { field } = useController({
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
     name,
     control,
   })
@@ -36,6 +39,7 @@ export default function InputSelect<TFieldValues extends FieldValues>({
       value={field.value || undefined}
       defaultValue={defaultValue as string | undefined}
       onValueChange={onChange}
+      msgError={error?.message}
     />
   )
 }

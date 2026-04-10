@@ -20,6 +20,7 @@ export default function InputSelect({
   onValueChange,
   disabled = false,
   emptyMessage,
+  msgError,
 }: {
   className?: string
   label?: string
@@ -32,9 +33,10 @@ export default function InputSelect({
   disabled?: boolean
   /** Hiển thị trong dropdown khi `options` rỗng (vd. API không trả bản ghi). */
   emptyMessage?: string
+  msgError?: string
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       {label ? (
         <Text size="base_14" className="text-text-secondary font-normal">
           {label}
@@ -50,7 +52,8 @@ export default function InputSelect({
       >
         <SelectTrigger
           className={cn(
-            'w-full h-[45px] rounded-[6px] border border-dust-red-1 bg-white px-[12px] text-base disabled:opacity-100 disabled:text-muted-foreground',
+            'w-full h-[45px] rounded-[6px] border bg-white px-[12px] text-base disabled:opacity-100 disabled:text-muted-foreground',
+            !!msgError ? 'border-red-600' : 'border-dust-red-1',
             className,
           )}
         >
@@ -81,6 +84,11 @@ export default function InputSelect({
           </SelectGroup>
         </SelectContent>
       </Select>
+      {!!msgError && (
+        <Text size="sm_12" className="text-red-600">
+          {msgError}
+        </Text>
+      )}
     </div>
   )
 }
