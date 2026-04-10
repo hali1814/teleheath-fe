@@ -15,7 +15,7 @@ export default function DateInput<TFieldValues extends FieldValues>({
 }: DateInputProps<TFieldValues>) {
   const {
     field,
-    // fieldState: { error  },
+    fieldState: { error },
   } = useController({
     name,
     control,
@@ -27,6 +27,7 @@ export default function DateInput<TFieldValues extends FieldValues>({
       value={field.value}
       onValueChange={field.onChange}
       onBlur={field.onBlur}
+      msgError={error?.message}
     />
   )
 }

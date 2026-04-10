@@ -13,7 +13,7 @@ export default function TextInput<TFieldValues extends FieldValues>({
 }: TextInputProps<TFieldValues>) {
   const {
     field,
-    // fieldState: { error },
+    fieldState: { error },
   } = useController({
     name,
     control,
@@ -29,6 +29,7 @@ export default function TextInput<TFieldValues extends FieldValues>({
       value={field.value}
       onChange={onChange}
       onBlur={field.onBlur}
+      msgError={error?.message}
     />
   )
 }

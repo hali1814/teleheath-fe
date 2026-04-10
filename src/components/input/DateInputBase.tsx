@@ -30,6 +30,7 @@ export interface DateInputBaseProps extends Omit<
 export default function DateInputBase({
   label = '',
   isRequired = false,
+  msgError,
   value,
   defaultValue,
   onValueChange,
@@ -99,7 +100,7 @@ export default function DateInputBase({
         }}
         className="w-full"
       >
-        <InputGroup className="h-[45px] bg-white border-dust-red-1 border">
+        <InputGroup className={cn("h-[45px] bg-white border", !!msgError ? 'border-red-600' : 'border-dust-red-1')}>
           <InputGroupInput
             {...props}
             disabled={disabled}
@@ -116,6 +117,12 @@ export default function DateInputBase({
           </InputGroupAddon>
         </InputGroup>
       </div>
+
+      {!!msgError && (
+        <Text size="sm_12" className="text-red-600">
+          {msgError}
+        </Text>
+      )}
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent

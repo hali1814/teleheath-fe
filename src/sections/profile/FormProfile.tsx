@@ -15,9 +15,12 @@ import { useGetDistrictsQuery } from '#/services/query/profile/getDistrict'
 import { useGetPrecinctsQuery } from '#/services/query/profile/getPrecinct'
 import { useProfileStore } from '#/stores/profile'
 import { useRouter } from '@tanstack/react-router'
-import { useEffect, useMemo, useState } from 'react'
+import dayjs from 'dayjs'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { z } from 'zod/v4'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { useUpdateProfileMutation } from '#/services/query/profile/updateProfile'
 import { Icon } from '#/components/icon'
@@ -26,11 +29,11 @@ import {
   useDeletePatientProfileMutation,
   useUpdatePatientProfileMutation,
 } from '#/services/query/profile/patientProfile'
-import LoadingBlocking from '#/components/LoadingBlocking'
 import {
   useGetListFamilyQuery,
   useGetPatientProfileMutation,
 } from '#/services/query/profile/listFamily'
+import { useCheckPhoneMutation } from '#/services/query/profile/checkPhone'
 import type { HttpCommonResponse } from '#/services/network/http-request'
 import type { PatientProfileResponse } from '#/services/query/profile/getProfile'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
@@ -62,6 +65,9 @@ interface FormValues {
   avatarUrl: string
 }
 
+const stripCountryCode = (phone: string) =>
+  phone.replace(/^(\+855|00855|855)/, '').replace(/^0/, '')
+
 export default function FormProfile({
   containerClassName,
   idMember,
@@ -70,7 +76,67 @@ export default function FormProfile({
   onSuccess,
   pyPassCheckViewMode = false,
 }: FormProfileProps) {
-  const { control, setValue } = useForm<FormValues>({
+  const { t, i18n } = useTranslation(['profile', 'common'])
+
+  const formSchema = useMemo(
+    () =>
+      z.object({
+        fullName: z.string().nonempty(t('requiredFullName')),
+        dateOfBirth: z
+          .string()
+          .nonempty(t('requiredDateOfBirth'))
+          .refine(
+            (val) => dayjs(val, 'YYYY-MM-DD', true).isValid(),
+            t('invalidDateOfBirth'),
+          )
+          .refine(
+            (val) => !dayjs(val, 'YYYY-MM-DD', true).isAfter(dayjs()),
+            t('futureDateOfBirth'),
+          )
+          .refine(
+            (val) =>
+              dayjs().diff(dayjs(val, 'YYYY-MM-DD', true), 'year') <= 120,
+            t('tooOldDateOfBirth'),
+          ),
+        gender: z.enum(['MALE', 'FEMALE']),
+        phoneNumber: z
+          .string()
+          .nonempty(t('requiredPhoneNumber'))
+          .refine(
+            (val) =>
+              /^(1[0-8]|2[3-6]|3[1-68]|4[2-4]|5[2-5]|6[0-36-9]|7[0-9]|8[015-9]|9[0-35-9])\d{6,7}$/.test(
+                val,
+              ),
+            t('invalidPhoneFormat'),
+          ),
+        email: z
+          .string()
+          .refine(
+            (val) =>
+              !val.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim()),
+            t('invalidEmail'),
+          ),
+        country: z.string(),
+        relationship: isUserProfile
+          ? z.string()
+          : z.string().nonempty(t('requiredRelationship')),
+        city: z.string(),
+        district: z.string(),
+        precinct: z.string(),
+        street: z.string(),
+        avatarUrl: z.string(),
+      }),
+    [t, isUserProfile],
+  )
+
+  const {
+    control,
+    setValue,
+    setError,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema as any),
     defaultValues: {
       fullName: '',
       dateOfBirth: '',
@@ -87,7 +153,8 @@ export default function FormProfile({
     },
   })
 
-  const { t, i18n } = useTranslation(['profile', 'common'])
+  const originalPhoneRef = useRef('')
+
   const user = useProfileStore((s) => s.profile)
   const setProfile = useProfileStore((s) => s.setProfile)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -96,13 +163,32 @@ export default function FormProfile({
   const country = useWatch({ control, name: 'country' })
   const city = useWatch({ control, name: 'city' })
   const district = useWatch({ control, name: 'district' })
+  const dateOfBirth = useWatch({ control, name: 'dateOfBirth' })
   const formValues = useWatch({ control })
+
+  const isUnder18 = useMemo(() => {
+    if (!dateOfBirth) return false
+    const parsed = dayjs(dateOfBirth, 'YYYY-MM-DD', true)
+    if (!parsed.isValid()) return false
+    return dayjs().diff(parsed, 'year') < 18
+  }, [dateOfBirth])
   const [editModeMemberFamily, setEditModeMemberFamily] = useState<
     'edit' | 'view'
   >('view')
 
   const isViewMode =
     editModeMemberFamily === 'view' && Boolean(idMember) && !pyPassCheckViewMode
+
+  const isPhoneLockedByAge = isUnder18 && !isUserProfile
+
+  useEffect(() => {
+    if (isPhoneLockedByAge) {
+      const accountPhone = stripCountryCode(
+        user?.phone || user?.contactNumber || '',
+      )
+      setValue('phoneNumber', accountPhone)
+    }
+  }, [isPhoneLockedByAge, user, setValue])
 
   const countriesQuery = useGetCountriesQuery({
     params: {},
@@ -240,24 +326,8 @@ export default function FormProfile({
     if (!formValues) return false
     const w = formValues
 
-    if (!w.fullName?.trim()) {
-      toast.error(t('requiredFullName'))
-      return false
-    }
-    if (!w.dateOfBirth) {
-      toast.error(t('requiredDateOfBirth'))
-      return false
-    }
     if (!w.gender) {
       toast.error(t('requiredGender'))
-      return false
-    }
-    if (!w.phoneNumber?.trim()) {
-      toast.error(t('requiredPhoneNumber'))
-      return false
-    }
-    if (w.email?.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(w.email.trim())) {
-      toast.error(t('invalidEmail'))
       return false
     }
 
@@ -283,7 +353,9 @@ export default function FormProfile({
       setValue('fullName', data.data.fullName ?? '')
       setValue('dateOfBirth', data.data.dateOfBirth || data.data.dob || '')
       setValue('gender', (data.data.gender as GenderValue) ?? 'MALE')
-      setValue('phoneNumber', data.data.phone || data.data.contactNumber || '')
+      const rawPhone = data.data.phone || data.data.contactNumber || ''
+      originalPhoneRef.current = rawPhone
+      setValue('phoneNumber', stripCountryCode(rawPhone))
       setValue('email', data.data.email ?? '')
       setValue('country', data.data.nationality ?? '')
       setValue('avatarUrl', data.data.avatarUrl ?? '')
@@ -299,7 +371,9 @@ export default function FormProfile({
     setValue('fullName', user?.fullName ?? '')
     setValue('dateOfBirth', user?.dob || user?.dateOfBirth || '')
     setValue('gender', (user?.gender as GenderValue) ?? 'MALE')
-    setValue('phoneNumber', user?.phone || user?.contactNumber || '')
+    const rawPhone = user?.phone || user?.contactNumber || ''
+    originalPhoneRef.current = rawPhone
+    setValue('phoneNumber', stripCountryCode(rawPhone))
     setValue('email', user?.email ?? '')
     setValue('country', user?.nationality ?? '')
     setValue('avatarUrl', user?.avatarUrl ?? '')
@@ -331,35 +405,45 @@ export default function FormProfile({
   } = useUpdatePatientProfileMutation()
   const { mutateAsync: deletePatientProfile, isPending: isDeletingProfile } =
     useDeletePatientProfileMutation()
-
-  const handleSaveProfile = async () => {
+  const { mutateAsync: checkPhone } = useCheckPhoneMutation()
+  const onValidSubmit = async (data: FormValues) => {
     if (!validateAndToast()) return
 
+    if (!isUserProfile && !isPhoneLockedByAge) {
+      const res = await checkPhone(
+        data.phoneNumber?.startsWith('+855')
+          ? data.phoneNumber
+          : `+855${data.phoneNumber}`,
+      )
+      if (res.data?.exists && res.data?.phone !== originalPhoneRef.current) {
+        setError('phoneNumber', { message: t('phoneLinkedToProfile') })
+        return
+      }
+    }
+
     const request = {
-      name: formValues.fullName!,
-      dob: formValues.dateOfBirth!,
-      gender: formValues.gender!,
-      phone: formValues.phoneNumber?.startsWith('+855')
-        ? formValues.phoneNumber
-        : `+855${formValues.phoneNumber}`,
-      email: formValues.email || '',
-      avatarUrl: formValues.avatarUrl,
-      relationship: formValues.relationship,
-      nationality: formValues.country,
+      name: data.fullName,
+      dob: data.dateOfBirth,
+      gender: data.gender,
+      phone: data.phoneNumber?.startsWith('+855')
+        ? data.phoneNumber
+        : `+855${data.phoneNumber}`,
+      email: data.email || '',
+      avatarUrl: data.avatarUrl,
+      relationship: data.relationship,
+      nationality: data.country,
       address: {
-        countryCode: formValues.country,
-        cityId: Number(formValues.city),
-        districtId: Number(formValues.district),
-        precinctId: Number(formValues.precinct),
-        detail: formValues.street,
-        cityName: cityOptions.find((c) => c.value === formValues.city)?.label,
-        districtName: districtOptions.find(
-          (d) => d.value === formValues.district,
-        )?.label,
-        precinctName: precinctOptions.find(
-          (p) => p.value === formValues.precinct,
-        )?.label,
-        countryName: countryOptions.find((c) => c.value === formValues.country)
+        countryCode: data.country,
+        cityId: Number(data.city),
+        districtId: Number(data.district),
+        precinctId: Number(data.precinct),
+        detail: data.street,
+        cityName: cityOptions.find((c) => c.value === data.city)?.label,
+        districtName: districtOptions.find((d) => d.value === data.district)
+          ?.label,
+        precinctName: precinctOptions.find((p) => p.value === data.precinct)
+          ?.label,
+        countryName: countryOptions.find((c) => c.value === data.country)
           ?.label,
       },
     }
@@ -389,6 +473,8 @@ export default function FormProfile({
       }
     }
   }
+
+  const handleSaveProfile = handleSubmit(onValidSubmit)
 
   const handleConfirmDelete = async () => {
     if (!idMember) return
@@ -522,7 +608,14 @@ export default function FormProfile({
             {t('phoneNumber')}
             <span className="ml-1 text-primary">*</span>
           </Text>
-          <div className="flex h-[45px] overflow-hidden rounded-[6px] border border-dust-red-1 bg-white">
+          <div
+            className={cn(
+              'flex h-[45px] overflow-hidden rounded-[6px] border bg-white',
+              errors.phoneNumber ? 'border-red-600' : 'border-dust-red-1',
+              (isViewMode || isPhoneLockedByAge) &&
+                'opacity-50 pointer-events-none cursor-not-allowed',
+            )}
+          >
             <div className="flex h-full items-center gap-[6px] border-r border-dust-red-1 bg-dust-red-1 px-[10px]">
               <FlagCambodia className="h-4 w-6 shrink-0" aria-hidden="true" />
               <Text size="sm_12" className="font-normal text-[#1A1A1A]">
@@ -531,18 +624,29 @@ export default function FormProfile({
             </div>
             <input
               value={formValues.phoneNumber ?? ''}
-              onChange={(event) => setValue('phoneNumber', event.target.value)}
+              onChange={(event) => {
+                const digits = event.target.value
+                  .replace(/\D/g, '')
+                  .replace(/^0/, '')
+                setValue('phoneNumber', digits, { shouldValidate: true })
+              }}
               onBlur={() => {}}
               name="phoneNumber"
               ref={() => {}}
               type="tel"
-              inputMode="tel"
-              disabled={isViewMode}
-              readOnly={isViewMode}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              disabled={isViewMode || isPhoneLockedByAge}
+              readOnly={isViewMode || isPhoneLockedByAge}
               placeholder={t('phoneNumber')}
               className="h-full w-full bg-transparent px-3 text-base text-[#1A1A1A] outline-none placeholder:text-muted-foreground"
             />
           </div>
+          {errors.phoneNumber && (
+            <Text size="sm_12" className="text-red-600">
+              {errors.phoneNumber.message}
+            </Text>
+          )}
         </div>
 
         <TextInput
