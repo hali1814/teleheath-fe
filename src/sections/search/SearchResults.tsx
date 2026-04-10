@@ -121,7 +121,7 @@ export default function SearchResults({
           </Section>
         ) : (
           <EmptyState>
-            {t('noResultsFor', { query })}
+            <TransNoResultsFor query={query} />
           </EmptyState>
         )}
       </div>

@@ -13,6 +13,7 @@ type DoctorCardProps = {
   variant?: 'vertical' | 'horizontal'
   hideBookAppointment?: boolean
   sizeAvatar?: string
+  truncateName?: boolean
 } & Doctor
 
 export default function DoctorCard({
@@ -20,6 +21,7 @@ export default function DoctorCard({
   variant = 'vertical',
   hideBookAppointment = false,
   sizeAvatar,
+  truncateName = false,
   ...doctor
 }: DoctorCardProps) {
   const { t } = useTranslation(['doctor', 'common'])
@@ -29,7 +31,6 @@ export default function DoctorCard({
     name,
     experienceYears,
     specialties,
-    consultationFee,
     countryName,
   } = doctor
   const avatarSize = sizeAvatar
@@ -59,8 +60,14 @@ export default function DoctorCard({
             </Text>
           </AvatarFallback>
         </Avatar>
-        <div className="w-full flex flex-col items-start gap-[8px]">
-          <Text size="base_14" className="font-semibold leading-[1.2]">
+        <div className="min-w-0 flex-1 flex flex-col items-start gap-[8px]">
+          <Text
+            size="base_14"
+            className={cn(
+              'font-semibold leading-[1.2]',
+              truncateName && 'w-full min-w-0 truncate',
+            )}
+          >
             {name}
           </Text>
           {specialties?.length > 0 &&
@@ -134,9 +141,23 @@ export default function DoctorCard({
           className="text-muted-foreground leading-[1.3]"
           textSize="xs_10"
         />
-        <Text size="base_14" className="font-semibold leading-[1.2]">
-          {name}
-        </Text>
+        {truncateName ? (
+          <div className="w-full min-w-0 self-stretch text-center">
+            <Text
+              size="base_14"
+              className="w-full min-w-0 truncate text-center font-semibold leading-[1.2]"
+            >
+              {name}
+            </Text>
+          </div>
+        ) : (
+          <Text
+            size="base_14"
+            className="text-center font-semibold leading-[1.2]"
+          >
+            {name}
+          </Text>
+        )}
         {specialties?.length > 0 &&
           specialties.map((specialty, index) => (
             <Text

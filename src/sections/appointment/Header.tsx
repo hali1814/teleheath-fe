@@ -48,7 +48,18 @@ export default function Header({ appointment }: AppointmentHeaderProps) {
               size="sm_12"
               className="font-normal leading-[16px] text-secondary"
             >
-              {appointment?.specialty?.name ?? ''}
+              {appointment?.doctor?.specialties &&
+                appointment?.doctor?.specialties.length > 0 &&
+                appointment?.doctor?.specialties.map((specialty, index) => (
+                  <Text
+                    key={`${appointment?.doctor?.doctorId}-spec-h-${index}`}
+                    size="sm_12"
+                    className="flex items-center gap-[8px] font-normal text-muted-foreground leading-[1.3]"
+                  >
+                    <div className="size-[4px] rounded-full bg-muted-foreground" />
+                    {specialty.name}
+                  </Text>
+                ))}
             </Text>
             <div className="flex items-center gap-2">
               <Icon name="money_appointment" className="size-4" />
