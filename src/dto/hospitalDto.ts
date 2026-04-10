@@ -85,7 +85,6 @@ export interface ApiHospital {
   isHeadquarters: boolean
   contactNumber1: string
   workEmail: string
-  province: string // Unclear if this is province name or object — kept as string as per sample
   detailedAddress: string
   googleMapsEmbed: string
   depositRequired: boolean

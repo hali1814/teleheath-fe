@@ -1,11 +1,12 @@
 import type { ListFamilyPatient } from '#/services/query/profile/listFamily'
-import type { Branch, Hospital, Service } from '#/types/hospital'
+import type { Branch } from '#/types/hospital'
 import type { Doctor } from '#/types/doctor'
 import type { Specialty } from '#/types/specialty'
 import { create } from 'zustand'
 import type { Package } from '#/types/package'
 import type { Room } from '#/services/query/branch/list-room'
 import type { ServiceType } from '#/types/service'
+import type { Hospital } from '#/entities/hospitalEntity'
 
 export type FileRowStatus = 'uploading' | 'success' | 'error'
 
@@ -24,7 +25,7 @@ const defaultFeeInfo = {
 
 export type BookingState = {
   step: number
-  hospital?: Partial<Hospital>
+  hospital?: Hospital
   branch?: Branch
   room?: Room
   doctor?: Partial<Doctor>

@@ -98,7 +98,11 @@ export default function AppointmentInformation({
           >
             {appointment?.branch?.address}
           </Text>
-          <div className="mt-[2px] flex items-center gap-1">
+          <a
+            href={appointment?.branch?.googleMapsEmbed ?? ''}
+            target="_blank"
+            className="mt-[2px] flex items-center gap-1"
+          >
             <Icon
               name="map_outline"
               color="#A8071A"
@@ -110,7 +114,7 @@ export default function AppointmentInformation({
             >
               {t('map')}
             </Text>
-          </div>
+          </a>
         </div>
       </div>
 
