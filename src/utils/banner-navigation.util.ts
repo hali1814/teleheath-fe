@@ -34,5 +34,5 @@ export function navigateBannerTarget(
   }
 
   const href = normalizeInternalBannerHref(target)
-  router.history.push(href)
+  router.navigate({ href })
 }
