@@ -26,7 +26,7 @@ export const mapApiDoctor = (
     api?.specialties?.length > 0
       ? api.specialties.map((specialty) => specialty.name)
       : [],
-  countryName: api.country
+  countryName: api?.country
     ? getLocalizedTextByLang(
         api.country.nameVi,
         null,
