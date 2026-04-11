@@ -12,7 +12,7 @@ export const mapApiPackage = (
   description: api.description,
   imageUrl: api.imageUrl,
   price: api.price,
-  hospitalName: api.hospital.name,
+  hospitalName: api?.hospital?.name,
   countryName:
     api?.countries?.length > 0
       ? getLocalizedTextByLang(
