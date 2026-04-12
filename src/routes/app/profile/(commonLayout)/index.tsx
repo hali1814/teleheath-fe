@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { BottomSheetTranslate } from '#/sections/profile/BottomSheetTranslate'
 import { useProfileStore } from '#/stores/profile'
 import { concatAddress, formatDate, getInitialsFromName } from '#/utils'
+import RequireLogin from '#/components/RequireLogin'
 
 export const Route = createFileRoute('/app/profile/(commonLayout)/')({
   component: RouteComponent,
@@ -23,6 +24,10 @@ function RouteComponent() {
   const navigate = useNavigate()
   const [openBottomSheet, setOpenBottomSheet] = useState(false)
   const user = useProfileStore((s) => s.profile)
+
+  if (!user?.id) {
+    return <RequireLogin />
+  }
 
   return (
     <div>

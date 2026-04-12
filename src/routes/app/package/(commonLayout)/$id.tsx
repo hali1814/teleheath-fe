@@ -4,7 +4,9 @@ import {
   WhatIsIncluded,
 } from '#/sections/package'
 import Image from '#/components/image'
-import { createFileRoute, Link, useParams } from '@tanstack/react-router'
+import { useProfileStore } from '#/stores/profile'
+import { goBackToAppMobile } from '#/utils/auth'
+import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { Button } from '#/components/ui/button'
 import Text from '#/components/text'
 import { Icon } from '#/components/icon'
@@ -19,6 +21,8 @@ export const Route = createFileRoute('/app/package/(commonLayout)/$id')({
 function RouteComponent() {
   const { t } = useTranslation(['package', 'common'])
   const { id } = useParams({ from: '/app/package/(commonLayout)/$id' })
+  const profile = useProfileStore((s) => s.profile)
+  const navigate = useNavigate()
 
   const { data: { data: packageData } = { data: null } } =
     useGetPackageDetailQuery({
@@ -55,20 +59,24 @@ function RouteComponent() {
         <div className="fixed bottom-0 left-0 right-0 px-[20px] pt-[10px] pb-[35px] bg-background">
           <Button
             className="w-full h-[45px] bg-primary gap-[10px] rounded-[40px]"
-            asChild
+            onClick={() => {
+              if (!profile?.id) {
+                goBackToAppMobile()
+                return
+              }
+              navigate({
+                to: '/app/book-appointment/package/$packageId',
+                params: { packageId: id },
+              })
+            }}
           >
-            <Link
-              to="/app/book-appointment/package/$packageId"
-              params={{ packageId: id }}
-            >
-              <Icon
-                name="book_appointment"
-                className="w-[20px] h-[20px] text-white"
-              />
-              <Text className="leading-normal font-medium text-white">
-                {t('common:actions.bookAppointment')}
-              </Text>
-            </Link>
+            <Icon
+              name="book_appointment"
+              className="w-[20px] h-[20px] text-white"
+            />
+            <Text className="leading-normal font-medium text-white">
+              {t('common:actions.bookAppointment')}
+            </Text>
           </Button>
         </div>
       </div>

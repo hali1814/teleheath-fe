@@ -6,8 +6,6 @@ import {
 import { DoctorLists } from '#/sections/doctor'
 import { HospitalList } from '#/sections/hospital'
 import { PackageList } from '#/sections/package'
-import { useGetProfileQuery } from '#/services/query/profile/getProfile'
-import { useProfileStore } from '#/stores/profile'
 import { useGetListPackagesQuery } from '#/services/query/package/list-packages'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
@@ -32,17 +30,6 @@ function RouteComponent() {
   const viewAllLabel = t('common:actions.viewAll')
   const router = useRouter()
   const { activeCountry } = useAppStore()
-
-  useGetProfileQuery({
-    params: {},
-    onSuccess: (data) => {
-      if (data.success) {
-        useProfileStore.getState().setProfile(data.data)
-      }
-    },
-    staleTime: 1000 * 60 * 30,
-    gcTime: 1000 * 60 * 30,
-  })
 
   const { data, isPending: hospitalsPending } = useGetTopHospitalsQuery({
     params: {

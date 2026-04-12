@@ -6,7 +6,9 @@ import { Button } from '#/components/ui/button'
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
 import { useTranslation } from 'react-i18next'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { useProfileStore } from '#/stores/profile'
+import { goBackToAppMobile } from '#/utils/auth'
 import type { Hospital } from '#/entities/hospitalEntity'
 
 type HospitalCardProps = {
@@ -30,6 +32,8 @@ export default function HospitalCard({
   const { hospitalId, thumbnailUrl, name, emergency24h, country, address } =
     hospital
   const { t } = useTranslation(['common'])
+  const profile = useProfileStore((s) => s.profile)
+  const navigate = useNavigate()
   const imgHeight = size === 'sm' ? 'h-[96px]' : 'h-[180px]'
   const textSize = size === 'sm' ? 'sm_12' : 'lg_16'
   const gap = size === 'sm' ? 'gap-[8px]' : 'gap-[10px]'
@@ -83,23 +87,31 @@ export default function HospitalCard({
           />
         </div>
         {!hideBookAppointment && (
-          <Button className={cn('w-full', heightButton, bgColor)} asChild>
-            <Link
-              to="/app/book-appointment/hospital/$hospitalId"
-              params={{ hospitalId: hospitalId.toString() }}
+          <Button
+            className={cn('w-full', heightButton, bgColor)}
+            onClick={(e) => {
+              e.preventDefault()
+              if (!profile?.id) {
+                goBackToAppMobile()
+                return
+              }
+              navigate({
+                to: '/app/book-appointment/hospital/$hospitalId',
+                params: { hospitalId: hospitalId.toString() },
+              })
+            }}
+          >
+            <Icon
+              name="book_appointment"
+              color={iconColor}
+              className="w-[16px] h-[16px]"
+            />
+            <Text
+              size="sm_12"
+              className={cn('font-medium leading-[1.3]', textColor)}
             >
-              <Icon
-                name="book_appointment"
-                color={iconColor}
-                className="w-[16px] h-[16px]"
-              />
-              <Text
-                size="sm_12"
-                className={cn('font-medium leading-[1.3]', textColor)}
-              >
-                {t('actions.bookAppointment')}
-              </Text>
-            </Link>
+              {t('actions.bookAppointment')}
+            </Text>
           </Button>
         )}
       </div>

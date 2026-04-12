@@ -5,7 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { useProfileStore } from '#/stores/profile'
+import { goBackToAppMobile } from '#/utils/auth'
 import type { Doctor } from '#/entities/doctorEntity'
 
 type DoctorCardProps = {
@@ -25,6 +27,8 @@ export default function DoctorCard({
   ...doctor
 }: DoctorCardProps) {
   const { t } = useTranslation(['doctor', 'common'])
+  const profile = useProfileStore((s) => s.profile)
+  const navigate = useNavigate()
   const {
     doctorId,
     avatarUrl,
@@ -94,23 +98,31 @@ export default function DoctorCard({
             </Text>
           </div>
           {!hideBookAppointment && (
-            <Button className="w-full h-[32px] bg-dust-red-1" asChild>
-              <Link
-                to="/app/book-appointment/doctor/$doctorId"
-                params={{ doctorId: doctorId.toString() }}
+            <Button
+              className="w-full h-[32px] bg-dust-red-1"
+              onClick={(e) => {
+                e.preventDefault()
+                if (!profile?.id) {
+                  goBackToAppMobile()
+                  return
+                }
+                navigate({
+                  to: '/app/book-appointment/doctor/$doctorId',
+                  params: { doctorId: doctorId.toString() },
+                })
+              }}
+            >
+              <Icon
+                name="book_appointment"
+                color="var(--primary)"
+                className="w-[16px] h-[16px]"
+              />
+              <Text
+                size="sm_12"
+                className="font-medium leading-[1.3] text-primary"
               >
-                <Icon
-                  name="book_appointment"
-                  color="var(--primary)"
-                  className="w-[16px] h-[16px]"
-                />
-                <Text
-                  size="sm_12"
-                  className="font-medium leading-[1.3] text-primary"
-                >
-                  {t('common:actions.bookAppointment')}
-                </Text>
-              </Link>
+                {t('common:actions.bookAppointment')}
+              </Text>
             </Button>
           )}
         </div>
@@ -170,23 +182,31 @@ export default function DoctorCard({
             </Text>
           ))}
         {!hideBookAppointment && (
-          <Button className="w-full h-[32px] bg-dust-red-1" asChild>
-            <Link
-              to="/app/book-appointment/doctor/$doctorId"
-              params={{ doctorId: doctorId.toString() }}
+          <Button
+            className="w-full h-[32px] bg-dust-red-1"
+            onClick={(e) => {
+              e.preventDefault()
+              if (!profile?.id) {
+                goBackToAppMobile()
+                return
+              }
+              navigate({
+                to: '/app/book-appointment/doctor/$doctorId',
+                params: { doctorId: doctorId.toString() },
+              })
+            }}
+          >
+            <Icon
+              name="book_appointment"
+              color="var(--primary)"
+              className="w-[16px] h-[16px]"
+            />
+            <Text
+              size="sm_12"
+              className="font-medium leading-[1.3] text-primary"
             >
-              <Icon
-                name="book_appointment"
-                color="var(--primary)"
-                className="w-[16px] h-[16px]"
-              />
-              <Text
-                size="sm_12"
-                className="font-medium leading-[1.3] text-primary"
-              >
-                {t('common:actions.bookAppointment')}
-              </Text>
-            </Link>
+              {t('common:actions.bookAppointment')}
+            </Text>
           </Button>
         )}
       </div>
