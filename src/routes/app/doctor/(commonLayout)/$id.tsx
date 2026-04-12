@@ -43,12 +43,11 @@ function RouteComponent() {
         {doctorData?.branches && doctorData?.branches?.length > 0 && (
           <DoctorCurrentLocation branches={doctorData?.branches ?? []} />
         )}
-        {doctorData?.educations?.length &&
-          doctorData?.educations?.length > 0 && (
-            <DoctorEducationCertifications
-              educations={doctorData?.educations ?? []}
-            />
-          )}
+        {(doctorData?.educations?.length ?? 0) > 0 && (
+          <DoctorEducationCertifications
+            educations={doctorData?.educations ?? []}
+          />
+        )}
         <DoctorActions />
       </div>
     </>
