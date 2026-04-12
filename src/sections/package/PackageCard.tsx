@@ -6,7 +6,9 @@ import Text from '#/components/text'
 import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import { useTranslation } from 'react-i18next'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { useProfileStore } from '#/stores/profile'
+import { goBackToAppMobile } from '#/utils/auth'
 import type { Package } from '#/entities/packageEntity'
 
 type PackageCardProps = {
@@ -26,6 +28,8 @@ export default function PackageCard({
   const { packageId, name, countryName, price, imageUrl, hospitalName } =
     packageData
   const { t } = useTranslation(['common'])
+  const profile = useProfileStore((s) => s.profile)
+  const navigate = useNavigate()
 
   const thumbnailSize =
     sizeThumbnail === 'fixed'
@@ -75,23 +79,31 @@ export default function PackageCard({
           {formatPrice(price)}
         </Text>
         {!hideBookAppointment && (
-          <Button className="w-full h-[32px] bg-dust-red-1" asChild>
-            <Link
-              to="/app/book-appointment/package/$packageId"
-              params={{ packageId: packageId.toString() }}
+          <Button
+            className="w-full h-[32px] bg-dust-red-1"
+            onClick={(e) => {
+              e.preventDefault()
+              if (!profile?.id) {
+                goBackToAppMobile()
+                return
+              }
+              navigate({
+                to: '/app/book-appointment/package/$packageId',
+                params: { packageId: packageId.toString() },
+              })
+            }}
+          >
+            <Icon
+              name="book_appointment"
+              color="var(--primary)"
+              className="w-[16px] h-[16px]"
+            />
+            <Text
+              size="sm_12"
+              className="font-medium leading-[1.3] text-primary"
             >
-              <Icon
-                name="book_appointment"
-                color="var(--primary)"
-                className="w-[16px] h-[16px]"
-              />
-              <Text
-                size="sm_12"
-                className="font-medium leading-[1.3] text-primary"
-              >
-                {t('actions.bookAppointment')}
-              </Text>
-            </Link>
+              {t('actions.bookAppointment')}
+            </Text>
           </Button>
         )}
       </div>

@@ -1,8 +1,8 @@
 import { Icon } from '#/components/icon'
-import Image from '#/components/image'
 import Text from '#/components/text'
 import { Badge } from '#/components/ui/badge'
 import { useGetListNotificationQuery } from '#/services/query/notification/list-notification'
+import { useProfileStore } from '#/stores/profile'
 import { Link, useRouter } from '@tanstack/react-router'
 
 export default function Header({
@@ -15,11 +15,12 @@ export default function Header({
   isCenter?: boolean
 }) {
   const router = useRouter()
-
+  const { profile } = useProfileStore()
   const { data } = useGetListNotificationQuery({
     params: {
       statuses: 'QUEUED',
     },
+    enabled: !!profile?.id,
   })
 
   const notifications = data?.data ?? []
@@ -31,18 +32,20 @@ export default function Header({
           <Link to="/app/home">
             <Icon name="logo" className="w-[155px] h-[48px]" />
           </Link>
-          <Link to="/app/notification" className="relative">
-            <Icon
-              name="notification"
-              className="w-[21px] h-[21px]"
-              color="#B3B3B3"
-            />
-            <Badge className="absolute -top-1 -right-1 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
-              <Text size="xs_10" className="leading-[1.3] text-white">
-                {notifications.length}
-              </Text>
-            </Badge>
-          </Link>
+          {!!profile?.id && (
+            <Link to="/app/notification" className="relative">
+              <Icon
+                name="notification"
+                className="w-[21px] h-[21px]"
+                color="#B3B3B3"
+              />
+              <Badge className="absolute -top-1 -right-1 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
+                <Text size="xs_10" className="leading-[1.3] text-white">
+                  {notifications.length}
+                </Text>
+              </Badge>
+            </Link>
+          )}
         </div>
       ) : isCenter ? (
         <div className="flex h-full items-center justify-center">

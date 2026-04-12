@@ -5,10 +5,11 @@ import EmptyAppointment from '#/sections/appointment/EmptyAppointment'
 import ItemAppointment from '#/sections/appointment/ItemAppointment'
 import Text from '#/components/text'
 import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appointments'
-import LoadingBlocking from '#/components/LoadingBlocking'
 import { groupAppointmentsByUpcomingWindow } from '#/utils'
 import dayjs from 'dayjs'
 import LoadingState from '#/components/LoadingState'
+import { useProfileStore } from '#/stores/profile'
+import RequireLogin from '#/components/RequireLogin'
 
 export const Route = createFileRoute('/app/appointments/(commonLayout)/')({
   component: RouteComponent,
@@ -16,7 +17,7 @@ export const Route = createFileRoute('/app/appointments/(commonLayout)/')({
 
 function RouteComponent() {
   const parentRef = useRef<HTMLDivElement>(null)
-
+  const { profile } = useProfileStore()
   const { data: appointments, isLoading: isLoadingAppointments } =
     useGetMyAppointmentsQuery({
       params: {
@@ -27,7 +28,12 @@ function RouteComponent() {
         sortDir: 'DESC',
       },
       staleTime: 0,
+      enabled: !!profile?.id,
     })
+
+  if (!profile?.id) {
+    return <RequireLogin />
+  }
 
   const groupedAppointments = useMemo(() => {
     return groupAppointmentsByUpcomingWindow(appointments?.data?.content ?? [])

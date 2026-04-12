@@ -10,7 +10,9 @@ import {
   BranchList,
 } from '#/sections/hospital'
 import { useGetHospitalDetailQuery } from '#/services/query/hospital/hospital-detail'
-import { createFileRoute, Link, useParams } from '@tanstack/react-router'
+import { useProfileStore } from '#/stores/profile'
+import { goBackToAppMobile } from '#/utils/auth'
+import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/app/hospital/(commonLayout)/$id')({
@@ -20,6 +22,8 @@ export const Route = createFileRoute('/app/hospital/(commonLayout)/$id')({
 function RouteComponent() {
   const { t } = useTranslation(['hospital', 'common'])
   const { id } = useParams({ from: '/app/hospital/(commonLayout)/$id' })
+  const profile = useProfileStore((s) => s.profile)
+  const navigate = useNavigate()
   const { data: { data: hospitalData } = { data: null } } =
     useGetHospitalDetailQuery({
       params: {
@@ -50,21 +54,25 @@ function RouteComponent() {
         <div className="fixed bottom-0 left-0 right-0 pt-[10px] pb-[35px] px-[20px] bg-background">
           <Button
             className="w-full h-[45px] bg-primary rounded-[40px] gap-[10px]"
-            asChild
+            onClick={() => {
+              if (!profile?.id) {
+                goBackToAppMobile()
+                return
+              }
+              navigate({
+                to: '/app/book-appointment/hospital/$hospitalId',
+                params: { hospitalId: id },
+              })
+            }}
           >
-            <Link
-              to="/app/book-appointment/hospital/$hospitalId"
-              params={{ hospitalId: id }}
-            >
-              <Icon
-                name="book_appointment"
-                color="white"
-                className="w-[20px] h-[20px]"
-              />
-              <Text className="font-medium leading-normal text-white">
-                {t('common:actions.bookAppointment')}
-              </Text>
-            </Link>
+            <Icon
+              name="book_appointment"
+              color="white"
+              className="w-[20px] h-[20px]"
+            />
+            <Text className="font-medium leading-normal text-white">
+              {t('common:actions.bookAppointment')}
+            </Text>
           </Button>
         </div>
       </div>

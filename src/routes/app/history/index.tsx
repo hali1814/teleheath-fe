@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
-import LoadingBlocking from '#/components/LoadingBlocking'
 import EmptyAppointment from '#/sections/appointment/EmptyAppointment'
 import ItemHistoryAppointment from '#/sections/history/ItemHistoryAppointment'
 import ModalHistoryFilter, {
@@ -22,6 +21,8 @@ import {
   groupAppointmentsByMonth,
 } from '#/utils/history'
 import LoadingState from '#/components/LoadingState'
+import { useProfileStore } from '#/stores/profile'
+import RequireLogin from '#/components/RequireLogin'
 
 export const Route = createFileRoute('/app/history/')({
   component: RouteComponent,
@@ -46,6 +47,8 @@ function RouteComponent() {
   const monthLabels = useMemo(() => getAppointmentMonthLabels(t), [t])
   const title = t('bottomNavigation.history')
 
+  const { profile } = useProfileStore()
+
   const { data: appointments, isLoading } = useGetMyAppointmentsQuery({
     params: {
       page: 0,
@@ -55,6 +58,7 @@ function RouteComponent() {
       status: appliedFilter.statuses.join(','),
     },
     staleTime: 0,
+    enabled: !!profile?.id,
   })
 
   const items = useMemo(
@@ -108,6 +112,20 @@ function RouteComponent() {
   }
 
   const showEmpty = !isLoading && rows.length === 0
+
+  if (!profile?.id) {
+    return (
+      <div>
+        <header className="sticky top-0 z-50 grid h-[62px] shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b-[0.5px] border-[#FFE8E6] bg-background px-4 py-5">
+          <div />
+          <Text size="lg_16" className="font-medium text-text-primary">
+            {title}
+          </Text>
+        </header>
+        <RequireLogin />
+      </div>
+    )
+  }
 
   if (isLoading) {
     return (

@@ -67,6 +67,11 @@
       "needsAuthSubtitle": "Không thể xác minh phiên. Vui lòng đăng nhập để tiếp tục.",
       "signIn": "Đăng nhập",
       "retryVerify": "Thử lại"
+    },
+    "requireLogin": {
+      "title": "Yêu cầu đăng nhập",
+      "description": "Vui lòng đăng nhập để xem thêm thông tin và sử dụng đầy đủ tính năng.",
+      "button": "Đăng nhập"
     }
   },
   "home": {
