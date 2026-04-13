@@ -9,7 +9,6 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import { Spinner } from '#/components/ui/spinner'
 import { useAuthCamIDMutation } from '#/services/query/auth/authCamID'
-import { useProfileStore } from '#/stores/profile'
 import { setTokens } from '#/stores/token'
 import i18n from '#/i18n'
 
@@ -39,7 +38,7 @@ function RouteComponent() {
           accessToken: data.data.accessToken,
           refreshToken: data.data.refreshToken,
         })
-        useProfileStore.getState().setProfile(data.data.user)
+        // useProfileStore.getState().setProfile(data.data.user)
 
         navigate({ to: '/app/home' })
         return
