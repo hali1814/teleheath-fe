@@ -72,11 +72,6 @@ const ServiceItem = ({
             onChange={(e) =>
               setData({ pickupTime: formatTimeInput(e.target.value) })
             }
-            onBlur={(e) => {
-              const formatted = formatTimeInput(e.target.value)
-              const isValid = /^([01]\d|2[0-3]):([0-5]\d)$/.test(formatted)
-              setData({ pickupTime: isValid ? formatted : '' })
-            }}
           />
           <TextInputBase
             label={t('pickup.addressLabel')}
@@ -527,47 +522,48 @@ export function ReviewStep() {
           </div>
         )}
 
-        {consultationFee > 0 && (
-          <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
-            <Text size="lg_16" className="font-semibold leading-[1.2]">
-              {t('appointment:paymentDetails')}
-            </Text>
-            {feeInfo.consultationFee > 0 && (
-              <div className="flex items-center justify-between">
-                <Text className="leading-normal text-muted-foreground">
-                  {t('appointment:consultationFee')}
+        {consultationFee > 0 ||
+          (feeInfo.serviceFee > 0 && (
+            <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
+              <Text size="lg_16" className="font-semibold leading-[1.2]">
+                {t('appointment:paymentDetails')}
+              </Text>
+              {feeInfo.consultationFee > 0 && (
+                <div className="flex items-center justify-between">
+                  <Text className="leading-normal text-muted-foreground">
+                    {t('appointment:consultationFee')}
+                  </Text>
+                  <Text className="leading-normal font-medium text-[#333333]">
+                    {formatPrice(consultationFee)}
+                  </Text>
+                </div>
+              )}
+              {feeInfo.serviceFee > 0 && (
+                <div className="flex items-center justify-between">
+                  <Text className="leading-normal text-muted-foreground">
+                    {t('appointment:serviceFee')}
+                  </Text>
+                  <Text className="leading-normal font-medium text-[#333333]">
+                    {formatPrice(feeInfo.serviceFee)}
+                  </Text>
+                </div>
+              )}
+              <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
+                <Text
+                  size="lg_16"
+                  className="font-semibold leading-[1.2] text-[#333333]"
+                >
+                  {t('appointment:totalAmount')}
                 </Text>
-                <Text className="leading-normal font-medium text-[#333333]">
+                <Text
+                  size="xl_18"
+                  className="leading-normal font-semibold text-primary"
+                >
                   {formatPrice(consultationFee)}
                 </Text>
               </div>
-            )}
-            {feeInfo.serviceFee > 0 && (
-              <div className="flex items-center justify-between">
-                <Text className="leading-normal text-muted-foreground">
-                  {t('appointment:serviceFee')}
-                </Text>
-                <Text className="leading-normal font-medium text-[#333333]">
-                  {formatPrice(feeInfo.serviceFee)}
-                </Text>
-              </div>
-            )}
-            <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
-              <Text
-                size="lg_16"
-                className="font-semibold leading-[1.2] text-[#333333]"
-              >
-                {t('appointment:totalAmount')}
-              </Text>
-              <Text
-                size="xl_18"
-                className="leading-normal font-semibold text-primary"
-              >
-                {formatPrice(consultationFee)}
-              </Text>
             </div>
-          </div>
-        )}
+          ))}
 
         {consultationFee > 0 && (
           <div className="flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white">
