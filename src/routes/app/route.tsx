@@ -4,7 +4,7 @@ import {
   useLocation,
   useNavigate,
 } from '@tanstack/react-router'
-import { getToken, setTokens } from '#/stores/token'
+import { clearTokens, getToken, setTokens } from '#/stores/token'
 import { useGetProfileQuery } from '#/services/query/profile/getProfile'
 import { useProfileStore } from '#/stores/profile'
 import { useAuthCamIDMutation } from '#/services/query/auth/authCamID'
@@ -22,12 +22,11 @@ export const Route = createFileRoute('/app')({
 })
 
 function App() {
-  const { setProfile, profile } = useProfileStore()
+  const { setProfile, profile, clearProfile } = useProfileStore()
   useGetProfileQuery({
     params: {},
     onSuccess: (data) => {
       if (data.success) {
-        console.log('data', data)
         !profile && setProfile(data.data)
       }
     },
@@ -65,11 +64,6 @@ function App() {
   })
 
   useEffect(() => {
-    if (!code) {
-      return
-    }
-    authCamID({ partnerToken: code! })
-
     if (lang) {
       // lang is km or en
       if (lang === 'km') {
@@ -78,6 +72,19 @@ function App() {
         i18n.changeLanguage('en')
       }
     }
+
+    if (code == 'guest') {
+      //logout
+      clearTokens()
+      clearProfile()
+      return
+    }
+
+    if (!code) {
+      return
+    }
+
+    authCamID({ partnerToken: code! })
   }, [])
 
   return (
