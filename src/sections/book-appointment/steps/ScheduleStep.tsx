@@ -95,7 +95,7 @@ export function ScheduleStep() {
 
   const selectedDateLabel =
     appointmentDate != null
-      ? formatDate(appointmentDate, DATE_TIME_TYPE.DD_MM_YYYY)
+      ? formatDate(appointmentDate, DATE_TIME_TYPE.DDDD_MMM_D_YYYY)
       : '—'
 
   const slotTimesMorning = useMemo(() => {
