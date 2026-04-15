@@ -48,7 +48,7 @@ function RouteComponent() {
     },
     onError: () => {
       setIsVerifying(false)
-      navigate({ to: '/app/home' })
+      // navigate({ to: '/app/home' })
     },
   })
 
@@ -56,7 +56,7 @@ function RouteComponent() {
     if (!code) {
       setIsVerifying(false)
       //ridirect to home page
-      navigate({ to: '/app/home' })
+      // navigate({ to: '/app/home' })
       return
     }
 

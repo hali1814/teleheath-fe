@@ -91,7 +91,12 @@ const handleLogoutClearData = () => {
   clearProfile()
   const r = getRouter()
   if (r) {
-    void r.navigate({ to: '/app/entry', replace: true })
+    void r.navigate({
+      to: '/app/entry',
+      replace: true,
+      params: { token: 'guest' },
+    })
+    // window.location.reload()
   }
 }
 

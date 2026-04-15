@@ -59,6 +59,8 @@ function App() {
       }
     },
     onError: () => {
+      clearTokens()
+      clearProfile()
       navigate({ to: '/app/entry' })
     },
   })
