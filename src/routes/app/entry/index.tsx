@@ -48,11 +48,17 @@ function RouteComponent() {
     },
     onError: () => {
       setIsVerifying(false)
+      navigate({ to: '/app/home' })
     },
   })
 
   useEffect(() => {
-    if (!code) setIsVerifying(false)
+    if (!code) {
+      setIsVerifying(false)
+      //ridirect to home page
+      navigate({ to: '/app/home' })
+      return
+    }
 
     authCamID({ partnerToken: code! })
 
