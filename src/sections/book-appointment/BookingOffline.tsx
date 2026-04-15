@@ -39,12 +39,6 @@ export default function BookingOffline() {
 
   return (
     <>
-      <Text
-        size="sm_12"
-        className="font-medium tracking-[0.03em] text-muted-foreground uppercase"
-      >
-        {t('bookingOffline.title')}
-      </Text>
       {BOOKING_OFFLINE_ITEMS.map((item) => (
         <BookingItem
           key={item.title}
