@@ -10,53 +10,76 @@ export const goBackToAppMobile = () => {
   const message = JSON.stringify(payload)
 
   const appWindow = window as Window & {
-    ReactNativeWebView?: { postMessage?: (message: string) => void }
-    webkit?: {
-      messageHandlers?: Partial<
-        Record<
-          string,
-          {
-            postMessage?: (message: string | Record<string, string>) => void
-          }
-        >
-      >
-    }
     Android?: {
       postMessage?: (message: string) => void
       TELEHEALTH_AUTHEN?: (path: string) => void
     }
+    ReactNativeWebView?: { postMessage?: (message: string) => void }
+    webkit?: {
+      messageHandlers?: Record<
+        string,
+        { postMessage?: (message: string | Record<string, string>) => void }
+      >
+    }
     TELEHEALTH_AUTHEN?: (path: string) => void
   }
 
-  const send = (action: () => void): boolean => {
-    try {
-      action()
-      return true
-    } catch (_error) {
-      // Ignore bridge errors and continue trying other channels.
-      return false
+  let isSent = false
+
+  try {
+    if (appWindow.Android?.postMessage) {
+      appWindow.Android.postMessage(message)
+      isSent = true
     }
+  } catch (e) {
+    console.error('Android.postMessage failed', e)
   }
 
-  const isSent = [
-    // React Native WebView bridge (common for both iOS/Android)
-    send(() => appWindow.ReactNativeWebView?.postMessage?.(message)),
-    // iOS WKWebView bridge by key-based handler
-    send(() =>
-      appWindow.webkit?.messageHandlers?.[TELEHEALTH_AUTHEN_KEY]?.postMessage?.(
-        payload
-      )
-    ),
-    // iOS WKWebView generic message handler
-    send(() => appWindow.webkit?.messageHandlers?.message?.postMessage?.(message)),
-    // Android bridge patterns
-    send(() => appWindow.Android?.postMessage?.(message)),
-    send(() => appWindow.Android?.TELEHEALTH_AUTHEN?.(path)),
-    // Direct global bridge fallback
-    send(() => appWindow.TELEHEALTH_AUTHEN?.(path)),
-  ].some(Boolean)
+  try {
+    if (!isSent && appWindow.Android?.TELEHEALTH_AUTHEN) {
+      appWindow.Android.TELEHEALTH_AUTHEN(path)
+      isSent = true
+    }
+  } catch (e) {
+    console.error('Android.TELEHEALTH_AUTHEN failed', e)
+  }
+
+  try {
+    if (!isSent && appWindow.ReactNativeWebView?.postMessage) {
+      appWindow.ReactNativeWebView.postMessage(message)
+      isSent = true
+    }
+  } catch (e) {
+    console.error('ReactNativeWebView.postMessage failed', e)
+  }
+
+  try {
+    if (
+      !isSent &&
+      appWindow.webkit?.messageHandlers?.[TELEHEALTH_AUTHEN_KEY]?.postMessage
+    ) {
+      appWindow.webkit.messageHandlers[TELEHEALTH_AUTHEN_KEY].postMessage(payload)
+      isSent = true
+    }
+  } catch (e) {
+    console.error('webkit handler failed', e)
+  }
+
+  try {
+    if (!isSent && appWindow.TELEHEALTH_AUTHEN) {
+      appWindow.TELEHEALTH_AUTHEN(path)
+      isSent = true
+    }
+  } catch (e) {
+    console.error('global TELEHEALTH_AUTHEN failed', e)
+  }
 
   if (!isSent) {
+    console.error('No native bridge available', {
+      hasAndroid: !!appWindow.Android,
+      hasAndroidPostMessage: typeof appWindow.Android?.postMessage,
+      hasAndroidTelehealth: typeof appWindow.Android?.TELEHEALTH_AUTHEN,
+    })
     toast.error('Please login to continue')
   }
 }
