@@ -3,7 +3,7 @@ import { useGetListBranchesByDoctorQuery } from '#/services/query/doctor/list-br
 import { useGetListBranchesQuery } from '#/services/query/hospital/list-branches'
 import { useBookingStore } from '#/stores/booking-store'
 import type { Branch } from '#/types/hospital'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { LocationCard } from '../LocationCard'
 import LoadingState from '#/components/LoadingState'
 import { useGetListBranchesByPackageQuery } from '#/services/query/package/list-branches-by-package'
@@ -16,6 +16,30 @@ export function LocationStep({ type }: { type: LocationStepType }) {
   const { branch, setData, hospital, packageData, doctor, next } =
     useBookingStore()
 
+  const packageId =
+    ((packageData as { packageId?: number } | undefined)?.packageId ??
+      packageData?.id ??
+      0)
+
+  const updateBranch = useCallback(
+    (nextBranch: Branch) => {
+      const isSameBranch = branch?.branchId === nextBranch.branchId
+      if (isSameBranch) return
+
+      setData({
+        branch: nextBranch,
+        room: undefined,
+        doctor: type === 'HOSPITAL' ? undefined : doctor,
+        serviceIds: [],
+        addonServiceTypes: [],
+        appointmentDate: undefined,
+        startTime: undefined,
+        endTime: undefined,
+      })
+    },
+    [branch?.branchId, setData, type, doctor],
+  )
+
   const hospitalBranchesQuery = useGetListBranchesQuery({
     params: { hospitalId: hospital?.hospitalId?.toString() ?? '' },
     enabled: type === 'HOSPITAL' && !!hospital?.hospitalId,
@@ -27,8 +51,8 @@ export function LocationStep({ type }: { type: LocationStepType }) {
   })
 
   const packageBranchesQuery = useGetListBranchesByPackageQuery({
-    params: { packageId: packageData?.packageId ?? 0 },
-    enabled: type === 'PACKAGE' && !!packageData?.packageId,
+    params: { packageId },
+    enabled: type === 'PACKAGE' && !!packageId,
   })
 
   const branches = useMemo((): Branch[] => {
@@ -51,9 +75,9 @@ export function LocationStep({ type }: { type: LocationStepType }) {
     if (branches.length !== 1) return
     const only = branches[0]
     if (branch?.branchId === only.branchId) return
-    setData({ branch: only })
+    updateBranch(only)
     next()
-  }, [branches, branch, setData, next])
+  }, [branches, branch, next, updateBranch])
 
   return (
     <div className="flex flex-col gap-[16px] px-[16px]">
@@ -71,7 +95,7 @@ export function LocationStep({ type }: { type: LocationStepType }) {
               <LocationCard
                 key={String(item.branchId)}
                 selected={branch?.branchId === item.branchId}
-                onClick={() => setData({ branch: item })}
+                onClick={() => updateBranch(item)}
                 branchId={String(item.branchId)}
                 nameVi={item.nameVi}
                 nameKh={item.nameKh}

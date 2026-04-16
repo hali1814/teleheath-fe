@@ -47,6 +47,7 @@ export default function EmptyPatientProfiles({
           onClick={onClickAddProfile}
           className="h-[44px] w-[200px] flex items-center justify-center gap-[8px] rounded-[12px]"
         >
+          <Icon name="add_profile" className="size-[16px]" />
           <Text className="font-medium text-white leading-normal">
             Add Profile
           </Text>
