@@ -18,22 +18,22 @@ export type BookingStepConfig = {
 
 export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
   {
-    title: 'Select specialty',
+    title: 'Select Specialty',
     component: SpecialtyStep,
     validate: (s) => !!s.specialty,
   },
   {
-    title: 'Select location',
+    title: 'Select Location',
     component: () => LocationStep({ type: 'HOSPITAL' }),
     validate: (s) => !!s.branch,
   },
   {
-    title: 'Select room',
+    title: 'Select Room',
     component: () => RoomStep({ type: 'HOSPITAL' }),
     validate: (s) => !!s.room,
   },
   {
-    title: 'Select schedule',
+    title: 'Select Schedule',
     component: ScheduleStep,
     validate: (s) => !!s.appointmentDate && !!s.startTime && !!s.endTime,
   },
@@ -58,17 +58,17 @@ export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
 
 export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
   {
-    title: 'Select location',
+    title: 'Select Location',
     component: () => LocationStep({ type: 'DOCTOR' }),
     validate: (s) => !!s.branch,
   },
   {
-    title: 'Select schedule',
+    title: 'Select Schedule',
     component: ScheduleStep,
     validate: (s) => !!s.appointmentDate && !!s.startTime && !!s.endTime,
   },
   {
-    title: 'Select Patient & Medical Records',
+    title: 'Select Patient & Medical Record',
     component: PatientStep,
     validate: (s) => !!s.patientProfile,
   },
@@ -88,17 +88,17 @@ export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
 
 export const BOOKING_STEPS_PACKAGE: BookingStepConfig[] = [
   {
-    title: 'Select location',
+    title: 'Select Location',
     component: () => LocationStep({ type: 'PACKAGE' }),
     validate: (s) => !!s.branch,
   },
   {
-    title: 'Select schedule',
+    title: 'Select Schedule',
     component: ScheduleStep,
     validate: (s) => !!s.appointmentDate && !!s.startTime && !!s.endTime,
   },
   {
-    title: 'Select Patient & Medical Records',
+    title: 'Select Patient & Medical Record',
     component: PatientStep,
     validate: (s) => !!s.patientProfile,
   },
