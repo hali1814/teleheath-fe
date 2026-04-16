@@ -26,6 +26,9 @@ function RouteComponent() {
   const { idMember, isUserProfile } = Route.useSearch()
 
   return (
-    <FormProfile idMember={idMember} isUserProfile={isUserProfile} />
+    <FormProfile
+      idMember={idMember}
+      isUserProfile={isUserProfile}
+    />
   )
 }

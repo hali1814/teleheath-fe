@@ -121,6 +121,7 @@ export interface MyAppointmentItem {
   startTime: string
   endTime: string
   patientName: string
+  cancellationReason: string | null
   patientPhone: string
   patientDob: string
   patientGender: string

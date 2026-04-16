@@ -84,7 +84,11 @@ function RouteComponent() {
             <InfoRow
               label={t('gender')}
               value={
-                user?.gender === 'MALE' ? t('genderMale') : t('genderFemale')
+                user?.gender === 'MALE'
+                  ? t('genderMale')
+                  : user?.gender === 'FEMALE'
+                    ? t('genderFemale')
+                    : '--'
               }
             />
             <InfoRow label={t('phoneNumber')} value={user?.phone ?? '--'} />

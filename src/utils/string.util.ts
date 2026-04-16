@@ -23,5 +23,5 @@ export function getInitialsFromName(name: string | null | undefined): string {
 }
 
 export const concatAddress = (address: PatientProfileResponse['address']) => {
-  return `${address?.detail || ''} ${address?.districtName || ''} ${address?.cityName || ''} ${address?.countryName || ''}`
+  return `${address?.detail || ''} ${address?.precinctName || ''} ${address?.districtName || ''}  ${address?.cityName || ''} ${address?.countryName || ''}`
 }

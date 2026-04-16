@@ -12,8 +12,8 @@ const STATUS_BADGE_CLASS: Record<HistoryAppointmentStatus, string> = {
   CONFIRMED: 'bg-[#1D5EF2]/10 text-[#1D5EF2]',
   CANCELLED: 'bg-[#E22A36]/10 text-[#E22A36]',
   COMPLETED: 'bg-[#16A34A]/10 text-[#16A34A]',
-  NO_SHOW: 'bg-[#F0B133]/10 text-[#F0B133]',
-  PENDING: 'bg-[#64748B]/10 text-[#64748B]',
+  NO_SHOW: 'bg-[#64748B]/10 text-[#64748B]',
+  PENDING: 'bg-[#64748B1A]/10 text-[#64748B]',
   WAITING_CONFIRM: 'bg-[#F0B133]/10 text-[#F0B133]',
 }
 
