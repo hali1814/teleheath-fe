@@ -69,7 +69,10 @@ export default function ModalFilterDoctor({
   })
 
   const handleClearDraft = () => {
-    setDraft(emptyFilter())
+    const cleared = emptyFilter()
+    setDraft(cleared)
+    onApply(cleared)
+    onOpenChange(false)
   }
 
   const handleApply = () => {
