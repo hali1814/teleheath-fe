@@ -40,6 +40,20 @@ export function RoomStep({ type }: { type: Type }) {
     next()
   }, [rooms, room, setData, next])
 
+  useEffect(() => {
+    if (!rooms || !room) return
+    const hasSelectedRoomInCurrentBranch = rooms.some((item) => item.id === room.id)
+    if (hasSelectedRoomInCurrentBranch) return
+
+    setData({
+      room: undefined,
+      doctor: undefined,
+      appointmentDate: undefined,
+      startTime: undefined,
+      endTime: undefined,
+    })
+  }, [rooms, room, setData])
+
   if (!rooms) return <EmptyState>No rooms found</EmptyState>
 
   return (

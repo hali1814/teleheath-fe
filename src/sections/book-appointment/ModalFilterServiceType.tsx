@@ -67,6 +67,8 @@ export default function ModalFilterServiceType({
     draftCountry.current = ''
     setFieldKey((k) => k + 1)
     rerender()
+    onApply(cleared)
+    onOpenChange(false)
   }
 
   const handleApply = () => {
