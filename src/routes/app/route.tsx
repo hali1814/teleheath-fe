@@ -45,6 +45,7 @@ function App() {
 
   const code = searchParams.get('token')
   const lang = searchParams.get('lang')
+  const path = searchParams.get('redirect')
 
   const { i18n } = useTranslation('common')
 
@@ -55,6 +56,9 @@ function App() {
           accessToken: data.data.accessToken,
           refreshToken: data.data.refreshToken,
         })
+        if (path) {
+          navigate({ to: path })
+        }
         // setProfile(data.data.user)
       }
     },
