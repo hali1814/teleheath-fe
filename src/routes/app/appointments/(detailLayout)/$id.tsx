@@ -1,5 +1,4 @@
 import { Icon } from '#/components/icon'
-import LoadingBlocking from '#/components/LoadingBlocking'
 import LoadingState from '#/components/LoadingState'
 import Text from '#/components/text'
 import AppointmentInformation from '#/sections/appointment/AppointmentInformation'
@@ -63,7 +62,7 @@ function RouteComponent() {
             className="font-medium leading-normal text-[#E22A36]"
           >
             {showCancelledBanner
-              ? t('detailBannerCancelled')
+              ? appointmentData?.data?.cancellationReason
               : t('detailBannerCompleted')}
           </Text>
         </div>
@@ -78,7 +77,8 @@ function RouteComponent() {
       {type === 'history' && (
         <PaymentSection appointment={appointmentData?.data} />
       )}
-      {appointmentData?.data?.status === 'CONFIRMED' && (
+      {(appointmentData?.data?.status === 'CONFIRMED' ||
+        appointmentData?.data?.status === 'WAITING_CONFIRM') && (
         <div
           className="mt-4 flex flex-col gap-[12px]
     rounded-[12px] px-[16px] py-[20px] bg-[#F0B1330D] border-l-4 border-[#F0B133]

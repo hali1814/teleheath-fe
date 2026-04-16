@@ -68,6 +68,11 @@ export default function DateInputBase({
     if (!selectedDate) return ''
     return dayjs(selectedDate).format('DD-MM-YYYY')
   }, [selectedDate])
+  const startMonth = useMemo(
+    () => dayjs().subtract(120, 'year').startOf('year').toDate(),
+    [],
+  )
+  const endMonth = useMemo(() => dayjs().endOf('month').toDate(), [])
 
   const commitValue = (nextIso: string) => {
     if (!isControlled) setInternalValue(nextIso)
@@ -140,6 +145,8 @@ export default function DateInputBase({
               mode="single"
               month={calendarMonth}
               onMonthChange={setCalendarMonth}
+              startMonth={startMonth}
+              endMonth={endMonth}
               selected={selectedDate}
               onSelect={(date) => {
                 if (!date) return

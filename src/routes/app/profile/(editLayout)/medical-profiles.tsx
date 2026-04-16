@@ -7,7 +7,6 @@ import { useGetListFamilyQuery } from '#/services/query/profile/listFamily'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { formatDate, DATE_TIME_TYPE } from '#/utils'
-import LoadingBlocking from '#/components/LoadingBlocking'
 import LoadingState from '#/components/LoadingState'
 
 export const Route = createFileRoute(

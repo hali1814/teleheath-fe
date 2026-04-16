@@ -40,6 +40,7 @@ import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
 import LoadingState from '#/components/LoadingState'
+import { useProfileEditLayoutTitleStore } from '#/stores/profile-edit-layout-title'
 
 export interface FormProfileProps {
   idMember?: number
@@ -134,6 +135,7 @@ export default function FormProfile({
     setValue,
     setError,
     handleSubmit,
+    clearErrors,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema as any),
@@ -180,6 +182,25 @@ export default function FormProfile({
     editModeMemberFamily === 'view' && Boolean(idMember) && !pyPassCheckViewMode
 
   const isPhoneLockedByAge = isUnder18 && !isUserProfile
+  const setLayoutTitle = useProfileEditLayoutTitleStore((s) => s.setTitle)
+
+  useEffect(() => {
+    if (isUserProfile) {
+      setLayoutTitle(t('profileInformation'))
+      return
+    }
+
+    if (idMember) {
+      setLayoutTitle(
+        editModeMemberFamily === 'view'
+          ? t('patientProfile')
+          : t('editPatientProfile'),
+      )
+      return
+    }
+
+    setLayoutTitle('Add Patient Profile')
+  }, [isUserProfile, idMember, editModeMemberFamily, setLayoutTitle, t])
 
   useEffect(() => {
     if (isPhoneLockedByAge) {
@@ -187,6 +208,7 @@ export default function FormProfile({
         user?.phone || user?.contactNumber || '',
       )
       setValue('phoneNumber', accountPhone)
+      clearErrors('phoneNumber')
     }
   }, [isPhoneLockedByAge, user, setValue])
 
@@ -559,6 +581,8 @@ export default function FormProfile({
     <div className={cn('pt-4 pb-20 px-4', containerClassName)}>
       <div className={cn('mt-6', isViewMode && 'pointer-events-none')}>
         <UploadAvatar
+          isPatientProfile={!!idMember || (!isUserProfile && !idMember)}
+          disabled={isViewMode}
           value={formValues.avatarUrl}
           onChange={(fileUrl) => {
             setValue('avatarUrl', fileUrl)
@@ -663,7 +687,7 @@ export default function FormProfile({
             name="relationship"
             options={filteredRelationshipOptions}
             placeholder={t('relationship')}
-            label={t('relationship')}
+            label={t('relationshipToAccountHolder')}
             isRequired
             disabled={isViewMode}
             onChangeCallback={(value) => {

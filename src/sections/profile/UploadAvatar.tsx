@@ -14,12 +14,14 @@ export interface UploadAvatarProps {
   onChange?: (fileUrl: string) => void
   value?: string
   disabled?: boolean
+  isPatientProfile?: boolean
 }
 
 export default function UploadAvatar({
   onChange,
   value,
   disabled = false,
+  isPatientProfile = false,
 }: UploadAvatarProps) {
   const { t } = useTranslation(['profile'])
   const MAX_AVATAR_SIZE_MB = 1
@@ -147,12 +149,12 @@ export default function UploadAvatar({
         )}
       </button>
 
-      {!avatarUrl ? (
+      {!avatarUrl && !disabled ? (
         <Text
           size="base_14"
           className="text-dust-red-8 mt-4 text-center font-medium"
         >
-          {t('uploadPhoto')}
+          {isPatientProfile ? t('uploadPhotoPatient') : t('uploadPhoto')}
         </Text>
       ) : null}
 
