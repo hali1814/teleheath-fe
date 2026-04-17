@@ -51,9 +51,8 @@ const postMessageToNativeBridge = ({
   }
 
   try {
-    const androidMethod = appWindow.Android?.[nativeMethodName]
-    if (!isSent && androidMethod) {
-      androidMethod(nativeMethodValue)
+    if (!isSent && appWindow.Android?.[nativeMethodName]) {
+      appWindow.Android[nativeMethodName]?.(nativeMethodValue)
       isSent = true
     }
   } catch (e) {
@@ -79,9 +78,8 @@ const postMessageToNativeBridge = ({
   }
 
   try {
-    const globalMethod = appWindow[nativeMethodName]
-    if (!isSent && globalMethod) {
-      globalMethod(nativeMethodValue)
+    if (!isSent && appWindow[nativeMethodName]) {
+      appWindow[nativeMethodName]?.(nativeMethodValue)
       isSent = true
     }
   } catch (e) {
