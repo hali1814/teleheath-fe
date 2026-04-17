@@ -7,6 +7,7 @@ import {
   getToken,
   setTokens,
 } from '#/stores/token'
+import { endSession } from '#/utils/auth'
 import axios, {
   AxiosError,
   type AxiosResponse,
@@ -91,6 +92,7 @@ const handleLogoutClearData = () => {
   clearProfile()
   const r = getRouter()
   if (r) {
+    endSession()
     void r.navigate({
       to: '/app/entry',
       replace: true,
