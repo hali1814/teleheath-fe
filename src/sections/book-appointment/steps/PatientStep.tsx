@@ -16,7 +16,11 @@ export function PatientStep() {
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   const {
-    data: { data: { patients } } = { data: { patients: [] } },
+    data: {
+      data: { patients, canAddMore, maxAllowed },
+    } = {
+      data: { patients: [], canAddMore: true, maxAllowed: 10 },
+    },
     isLoading,
   } = useGetListFamilyQuery({
     params: {
@@ -42,6 +46,8 @@ export function PatientStep() {
           <PatientProfileList
             profiles={patients}
             selected={patientProfile?.id}
+            canAddMore={canAddMore}
+            maxAllowed={maxAllowed}
             onClick={(patient) =>
               setData({
                 patientProfile: patient,

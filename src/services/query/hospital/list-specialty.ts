@@ -8,6 +8,8 @@ interface ListSpecialtyRequest {
   hospitalId?: string
   keyword?: string
   country?: 'VN' | 'KH'
+  size?: number
+  isHome?: boolean
 }
 
 const getListSpecialty = async (

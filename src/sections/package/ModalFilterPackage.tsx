@@ -22,6 +22,7 @@ import { PACKAGE_PRICE_RANGE_OPTIONS } from '#/sections/package/package-filter-p
 const emptyFilter = (): FilterPackage => ({
   country: '',
   hospitalId: '',
+  category: '',
   priceRange: '',
   specialtyId: undefined,
 })
@@ -45,6 +46,7 @@ export default function ModalFilterPackage({
 
   const draftCountry = useRef('')
   const draftHospitalId = useRef('')
+  const draftCategory = useRef('')
   const draftSpecialtyId = useRef('')
   const draftPriceRange = useRef('')
 
@@ -61,6 +63,7 @@ export default function ModalFilterPackage({
     setDefaultsSource(null)
     draftCountry.current = appliedFilter.country
     draftHospitalId.current = appliedFilter.hospitalId
+    draftCategory.current = appliedFilter.category
     draftSpecialtyId.current =
       appliedFilter.specialtyId != null ? String(appliedFilter.specialtyId) : ''
     draftPriceRange.current = appliedFilter.priceRange
@@ -90,6 +93,7 @@ export default function ModalFilterPackage({
     setDefaultsSource(cleared)
     draftCountry.current = ''
     draftHospitalId.current = ''
+    draftCategory.current = ''
     draftSpecialtyId.current = ''
     draftPriceRange.current = ''
     setFieldKey((k) => k + 1)
@@ -104,6 +108,7 @@ export default function ModalFilterPackage({
     onApply({
       country: draftCountry.current,
       hospitalId: draftHospitalId.current,
+      category: draftCategory.current,
       priceRange: draftPriceRange.current,
       specialtyId:
         sid !== '' && Number.isFinite(specialtyIdParsed)
@@ -116,6 +121,7 @@ export default function ModalFilterPackage({
   const draftIsEmpty =
     !draftCountry.current &&
     !draftHospitalId.current &&
+    !draftCategory.current &&
     !draftSpecialtyId.current &&
     !draftPriceRange.current
 
@@ -196,6 +202,21 @@ export default function ModalFilterPackage({
               }}
               placeholder={t('filter.hospital')}
               options={hospitalOptions}
+            />
+          </div>
+          <div className="flex flex-col gap-[8px]">
+            <Text>Category</Text>
+            <InputSelect
+              defaultValue={effectiveDefaults.category || undefined}
+              onValueChange={(value) => {
+                draftCategory.current = value
+                rerender()
+              }}
+              placeholder="Package Category"
+              options={[
+                { label: 'General Package', value: 'GENERAL' },
+                { label: 'Simple Package', value: 'SPECIALIZE' },
+              ]}
             />
           </div>
           <div className="flex flex-col gap-[8px]">

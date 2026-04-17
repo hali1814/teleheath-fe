@@ -7,6 +7,7 @@ interface Branch {
 export interface Package {
   packageId: number
   imageUrl: string
+  promotionPrice: number
   name: string
   price: number
   countryName: string

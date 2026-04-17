@@ -18,7 +18,7 @@ export default function Header({
   const { profile } = useProfileStore()
   const { data } = useGetListNotificationQuery({
     params: {
-      statuses: 'QUEUED',
+      statuses: 'DELIVERED',
     },
     enabled: !!profile?.id,
   })

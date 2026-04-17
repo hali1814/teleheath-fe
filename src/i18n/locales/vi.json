@@ -289,7 +289,8 @@
       "removeFileAria": "Xóa {{fileName}}",
       "toastFileNotAllowed": "{{fileName}} không được phép. Chỉ PNG, JPG, PDF.",
       "toastFileTooLarge": "{{fileName}} vượt quá 10MB",
-      "toastUploadError": "Không thể tải lên {{fileName}}"
+      "toastUploadError": "Không thể tải lên {{fileName}}",
+      "wordLimitExceeded": "Tối đa {{max}} từ."
     },
     "pickup": {
       "timeLabel": "Giờ đón",
@@ -364,6 +365,7 @@
     "noShow": "Không đến",
     "paymentDetails": "Chi tiết thanh toán",
     "consultationFee": "Phí tư vấn",
+    "deposit": "Đặt cọc",
     "totalAmount": "Tổng tiền",
     "paymentMethod": "Phương thức thanh toán",
     "paid": "Đã thanh toán",

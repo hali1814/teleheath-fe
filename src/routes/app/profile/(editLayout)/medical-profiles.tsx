@@ -23,6 +23,7 @@ function RouteComponent() {
   })
 
   const familyMembers = familyList?.data?.patients ?? []
+  const canAddMore = familyList?.data?.canAddMore ?? true
 
   if (isFetching) {
     return <LoadingState />
@@ -59,7 +60,9 @@ function RouteComponent() {
           type="button"
           variant="secondary"
           className="flex h-[45px] w-full items-center justify-center gap-3 rounded-[40px]"
+          disabled={!canAddMore}
           onClick={() => {
+            if (!canAddMore) return
             router.navigate({
               to: '/app/profile/edit',
               search: { idMember: undefined, isUserProfile: false },

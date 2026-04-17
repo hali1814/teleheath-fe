@@ -1,8 +1,14 @@
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
 
-interface ListNotificationRequest {
-  statuses?: string
+export type NotificationStatus = 'QUEUED' | 'DELIVERED' | 'READ'
+
+export interface ListNotificationRequest {
+  /**
+   * Optional statuses filter. Backend accepts comma-separated values, e.g.
+   * `READ,DELIVERED`.
+   */
+  statuses?: NotificationStatus | NotificationStatus[]
 }
 
 export interface ListNotificationResponse {
@@ -12,10 +18,29 @@ export interface ListNotificationResponse {
   body: string
   iconUrl: string
   type: string
+  eventCode: string
   channel: string
+  language: string
   status: string
   sentAt: string
+  deliveredAt: string
   createdAt: string
+}
+
+function normalizeNotificationParams(params: ListNotificationRequest): {
+  statuses?: string
+} {
+  if (Array.isArray(params.statuses)) {
+    return {
+      ...params,
+      statuses:
+        params.statuses.length > 0 ? params.statuses.join(',') : undefined,
+    }
+  }
+
+  return {
+    statuses: params.statuses,
+  }
 }
 
 const getListNotification = async (
@@ -24,7 +49,7 @@ const getListNotification = async (
 ) => {
   const response = await http.get<ListNotificationResponse[]>(
     '/notifications',
-    params,
+    normalizeNotificationParams(params),
     {
       signal,
     },

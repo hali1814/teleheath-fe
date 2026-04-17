@@ -45,6 +45,7 @@ function RouteComponent() {
         <PackageInformation
           name={packageData?.name ?? ''}
           price={packageData?.price ?? 0}
+          promotionPrice={packageData?.promotionPrice ?? 0}
           description={packageData?.description ?? ''}
           countryName={packageData?.countryName ?? ''}
         />

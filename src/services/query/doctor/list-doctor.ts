@@ -17,6 +17,8 @@ interface ListDoctorRequest extends IPagingRequest {
   maxPrice?: number
   keyword?: string
   topOnly?: boolean
+  isHome?: boolean
+  homeSize?: number
 }
 
 const getListDoctor = async (
@@ -48,5 +50,8 @@ export const useGetListDoctorQuery = (
     queryKey: ['list-doctor', options.params],
     queryFn: ({ signal }) => getListDoctor(options.params, signal),
     ...options,
+    onError: (error) => {
+      console.log(error)
+    },
   })
 }

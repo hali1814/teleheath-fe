@@ -289,7 +289,8 @@
       "removeFileAria": "Remove {{fileName}}",
       "toastFileNotAllowed": "{{fileName}} is not allowed. Only PNG, JPG, PDF.",
       "toastFileTooLarge": "{{fileName}} exceeds 10MB",
-      "toastUploadError": "Could not upload {{fileName}}"
+      "toastUploadError": "Could not upload {{fileName}}",
+      "wordLimitExceeded": "Maximum {{max}} words allowed."
     },
     "pickup": {
       "timeLabel": "Time to pick-up",
@@ -364,6 +365,7 @@
     "noShow": "No-show",
     "paymentDetails": "Payment Details",
     "consultationFee": "Consultation Fee",
+    "deposit": "Deposit",
     "totalAmount": "Total Amount",
     "paymentMethod": "Payment method",
     "paid": "Paid",

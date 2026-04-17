@@ -1,9 +1,9 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
-import { Button } from '#/components/ui/button'
 import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
 import { useGetListBranchesQuery } from '#/services/query/hospital/list-branches'
+import { getGoogleMapsHref } from '#/utils/google-maps.util'
 import { formatWorkingHours, isClosedLabel } from '#/utils/working-hours.util'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useState } from 'react'
@@ -42,10 +42,13 @@ const BranchCard = ({
       <div className="flex items-center justify-between">
         <Text className="font-medium leading-normal">{name}</Text>
         <button
+          type="button"
           className="flex items-center gap-[4px]"
           onClick={() => {
-            if (!googleMapsEmbed) return
-            window.open(googleMapsEmbed, '_blank')
+            const href = getGoogleMapsHref(googleMapsEmbed, address)
+            if (!href) return
+
+            window.open(href, '_blank', 'noopener,noreferrer')
           }}
         >
           <Icon
@@ -177,7 +180,7 @@ export default function BranchList({ hospitalId }: { hospitalId: string }) {
                 googleMapsEmbed={branch.googleMapsEmbed}
               />
             ))}
-            {branches.length > LIMIT_BRANCH && !expanded && (
+            {branches.length > LIMIT_BRANCH && (
               <ExpandViewButton
                 className="w-full flex justify-center"
                 expanded={expanded}

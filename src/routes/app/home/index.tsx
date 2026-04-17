@@ -34,6 +34,7 @@ function RouteComponent() {
   const { data, isPending: hospitalsPending } = useGetTopHospitalsQuery({
     params: {
       country: activeCountry,
+      size: 5,
     },
   })
   const topHospitalsData = data?.data || []
@@ -42,6 +43,8 @@ function RouteComponent() {
     useGetListSpecialtyQuery({
       params: {
         country: activeCountry,
+        isHome: true,
+        size: 6,
       },
     })
   const specialtiesData = specialtiesDataResponse?.data || []
@@ -53,9 +56,9 @@ function RouteComponent() {
     },
   } = useGetListPackagesQuery({
     params: {
-      ...SPECIALIZED_PACKAGE_PAGINATION,
-      specialized: true,
       country: activeCountry,
+      isHome: true,
+      homeSize: 5,
     },
   })
 
@@ -66,9 +69,9 @@ function RouteComponent() {
     },
   } = useGetListDoctorQuery({
     params: {
-      ...FEATURED_DOCTOR_PAGINATION,
-      topOnly: true,
       country: activeCountry,
+      isHome: true,
+      homeSize: 5,
     },
   })
 

@@ -34,6 +34,7 @@ const packageSearchSchema = z
   .object({
     country: z.string().optional(),
     hospitalId: z.string().optional(),
+    category: z.string().optional(),
     specialtyId: z.unknown().optional(),
     minPrice: z.unknown().optional(),
     maxPrice: z.unknown().optional(),
@@ -41,6 +42,7 @@ const packageSearchSchema = z
   .transform((s) => ({
     country: s.country?.trim() || undefined,
     hospitalId: s.hospitalId?.trim() || undefined,
+    category: s.category?.trim() || undefined,
     specialtyId: parseSearchInt(s.specialtyId),
     minPrice: parseSearchInt(s.minPrice),
     maxPrice: parseSearchInt(s.maxPrice),
@@ -51,6 +53,7 @@ export type PackageSearch = z.infer<typeof packageSearchSchema>
 export interface FilterPackage {
   country: string
   hospitalId: string
+  category: string
   /** key preset khoảng giá (vd. `0-100`, `500`) — Apply → min/max URL */
   priceRange: string
   specialtyId?: number
@@ -66,6 +69,7 @@ function searchToFilter(s: PackageSearch): FilterPackage {
   return {
     country: s.country ?? '',
     hospitalId: s.hospitalId ?? '',
+    category: s.category ?? '',
     priceRange: minMaxToPriceRangeKey(s.minPrice, s.maxPrice),
     specialtyId: s.specialtyId,
   }
@@ -91,6 +95,7 @@ function RouteComponent() {
       keyword: debouncedKeyword,
       ...(search.country ? { country: search.country } : {}),
       ...(search.hospitalId ? { hospitalId: search.hospitalId } : {}),
+      ...(search.category ? { category: search.category } : {}),
       ...(search.specialtyId != null
         ? { specialtyId: search.specialtyId }
         : {}),
@@ -106,6 +111,7 @@ function RouteComponent() {
   const activeFilterCount = [
     appliedFilter.country,
     appliedFilter.hospitalId,
+    appliedFilter.category,
     appliedFilter.specialtyId != null ? 'specialty' : '',
     hasPriceFilter ? 'price' : '',
   ].filter(Boolean).length
@@ -117,6 +123,7 @@ function RouteComponent() {
       search: {
         country: filter.country || undefined,
         hospitalId: filter.hospitalId || undefined,
+        category: filter.category || undefined,
         specialtyId: filter.specialtyId,
         minPrice,
         maxPrice,

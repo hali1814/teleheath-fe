@@ -20,7 +20,7 @@ const PatientProfileItem = ({
   onViewDetails?: () => void
 }) => {
   return (
-    <div className="w-[122px] px-[20px] flex justify-center items-center shrink-0">
+    <div className="w-[122px] px-[20px] flex justify-center items-start shrink-0">
       <div onClick={onClick} className="flex flex-col items-center gap-[12px]">
         <div className="relative">
           <Avatar
@@ -79,15 +79,20 @@ export function PatientProfileList({
   selected,
   onClick,
   profiles,
+  canAddMore = true,
+  maxAllowed = 10,
 }: {
   selected?: number
   onClick?: (patient: ListFamilyPatient) => void
   profiles: ListFamilyPatient[]
+  canAddMore?: boolean
+  maxAllowed?: number
 }) {
   const [open, setOpen] = useState(false)
   const [openAddNewProfileModal, setOpenAddNewProfileModal] = useState(false)
   const [patientToViewDetails, setPatientToViewDetails] =
     useState<ListFamilyPatient | null>(null)
+  const addDisabled = !canAddMore
 
   const handleViewDetails = (patientId: number) => {
     const patient = profiles?.find((patient) => patient.id === patientId)
@@ -104,7 +109,12 @@ export function PatientProfileList({
             Patient Profile
           </Text>
           <button
+            type="button"
+            disabled={addDisabled}
+            aria-disabled={addDisabled}
+            className={cn(addDisabled && 'cursor-not-allowed opacity-50')}
             onClick={() => {
+              if (addDisabled) return
               setPatientToViewDetails(null)
               setOpenAddNewProfileModal(true)
             }}
@@ -132,7 +142,10 @@ export function PatientProfileList({
           </div>
         ) : (
           <EmptyPatientProfiles
+            disabledAddProfile={addDisabled}
+            maxAllowed={maxAllowed}
             onClickAddProfile={() => {
+              if (addDisabled) return
               setPatientToViewDetails(null)
               setOpenAddNewProfileModal(true)
             }}

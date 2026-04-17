@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
 const MAX_FILE_BYTES = 10 * 1024 * 1024
+const MAX_WORDS = 500
 
 function formatFileSize(bytes: number) {
   if (bytes < 1024) return `${bytes} B`
@@ -31,10 +32,26 @@ function isAllowedFile(file: File): boolean {
   // Fallback theo MIME type (một số môi trường có thể thiếu ext)
   const mime = file.type?.toLowerCase?.() ?? ''
   return (
-    mime === 'image/png' ||
-    mime === 'image/jpeg' ||
-    mime === 'application/pdf'
+    mime === 'image/png' || mime === 'image/jpeg' || mime === 'application/pdf'
   )
+}
+
+function countWords(value?: string | null): number {
+  const trimmed = (value ?? '').trim()
+  if (!trimmed) return 0
+  return trimmed.split(/\s+/).length
+}
+
+function clampToMaxWords(value: string, maxWords: number) {
+  const words = value.trim().split(/\s+/).filter(Boolean)
+  if (words.length <= maxWords) {
+    return { value, truncated: false }
+  }
+
+  return {
+    value: words.slice(0, maxWords).join(' '),
+    truncated: true,
+  }
 }
 
 const MedicalFileItem = ({
@@ -100,6 +117,21 @@ export function MedicalRecords() {
   const { mutateAsync: uploadFile } = useUploadImageMutation({
     isShowError: false,
   })
+
+  const handleWordLimitedChange = (
+    field: 'medicalHistory' | 'notes',
+    value: string,
+  ) => {
+    const previousValue = field === 'medicalHistory' ? medicalHistory : notes
+    const previousCount = countWords(previousValue)
+    const nextCount = countWords(value)
+    const { value: clampedValue, truncated } = clampToMaxWords(value, MAX_WORDS)
+
+    if (truncated && previousCount <= MAX_WORDS && nextCount > MAX_WORDS) {
+      toast.error(t('medicalRecords.wordLimitExceeded', { max: MAX_WORDS }))
+    }
+    setData({ [field]: clampedValue })
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const list = e.target.files
@@ -205,24 +237,39 @@ export function MedicalRecords() {
         />
       ))}
       <div className="flex flex-col gap-[10px]">
-        <Text className="font-medium leading-normal text-[#333333]">
-          {t('medicalRecords.describeManual')}
-        </Text>
+        <div className="flex items-center justify-between gap-3">
+          <Text className="font-medium leading-normal text-[#333333]">
+            {t('medicalRecords.describeManual')}
+          </Text>
+          <Text size="sm_12" className="text-muted-foreground">
+            {countWords(medicalHistory)}/{MAX_WORDS}
+          </Text>
+        </div>
         <Textarea
           className="h-[92px] border-dust-red-1 bg-white rounded-[6px] px-[16px] py-[12px]"
           placeholder={t('medicalRecords.manualPlaceholder')}
-          value={medicalHistory}
-          onChange={(e) => setData({ medicalHistory: e.target.value })}
+          value={medicalHistory ?? ''}
+          onChange={(e) =>
+            handleWordLimitedChange('medicalHistory', e.target.value)
+          }
         />
       </div>
-      <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
-        {t('medicalRecords.additionalNotes')}
-      </Text>
+      <div className="flex items-center justify-between gap-3">
+        <Text
+          size="lg_16"
+          className="font-semibold leading-[1.2] text-[#333333]"
+        >
+          {t('medicalRecords.additionalNotes')}
+        </Text>
+        <Text size="sm_12" className="text-muted-foreground">
+          {countWords(notes)}/{MAX_WORDS}
+        </Text>
+      </div>
       <Textarea
         className="h-[92px] border-dust-red-1 bg-white rounded-[6px] px-[16px] py-[12px]"
         placeholder={t('medicalRecords.notesPlaceholder')}
-        value={notes}
-        onChange={(e) => setData({ notes: e.target.value })}
+        value={notes ?? ''}
+        onChange={(e) => handleWordLimitedChange('notes', e.target.value)}
       />
     </div>
   )

@@ -85,7 +85,7 @@ export function ModalDetailService({
 
             <SectionHeading>
               <Text className="font-semibold leading-[1.2] text-[#333333]">
-                Pricing
+                Price
               </Text>
               <Text
                 size="lg_16"

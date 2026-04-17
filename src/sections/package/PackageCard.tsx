@@ -25,8 +25,15 @@ export default function PackageCard({
   truncateName = false,
   ...packageData
 }: PackageCardProps) {
-  const { packageId, name, countryName, price, imageUrl, hospitalName } =
-    packageData
+  const {
+    packageId,
+    name,
+    countryName,
+    price,
+    imageUrl,
+    hospitalName,
+    promotionPrice,
+  } = packageData
   const { t } = useTranslation(['common'])
   const profile = useProfileStore((s) => s.profile)
   const navigate = useNavigate()
@@ -35,6 +42,8 @@ export default function PackageCard({
     sizeThumbnail === 'fixed'
       ? 'w-[92px] h-[92px]'
       : 'w-full h-full aspect-square'
+
+  const hasActiveDiscount = promotionPrice != null && price > promotionPrice
 
   return (
     <Link
@@ -76,7 +85,7 @@ export default function PackageCard({
           textSize="xs_10"
         />
         <Text size="lg_16" className="font-semibold leading-[1.2] text-primary">
-          {formatPrice(price)}
+          {hasActiveDiscount ? formatPrice(promotionPrice) : formatPrice(price)}
         </Text>
         {!hideBookAppointment && (
           <Button

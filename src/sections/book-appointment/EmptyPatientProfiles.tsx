@@ -5,8 +5,12 @@ import { useTranslation } from 'react-i18next'
 
 export default function EmptyPatientProfiles({
   onClickAddProfile,
+  disabledAddProfile = false,
+  maxAllowed = 10,
 }: {
   onClickAddProfile: () => void
+  disabledAddProfile?: boolean
+  maxAllowed?: number
 }) {
   const { t } = useTranslation('profile')
   return (
@@ -45,6 +49,7 @@ export default function EmptyPatientProfiles({
       <div className="mt-[32px] flex items-center justify-center">
         <Button
           onClick={onClickAddProfile}
+          disabled={disabledAddProfile}
           className="h-[44px] w-[200px] flex items-center justify-center gap-[8px] rounded-[12px]"
         >
           <Icon name="add_profile" className="size-[16px]" />
