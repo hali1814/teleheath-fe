@@ -75,6 +75,16 @@ let failedQueue: {
   resolve: (value: unknown) => void
   reject: (reason?: any) => void
 }[] = []
+let endSessionDebounceTimer: ReturnType<typeof setTimeout> | null = null
+
+const debounceEndSession = () => {
+  if (endSessionDebounceTimer) return
+
+  endSession()
+  endSessionDebounceTimer = setTimeout(() => {
+    endSessionDebounceTimer = null
+  }, 1000)
+}
 
 const processQueue = (error: AxiosError | null, token: string | null) => {
   failedQueue.forEach(({ resolve, reject }) => {
@@ -92,7 +102,7 @@ const handleLogoutClearData = () => {
   clearProfile()
   const r = getRouter()
   if (r) {
-    endSession()
+    debounceEndSession()
     void r.navigate({
       to: '/app/entry',
       replace: true,
