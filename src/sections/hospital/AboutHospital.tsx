@@ -1,12 +1,15 @@
 import Text from '#/components/text'
 import { useClampExpand } from '#/hooks/use-clamp-expand'
 import { cn } from '#/lib/utils'
+import { sanitizeTipTapHtml } from '#/utils/sanitize-tiptap-html'
+import { useMemo } from 'react'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useTranslation } from 'react-i18next'
 
 export default function AboutHospital({ aboutUs }: { aboutUs: string }) {
+  const safeAboutHtml = useMemo(() => sanitizeTipTapHtml(aboutUs), [aboutUs])
   const { ref: bodyRef, expanded, needsExpand, toggle } = useClampExpand({
-    contentKey: aboutUs,
+    contentKey: safeAboutHtml,
   })
   const { t } = useTranslation(['hospital', 'common'])
 
@@ -19,12 +22,11 @@ export default function AboutHospital({ aboutUs }: { aboutUs: string }) {
         <div
           ref={bodyRef}
           className={cn(
-            'text-base text-muted-foreground leading-[1.7] font-normal',
+            'prose prose-sm max-w-none text-muted-foreground leading-[1.7] font-normal [&_img]:my-[16px] [&_img]:rounded-[6px]',
             expanded ? '' : 'line-clamp-5',
           )}
-        >
-          {aboutUs}
-        </div>
+          dangerouslySetInnerHTML={{ __html: safeAboutHtml }}
+        />
         {needsExpand && !expanded && (
           <div
             className="flex justify-center absolute -bottom-1 left-0 right-0 h-[32px]"

@@ -1,4 +1,5 @@
 import { Icon, type IconName } from '#/components/icon'
+import Image from '#/components/image'
 import Text from '#/components/text'
 import { cn } from '#/lib/utils'
 import type { ListNotificationResponse } from '#/services/query/notification/list-notification'
@@ -44,12 +45,13 @@ export default function NotificationCard({
   type,
   status,
   sentAt,
+  iconUrl,
 }: ListNotificationResponse) {
   const navigate = useNavigate()
   const isRead = status === 'READ'
   const colorCode =
     MAPPING_COLOR[mappingType[type as keyof typeof mappingType].color]
-  const accentBg = `${colorCode}1A`
+  const accentBg = isRead ? `#CF13221A` : `#5858581A`
   const bgContainer = isRead ? 'bg-background' : 'bg-[#FFF4F4]'
 
   const { mutateAsync: markReadNotification } =
@@ -79,12 +81,10 @@ export default function NotificationCard({
           className="flex items-center justify-center w-[36px] h-[36px] rotate-45 rounded-[8px]"
           style={{ backgroundColor: accentBg }}
         >
-          <Icon
-            name={
-              mappingType[type as keyof typeof mappingType].icon as IconName
-            }
+          <Image
+            src={iconUrl}
+            alt="icon"
             className="w-[20px] h-[20px] -rotate-45"
-            style={{ color: colorCode }}
           />
         </div>
       </div>
@@ -92,32 +92,27 @@ export default function NotificationCard({
       <div className="flex-1">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-1">
-            <Text
-              className="font-medium leading-normal"
-              style={{ color: isRead ? '#333333' : colorCode }}
-            >
+            <Text className="font-medium leading-normal text-[#333333]">
               {title}{' '}
             </Text>
             {isRead ? null : (
               <Icon
                 name="circle_solid"
-                className="w-[6px] h-[6px]"
-                style={{ color: colorCode }}
+                className="w-[6px] h-[6px] text-[#CF1322]"
               />
             )}
           </div>
 
-          <Text size="sm_12" className="leading-[1.3] text-muted-foreground">
+          <Text
+            size="sm_12"
+            className="leading-[1.3] text-muted-foreground text-left"
+          >
             {body}
           </Text>
         </div>
       </div>
 
-      <Text
-        size="xs_10"
-        className="font-medium leading-[1.3]"
-        style={{ color: isRead ? '#94A3B8' : colorCode }}
-      >
+      <Text size="xs_10" className="font-medium leading-[1.3] text-[#333333]">
         {formatTimeAgo(sentAt)}
       </Text>
     </button>

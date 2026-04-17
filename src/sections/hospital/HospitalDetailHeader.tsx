@@ -28,12 +28,19 @@ export default function HospitalDetailHeader({
             <Text size="2xl_20" className="font-semibold leading-normal">
               {name}
             </Text>
-            <div className="flex items-center gap-[6px]">
-              <Icon name="plump_web" className="w-[16px] h-[16px]" />
-              <Text className="text-muted-foreground leading-normal font-normal">
-                {getDomainWebsite(website)}
-              </Text>
-            </div>
+            {website && (
+              <a
+                href={website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-[6px]"
+              >
+                <Icon name="plump_web" className="w-[16px] h-[16px]" />
+                <Text className="text-muted-foreground leading-normal font-normal">
+                  {getDomainWebsite(website)}
+                </Text>
+              </a>
+            )}
           </div>
         </div>
       </div>

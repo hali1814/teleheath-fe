@@ -9,6 +9,7 @@ import dayjs from 'dayjs'
 import Image from '#/components/image'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import type { AppLanguage } from '#/i18n'
+import { getGoogleMapsHref } from '#/utils/google-maps.util'
 
 export interface ItemAppointmentProps {
   appointment: MyAppointmentItem
@@ -17,6 +18,12 @@ export interface ItemAppointmentProps {
 export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
   const { t, i18n } = useTranslation(['appointment'])
   const router = useRouter()
+  const mapsHref = useMemo(() => {
+    return getGoogleMapsHref(
+      appointment.branch?.googleMapsEmbed,
+      appointment.branch?.address,
+    )
+  }, [appointment.branch?.googleMapsEmbed, appointment.branch?.address])
 
   const label = useMemo(() => {
     if (appointment.bookingType === 'HOSPITAL') {
@@ -139,7 +146,14 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
             className={`h-[36px] gap-2 bg-[#FFF1F0]`}
             asChild
           >
-            <a href={appointment.branch?.googleMapsEmbed ?? ''} target="_blank">
+            <a
+              href={mapsHref ?? '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                if (!mapsHref) e.preventDefault()
+              }}
+            >
               <Icon name="map_blue" className="size-4" />
               <Text size="base_14" className="font-medium text-primary">
                 {t('getDirections')}

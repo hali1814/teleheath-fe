@@ -3,6 +3,20 @@ import type { Package } from '#/entities/packageEntity'
 import type { AppLanguage } from '#/i18n'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 
+/** Giá khuyến mãi chỉ hợp lệ khi `now` nằm trong [promotionStart, promotionEnd] (cận biên inclusive). */
+function isPromotionActive(
+  promotionStart: string | null | undefined,
+  promotionEnd: string | null | undefined,
+  now: Date = new Date(),
+): boolean {
+  if (!promotionStart?.trim() || !promotionEnd?.trim()) return false
+  const startMs = new Date(promotionStart).getTime()
+  const endMs = new Date(promotionEnd).getTime()
+  const nowMs = now.getTime()
+  if (Number.isNaN(startMs) || Number.isNaN(endMs)) return false
+  return nowMs >= startMs && nowMs <= endMs
+}
+
 export const mapApiPackage = (
   api: ApiPackage,
   language: AppLanguage = 'en',
@@ -11,7 +25,16 @@ export const mapApiPackage = (
   name: api.name,
   description: api.description,
   imageUrl: api.imageUrl,
-  price: api.price,
+  price: api.price ?? 0,
+  promotionPrice: (() => {
+    const listPrice = api.price ?? 0
+    if (!isPromotionActive(api.promotionStart, api.promotionEnd)) {
+      return listPrice
+    }
+    const promo = api.promotionPrice
+    if (promo == null || Number.isNaN(Number(promo))) return listPrice
+    return Number(promo)
+  })(),
   hospitalName: api?.hospital?.name,
   countryName:
     api?.countries?.length > 0

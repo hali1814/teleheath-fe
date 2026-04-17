@@ -8,6 +8,7 @@ import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import Image from '#/components/image'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import type { AppLanguage } from '#/i18n'
+import { getGoogleMapsHref } from '#/utils/google-maps.util'
 
 interface AppointmentInformationProps {
   appointment?: MyAppointmentItem
@@ -19,6 +20,10 @@ export default function AppointmentInformation({
   const { t, i18n } = useTranslation(['appointment'])
   const bookingType = appointment?.bookingType
   const isHospital = bookingType === 'HOSPITAL'
+  const mapsHref = getGoogleMapsHref(
+    appointment?.branch?.googleMapsEmbed,
+    appointment?.branch?.address,
+  )
   const formatTimeWithMeridiem = (value?: string) => {
     if (!value) return ''
 
@@ -99,9 +104,13 @@ export default function AppointmentInformation({
             {appointment?.branch?.address}
           </Text>
           <a
-            href={appointment?.branch?.googleMapsEmbed ?? ''}
+            href={mapsHref ?? '#'}
             target="_blank"
+            rel="noopener noreferrer"
             className="mt-[2px] flex items-center gap-1"
+            onClick={(e) => {
+              if (!mapsHref) e.preventDefault()
+            }}
           >
             <Icon
               name="map_outline"

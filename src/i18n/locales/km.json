@@ -289,7 +289,8 @@
       "removeFileAria": "លុប {{fileName}}",
       "toastFileNotAllowed": "{{fileName}} មិនត្រូវបានអនុញ្ញាតទេ។ មានតែ PNG, JPG, PDF។",
       "toastFileTooLarge": "{{fileName}} លើស 10MB",
-      "toastUploadError": "មិនអាចផ្ទុក {{fileName}} បានទេ"
+      "toastUploadError": "មិនអាចផ្ទុក {{fileName}} បានទេ",
+      "wordLimitExceeded": "អនុញ្ញាតអតិបរមា {{max}} ពាក្យ។"
     },
     "pickup": {
       "timeLabel": "ម៉ោងទៅយក",
@@ -364,6 +365,7 @@
     "noShow": "មិនបានមក",
     "paymentDetails": "ព័ត៌មានលម្អិតការទូទាត់",
     "consultationFee": "ថ្លៃពិគ្រោះ",
+    "deposit": "ការបង់បន្ថែម",
     "totalAmount": "ទឹកប្រាក់សរុប",
     "paymentMethod": "វិធីសាស្រ្តទូទាត់",
     "paid": "បានទូទាត់",

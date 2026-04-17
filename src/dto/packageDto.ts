@@ -80,6 +80,9 @@ export interface ApiPackage {
   imageUrl: string
   category: string
   price: number
+  promotionPrice?: number | null
+  promotionStart?: string | null
+  promotionEnd?: string | null
   durationMinutes: number
   countries: CountryDto[]
   checkupTypes: CheckupTypeDto[]

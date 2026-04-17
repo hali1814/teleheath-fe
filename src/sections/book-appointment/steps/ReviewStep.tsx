@@ -156,12 +156,7 @@ export function ReviewStep() {
     setData,
   } = useBookingStore()
 
-  const consultationFee =
-    bookingType === 'DOCTOR'
-      ? (doctor?.consultationFee ?? 0)
-      : bookingType === 'PACKAGE'
-        ? (packageData?.price ?? 0)
-        : (branch?.depositFee ?? 0)
+  const consultationFee = branch?.depositFee ?? 0
 
   useEffect(() => {
     calcFeeInfo(consultationFee)
@@ -530,7 +525,7 @@ export function ReviewStep() {
             {feeInfo.consultationFee > 0 && (
               <div className="flex items-center justify-between">
                 <Text className="leading-normal text-muted-foreground">
-                  {t('appointment:consultationFee')}
+                  {t('appointment:deposit')}
                 </Text>
                 <Text className="leading-normal font-medium text-[#333333]">
                   {formatPrice(consultationFee)}

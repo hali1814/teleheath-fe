@@ -10,9 +10,12 @@ interface ListPackagesRequest extends IPagingRequest {
   country?: string
   hospitalId?: string
   specialtyId?: number
+  category?: 'GENERAL' | 'SPECIALIZE'
   minPrice?: number
   maxPrice?: number
   specialized?: boolean
+  isHome?: boolean
+  homeSize?: number
 }
 
 const getListPackages = async (

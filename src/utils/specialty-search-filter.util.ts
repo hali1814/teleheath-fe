@@ -1,25 +1,24 @@
 /** Chuỗi có chứa keyword (đã normalize) — dùng cho filter client-side. */
 function haystackMatches(haystack: string, needle: string): boolean {
   if (!needle) return true
-  return haystack.toLowerCase().includes(needle)
+  return normalizeText(haystack).includes(needle)
+}
+
+function normalizeText(input: string): string {
+  return input
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .trim()
+    .toLowerCase()
 }
 
 function normalizeKeyword(keyword: string): string {
-  return keyword.trim().toLowerCase()
+  return normalizeText(keyword)
 }
 
 function asRecord(v: unknown): Record<string, unknown> | null {
   if (v == null || typeof v !== 'object' || Array.isArray(v)) return null
   return v as Record<string, unknown>
-}
-
-function countryBlob(c: unknown): string {
-  const o = asRecord(c)
-  if (!o) return ''
-  return [o.nameVi, o.nameEn, o.nameKh]
-    .map((x) => (typeof x === 'string' ? x : x != null ? String(x) : ''))
-    .filter(Boolean)
-    .join(' ')
 }
 
 function hospitalSearchBlob(h: unknown): string {
@@ -34,19 +33,7 @@ function hospitalSearchBlob(h: unknown): string {
 function doctorSearchBlob(d: unknown): string {
   const o = asRecord(d)
   if (!o) return ''
-  let spec = ''
-  if (Array.isArray(o.specialties)) {
-    spec = o.specialties
-      .map((s) => {
-        const r = asRecord(s)
-        if (!r) return ''
-        if (typeof r.name === 'string') return r.name
-        return ''
-      })
-      .filter(Boolean)
-      .join(' ')
-  }
-  return [o.nameVi, o.nameEn, o.nameKh, spec, countryBlob(o.country)]
+  return [o.name]
     .map((x) => (typeof x === 'string' ? x : x != null ? String(x) : ''))
     .filter(Boolean)
     .join(' ')
@@ -55,15 +42,6 @@ function doctorSearchBlob(d: unknown): string {
 function packageSearchBlob(p: unknown): string {
   const o = asRecord(p)
   if (!o) return ''
-  let countries = ''
-  if (Array.isArray(o.countries)) {
-    countries = o.countries.map(countryBlob).filter(Boolean).join(' ')
-  }
-  let hosp = ''
-  const h = asRecord(o.hospital)
-  if (h) {
-    hosp = [h.nameVi, h.nameEn, h.nameKh].filter(Boolean).join(' ')
-  }
   return [o.name]
     .map((x) => (typeof x === 'string' ? x : x != null ? String(x) : ''))
     .filter(Boolean)
