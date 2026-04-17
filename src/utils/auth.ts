@@ -2,6 +2,8 @@ import { toast } from 'sonner'
 
 const TELEHEALTH_AUTHEN_KEY = 'TELEHEALTH_AUTHEN'
 const WEB_END_SESSION = 'WEB_END_SESSION'
+const GO_BACK_BRIDGE_THROTTLE_MS = 1000
+let lastGoBackBridgeSentAt = 0
 
 type NativeBridgeWindow = Window & {
   Android?: {
@@ -98,6 +100,10 @@ const postMessageToNativeBridge = ({
 
 export const goBackToAppMobile = () => {
   if (typeof window === 'undefined') return
+
+  const now = Date.now()
+  if (now - lastGoBackBridgeSentAt < GO_BACK_BRIDGE_THROTTLE_MS) return
+  lastGoBackBridgeSentAt = now
 
   const path = `${window.location.pathname}${window.location.search}${window.location.hash}`
   const payload = { [TELEHEALTH_AUTHEN_KEY]: path }
