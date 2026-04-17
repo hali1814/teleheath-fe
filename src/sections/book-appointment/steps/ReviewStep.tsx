@@ -348,7 +348,9 @@ export function ReviewStep() {
                       className="w-[16px] h-[16px] text-primary"
                     />
                     <Text className="font-medium leading-normal text-[#333333]">
-                      {formatPrice(packageData?.price ?? 0)}
+                      {formatPrice(
+                        packageData?.promotionPrice ?? packageData?.price ?? 0,
+                      )}
                     </Text>
                   </div>
                 </div>
