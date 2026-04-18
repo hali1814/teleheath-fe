@@ -143,7 +143,7 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
             type="button"
             variant="ghost"
             onClick={(e) => {
-              // e.stopPropagation()
+              e.stopPropagation()
               if (!mapsHref) {
                 toast.error(t('getDirectionsDescription'))
                 return
@@ -151,7 +151,6 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
               webIntent(mapsHref ?? '')
             }}
             className={`h-[36px] gap-2 bg-[#FFF1F0]`}
-            asChild
           >
             <Icon name="map_blue" className="size-4" />
             <Text size="base_14" className="font-medium text-primary">
