@@ -97,14 +97,11 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
       if (isLikelyWebView()) {
         // In some mobile webviews, normal `download` via blob does not work.
         // Try opening in external browser first so user can save from there.
-        const openedOutside = window.open(
+        const openedNewTab = window.open(
           imageDataUrl,
-          '_system',
+          '_blank',
           'noopener,noreferrer',
         )
-        const openedNewTab =
-          openedOutside ||
-          window.open(imageDataUrl, '_blank', 'noopener,noreferrer')
 
         if (!openedNewTab) {
           window.location.href = imageDataUrl
