@@ -13,6 +13,7 @@ import { formatPrice } from '#/utils/price.util'
 import { useBookingStore } from '#/stores/booking-store'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 const POLL_INTERVAL_MS = 10_000
 
@@ -28,6 +29,33 @@ function isTerminalPaymentStatus(status: string) {
     'CANCELLED',
     'REFUNDED',
   ].includes(s)
+}
+
+function base64ToPngBlob(base64Data: string) {
+  const binary = atob(base64Data)
+  const bytes = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i)
+  }
+  return new Blob([bytes], { type: 'image/png' })
+}
+
+function isLikelyWebView() {
+  const ua = navigator.userAgent || ''
+  const isIOS = /iPad|iPhone|iPod/i.test(ua)
+  const isAndroid = /Android/i.test(ua)
+
+  if (isIOS) {
+    // iOS WebView thường không chứa "Safari"
+    return !/Safari/i.test(ua)
+  }
+
+  if (isAndroid) {
+    // Android WebView thường có "wv" hoặc "Version/x.y"
+    return /\bwv\b/i.test(ua) || /Version\/[\d.]+/i.test(ua)
+  }
+
+  return false
 }
 
 export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
@@ -59,6 +87,37 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     },
     [khqr, router, reset, navigate, data?.appointmentCode],
   )
+
+  const handleDownloadQr = useCallback(() => {
+    if (!khqr?.qrImage) return
+
+    const blob = base64ToPngBlob(khqr.qrImage)
+    const objectUrl = URL.createObjectURL(blob)
+    const filename = `khqr-${khqr.refId || bookingToken}.png`
+
+    try {
+      const anchor = document.createElement('a')
+      anchor.href = objectUrl
+      anchor.download = filename
+      anchor.rel = 'noopener noreferrer'
+      document.body.appendChild(anchor)
+      anchor.click()
+      document.body.removeChild(anchor)
+
+      if (isLikelyWebView()) {
+        const opened = window.open(objectUrl, '_blank', 'noopener,noreferrer')
+        if (!opened) {
+          window.location.href = objectUrl
+        }
+      }
+
+      toast.success(t('downloadQrSuccess'))
+    } catch {
+      toast.error(t('downloadQrError'))
+    } finally {
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 3000)
+    }
+  }, [khqr?.qrImage, khqr?.refId, bookingToken, t])
 
   useCheckStatusPaymentQuery({
     params: { refId: khqr?.refId ?? '' },
@@ -111,7 +170,11 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
               <Text className="leading-[1.2] text-black">{t('or')}</Text>
             </div>
 
-            <div className="flex flex-col items-center gap-[8px]">
+            <button
+              type="button"
+              onClick={handleDownloadQr}
+              className="flex flex-col items-center gap-[8px]"
+            >
               <div className="flex justify-center items-center gap-[8px]">
                 <Icon name="download" className="text-white" />
                 <Text className="leading-[1.2] text-[#11BFC6]">
@@ -121,7 +184,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
               <Text className="max-w-[230px] text-center text-[#808080] leading-normal">
                 {t('khqrMobileBankingHint')}
               </Text>
-            </div>
+            </button>
 
             <div className="w-full flex flex-col gap-[14px] p-[16px]">
               <div className="flex justify-between items-center">

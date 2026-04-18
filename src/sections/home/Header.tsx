@@ -1,8 +1,6 @@
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
-import { Badge } from '#/components/ui/badge'
-import { useGetListNotificationQuery } from '#/services/query/notification/list-notification'
-import { useProfileStore } from '#/stores/profile'
+import NotificationBell from './NotificationBell'
 import { Link, useRouter } from '@tanstack/react-router'
 
 export default function Header({
@@ -15,15 +13,6 @@ export default function Header({
   isCenter?: boolean
 }) {
   const router = useRouter()
-  const { profile } = useProfileStore()
-  const { data } = useGetListNotificationQuery({
-    params: {
-      statuses: 'DELIVERED',
-    },
-    enabled: !!profile?.id,
-  })
-
-  const notifications = data?.data ?? []
 
   return (
     <header className="sticky top-0 z-50 h-[62px] border-b-[0.5px] border-[#FFE8E6] bg-background">
@@ -32,20 +21,7 @@ export default function Header({
           <Link to="/app/home">
             <Icon name="logo" className="w-[155px] h-[48px]" />
           </Link>
-          {!!profile?.id && (
-            <Link to="/app/notification" className="relative">
-              <Icon
-                name="notification"
-                className="w-[21px] h-[21px]"
-                color="#B3B3B3"
-              />
-              <Badge className="absolute -top-1 -right-1 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
-                <Text size="xs_10" className="leading-[1.3] text-white">
-                  {notifications.length}
-                </Text>
-              </Badge>
-            </Link>
-          )}
+          <NotificationBell />
         </div>
       ) : isCenter ? (
         <div className="flex h-full items-center justify-center">

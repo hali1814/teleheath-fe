@@ -40,7 +40,7 @@ function RouteComponent() {
         <HospitalDetailHeader hospital={hospitalData} />
         <div className="flex flex-col gap-[16px] p-[16px]">
           {hospitalData?.gallery && hospitalData?.gallery?.length > 0 && (
-            <GalleryImage images={hospitalData?.gallery ?? []} />
+            <GalleryImage images={hospitalData?.gallery?.slice(0, 10) ?? []} />
           )}
           {hospitalData?.about && (
             <AboutHospital aboutUs={hospitalData?.about} />
