@@ -9,7 +9,7 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
 const MAX_FILE_BYTES = 10 * 1024 * 1024
-const MAX_WORDS = 500
+const MAX_CHARACTERS = 500
 
 function formatFileSize(bytes: number) {
   if (bytes < 1024) return `${bytes} B`
@@ -36,20 +36,17 @@ function isAllowedFile(file: File): boolean {
   )
 }
 
-function countWords(value?: string | null): number {
-  const trimmed = (value ?? '').trim()
-  if (!trimmed) return 0
-  return trimmed.split(/\s+/).length
+function countCharacters(value?: string | null): number {
+  return (value ?? '').length
 }
 
-function clampToMaxWords(value: string, maxWords: number) {
-  const words = value.trim().split(/\s+/).filter(Boolean)
-  if (words.length <= maxWords) {
+function clampToMaxCharacters(value: string, maxCharacters: number) {
+  if (value.length <= maxCharacters) {
     return { value, truncated: false }
   }
 
   return {
-    value: words.slice(0, maxWords).join(' '),
+    value: value.slice(0, maxCharacters),
     truncated: true,
   }
 }
@@ -118,17 +115,24 @@ export function MedicalRecords() {
     isShowError: false,
   })
 
-  const handleWordLimitedChange = (
+  const handleCharacterLimitedChange = (
     field: 'medicalHistory' | 'notes',
     value: string,
   ) => {
     const previousValue = field === 'medicalHistory' ? medicalHistory : notes
-    const previousCount = countWords(previousValue)
-    const nextCount = countWords(value)
-    const { value: clampedValue, truncated } = clampToMaxWords(value, MAX_WORDS)
+    const previousCount = countCharacters(previousValue)
+    const nextCount = countCharacters(value)
+    const { value: clampedValue, truncated } = clampToMaxCharacters(
+      value,
+      MAX_CHARACTERS,
+    )
 
-    if (truncated && previousCount <= MAX_WORDS && nextCount > MAX_WORDS) {
-      toast.error(t('medicalRecords.wordLimitExceeded', { max: MAX_WORDS }))
+    if (
+      truncated &&
+      previousCount <= MAX_CHARACTERS &&
+      nextCount > MAX_CHARACTERS
+    ) {
+      toast.error(t('medicalRecords.wordLimitExceeded', { max: MAX_CHARACTERS }))
     }
     setData({ [field]: clampedValue })
   }
@@ -242,7 +246,7 @@ export function MedicalRecords() {
             {t('medicalRecords.describeManual')}
           </Text>
           <Text size="sm_12" className="text-muted-foreground">
-            {countWords(medicalHistory)}/{MAX_WORDS}
+            {countCharacters(medicalHistory)}/{MAX_CHARACTERS}
           </Text>
         </div>
         <Textarea
@@ -250,7 +254,7 @@ export function MedicalRecords() {
           placeholder={t('medicalRecords.manualPlaceholder')}
           value={medicalHistory ?? ''}
           onChange={(e) =>
-            handleWordLimitedChange('medicalHistory', e.target.value)
+            handleCharacterLimitedChange('medicalHistory', e.target.value)
           }
         />
       </div>
@@ -262,14 +266,14 @@ export function MedicalRecords() {
           {t('medicalRecords.additionalNotes')}
         </Text>
         <Text size="sm_12" className="text-muted-foreground">
-          {countWords(notes)}/{MAX_WORDS}
+          {countCharacters(notes)}/{MAX_CHARACTERS}
         </Text>
       </div>
       <Textarea
         className="h-[92px] border-dust-red-1 bg-white rounded-[6px] px-[16px] py-[12px]"
         placeholder={t('medicalRecords.notesPlaceholder')}
         value={notes ?? ''}
-        onChange={(e) => handleWordLimitedChange('notes', e.target.value)}
+        onChange={(e) => handleCharacterLimitedChange('notes', e.target.value)}
       />
     </div>
   )
