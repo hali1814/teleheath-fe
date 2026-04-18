@@ -32,33 +32,6 @@ function isTerminalPaymentStatus(status: string) {
   ].includes(s)
 }
 
-function base64ToPngBlob(base64Data: string) {
-  const binary = atob(base64Data)
-  const bytes = new Uint8Array(binary.length)
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i)
-  }
-  return new Blob([bytes], { type: 'image/png' })
-}
-
-function isLikelyWebView() {
-  const ua = navigator.userAgent || ''
-  const isIOS = /iPad|iPhone|iPod/i.test(ua)
-  const isAndroid = /Android/i.test(ua)
-
-  if (isIOS) {
-    // iOS WebView thường không chứa "Safari"
-    return !/Safari/i.test(ua)
-  }
-
-  if (isAndroid) {
-    // Android WebView thường có "wv" hoặc "Version/x.y"
-    return /\bwv\b/i.test(ua) || /Version\/[\d.]+/i.test(ua)
-  }
-
-  return false
-}
-
 export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   const { t } = useTranslation(['payment'])
   const router = useRouter()
@@ -93,29 +66,12 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     if (!khqr?.qrImage) return
 
     try {
-      if (isLikelyWebView()) {
-        downloadImage(khqr.qrImage)
-        toast.success(t('downloadQrSuccess'))
-        return
-      }
-
-      const blob = base64ToPngBlob(khqr.qrImage)
-      const objectUrl = URL.createObjectURL(blob)
-      const filename = `khqr-${khqr.refId || bookingToken}.png`
-      const anchor = document.createElement('a')
-      anchor.href = objectUrl
-      anchor.download = filename
-      anchor.rel = 'noopener noreferrer'
-      document.body.appendChild(anchor)
-      anchor.click()
-      document.body.removeChild(anchor)
+      downloadImage(khqr.qrImage)
       toast.success(t('downloadQrSuccess'))
-
-      setTimeout(() => URL.revokeObjectURL(objectUrl), 3000)
     } catch {
       toast.error(t('downloadQrError'))
     }
-  }, [khqr?.qrImage, khqr?.refId, bookingToken, t])
+  }, [khqr?.qrImage, t])
 
   useCheckStatusPaymentQuery({
     params: { refId: khqr?.refId ?? '' },
