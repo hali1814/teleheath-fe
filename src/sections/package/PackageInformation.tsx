@@ -4,7 +4,9 @@ import type { Package } from '#/entities/packageEntity'
 import { useClampExpand } from '#/hooks/use-clamp-expand'
 import { cn } from '#/lib/utils'
 import { formatPrice } from '#/utils/price.util'
+import { sanitizeTipTapHtml } from '#/utils/sanitize-tiptap-html'
 import ExpandViewButton from '../common/ExpandViewButton'
+import { useMemo } from 'react'
 
 export default function InformationDetail({
   name,
@@ -16,13 +18,17 @@ export default function InformationDetail({
   Package,
   'name' | 'price' | 'description' | 'countryName' | 'promotionPrice'
 >) {
+  const safeDescriptionHtml = useMemo(
+    () => sanitizeTipTapHtml(description),
+    [description],
+  )
   const {
     ref: bodyRef,
     expanded,
     needsExpand,
     toggle,
   } = useClampExpand({
-    contentKey: description,
+    contentKey: safeDescriptionHtml,
   })
 
   const hasActiveDiscount = promotionPrice != null && price > promotionPrice
@@ -35,7 +41,7 @@ export default function InformationDetail({
       <div className="flex items-start justify-between gap-3">
         <div
           className={cn(
-            'flex min-w-0 flex-col gap-1',
+            'flex min-w-0 flex-col gap-[8px]',
             hasActiveDiscount ? 'flex-row items-center' : 'flex-col',
           )}
         >
@@ -48,8 +54,8 @@ export default function InformationDetail({
                 {formatPrice(promotionPrice)}
               </Text>
               <Text
-                size="base_14"
-                className="font-medium leading-normal text-muted-foreground line-through"
+                size="xl_18"
+                className="leading-normal text-muted-foreground line-through"
               >
                 {formatPrice(price)}
               </Text>
@@ -74,12 +80,11 @@ export default function InformationDetail({
         <div
           ref={bodyRef}
           className={cn(
-            'text-base text-muted-foreground leading-[1.7] font-normal',
+            'prose prose-sm max-w-none text-muted-foreground leading-[1.7] font-normal [&_img]:my-[16px] [&_img]:rounded-[6px]',
             expanded ? '' : 'line-clamp-5',
           )}
-        >
-          {description}
-        </div>
+          dangerouslySetInnerHTML={{ __html: safeDescriptionHtml }}
+        />
         {needsExpand && !expanded && (
           <div
             className="flex justify-center absolute -bottom-1 left-0 right-0 h-[32px]"

@@ -84,9 +84,26 @@ export default function PackageCard({
           className="text-muted-foreground leading-[1.3]"
           textSize="xs_10"
         />
-        <Text size="lg_16" className="font-semibold leading-[1.2] text-primary">
-          {hasActiveDiscount ? formatPrice(promotionPrice) : formatPrice(price)}
-        </Text>
+        {hasActiveDiscount ? (
+          <div className="flex items-center gap-[8px]">
+            <Text
+              size="lg_16"
+              className="font-semibold leading-[1.2] text-primary"
+            >
+              {formatPrice(promotionPrice)}
+            </Text>
+            <Text className="leading-normal text-muted-foreground line-through">
+              {formatPrice(price)}
+            </Text>
+          </div>
+        ) : (
+          <Text
+            size="lg_16"
+            className="font-semibold leading-[1.2] text-primary"
+          >
+            {formatPrice(price)}
+          </Text>
+        )}
         {!hideBookAppointment && (
           <Button
             className="w-full h-[32px] bg-dust-red-1"

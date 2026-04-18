@@ -437,7 +437,7 @@
     "scanToPay": "Scan to Pay",
     "or": "or",
     "downloadQr": "Download QR",
-    "downloadQrSuccess": "QR saved. If not, open image and save manually.",
+    "downloadQrSuccess": "Image downloaded successfully.",
     "downloadQrError": "Could not download QR. Please try again.",
     "khqrMobileBankingHint": "and upload to Mobile Banking app supporting KHQR",
     "subtotal": "Subtotal",
