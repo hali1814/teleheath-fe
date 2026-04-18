@@ -1,8 +1,4 @@
 import SearchBar from '#/components/SearchBar'
-import {
-  FEATURED_DOCTOR_PAGINATION,
-  SPECIALIZED_PACKAGE_PAGINATION,
-} from '#/const/pagination'
 import { DoctorLists } from '#/sections/doctor'
 import { HospitalList } from '#/sections/hospital'
 import { PackageList } from '#/sections/package'
@@ -21,6 +17,7 @@ import ListSpecialty from '#/sections/specialty/ListSpecialty'
 import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
 import { useAppStore } from '#/stores/app'
 import { NotificationBell } from '#/sections/home'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export const Route = createFileRoute('/app/home/')({
   component: RouteComponent,
@@ -32,7 +29,11 @@ function RouteComponent() {
   const router = useRouter()
   const { activeCountry } = useAppStore()
 
-  const { data, isPending: hospitalsPending } = useGetTopHospitalsQuery({
+  const {
+    data,
+    isPending: hospitalsPending,
+    refetch: refetchHospitals,
+  } = useGetTopHospitalsQuery({
     params: {
       country: activeCountry,
       size: 5,
@@ -40,7 +41,11 @@ function RouteComponent() {
   })
   const topHospitalsData = data?.data || []
 
-  const { data: specialtiesDataResponse, isPending: specialtiesPending } =
+  const {
+    data: specialtiesDataResponse,
+    isPending: specialtiesPending,
+    refetch: refetchSpecialties,
+  } =
     useGetListSpecialtyQuery({
       params: {
         country: activeCountry,
@@ -52,6 +57,7 @@ function RouteComponent() {
 
   const {
     isPending: packagesPending,
+    refetch: refetchPackages,
     data: { data: { content: packagesData } = { content: [] } } = {
       data: { content: [] },
     },
@@ -65,6 +71,7 @@ function RouteComponent() {
 
   const {
     isPending: doctorsPending,
+    refetch: refetchDoctors,
     data: { data: { content: doctorsData } = { content: [] } } = {
       data: { content: [] },
     },
@@ -76,8 +83,17 @@ function RouteComponent() {
     },
   })
 
+  const handleRefresh = async () => {
+    await Promise.all([
+      refetchHospitals(),
+      refetchSpecialties(),
+      refetchPackages(),
+      refetchDoctors(),
+    ])
+  }
+
   return (
-    <>
+    <PullToRefresh onRefresh={handleRefresh}>
       <div className="flex flex-col gap-[20px] px-[16px]">
         <div className="flex items-center gap-[16px]">
           <div className="min-w-0 flex-1">
@@ -161,6 +177,6 @@ function RouteComponent() {
           />
         )}
       </div>
-    </>
+    </PullToRefresh>
   )
 }
