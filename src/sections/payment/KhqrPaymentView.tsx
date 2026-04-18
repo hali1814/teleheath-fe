@@ -10,6 +10,7 @@ import { useNavigate, useRouter } from '@tanstack/react-router'
 import Image from '#/components/image'
 import { Icon } from '#/components/icon'
 import { formatPrice } from '#/utils/price.util'
+import { downloadImage } from '#/utils/auth'
 import { useBookingStore } from '#/stores/booking-store'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -91,25 +92,12 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   const handleDownloadQr = useCallback(() => {
     if (!khqr?.qrImage) return
 
-    const imageDataUrl = `data:image/png;base64,${khqr.qrImage}`
-
     try {
-      //   if (isLikelyWebView()) {
-      //     // In some mobile webviews, normal `download` via blob does not work.
-      //     // Try opening in external browser first so user can save from there.
-      //     const openedNewTab = window.open(
-      //       imageDataUrl,
-      //       '_blank',
-      //       'noopener,noreferrer',
-      //     )
-
-      //     if (!openedNewTab) {
-      //       window.location.href = imageDataUrl
-      //     }
-
-      //     toast.success(t('downloadQrSuccess'))
-      //     return
-      //   }
+      if (isLikelyWebView()) {
+        downloadImage(khqr.qrImage)
+        toast.success(t('downloadQrSuccess'))
+        return
+      }
 
       const blob = base64ToPngBlob(khqr.qrImage)
       const objectUrl = URL.createObjectURL(blob)

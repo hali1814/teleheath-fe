@@ -35,6 +35,11 @@ const formatTimeInput = (value: string) => {
     .padStart(2, '0')}`
 }
 
+const isValidPickupTime = (value?: string) => {
+  if (!value) return false
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(value)
+}
+
 const ServiceItem = ({
   service,
   onDetailClick,
@@ -44,6 +49,13 @@ const ServiceItem = ({
 }) => {
   const { t } = useTranslation(['book-appointment', 'common'])
   const { pickupTime, pickupDate, pickupNote, setData } = useBookingStore()
+  const [isPickupTimeTouched, setIsPickupTimeTouched] = useState(false)
+  const pickupTimeError =
+    isPickupTimeTouched && pickupTime && !isValidPickupTime(pickupTime)
+      ? t('pickup.invalidTimeFormat', {
+          defaultValue: 'Please enter a valid time in HH:mm format',
+        })
+      : undefined
 
   return (
     <div className="flex flex-col gap-[8px]">
@@ -69,9 +81,12 @@ const ServiceItem = ({
             pattern="[0-9:]*"
             maxLength={5}
             value={pickupTime}
-            onChange={(e) =>
+            msgError={pickupTimeError}
+            onBlur={() => setIsPickupTimeTouched(true)}
+            onChange={(e) => {
+              setIsPickupTimeTouched(true)
               setData({ pickupTime: formatTimeInput(e.target.value) })
-            }
+            }}
           />
           <TextInputBase
             label={t('pickup.addressLabel')}
