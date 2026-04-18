@@ -17,9 +17,9 @@ export function LocationStep({ type }: { type: LocationStepType }) {
     useBookingStore()
 
   const packageId =
-    ((packageData as { packageId?: number } | undefined)?.packageId ??
-      packageData?.id ??
-      0)
+    (packageData as { packageId?: number } | undefined)?.packageId ??
+    packageData?.id ??
+    0
 
   const updateBranch = useCallback(
     (nextBranch: Branch) => {
@@ -41,7 +41,10 @@ export function LocationStep({ type }: { type: LocationStepType }) {
   )
 
   const hospitalBranchesQuery = useGetListBranchesQuery({
-    params: { hospitalId: hospital?.hospitalId?.toString() ?? '' },
+    params: {
+      hospitalId: hospital?.hospitalId?.toString() ?? '',
+      isRoomAvailable: true,
+    },
     enabled: type === 'HOSPITAL' && !!hospital?.hospitalId,
   })
 

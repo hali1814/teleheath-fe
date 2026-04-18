@@ -4,6 +4,7 @@ import type { Branch } from '#/types/hospital'
 
 interface ListBranchesRequest {
   hospitalId: string
+  isRoomAvailable?: boolean
 }
 
 const getListBranches = async (
