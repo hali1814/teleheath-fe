@@ -91,11 +91,32 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   const handleDownloadQr = useCallback(() => {
     if (!khqr?.qrImage) return
 
-    const blob = base64ToPngBlob(khqr.qrImage)
-    const objectUrl = URL.createObjectURL(blob)
-    const filename = `khqr-${khqr.refId || bookingToken}.png`
+    const imageDataUrl = `data:image/png;base64,${khqr.qrImage}`
 
     try {
+      if (isLikelyWebView()) {
+        // In some mobile webviews, normal `download` via blob does not work.
+        // Try opening in external browser first so user can save from there.
+        const openedOutside = window.open(
+          imageDataUrl,
+          '_system',
+          'noopener,noreferrer',
+        )
+        const openedNewTab =
+          openedOutside ||
+          window.open(imageDataUrl, '_blank', 'noopener,noreferrer')
+
+        if (!openedNewTab) {
+          window.location.href = imageDataUrl
+        }
+
+        toast.success(t('downloadQrSuccess'))
+        return
+      }
+
+      const blob = base64ToPngBlob(khqr.qrImage)
+      const objectUrl = URL.createObjectURL(blob)
+      const filename = `khqr-${khqr.refId || bookingToken}.png`
       const anchor = document.createElement('a')
       anchor.href = objectUrl
       anchor.download = filename
@@ -103,19 +124,11 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
       document.body.appendChild(anchor)
       anchor.click()
       document.body.removeChild(anchor)
-
-      if (isLikelyWebView()) {
-        const opened = window.open(objectUrl, '_blank', 'noopener,noreferrer')
-        if (!opened) {
-          window.location.href = objectUrl
-        }
-      }
-
       toast.success(t('downloadQrSuccess'))
+
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 3000)
     } catch {
       toast.error(t('downloadQrError'))
-    } finally {
-      setTimeout(() => URL.revokeObjectURL(objectUrl), 3000)
     }
   }, [khqr?.qrImage, khqr?.refId, bookingToken, t])
 
