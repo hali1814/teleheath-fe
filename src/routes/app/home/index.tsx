@@ -20,6 +20,7 @@ import { useGetTopHospitalsQuery } from '#/services/query/hospital/top-hospitals
 import ListSpecialty from '#/sections/specialty/ListSpecialty'
 import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
 import { useAppStore } from '#/stores/app'
+import { NotificationBell } from '#/sections/home'
 
 export const Route = createFileRoute('/app/home/')({
   component: RouteComponent,
@@ -78,12 +79,17 @@ function RouteComponent() {
   return (
     <>
       <div className="flex flex-col gap-[20px] px-[16px]">
-        <SearchBar
-          isHome
-          placeholder={t('searchPlaceholder')}
-          isAutoScroll={true}
-          onClick={() => router.navigate({ to: '/app/search' })}
-        />
+        <div className="flex items-center gap-[16px]">
+          <div className="min-w-0 flex-1">
+            <SearchBar
+              isHome
+              placeholder={t('searchPlaceholder')}
+              isAutoScroll={true}
+              onClick={() => router.navigate({ to: '/app/search' })}
+            />
+          </div>
+          <NotificationBell />
+        </div>
         {/* <MenuList /> */}
         <SliderBanner />
         {/* <PremiumService /> */}

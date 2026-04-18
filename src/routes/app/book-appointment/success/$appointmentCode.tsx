@@ -3,6 +3,7 @@ import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import { createFileRoute, Link, useParams } from '@tanstack/react-router'
+import { toast } from 'sonner'
 
 export const Route = createFileRoute(
   '/app/book-appointment/success/$appointmentCode',
@@ -14,6 +15,15 @@ function RouteComponent() {
   const { appointmentCode } = useParams({
     from: '/app/book-appointment/success/$appointmentCode',
   })
+
+  const handleCopyBookingId = async () => {
+    try {
+      await navigator.clipboard.writeText(appointmentCode)
+      toast.success('Booking ID copied')
+    } catch {
+      toast.error('Failed to copy Booking ID')
+    }
+  }
 
   return (
     <div className="relative mt-[60px] px-[15px]">
@@ -35,7 +45,13 @@ function RouteComponent() {
               Booking ID:{' '}
               <span className="text-dust-red-8">#{appointmentCode}</span>
             </Text>
-            <Icon name="copy" className="w-[16px] h-[16px] text-dust-red-8" />
+            <button
+              type="button"
+              onClick={handleCopyBookingId}
+              aria-label="Copy booking ID"
+            >
+              <Icon name="copy" className="w-[16px] h-[16px] text-dust-red-8" />
+            </button>
           </div>
           <Text size="sm_12" className="leading-[1.3] text-muted-foreground">
             {formatDate(
