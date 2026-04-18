@@ -39,6 +39,10 @@ export function ModalDetailService({
     return null
   }
 
+  const hasActiveDiscount =
+    serviceType.promotionPrice != null &&
+    serviceType.originalPrice > serviceType.promotionPrice
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -87,12 +91,26 @@ export function ModalDetailService({
               <Text className="font-semibold leading-[1.2] text-[#333333]">
                 Price
               </Text>
-              <Text
-                size="lg_16"
-                className="leading-[1.2] font-semibold text-primary"
-              >
-                {formatPrice(serviceType.price)}
-              </Text>
+              {hasActiveDiscount ? (
+                <div className="flex items-center gap-[8px]">
+                  <Text
+                    size="lg_16"
+                    className="font-semibold leading-[1.2] text-primary"
+                  >
+                    {formatPrice(serviceType.promotionPrice)}
+                  </Text>
+                  <Text className="leading-normal text-muted-foreground line-through">
+                    {formatPrice(serviceType.originalPrice)}
+                  </Text>
+                </div>
+              ) : (
+                <Text
+                  size="lg_16"
+                  className="font-semibold leading-[1.2] text-primary"
+                >
+                  {formatPrice(serviceType.price)}
+                </Text>
+              )}
             </SectionHeading>
           </div>
         </div>

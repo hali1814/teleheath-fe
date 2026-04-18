@@ -46,6 +46,10 @@ export default function BranchPopUp({
   const [open, setOpen] = useState(false)
   const { t } = useTranslation(['package', 'common'])
 
+  if (branchCount === 0) {
+    return null
+  }
+
   return (
     <>
       <div

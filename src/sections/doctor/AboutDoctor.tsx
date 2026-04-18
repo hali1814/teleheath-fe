@@ -1,20 +1,23 @@
 import Text from '#/components/text'
 import { useClampExpand } from '#/hooks/use-clamp-expand'
 import { cn } from '#/lib/utils'
+import { sanitizeTipTapHtml } from '#/utils/sanitize-tiptap-html'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useTranslation } from 'react-i18next'
 import type { Doctor } from '#/entities/doctorEntity'
 import i18n from '#/i18n'
+import { useMemo } from 'react'
 
 export default function AboutDoctor({ bio }: Pick<Doctor, 'bio'>) {
   const { t } = useTranslation(['doctor', 'common'])
+  const safeBioHtml = useMemo(() => sanitizeTipTapHtml(bio), [bio])
   const {
     ref: bodyRef,
     expanded,
     needsExpand,
     toggle,
   } = useClampExpand({
-    contentKey: `${i18n.language}:${bio}`,
+    contentKey: `${i18n.language}:${safeBioHtml}`,
   })
 
   return (
@@ -26,12 +29,11 @@ export default function AboutDoctor({ bio }: Pick<Doctor, 'bio'>) {
         <div
           ref={bodyRef}
           className={cn(
-            'text-base text-muted-foreground leading-[1.7] font-normal',
+            'prose prose-sm max-w-none text-muted-foreground leading-[1.7] font-normal [&_img]:my-[16px] [&_img]:rounded-[6px]',
             expanded ? '' : 'line-clamp-6',
           )}
-        >
-          {bio}
-        </div>
+          dangerouslySetInnerHTML={{ __html: safeBioHtml }}
+        />
         {needsExpand && !expanded && (
           <div
             className="flex justify-center absolute -bottom-1 left-0 right-0 h-[32px]"
