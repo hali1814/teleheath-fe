@@ -8,16 +8,19 @@ import {
   DialogTitle,
 } from '#/components/ui/dialog'
 import type { ListFamilyPatient } from '#/services/query/profile/listFamily'
+import type { PatientProfileResponse } from '#/services/query/profile/getProfile'
 import FormProfile from './FormProfile'
 
 export default function ProfileFormModal({
   defaultValues,
   open,
   onOpenChange,
+  onSuccess,
 }: {
   defaultValues?: ListFamilyPatient | null
   open: boolean
   onOpenChange: (open: boolean) => void
+  onSuccess?: (profile?: PatientProfileResponse) => void
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -49,7 +52,10 @@ export default function ProfileFormModal({
           isUserProfile={false}
           idMember={defaultValues?.id}
           pyPassCheckViewMode
-          onSuccess={() => onOpenChange(false)}
+          onSuccess={(profile) => {
+            onSuccess?.(profile)
+            onOpenChange(false)
+          }}
           customButton={(handleSaveProfile) => (
             <div className="sticky bottom-0 left-0 right-0 flex justify-between items-center pt-[20px] pb-[24px] gap-[20px] bg-white">
               <Button

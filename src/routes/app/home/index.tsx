@@ -45,14 +45,13 @@ function RouteComponent() {
     data: specialtiesDataResponse,
     isPending: specialtiesPending,
     refetch: refetchSpecialties,
-  } =
-    useGetListSpecialtyQuery({
-      params: {
-        country: activeCountry,
-        isHome: true,
-        size: 6,
-      },
-    })
+  } = useGetListSpecialtyQuery({
+    params: {
+      country: activeCountry,
+      isHome: true,
+      size: 6,
+    },
+  })
   const specialtiesData = specialtiesDataResponse?.data || []
 
   const {
@@ -94,7 +93,7 @@ function RouteComponent() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-      <div className="flex flex-col gap-[20px] px-[16px]">
+      <div className="flex flex-col gap-[20px] px-[16px] mb-[20px]">
         <div className="flex items-center gap-[16px]">
           <div className="min-w-0 flex-1">
             <SearchBar
