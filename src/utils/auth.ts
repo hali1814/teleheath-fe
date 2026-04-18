@@ -133,21 +133,20 @@ export const endSession = () => {
   })
 }
 
-export const downloadImage = () => {
+export const downloadImage = (base64: string) => {
   if (typeof window === 'undefined') return
 
   const now = Date.now()
   if (now - lastDownloadImageBridgeSentAt < NATIVE_BRIDGE_THROTTLE_MS) return
   lastDownloadImageBridgeSentAt = now
 
-  const path = `${window.location.pathname}${window.location.search}${window.location.hash}`
-  const payload = { [DOWNLOAD_IMAGE]: path }
+  const payload = { [DOWNLOAD_IMAGE]: base64 }
 
   postMessageToNativeBridge({
     key: DOWNLOAD_IMAGE,
     payload,
     nativeMethodName: DOWNLOAD_IMAGE,
-    nativeMethodValue: path,
+    nativeMethodValue: base64,
     errorContext: DOWNLOAD_IMAGE,
     toastMessage: 'Cannot download image',
   })
