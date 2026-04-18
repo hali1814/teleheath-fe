@@ -8,7 +8,8 @@ import { clearTokens, getToken, setTokens } from '#/stores/token'
 import { useGetProfileQuery } from '#/services/query/profile/getProfile'
 import { useProfileStore } from '#/stores/profile'
 import { useAuthCamIDMutation } from '#/services/query/auth/authCamID'
-import { useEffect } from 'react'
+import LoadingBlocking from '#/components/LoadingBlocking'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/app')({
@@ -47,7 +48,12 @@ function App() {
   const lang = searchParams.get('lang')
   const path = searchParams.get('redirect')
 
-  const { i18n } = useTranslation('common')
+  const isPartnerTokenExchange = Boolean(code && code !== 'guest')
+  const [ssoExchangeComplete, setSsoExchangeComplete] = useState(
+    () => !isPartnerTokenExchange,
+  )
+
+  const { i18n, t } = useTranslation('common')
 
   const { mutate: authCamID } = useAuthCamIDMutation({
     onSuccess: (data) => {
@@ -90,11 +96,22 @@ function App() {
       return
     }
 
-    authCamID({ partnerToken: code! })
+    authCamID(
+      { partnerToken: code },
+      {
+        onSettled: () => {
+          setSsoExchangeComplete(true)
+        },
+      },
+    )
   }, [])
 
   return (
     <div className="bg-background min-h-screen">
+      <LoadingBlocking
+        isLoading={isPartnerTokenExchange && !ssoExchangeComplete}
+        label={t('entry.verifyingTitle')}
+      />
       <Outlet />
     </div>
   )
