@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { LocationCard } from '../LocationCard'
 import LoadingState from '#/components/LoadingState'
 import { useGetListBranchesByPackageQuery } from '#/services/query/package/list-branches-by-package'
+import { EmptyState } from '#/sections/search'
 
 const EMPTY_BRANCHES: Branch[] = []
 
@@ -93,7 +94,7 @@ export function LocationStep({ type }: { type: LocationStepType }) {
         <LoadingState />
       ) : (
         <>
-          {branches.length > 0 &&
+          {branches.length > 0 ? (
             branches.map((item) => (
               <LocationCard
                 key={String(item.branchId)}
@@ -105,7 +106,10 @@ export function LocationStep({ type }: { type: LocationStepType }) {
                 nameEn={item.nameEn}
                 address={item.detailedAddress}
               />
-            ))}
+            ))
+          ) : (
+            <EmptyState>No locations found</EmptyState>
+          )}
         </>
       )}
     </div>
