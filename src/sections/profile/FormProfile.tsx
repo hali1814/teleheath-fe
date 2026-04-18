@@ -47,7 +47,7 @@ export interface FormProfileProps {
   isUserProfile: boolean
   customButton?: (handleSaveProfile: () => void) => React.ReactNode
   containerClassName?: string
-  onSuccess?: () => void
+  onSuccess?: (profile?: PatientProfileResponse) => void
   pyPassCheckViewMode?: boolean
 }
 
@@ -489,7 +489,7 @@ export default function FormProfile({
     if (!res) return
     if (res.success) {
       toast.success(t('profileUpdated'))
-      onSuccess ? onSuccess() : router.history.back()
+      onSuccess ? onSuccess(res.data) : router.history.back()
       if (isUserProfile) {
         setProfile(res.data)
       }

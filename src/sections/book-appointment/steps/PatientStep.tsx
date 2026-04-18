@@ -3,7 +3,7 @@ import { useBookingStore } from '#/stores/booking-store'
 import { PatientProfileList } from '../PatientProfileList'
 import { MedicalRecords } from '../MedicalRecords'
 import { useGetListFamilyQuery } from '#/services/query/profile/listFamily'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useDebounce from '#/hooks/use-debounce'
 import { keepPreviousData } from '@tanstack/react-query'
 import LoadingState from '#/components/LoadingState'
@@ -28,6 +28,18 @@ export function PatientStep() {
     },
     placeholderData: keepPreviousData,
   })
+
+  useEffect(() => {
+    // Chỉ auto-select ở danh sách mặc định (không search) và khi chưa chọn profile nào.
+    if (searchQuery.trim() !== '' || patientProfile?.id) return
+
+    const selfProfile = patients.find(
+      (patient) => patient.relationship?.toUpperCase() === 'SELF',
+    )
+    if (selfProfile) {
+      setData({ patientProfile: selfProfile })
+    }
+  }, [patients, patientProfile?.id, searchQuery, setData])
 
   return (
     <div className="flex flex-col gap-[16px] ">
