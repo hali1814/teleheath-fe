@@ -3,9 +3,11 @@ import { toast } from 'sonner'
 const TELEHEALTH_AUTHEN_KEY = 'TELEHEALTH_AUTHEN'
 const WEB_END_SESSION = 'WEB_END_SESSION'
 const DOWNLOAD_IMAGE = 'DOWNLOAD_IMAGE'
+const WEB_INTENT = 'WEB_INTENT'
 const NATIVE_BRIDGE_THROTTLE_MS = 1000
 let lastGoBackBridgeSentAt = 0
 let lastDownloadImageBridgeSentAt = 0
+let lastWebIntentBridgeSentAt = 0
 
 type NativeBridgeWindow = Window & {
   Android?: {
@@ -149,5 +151,24 @@ export const downloadImage = (base64: string) => {
     nativeMethodValue: base64,
     errorContext: DOWNLOAD_IMAGE,
     toastMessage: 'Cannot download image',
+  })
+}
+
+export const webIntent = (url: string) => {
+  if (typeof window === 'undefined') return
+
+  const now = Date.now()
+  if (now - lastWebIntentBridgeSentAt < NATIVE_BRIDGE_THROTTLE_MS) return
+  lastWebIntentBridgeSentAt = now
+
+  const payload = { [WEB_INTENT]: url }
+
+  postMessageToNativeBridge({
+    key: WEB_INTENT,
+    payload,
+    nativeMethodName: WEB_INTENT,
+    nativeMethodValue: url,
+    errorContext: WEB_INTENT,
+    toastMessage: 'Cannot open web intent',
   })
 }

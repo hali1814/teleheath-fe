@@ -337,6 +337,7 @@
     "videoConsultation": "Video Consultation",
     "inPersonVisit": "In-person Visit",
     "getDirections": "Get Directions",
+    "getDirectionsDescription": "There is no address or map link available for this location.",
     "neurosurgeryAndSpineSurgery": "Neurosurgery and Spine Surgery",
     "joinCall": "Join Call",
     "bookAgain": "Book Again",

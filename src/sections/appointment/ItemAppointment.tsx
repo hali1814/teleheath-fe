@@ -10,6 +10,8 @@ import Image from '#/components/image'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import type { AppLanguage } from '#/i18n'
 import { getGoogleMapsHref } from '#/utils/google-maps.util'
+import { webIntent } from '#/utils/auth'
+import { toast } from 'sonner'
 
 export interface ItemAppointmentProps {
   appointment: MyAppointmentItem
@@ -141,24 +143,20 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
             type="button"
             variant="ghost"
             onClick={(e) => {
-              e.stopPropagation()
+              // e.stopPropagation()
+              if (!mapsHref) {
+                toast.error(t('getDirectionsDescription'))
+                return
+              }
+              webIntent(mapsHref ?? '')
             }}
             className={`h-[36px] gap-2 bg-[#FFF1F0]`}
             asChild
           >
-            <a
-              href={mapsHref ?? '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                if (!mapsHref) e.preventDefault()
-              }}
-            >
-              <Icon name="map_blue" className="size-4" />
-              <Text size="base_14" className="font-medium text-primary">
-                {t('getDirections')}
-              </Text>
-            </a>
+            <Icon name="map_blue" className="size-4" />
+            <Text size="base_14" className="font-medium text-primary">
+              {t('getDirections')}
+            </Text>
           </Button>
         </div>
       </div>
