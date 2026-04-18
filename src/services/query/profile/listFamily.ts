@@ -22,6 +22,7 @@ export interface ListFamilyPatient {
   fullName?: string | null
   dob?: string | null
   contactNumber?: string | null
+  genderText?: string | null
 }
 
 export interface ListFamilyResponse {

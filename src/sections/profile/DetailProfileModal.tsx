@@ -29,7 +29,7 @@ export default function DetailProfileModal({
   onEdit,
 }: DetailProfileModalProps) {
   const { t } = useTranslation(['profile', 'common'])
-  const ageText = getAgeText(patient.dateOfBirth)
+  const ageText = getAgeText(patient.dob ?? '')
   const genderText =
     patient.gender === 'MALE'
       ? t('profile:genderMale', { defaultValue: 'Male' })
