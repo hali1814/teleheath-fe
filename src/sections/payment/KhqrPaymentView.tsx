@@ -94,22 +94,22 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     const imageDataUrl = `data:image/png;base64,${khqr.qrImage}`
 
     try {
-      if (isLikelyWebView()) {
-        // In some mobile webviews, normal `download` via blob does not work.
-        // Try opening in external browser first so user can save from there.
-        const openedNewTab = window.open(
-          imageDataUrl,
-          '_blank',
-          'noopener,noreferrer',
-        )
+      //   if (isLikelyWebView()) {
+      //     // In some mobile webviews, normal `download` via blob does not work.
+      //     // Try opening in external browser first so user can save from there.
+      //     const openedNewTab = window.open(
+      //       imageDataUrl,
+      //       '_blank',
+      //       'noopener,noreferrer',
+      //     )
 
-        if (!openedNewTab) {
-          window.location.href = imageDataUrl
-        }
+      //     if (!openedNewTab) {
+      //       window.location.href = imageDataUrl
+      //     }
 
-        toast.success(t('downloadQrSuccess'))
-        return
-      }
+      //     toast.success(t('downloadQrSuccess'))
+      //     return
+      //   }
 
       const blob = base64ToPngBlob(khqr.qrImage)
       const objectUrl = URL.createObjectURL(blob)
