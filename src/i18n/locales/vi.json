@@ -337,6 +337,7 @@
     "videoConsultation": "Tư vấn video",
     "inPersonVisit": "Khám trực tiếp",
     "getDirections": "Chỉ đường",
+    "getDirectionsDescription": "Không có địa chỉ hoặc liên kết bản đồ cho vị trí này.",
     "neurosurgeryAndSpineSurgery": "Phẫu thuật thần kinh và cột sống",
     "joinCall": "Tham gia cuộc gọi",
     "bookAgain": "Đặt lại",
