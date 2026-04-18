@@ -11,6 +11,7 @@ export interface CheckStatusPaymentResponse {
   attempt: number
   paidAt?: string | null
   appointmentId: string
+  appointmentCode?: string
   appointmentStatus: string
 }
 
