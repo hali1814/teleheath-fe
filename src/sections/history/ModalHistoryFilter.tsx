@@ -228,7 +228,7 @@ export default function ModalHistoryFilter({
             onClick={handleClearAllFilters}
             disabled={!hasAnyFilterValue}
           >
-            <Text className="font-medium leading-normal text-[#A8071A]/50">
+            <Text className="font-medium leading-normal text-[#A8071A]">
               {t('common:actions.clearAllFilters')}
             </Text>
           </Button>

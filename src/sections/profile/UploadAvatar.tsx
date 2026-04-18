@@ -4,6 +4,7 @@ import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Spinner } from '#/components/ui/spinner'
 import { useUploadImageMutation } from '#/services/query/upload/use-upload-image-mutate'
+import { compressImageFile } from '#/utils/compress-image.util'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -42,8 +43,7 @@ export default function UploadAvatar({
   const uploadFile = useCallback(
     async (file: File) => {
       const res = await mutateAsync({ file })
-      console.log(res)
-      if (res.success && res.data?.fileUrl) {
+      if (res.success && res.data.fileUrl) {
         setAvatarUrl(res.data.fileUrl)
         onChange?.(res.data.fileUrl)
       }
@@ -56,7 +56,14 @@ export default function UploadAvatar({
       const file = e.target.files?.[0]
       e.target.value = ''
       if (!file) return
-      if (file.size > MAX_AVATAR_SIZE_BYTES) {
+
+      const targetMaxBytes = Math.floor(MAX_AVATAR_SIZE_BYTES * 0.95)
+      const toUpload =
+        file.type.startsWith('image/') && file.size > targetMaxBytes
+          ? await compressImageFile(file, { maxBytes: targetMaxBytes })
+          : file
+
+      if (toUpload.size > MAX_AVATAR_SIZE_BYTES) {
         toast.error(
           t('fileTooLargeTitle', {
             ns: 'profile',
@@ -70,9 +77,9 @@ export default function UploadAvatar({
         )
         return
       }
-      await uploadFile(file)
+      await uploadFile(toUpload)
     },
-    [uploadFile, t],
+    [uploadFile, t, MAX_AVATAR_SIZE_BYTES, MAX_AVATAR_SIZE_MB],
   )
 
   const openInputAfterSheetClose = (
