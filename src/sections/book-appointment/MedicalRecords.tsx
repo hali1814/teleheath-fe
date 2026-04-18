@@ -183,7 +183,7 @@ export function MedicalRecords() {
 
   const removeRow = (index: number) => {
     const row = medicalFiles[index]
-    if (row?.fileId) {
+    if (row && row.status !== 'uploading') {
       removeMedicalFile(row.id)
     }
   }

@@ -436,6 +436,8 @@
     "scanToPay": "Quét để thanh toán",
     "or": "hoặc",
     "downloadQr": "Tải mã QR",
+    "downloadQrSuccess": "Đã lưu mã QR. Nếu chưa thấy, hãy mở ảnh và lưu thủ công.",
+    "downloadQrError": "Không thể tải mã QR. Vui lòng thử lại.",
     "khqrMobileBankingHint": "và tải lên ứng dụng ngân hàng di động hỗ trợ KHQR",
     "subtotal": "Tạm tính",
     "total": "TỔNG CỘNG",

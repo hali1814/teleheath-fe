@@ -3,7 +3,7 @@ import EmptyPatientProfiles from './EmptyPatientProfiles'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import { Icon } from '#/components/icon'
 import { cn } from '#/lib/utils'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DetailProfileModal from '../profile/DetailProfileModal'
 import ProfileFormModal from '../profile/ProfileFormModal'
 import type { ListFamilyPatient } from '#/services/query/profile/listFamily'
@@ -92,6 +92,9 @@ export function PatientProfileList({
   const [openAddNewProfileModal, setOpenAddNewProfileModal] = useState(false)
   const [patientToViewDetails, setPatientToViewDetails] =
     useState<ListFamilyPatient | null>(null)
+  const [pendingSelectProfileId, setPendingSelectProfileId] = useState<
+    number | null
+  >(null)
   const addDisabled = !canAddMore
 
   const handleViewDetails = (patientId: number) => {
@@ -100,6 +103,16 @@ export function PatientProfileList({
     setPatientToViewDetails(patient)
     setOpen(true)
   }
+
+  useEffect(() => {
+    if (!pendingSelectProfileId) return
+
+    const createdProfile = profiles.find((p) => p.id === pendingSelectProfileId)
+    if (!createdProfile) return
+
+    onClick?.(createdProfile)
+    setPendingSelectProfileId(null)
+  }, [pendingSelectProfileId, profiles, onClick])
 
   return (
     <>
@@ -164,6 +177,11 @@ export function PatientProfileList({
         defaultValues={patientToViewDetails}
         open={openAddNewProfileModal}
         onOpenChange={setOpenAddNewProfileModal}
+        onSuccess={(profile) => {
+          if (!patientToViewDetails && profile?.id) {
+            setPendingSelectProfileId(profile.id)
+          }
+        }}
       />
     </>
   )
