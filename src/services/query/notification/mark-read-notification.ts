@@ -30,7 +30,7 @@ export const useMarkReadNotificationMutation = (
   return useMutation({
     mutationFn: (variables: MarkReadNotificationRequest, signal: AbortSignal) =>
       markReadNotification(variables, signal),
-    mutationKey: ['mark-read-notification'],
+    mutationKey: ['mark-read-notification', 'list-notification'],
     ...options,
   })
 }

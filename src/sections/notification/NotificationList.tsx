@@ -16,6 +16,9 @@ export default function NotificationList() {
   })
 
   const notifications = data?.data ?? []
+  const isAllRead =
+    notifications.length > 0 &&
+    notifications.every((notification) => notification.status === 'READ')
 
   const { mutateAsync: markReadAllNotification } =
     useMarkReadAllNotificationMutation()
@@ -30,7 +33,7 @@ export default function NotificationList() {
       <button
         className="self-end flex items-center gap-[4px] mr-[16px] disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={() => markReadAllNotification({})}
-        disabled={notifications.length === 0 || isLoading}
+        disabled={notifications.length === 0 || isLoading || isAllRead}
       >
         <Icon
           name="double_check"

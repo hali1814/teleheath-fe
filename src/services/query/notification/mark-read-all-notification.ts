@@ -26,7 +26,7 @@ export const useMarkReadAllNotificationMutation = (
       variables: MarkReadAllNotificationRequest,
       signal: AbortSignal,
     ) => markReadAllNotification(variables, signal),
-    mutationKey: ['mark-read-all-notification'],
+    mutationKey: ['mark-read-all-notification', 'list-notification'],
     ...options,
   })
 }
