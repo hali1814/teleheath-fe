@@ -24,7 +24,11 @@ export const ServiceCard = ({
   onDetailClick: () => void
 }) => {
   const { i18n } = useTranslation()
-  const { typeName, originalPrice, price, amenities, isBest } = service
+  const { typeName, originalPrice, promotionPrice, price, amenities, isBest } =
+    service
+
+  const hasActiveDiscount =
+    promotionPrice != null && originalPrice > promotionPrice
 
   return (
     <div
@@ -74,20 +78,61 @@ export const ServiceCard = ({
       <Text size="sm_12" className="leading-[1.2] font-medium">
         {typeName}
       </Text>
-      <div className="flex justify-between items-center">
-        <Text
-          size="xs_10"
-          className="leading-[15px] tracking-[1px] text-[#707977]"
-        >
-          Price around
-        </Text>
-        <Text
-          size="sm_12"
-          className="leading-[1.2] font-extrabold text-[#00322D]"
-        >
-          {price !== 0 && price ? formatPrice(price) : 'Contact later'}
-        </Text>
-      </div>
+      {price !== 0 && price && (
+        <div className="flex justify-between items-center">
+          <Text
+            size="xs_10"
+            className="leading-[15px] tracking-[1px] text-[#707977]"
+          >
+            Price around
+          </Text>
+          {hasActiveDiscount ? (
+            <div className="flex items-center gap-[8px]">
+              <Text
+                size="sm_12"
+                className="leading-[1.2] font-extrabold text-[#E22A36]"
+              >
+                {promotionPrice !== 0 && promotionPrice
+                  ? formatPrice(promotionPrice)
+                  : 'Contact later'}
+              </Text>
+              <Text
+                size="sm_12"
+                className="leading-[1.2] font-extrabold text-muted-foreground line-through"
+              >
+                {originalPrice !== 0 && originalPrice
+                  ? formatPrice(originalPrice)
+                  : 'Contact later'}
+              </Text>
+            </div>
+          ) : (
+            <Text
+              size="sm_12"
+              className="leading-[1.2] font-extrabold text-[#00322D]"
+            >
+              {originalPrice !== 0 && originalPrice
+                ? formatPrice(originalPrice)
+                : 'Contact later'}
+            </Text>
+          )}
+        </div>
+      )}
+      {service.partner.distanceFromHospital && (
+        <div className="flex justify-between items-center">
+          <Text
+            size="xs_10"
+            className="leading-[15px] tracking-[1px] text-[#707977]"
+          >
+            Distance from hospital
+          </Text>
+          <Text
+            size="sm_12"
+            className="leading-[1.2] font-extrabold text-[#00322D]"
+          >
+            {service.partner.distanceFromHospital}
+          </Text>
+        </div>
+      )}
       <div className="flex items-center flex-wrap gap-[12px]">
         {amenities &&
           amenities.map((amenity: Amenity) => (
