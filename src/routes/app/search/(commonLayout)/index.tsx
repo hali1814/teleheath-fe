@@ -54,6 +54,7 @@ function RouteComponent() {
     params: {
       keyword: searchKeyword ?? '',
       type: 'ALL',
+      hasRoomAvailable: true,
     },
     enabled: searchKeyword !== null && searchKeyword.trim().length > 0,
     onSuccess: ({ data }) => {

@@ -12,6 +12,7 @@ import type { Package } from '#/entities/packageEntity'
 
 interface SearchRequest {
   specialtyId: number
+  hasRoomAvailable?: boolean
 }
 
 interface SearchSpecialtyApiResponse {

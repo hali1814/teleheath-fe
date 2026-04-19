@@ -47,6 +47,7 @@ function RouteComponent() {
   } = useGetSearchSpecialtyQuery({
     params: {
       specialtyId: Number(specialtyId),
+      hasRoomAvailable: true,
     },
     enabled: Number.isFinite(Number(specialtyId)),
   })
