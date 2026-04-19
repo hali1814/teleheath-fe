@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import z from 'zod'
+import PullToRefresh from '#/components/PullToRefresh'
 
 const specialtySearchSchema = z.object({
   specialtyName: z.string(),
@@ -39,7 +40,7 @@ function RouteComponent() {
 
   const {
     isLoading,
-    isFetching,
+    refetch,
     data: { data: searchData } = {
       data: { hospitals: [], doctors: [], packages: [] },
     },
@@ -74,6 +75,10 @@ function RouteComponent() {
     setQuery(value)
   }
 
+  const handleRefresh = async () => {
+    await refetch()
+  }
+
   const counts = {
     all:
       searchResults.hospitals.length +
@@ -95,25 +100,27 @@ function RouteComponent() {
           onClear={() => setQuery('')}
         />
       </div>
-      {(isLoading || isFetching) && <LoadingState />}
-      {!isLoading && !isFetching && counts.all > 0 && (
+      {isLoading && <LoadingState />}
+      {!isLoading && counts.all > 0 && (
         <>
-          <SearchTabs
-            value={tab}
-            onChange={setTab}
-            variant="round"
-            counts={counts}
-          />
-          <SearchResults
-            data={searchResults}
-            tab={tab}
-            query={searchKeyword}
-            hideCount
-            hideBookAppointment={false}
-          />
+          <PullToRefresh onRefresh={handleRefresh}>
+            <SearchTabs
+              value={tab}
+              onChange={setTab}
+              variant="round"
+              counts={counts}
+            />
+            <SearchResults
+              data={searchResults}
+              tab={tab}
+              query={searchKeyword}
+              hideCount
+              hideBookAppointment={false}
+            />
+          </PullToRefresh>
         </>
       )}
-      {!isLoading && !isFetching && counts.all === 0 && (
+      {!isLoading && counts.all === 0 && (
         <>
           <SearchTabs
             value={tab}
@@ -122,13 +129,13 @@ function RouteComponent() {
             counts={counts}
           />
           <EmptyState>
-            {rawTotalCount === 0
-              ? t('common:noDataAvailable')
-              : searchKeyword
-                ? (
-                    <TransNoResultsFor query={searchKeyword} />
-                  )
-                : t('common:noDataAvailable')}
+            {rawTotalCount === 0 ? (
+              t('common:noDataAvailable')
+            ) : searchKeyword ? (
+              <TransNoResultsFor query={searchKeyword} />
+            ) : (
+              t('common:noDataAvailable')
+            )}
           </EmptyState>
         </>
       )}
