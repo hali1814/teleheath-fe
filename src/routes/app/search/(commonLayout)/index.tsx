@@ -15,6 +15,7 @@ import { useGetSuggestionQuery } from '#/services/query/search/suggestion'
 import { useGetSearchQuery } from '#/services/query/search/search'
 import { useSearchStore } from '#/stores/search'
 import LoadingState from '#/components/LoadingState'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export const Route = createFileRoute('/app/search/(commonLayout)/')({
   component: RouteComponent,
@@ -33,19 +34,22 @@ function RouteComponent() {
   const { recentSearches, addRecent, removeRecent, clearRecent } =
     useSearchStore()
 
-  const { data: { data: { suggestions } } = { data: { suggestions: [] } } } =
-    useGetSuggestionQuery({
-      params: {
-        keyword: debouncedQuery,
-      },
-      enabled: debouncedQuery.length > 0,
-      placeholderData: keepPreviousData,
-    })
+  const {
+    data: { data: { suggestions } } = { data: { suggestions: [] } },
+    refetch: refetchSuggestions,
+  } = useGetSuggestionQuery({
+    params: {
+      keyword: debouncedQuery,
+    },
+    enabled: debouncedQuery.length > 0,
+    placeholderData: keepPreviousData,
+  })
 
   const {
     data: { data: searchData } = {
       data: { hospitals: [], doctors: [], packages: [] },
     },
+    refetch: refetchSearch,
   } = useGetSearchQuery({
     params: {
       keyword: searchKeyword ?? '',
@@ -100,6 +104,10 @@ function RouteComponent() {
     handleSelect(query)
   }
 
+  const handleRefresh = async () => {
+    await Promise.all([refetchSuggestions(), refetchSearch()])
+  }
+
   return (
     <>
       <SearchInput
@@ -125,8 +133,10 @@ function RouteComponent() {
       {status === 'LOADING' && <LoadingState />}
       {status === 'RESULT' && (
         <>
-          <SearchTabs value={tab} onChange={setTab} />
-          <SearchResults data={searchResults} tab={tab} query={query} />
+          <PullToRefresh onRefresh={handleRefresh}>
+            <SearchTabs value={tab} onChange={setTab} />
+            <SearchResults data={searchResults} tab={tab} query={query} />
+          </PullToRefresh>
         </>
       )}
       {status === 'EMPTY' && (

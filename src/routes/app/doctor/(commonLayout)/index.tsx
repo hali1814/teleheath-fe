@@ -21,6 +21,7 @@ import {
   priceRangeKeyToMinMax,
 } from '#/sections/package/package-filter-price'
 import { EmptyState } from '#/sections/search'
+import PullToRefresh from '#/components/PullToRefresh'
 
 const optionalTrim = (s: string | undefined) => s?.trim() || undefined
 
@@ -99,6 +100,7 @@ function RouteComponent() {
     data: { data: { content: doctorsData = [] } = { content: [] } } = {
       data: { content: [] },
     },
+    refetch,
   } = useGetListDoctorQuery({
     params: {
       ...ALL_PAGINATION,
@@ -152,6 +154,10 @@ function RouteComponent() {
     })
   }
 
+  const handleRefresh = async () => {
+    await refetch()
+  }
+
   return (
     <>
       <Header title={t('doctor:title')} />
@@ -179,13 +185,17 @@ function RouteComponent() {
         </div>
         {doctorsData.length > 0 ? (
           <>
-            {doctorsData.map((doctor) => (
-              <DoctorCard
-                key={doctor.doctorId}
-                variant="horizontal"
-                {...doctor}
-              />
-            ))}
+            <PullToRefresh onRefresh={handleRefresh}>
+              <div className="flex flex-col gap-[16px]">
+                {doctorsData.map((doctor) => (
+                  <DoctorCard
+                    key={doctor.doctorId}
+                    variant="horizontal"
+                    {...doctor}
+                  />
+                ))}
+              </div>
+            </PullToRefresh>
           </>
         ) : (
           <EmptyState>{t('search:empty.doctors')}</EmptyState>

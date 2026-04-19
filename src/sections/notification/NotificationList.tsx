@@ -7,10 +7,11 @@ import { useMarkReadAllNotificationMutation } from '#/services/query/notificatio
 import LoadingBlocking from '#/components/LoadingBlocking'
 import LoadingState from '#/components/LoadingState'
 import { useTranslation } from 'react-i18next'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export default function NotificationList() {
   const { t } = useTranslation(['common', 'search'])
-  const { data, isLoading } = useGetListNotificationQuery({
+  const { data, isLoading, refetch } = useGetListNotificationQuery({
     params: {},
   })
 
@@ -19,7 +20,12 @@ export default function NotificationList() {
   const { mutateAsync: markReadAllNotification } =
     useMarkReadAllNotificationMutation()
 
+  const handleRefresh = async () => {
+    await refetch()
+  }
+
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <div className="w-full flex flex-col mt-[16px] gap-[10px]">
       <button
         className="self-end flex items-center gap-[4px] mr-[16px] disabled:opacity-50 disabled:cursor-not-allowed"
@@ -56,5 +62,6 @@ export default function NotificationList() {
         )}
       </div>
     </div>
+    </PullToRefresh>
   )
 }

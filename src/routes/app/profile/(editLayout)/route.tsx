@@ -1,17 +1,17 @@
 import Header from '#/sections/home/Header'
-import { useProfileEditLayoutTitleStore } from '#/stores/profile-edit-layout-title'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/app/profile/(editLayout)')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const title = useProfileEditLayoutTitleStore((s) => s.title)
+  const { t } = useTranslation(['profile'])
 
   return (
     <div>
-      <Header title={title} />
+      <Header title={t('medicalProfiles')} />
       <Outlet />
     </div>
   )

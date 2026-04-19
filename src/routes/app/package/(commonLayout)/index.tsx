@@ -19,6 +19,7 @@ import useDebounce from '#/hooks/use-debounce'
 import { keepPreviousData } from '@tanstack/react-query'
 import { EmptyState } from '#/sections/search'
 import type { Package } from '#/entities/packageEntity'
+import PullToRefresh from '#/components/PullToRefresh'
 
 function parseSearchInt(v: unknown): number | undefined {
   if (v === undefined || v === null || v === '') return undefined
@@ -89,6 +90,7 @@ function RouteComponent() {
     data: { data: { content: packagesData } = { content: [] } } = {
       data: { content: [] },
     },
+    refetch,
   } = useGetListPackagesQuery({
     params: {
       ...ALL_PAGINATION,
@@ -132,6 +134,10 @@ function RouteComponent() {
     })
   }
 
+  const handleRefresh = async () => {
+    await refetch()
+  }
+
   return (
     <>
       <Header title={t('title')} />
@@ -159,9 +165,13 @@ function RouteComponent() {
         </div>
         {packagesData.length > 0 ? (
           <>
-            {packagesData.map((p: Package) => (
-              <PackageCard key={p.packageId} {...p} truncateName={false} />
-            ))}
+            <PullToRefresh onRefresh={handleRefresh}>
+              <div className="flex flex-col gap-[16px]">
+                {packagesData.map((p: Package) => (
+                  <PackageCard key={p.packageId} {...p} truncateName={false} />
+                ))}
+              </div>
+            </PullToRefresh>
           </>
         ) : (
           <EmptyState>{t('search:empty.packages')}</EmptyState>
