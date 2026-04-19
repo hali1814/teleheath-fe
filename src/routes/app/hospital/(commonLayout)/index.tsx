@@ -71,6 +71,7 @@ function RouteComponent() {
     params: {
       ...ALL_PAGINATION,
       keyword: debouncedQuery,
+      hasRoomAvailable: true,
       ...(search.country ? { country: search.country } : {}),
     },
     placeholderData: keepPreviousData,
