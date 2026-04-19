@@ -7,6 +7,7 @@ import type { ApiTopHospitals } from '#/dto/hospitalDto'
 interface TopHospitalsRequest {
   country?: string
   size?: number
+  hasRoomAvailable?: boolean
 }
 
 const getTopHospitals = async (
