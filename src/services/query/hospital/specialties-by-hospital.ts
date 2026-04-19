@@ -5,6 +5,7 @@ import type { Specialty } from '#/types/specialty'
 interface SpecialtiesByHospitalRequest {
   hospitalId: string
   keyword?: string
+  hasRoomAvailable?: boolean
 }
 
 const getSpecialtiesByHospital = async (

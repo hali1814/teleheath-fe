@@ -20,6 +20,7 @@ export function SpecialtyStep() {
     params: {
       hospitalId: hospital?.hospitalId ?? '',
       keyword: debouncedSearch,
+      hasRoomAvailable: true,
     },
     enabled: !!hospital?.hospitalId,
     placeholderData: keepPreviousData,
