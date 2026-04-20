@@ -48,7 +48,7 @@ const ServiceItem = ({
   onDetailClick: () => void
 }) => {
   const { t } = useTranslation(['book-appointment', 'common'])
-  const { pickupTime, pickupDate, pickupNote, setData } = useBookingStore()
+  const { pickupTime, pickupAddress, pickupNote, setData } = useBookingStore()
   const [isPickupTimeTouched, setIsPickupTimeTouched] = useState(false)
   const pickupTimeError =
     isPickupTimeTouched && pickupTime && !isValidPickupTime(pickupTime)
@@ -91,8 +91,8 @@ const ServiceItem = ({
           <TextInputBase
             label={t('pickup.addressLabel')}
             placeholder={t('pickup.placeholderAddress')}
-            value={pickupDate}
-            onChange={(e) => setData({ pickupDate: e.target.value })}
+            value={pickupAddress}
+            onChange={(e) => setData({ pickupAddress: e.target.value })}
           />
           <TextInputBase
             label={t('pickup.noteLabel')}
