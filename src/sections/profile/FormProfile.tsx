@@ -168,11 +168,11 @@ export default function FormProfile({
   const dateOfBirth = useWatch({ control, name: 'dateOfBirth' })
   const formValues = useWatch({ control })
 
-  const isUnder18 = useMemo(() => {
+  const isUnder12 = useMemo(() => {
     if (!dateOfBirth) return false
     const parsed = dayjs(dateOfBirth, 'YYYY-MM-DD', true)
     if (!parsed.isValid()) return false
-    return dayjs().diff(parsed, 'year') < 18
+    return dayjs().diff(parsed, 'year') < 12
   }, [dateOfBirth])
   const [editModeMemberFamily, setEditModeMemberFamily] = useState<
     'edit' | 'view'
@@ -181,7 +181,7 @@ export default function FormProfile({
   const isViewMode =
     editModeMemberFamily === 'view' && Boolean(idMember) && !pyPassCheckViewMode
 
-  const isPhoneLockedByAge = isUnder18 && !isUserProfile
+  const isPhoneLockedByAge = isUnder12 && !isUserProfile
   const setLayoutTitle = useProfileEditLayoutTitleStore((s) => s.setTitle)
 
   useEffect(() => {
