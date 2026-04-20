@@ -17,6 +17,10 @@ export default function LocationBadge({
 }) {
   const textColor = disabled ? 'text-primary/50' : 'text-primary'
 
+  if (location === '') {
+    return null
+  }
+
   return (
     <div className="flex items-start gap-[4px]">
       <Icon

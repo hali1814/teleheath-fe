@@ -362,11 +362,24 @@ export function ReviewStep() {
                       name="money"
                       className="w-[16px] h-[16px] text-primary"
                     />
-                    <Text className="font-medium leading-normal text-[#333333]">
-                      {formatPrice(
-                        packageData?.promotionPrice ?? packageData?.price ?? 0,
-                      )}
-                    </Text>
+                    {packageData?.promotionPrice != null &&
+                    packageData?.price > packageData?.promotionPrice ? (
+                      <div className="flex items-center gap-[8px]">
+                        <Text
+                          size="lg_16"
+                          className="font-semibold leading-[1.2] text-primary"
+                        >
+                          {formatPrice(packageData?.promotionPrice)}
+                        </Text>
+                        <Text className="leading-normal text-muted-foreground line-through">
+                          {formatPrice(packageData?.price)}
+                        </Text>
+                      </div>
+                    ) : (
+                      <Text className="font-medium leading-normal text-[#333333]">
+                        {formatPrice(packageData?.price)}
+                      </Text>
+                    )}
                   </div>
                 </div>
               </div>

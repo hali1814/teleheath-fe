@@ -23,6 +23,7 @@ import {
 import LoadingState from '#/components/LoadingState'
 import { useProfileStore } from '#/stores/profile'
 import RequireLogin from '#/components/RequireLogin'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export const Route = createFileRoute('/app/history/')({
   component: RouteComponent,
@@ -49,7 +50,11 @@ function RouteComponent() {
 
   const { profile } = useProfileStore()
 
-  const { data: appointments, isLoading } = useGetMyAppointmentsQuery({
+  const {
+    data: appointments,
+    isLoading,
+    refetch,
+  } = useGetMyAppointmentsQuery({
     params: {
       page: 0,
       size: 1805,
@@ -95,6 +100,10 @@ function RouteComponent() {
     estimateSize: (index) => (rows[index]?.kind === 'title' ? 44 : 140),
     overscan: 6,
   })
+
+  const handleRefresh = async () => {
+    await refetch()
+  }
 
   const filterBadgeCount = useMemo(() => {
     const f = filterOpen ? draftFilter : appliedFilter
@@ -186,48 +195,50 @@ function RouteComponent() {
             ref={parentRef}
             className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 pt-4"
           >
-            <div
-              className="relative w-full"
-              style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
-            >
-              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                const row = rows[virtualRow.index]
+            <PullToRefresh onRefresh={handleRefresh}>
+              <div
+                className="relative w-full"
+                style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+              >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                  const row = rows[virtualRow.index]
 
-                return (
-                  <div
-                    key={virtualRow.key}
-                    data-index={virtualRow.index}
-                    ref={rowVirtualizer.measureElement}
-                    className="absolute left-0 top-0 w-full pb-3"
-                    style={{ transform: `translateY(${virtualRow.start}px)` }}
-                  >
-                    {row.kind === 'title' ? (
-                      <div className="flex items-center gap-2">
-                        <Text
-                          size="base_14"
-                          className={cn(
-                            'text-[14px] font-medium uppercase leading-none tracking-[0.03em]',
-                            row.isCurrentMonth
-                              ? 'text-[#A8071A]'
-                              : 'text-[#64748B]',
-                          )}
-                        >
-                          {row.title}
-                        </Text>
-                        {row.isCurrentMonth ? (
-                          <span
-                            className="size-[6px] shrink-0 rounded-full bg-[#A8071A]"
-                            aria-hidden
-                          />
-                        ) : null}
-                      </div>
-                    ) : (
-                      <ItemHistoryAppointment item={row.item} />
-                    )}
-                  </div>
-                )
-              })}
-            </div>
+                  return (
+                    <div
+                      key={virtualRow.key}
+                      data-index={virtualRow.index}
+                      ref={rowVirtualizer.measureElement}
+                      className="absolute left-0 top-0 w-full pb-3"
+                      style={{ transform: `translateY(${virtualRow.start}px)` }}
+                    >
+                      {row.kind === 'title' ? (
+                        <div className="flex items-center gap-2">
+                          <Text
+                            size="base_14"
+                            className={cn(
+                              'text-[14px] font-medium uppercase leading-none tracking-[0.03em]',
+                              row.isCurrentMonth
+                                ? 'text-[#A8071A]'
+                                : 'text-[#64748B]',
+                            )}
+                          >
+                            {row.title}
+                          </Text>
+                          {row.isCurrentMonth ? (
+                            <span
+                              className="size-[6px] shrink-0 rounded-full bg-[#A8071A]"
+                              aria-hidden
+                            />
+                          ) : null}
+                        </div>
+                      ) : (
+                        <ItemHistoryAppointment item={row.item} />
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </PullToRefresh>
           </div>
         )}
 
