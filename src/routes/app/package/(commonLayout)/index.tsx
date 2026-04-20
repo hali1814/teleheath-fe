@@ -140,43 +140,41 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title={t('title')} />
-      <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
-        <div className="flex items-center gap-[10px]">
-          <SearchBar
-            placeholder={t('searchPlaceholder')}
-            value={keyword}
-            onSearch={(value) => setKeyword(value)}
-            onClear={() => setKeyword('')}
-          />
-          <button
-            type="button"
-            className="relative flex shrink-0 items-center justify-center"
-            onClick={() => setOpen(true)}
-            aria-label={t('filter.title')}
-          >
-            <Icon name="filter" className="text-icon" />
-            <Badge className="absolute -top-2 -right-2 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
-              <Text size="xs_10" className="leading-[1.3] text-white">
-                {activeFilterCount}
-              </Text>
-            </Badge>
-          </button>
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={t('title')} />
+        <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
+          <div className="flex items-center gap-[10px]">
+            <SearchBar
+              placeholder={t('searchPlaceholder')}
+              value={keyword}
+              onSearch={(value) => setKeyword(value)}
+              onClear={() => setKeyword('')}
+            />
+            <button
+              type="button"
+              className="relative flex shrink-0 items-center justify-center"
+              onClick={() => setOpen(true)}
+              aria-label={t('filter.title')}
+            >
+              <Icon name="filter" className="text-icon" />
+              <Badge className="absolute -top-2 -right-2 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
+                <Text size="xs_10" className="leading-[1.3] text-white">
+                  {activeFilterCount}
+                </Text>
+              </Badge>
+            </button>
+          </div>
+          {packagesData.length > 0 ? (
+            <>
+              {packagesData.map((p: Package) => (
+                <PackageCard key={p.packageId} {...p} truncateName={false} />
+              ))}
+            </>
+          ) : (
+            <EmptyState>{t('search:empty.packages')}</EmptyState>
+          )}
         </div>
-        {packagesData.length > 0 ? (
-          <>
-            <PullToRefresh onRefresh={handleRefresh}>
-              <div className="flex flex-col gap-[16px]">
-                {packagesData.map((p: Package) => (
-                  <PackageCard key={p.packageId} {...p} truncateName={false} />
-                ))}
-              </div>
-            </PullToRefresh>
-          </>
-        ) : (
-          <EmptyState>{t('search:empty.packages')}</EmptyState>
-        )}
-      </div>
+      </PullToRefresh>
       <ModalFilterPackage
         open={open}
         onOpenChange={setOpen}

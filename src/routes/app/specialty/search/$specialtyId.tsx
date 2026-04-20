@@ -92,19 +92,19 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title={specialtyName} />
-      <div className="px-[16px] pt-[16px]">
-        <SearchBar
-          placeholder={t('specialtySearchPlaceholder')}
-          value={query}
-          onSearch={handleSearch}
-          onClear={() => setQuery('')}
-        />
-      </div>
-      {isLoading && <LoadingState />}
-      {!isLoading && counts.all > 0 && (
-        <>
-          <PullToRefresh onRefresh={handleRefresh}>
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={specialtyName} />
+        <div className="px-[16px] pt-[16px]">
+          <SearchBar
+            placeholder={t('specialtySearchPlaceholder')}
+            value={query}
+            onSearch={handleSearch}
+            onClear={() => setQuery('')}
+          />
+        </div>
+        {isLoading && <LoadingState />}
+        {!isLoading && counts.all > 0 && (
+          <>
             <SearchTabs
               value={tab}
               onChange={setTab}
@@ -118,28 +118,28 @@ function RouteComponent() {
               hideCount
               hideBookAppointment={false}
             />
-          </PullToRefresh>
-        </>
-      )}
-      {!isLoading && counts.all === 0 && (
-        <>
-          <SearchTabs
-            value={tab}
-            onChange={setTab}
-            variant="round"
-            counts={counts}
-          />
-          <EmptyState>
-            {rawTotalCount === 0 ? (
-              t('common:noDataAvailable')
-            ) : searchKeyword ? (
-              <TransNoResultsFor query={searchKeyword} />
-            ) : (
-              t('common:noDataAvailable')
-            )}
-          </EmptyState>
-        </>
-      )}
+          </>
+        )}
+        {!isLoading && counts.all === 0 && (
+          <>
+            <SearchTabs
+              value={tab}
+              onChange={setTab}
+              variant="round"
+              counts={counts}
+            />
+            <EmptyState>
+              {rawTotalCount === 0 ? (
+                t('common:noDataAvailable')
+              ) : searchKeyword ? (
+                <TransNoResultsFor query={searchKeyword} />
+              ) : (
+                t('common:noDataAvailable')
+              )}
+            </EmptyState>
+          </>
+        )}
+      </PullToRefresh>
     </>
   )
 }

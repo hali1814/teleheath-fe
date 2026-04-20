@@ -1,5 +1,7 @@
+import { Header } from '#/sections/home'
 import FormProfile from '#/sections/profile/FormProfile'
 import { createFileRoute } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 /** Optional query: `/edit` hoặc `/edit?idMember=1` */
@@ -24,11 +26,12 @@ export const Route = createFileRoute('/app/profile/(editLayout)/edit')({
 
 function RouteComponent() {
   const { idMember, isUserProfile } = Route.useSearch()
-
+  const { t } = useTranslation(['profile'])
   return (
-    <FormProfile
-      idMember={idMember}
-      isUserProfile={isUserProfile}
-    />
+    <>
+      <Header title={t('editPatientProfile')} />
+
+      <FormProfile idMember={idMember} isUserProfile={isUserProfile} />
+    </>
   )
 }

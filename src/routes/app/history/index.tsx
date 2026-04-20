@@ -165,37 +165,37 @@ function RouteComponent() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 grid h-[62px] shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b-[0.5px] border-[#FFE8E6] bg-background px-4 py-5">
-        <div />
-        <Text size="lg_16" className="font-medium text-text-primary">
-          {title}
-        </Text>
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="relative flex size-9 items-center justify-center rounded-md"
-            onClick={openFilterModal}
-            aria-label={t('appointment:filter')}
-          >
-            <Icon name="filter" className="size-5" color="#B3B3B3" />
-            <span className="absolute top-0 left-[16px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#DB1A21] px-0.5 text-[10px] font-semibold leading-none text-white">
-              {filterBadgeCount}
-            </span>
-          </button>
-        </div>
-      </header>
-
-      <div className="flex flex-col overflow-hidden pb-[90px]">
-        {showEmpty ? (
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <EmptyAppointment variant="history" />
+      <PullToRefresh onRefresh={handleRefresh}>
+        <header className="sticky top-0 z-40 grid h-[62px] shrink-0 grid-cols-[1fr_auto_1fr] items-center border-b-[0.5px] border-[#FFE8E6] bg-background px-4 py-5">
+          <div />
+          <Text size="lg_16" className="font-medium text-text-primary">
+            {title}
+          </Text>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="relative flex size-9 items-center justify-center rounded-md"
+              onClick={openFilterModal}
+              aria-label={t('appointment:filter')}
+            >
+              <Icon name="filter" className="size-5" color="#B3B3B3" />
+              <span className="absolute top-0 left-[16px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#DB1A21] px-0.5 text-[10px] font-semibold leading-none text-white">
+                {filterBadgeCount}
+              </span>
+            </button>
           </div>
-        ) : (
-          <div
-            ref={parentRef}
-            className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 pt-4"
-          >
-            <PullToRefresh onRefresh={handleRefresh}>
+        </header>
+
+        <div className="flex flex-col overflow-hidden pb-[90px]">
+          {showEmpty ? (
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <EmptyAppointment variant="history" />
+            </div>
+          ) : (
+            <div
+              ref={parentRef}
+              className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 pt-4"
+            >
               <div
                 className="relative w-full"
                 style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
@@ -238,18 +238,17 @@ function RouteComponent() {
                   )
                 })}
               </div>
-            </PullToRefresh>
-          </div>
-        )}
-
-        <ModalHistoryFilter
-          open={filterOpen}
-          onOpenChange={setFilterOpen}
-          filter={draftFilter}
-          onFilterChange={setDraftFilter}
-          onApply={handleApplyFilters}
-        />
-      </div>
+            </div>
+          )}
+        </div>
+      </PullToRefresh>
+      <ModalHistoryFilter
+        open={filterOpen}
+        onOpenChange={setFilterOpen}
+        filter={draftFilter}
+        onFilterChange={setDraftFilter}
+        onApply={handleApplyFilters}
+      />
     </>
   )
 }

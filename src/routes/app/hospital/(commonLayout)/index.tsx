@@ -83,36 +83,34 @@ function RouteComponent() {
 
   return (
     <>
-      <Header title={t('hospital:title')} />
-      <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
-        <SearchBar
-          placeholder={t('searchPlaceholder')}
-          value={query}
-          onSearch={(value) => setQuery(value)}
-          onClear={() => setQuery('')}
-        />
-        <CountryList activeCountry={activeCountry} onClick={setCountry} />
-        {hospitalsData.length > 0 ? (
-          <>
-            <PullToRefresh onRefresh={handleRefresh}>
-              <div className="flex flex-col gap-[16px]">
-                {hospitalsData.map((hospital) => (
-                  <HospitalCard
-                    key={hospital.hospitalId}
-                    size="md"
-                    variantButton="solid"
-                    showBadge={true}
-                    showAddress={true}
-                    {...hospital}
-                  />
-                ))}
-              </div>
-            </PullToRefresh>
-          </>
-        ) : (
-          <EmptyState>{t('search:empty.hospitals')}</EmptyState>
-        )}
-      </div>
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={t('hospital:title')} />
+        <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
+          <SearchBar
+            placeholder={t('searchPlaceholder')}
+            value={query}
+            onSearch={(value) => setQuery(value)}
+            onClear={() => setQuery('')}
+          />
+          <CountryList activeCountry={activeCountry} onClick={setCountry} />
+          {hospitalsData.length > 0 ? (
+            <>
+              {hospitalsData.map((hospital) => (
+                <HospitalCard
+                  key={hospital.hospitalId}
+                  size="md"
+                  variantButton="solid"
+                  showBadge={true}
+                  showAddress={true}
+                  {...hospital}
+                />
+              ))}
+            </>
+          ) : (
+            <EmptyState>{t('search:empty.hospitals')}</EmptyState>
+          )}
+        </div>
+      </PullToRefresh>
     </>
   )
 }
