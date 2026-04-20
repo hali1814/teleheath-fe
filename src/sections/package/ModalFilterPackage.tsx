@@ -18,6 +18,7 @@ import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospita
 import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
 import { ALL_PAGINATION } from '#/const/pagination'
 import { PACKAGE_PRICE_RANGE_OPTIONS } from '#/sections/package/package-filter-price'
+import { cn } from '#/lib/utils'
 
 const emptyFilter = (): FilterPackage => ({
   country: '',
@@ -105,15 +106,19 @@ export default function ModalFilterPackage({
   const handleApply = () => {
     const sid = draftSpecialtyId.current.trim()
     const specialtyIdParsed = Number(sid)
+    const specialtyId =
+      draftCategory.current === 'GENERAL'
+        ? undefined
+        : sid !== '' && Number.isFinite(specialtyIdParsed)
+          ? specialtyIdParsed
+          : undefined
+
     onApply({
       country: draftCountry.current,
       hospitalId: draftHospitalId.current,
       category: draftCategory.current,
       priceRange: draftPriceRange.current,
-      specialtyId:
-        sid !== '' && Number.isFinite(specialtyIdParsed)
-          ? specialtyIdParsed
-          : undefined,
+      specialtyId,
     })
     onOpenChange(false)
   }
@@ -139,6 +144,8 @@ export default function ModalFilterPackage({
       value: specialty.specialtyId.toString(),
     }))
   }, [specialtiesData])
+
+  const isGeneralCategory = draftCategory.current === 'GENERAL'
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -210,6 +217,9 @@ export default function ModalFilterPackage({
               defaultValue={effectiveDefaults.category || undefined}
               onValueChange={(value) => {
                 draftCategory.current = value
+                if (value === 'GENERAL') {
+                  draftSpecialtyId.current = ''
+                }
                 rerender()
               }}
               placeholder="Package Category"
@@ -219,7 +229,12 @@ export default function ModalFilterPackage({
               ]}
             />
           </div>
-          <div className="flex flex-col gap-[8px]">
+          <div
+            className={cn(
+              'flex flex-col gap-[8px]',
+              isGeneralCategory ? 'opacity-50' : '',
+            )}
+          >
             <Text>{t('filter.specialty')}</Text>
             <InputSelect
               defaultValue={
@@ -233,6 +248,7 @@ export default function ModalFilterPackage({
               }}
               placeholder={t('filter.specialty')}
               options={specialtyOptions}
+              disabled={isGeneralCategory}
             />
           </div>
           <div className="flex flex-col gap-[8px]">
