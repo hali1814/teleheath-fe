@@ -37,6 +37,7 @@ function RouteComponent() {
     params: {
       country: activeCountry,
       size: 5,
+      hasRoomAvailable: true,
     },
   })
   const topHospitalsData = data?.data || []

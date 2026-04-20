@@ -9,6 +9,7 @@ import type { Hospital as ApiHospital } from '#/types/hospital'
 interface ListHospitalsRequest extends IPagingRequest {
   keyword?: string
   country?: string
+  hasRoomAvailable?: boolean
 }
 
 const getListHospitals = async (

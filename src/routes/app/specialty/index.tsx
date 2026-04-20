@@ -8,6 +8,7 @@ import { keepPreviousData } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export const Route = createFileRoute('/app/specialty/')({
   component: RouteComponent,
@@ -18,13 +19,17 @@ function RouteComponent() {
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 300)
 
-  const { data } = useGetListSpecialtyQuery({
+  const { data, refetch } = useGetListSpecialtyQuery({
     params: {
       keyword: debouncedQuery,
     },
     placeholderData: keepPreviousData,
   })
   const specialties = data?.data ?? []
+
+  const handleRefresh = async () => {
+    await refetch()
+  }
 
   return (
     <>
@@ -37,11 +42,13 @@ function RouteComponent() {
           onClear={() => setQuery('')}
         />
         {specialties.length > 0 ? (
-          <div className="grid grid-cols-3 mt-[10px] gap-y-[36px]">
-            {specialties.map((specialty) => (
-              <SpecialtyItem key={specialty.specialtyId} {...specialty} />
-            ))}
-          </div>
+          <PullToRefresh onRefresh={handleRefresh}>
+            <div className="grid grid-cols-3 mt-[10px] gap-y-[36px]">
+              {specialties.map((specialty) => (
+                <SpecialtyItem key={specialty.specialtyId} {...specialty} />
+              ))}
+            </div>
+          </PullToRefresh>
         ) : (
           <EmptyState>{t('search:empty.specialties')}</EmptyState>
         )}

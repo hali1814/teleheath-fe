@@ -12,6 +12,7 @@ import { Header } from '#/sections/home'
 import { z } from 'zod'
 import { EmptyState } from '#/sections/search'
 import Text from '#/components/text'
+import PullToRefresh from '#/components/PullToRefresh'
 
 const optionalTrim = (s: string | undefined) => s?.trim() || undefined
 
@@ -65,16 +66,20 @@ function RouteComponent() {
     data: { data: { content: hospitalsData } = { content: [] } } = {
       data: { content: [] },
     },
+    refetch,
   } = useGetListHospitalsQuery({
     params: {
       ...ALL_PAGINATION,
       keyword: debouncedQuery,
+      hasRoomAvailable: true,
       ...(search.country ? { country: search.country } : {}),
     },
     placeholderData: keepPreviousData,
   })
 
-  console.log(hospitalsData)
+  const handleRefresh = async () => {
+    await refetch()
+  }
 
   return (
     <>
@@ -89,16 +94,20 @@ function RouteComponent() {
         <CountryList activeCountry={activeCountry} onClick={setCountry} />
         {hospitalsData.length > 0 ? (
           <>
-            {hospitalsData.map((hospital) => (
-              <HospitalCard
-                key={hospital.hospitalId}
-                size="md"
-                variantButton="solid"
-                showBadge={true}
-                showAddress={true}
-                {...hospital}
-              />
-            ))}
+            <PullToRefresh onRefresh={handleRefresh}>
+              <div className="flex flex-col gap-[16px]">
+                {hospitalsData.map((hospital) => (
+                  <HospitalCard
+                    key={hospital.hospitalId}
+                    size="md"
+                    variantButton="solid"
+                    showBadge={true}
+                    showAddress={true}
+                    {...hospital}
+                  />
+                ))}
+              </div>
+            </PullToRefresh>
           </>
         ) : (
           <EmptyState>{t('search:empty.hospitals')}</EmptyState>

@@ -8,6 +8,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { formatDate, DATE_TIME_TYPE } from '#/utils'
 import LoadingState from '#/components/LoadingState'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export const Route = createFileRoute(
   '/app/profile/(editLayout)/medical-profiles',
@@ -18,18 +19,27 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { t } = useTranslation(['profile', 'common'])
   const router = useRouter()
-  const { data: familyList, isFetching } = useGetListFamilyQuery({
+  const { data: familyList, isFetching, refetch } = useGetListFamilyQuery({
     params: {},
   })
+
+  const handleRefresh = async () => {
+    await refetch()
+  }
 
   const familyMembers = familyList?.data?.patients ?? []
   const canAddMore = familyList?.data?.canAddMore ?? true
 
   if (isFetching) {
-    return <LoadingState />
+    return (
+      <PullToRefresh onRefresh={handleRefresh}>
+        <LoadingState />
+      </PullToRefresh>
+    )
   }
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <div className="px-4 pb-20">
       {familyMembers.length === 0 ? (
         <EmptyMedicalProfiles />
@@ -76,5 +86,6 @@ function RouteComponent() {
         </Button>
       </div>
     </div>
+    </PullToRefresh>
   )
 }

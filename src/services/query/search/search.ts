@@ -14,6 +14,7 @@ interface SearchRequest {
   keyword: string
   type: string
   specialtyId?: number
+  hasRoomAvailable?: boolean
 }
 
 export interface SearchResponse {

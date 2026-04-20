@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import LoadingState from '#/components/LoadingState'
 import { useProfileStore } from '#/stores/profile'
 import RequireLogin from '#/components/RequireLogin'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export const Route = createFileRoute('/app/appointments/(commonLayout)/')({
   component: RouteComponent,
@@ -18,8 +19,11 @@ export const Route = createFileRoute('/app/appointments/(commonLayout)/')({
 function RouteComponent() {
   const parentRef = useRef<HTMLDivElement>(null)
   const { profile } = useProfileStore()
-  const { data: appointments, isLoading: isLoadingAppointments } =
-    useGetMyAppointmentsQuery({
+  const {
+    data: appointments,
+    isLoading: isLoadingAppointments,
+    refetch,
+  } = useGetMyAppointmentsQuery({
       params: {
         status: 'CONFIRMED',
         page: 0,
@@ -31,8 +35,8 @@ function RouteComponent() {
       enabled: !!profile?.id,
     })
 
-  if (!profile?.id) {
-    return <RequireLogin />
+  const handleRefresh = async () => {
+    await refetch()
   }
 
   const groupedAppointments = useMemo(() => {
@@ -65,8 +69,16 @@ function RouteComponent() {
     overscan: 8,
   })
 
+  if (!profile?.id) {
+    return <RequireLogin />
+  }
+
   if (isLoadingAppointments) {
-    return <LoadingState />
+    return (
+      <PullToRefresh onRefresh={handleRefresh}>
+        <LoadingState />
+      </PullToRefresh>
+    )
   }
 
   /*
@@ -74,10 +86,15 @@ function RouteComponent() {
    * (groupAppointmentsByUpcomingWindow chỉ giữ từ hôm nay) → rows rỗng, không được coi là "có data".
    */
   if (rows.length === 0) {
-    return <EmptyAppointment variant="upcoming" />
+    return (
+      <PullToRefresh onRefresh={handleRefresh}>
+        <EmptyAppointment variant="upcoming" />
+      </PullToRefresh>
+    )
   }
 
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <div ref={parentRef} className="mt-4 overflow-y-auto px-4 pb-[90px]">
       <div
         className="relative w-full"
@@ -106,5 +123,6 @@ function RouteComponent() {
         })}
       </div>
     </div>
+    </PullToRefresh>
   )
 }

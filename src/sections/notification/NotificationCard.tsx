@@ -1,4 +1,4 @@
-import { Icon, type IconName } from '#/components/icon'
+import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
 import { cn } from '#/lib/utils'
@@ -6,36 +6,6 @@ import type { ListNotificationResponse } from '#/services/query/notification/lis
 import { useMarkReadNotificationMutation } from '#/services/query/notification/mark-read-notification'
 import { formatTimeAgo } from '#/utils/time.util'
 import { useNavigate } from '@tanstack/react-router'
-
-const MAPPING_COLOR = {
-  green: '#34D36C',
-  red: '#CF1322',
-  cyan: '#006D75',
-  blue: '#1D39C4',
-  orange: '#D46B08',
-}
-
-const mappingType = {
-  appointment: {
-    icon: 'check_circle_solid',
-    color: 'cyan',
-  },
-  cancelled: {
-    icon: 'send_cancel_filled',
-    color: 'red',
-  },
-  reminder: {
-    icon: 'notification_active',
-    color: 'orange',
-  },
-  completed: {
-    icon: 'bell_check',
-    color: 'green',
-  },
-} as const satisfies Record<
-  string,
-  { icon: IconName; color: keyof typeof MAPPING_COLOR }
->
 
 export default function NotificationCard({
   notifId,
@@ -49,9 +19,7 @@ export default function NotificationCard({
 }: ListNotificationResponse) {
   const navigate = useNavigate()
   const isRead = status === 'READ'
-  const colorCode =
-    MAPPING_COLOR[mappingType[type as keyof typeof mappingType].color]
-  const accentBg = isRead ? `#CF13221A` : `#5858581A`
+  const accentBg = isRead ? `#5858581A` : `#CF13221A`
   const bgContainer = isRead ? 'bg-background' : 'bg-[#FFF4F4]'
 
   const { mutateAsync: markReadNotification } =
