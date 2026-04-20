@@ -15,7 +15,7 @@ export default function Header({
   const router = useRouter()
 
   return (
-    <header className="sticky top-0 z-50 h-[62px] border-b-[0.5px] border-[#FFE8E6] bg-background">
+    <header className="sticky top-0 z-40 h-[62px] border-b-[0.5px] border-[#FFE8E6] bg-background">
       {isHome ? (
         <div className="flex items-center justify-between h-full pl-[16px] pr-[20px]">
           <Link to="/app/home">

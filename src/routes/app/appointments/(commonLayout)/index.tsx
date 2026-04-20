@@ -11,12 +11,16 @@ import LoadingState from '#/components/LoadingState'
 import { useProfileStore } from '#/stores/profile'
 import RequireLogin from '#/components/RequireLogin'
 import PullToRefresh from '#/components/PullToRefresh'
+import { Header } from '#/sections/home'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/app/appointments/(commonLayout)/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const { t } = useTranslation(['appointment'])
+  const title = t('title')
   const parentRef = useRef<HTMLDivElement>(null)
   const { profile } = useProfileStore()
   const {
@@ -24,16 +28,16 @@ function RouteComponent() {
     isLoading: isLoadingAppointments,
     refetch,
   } = useGetMyAppointmentsQuery({
-      params: {
-        status: 'CONFIRMED',
-        page: 0,
-        size: 1805,
-        fromDate: dayjs().format('YYYY-MM-DD'),
-        sortDir: 'DESC',
-      },
-      staleTime: 0,
-      enabled: !!profile?.id,
-    })
+    params: {
+      status: 'CONFIRMED',
+      page: 0,
+      size: 1805,
+      fromDate: dayjs().format('YYYY-MM-DD'),
+      sortDir: 'DESC',
+    },
+    staleTime: 0,
+    enabled: !!profile?.id,
+  })
 
   const handleRefresh = async () => {
     await refetch()
@@ -95,34 +99,36 @@ function RouteComponent() {
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
-    <div ref={parentRef} className="mt-4 overflow-y-auto px-4 pb-[90px]">
-      <div
-        className="relative w-full"
-        style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
-      >
-        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-          const row = rows[virtualRow.index]
+      <Header title={title} isCenter />
 
-          return (
-            <div
-              key={virtualRow.key}
-              data-index={virtualRow.index}
-              ref={rowVirtualizer.measureElement}
-              className="absolute left-0 top-0 w-full pb-3"
-              style={{ transform: `translateY(${virtualRow.start}px)` }}
-            >
-              {row.kind === 'title' ? (
-                <Text size="lg_16" className="font-semibold">
-                  {row.title}
-                </Text>
-              ) : (
-                <ItemAppointment appointment={row.item} />
-              )}
-            </div>
-          )
-        })}
+      <div ref={parentRef} className="mt-4 overflow-y-auto px-4 pb-[90px]">
+        <div
+          className="relative w-full"
+          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+        >
+          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+            const row = rows[virtualRow.index]
+
+            return (
+              <div
+                key={virtualRow.key}
+                data-index={virtualRow.index}
+                ref={rowVirtualizer.measureElement}
+                className="absolute left-0 top-0 w-full pb-3"
+                style={{ transform: `translateY(${virtualRow.start}px)` }}
+              >
+                {row.kind === 'title' ? (
+                  <Text size="lg_16" className="font-semibold">
+                    {row.title}
+                  </Text>
+                ) : (
+                  <ItemAppointment appointment={row.item} />
+                )}
+              </div>
+            )
+          })}
+        </div>
       </div>
-    </div>
     </PullToRefresh>
   )
 }

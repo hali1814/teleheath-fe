@@ -6,6 +6,7 @@ import { EmptyState } from '#/sections/search'
 import { useTranslation } from 'react-i18next'
 import { RoomCard } from '../RoomCard'
 import { useEffect } from 'react'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export type Type = 'HOSPITAL' | 'DOCTOR' | 'PACKAGE'
 
@@ -13,7 +14,11 @@ export function RoomStep({ type }: { type: Type }) {
   const { t } = useTranslation(['book-appointment'])
   const { branch, room, setData, specialty, next } = useBookingStore()
 
-  const { data: rooms, isLoading } = useGetListRoomQuery({
+  const {
+    data: rooms,
+    isLoading,
+    refetch,
+  } = useGetListRoomQuery({
     params: {
       branchId: branch?.branchId ?? 0,
       specialtyId: specialty?.id ?? undefined,
@@ -42,7 +47,9 @@ export function RoomStep({ type }: { type: Type }) {
 
   useEffect(() => {
     if (!rooms || !room) return
-    const hasSelectedRoomInCurrentBranch = rooms.some((item) => item.id === room.id)
+    const hasSelectedRoomInCurrentBranch = rooms.some(
+      (item) => item.id === room.id,
+    )
     if (hasSelectedRoomInCurrentBranch) return
 
     setData({
@@ -56,37 +63,46 @@ export function RoomStep({ type }: { type: Type }) {
 
   if (!rooms) return <EmptyState>No rooms found</EmptyState>
 
+  const handleRefresh = async () => {
+    await refetch()
+  }
+
   return (
-    <div className="flex flex-col gap-[16px] px-[16px]">
-      <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
-        {t('roomStep.title')}
-      </Text>
-      {isLoading ? (
-        <LoadingState />
-      ) : (
-        <>
-          {rooms?.length > 0 &&
-            rooms?.map((item) => (
-              <RoomCard
-                key={String(item.id)}
-                selected={room?.id === item.id}
-                onClick={() =>
-                  setData({
-                    room: item,
-                    doctor: item.doctors[0]
-                      ? {
-                          doctorId: String(item.doctors[0].doctorId),
-                          nameVi: item.doctors[0].name,
-                          avatarUrl: item.doctors[0].photoUrl,
-                        }
-                      : undefined,
-                  })
-                }
-                room={item}
-              />
-            ))}
-        </>
-      )}
-    </div>
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="flex flex-col gap-[16px] px-[16px]">
+        <Text
+          size="lg_16"
+          className="font-semibold leading-[1.2] text-[#333333]"
+        >
+          {t('roomStep.title')}
+        </Text>
+        {isLoading ? (
+          <LoadingState />
+        ) : (
+          <>
+            {rooms?.length > 0 &&
+              rooms?.map((item) => (
+                <RoomCard
+                  key={String(item.id)}
+                  selected={room?.id === item.id}
+                  onClick={() =>
+                    setData({
+                      room: item,
+                      doctor: item.doctors[0]
+                        ? {
+                            doctorId: String(item.doctors[0].doctorId),
+                            nameVi: item.doctors[0].name,
+                            avatarUrl: item.doctors[0].photoUrl,
+                          }
+                        : undefined,
+                    })
+                  }
+                  room={item}
+                />
+              ))}
+          </>
+        )}
+      </div>
+    </PullToRefresh>
   )
 }
