@@ -124,15 +124,66 @@ export const endSession = () => {
   if (typeof window === 'undefined') return
 
   const payload = { [WEB_END_SESSION]: 'true' }
+  const appWindow = window as unknown as NativeBridgeWindow
+  const message = JSON.stringify(payload)
+  let isSent = false
 
-  postMessageToNativeBridge({
-    key: WEB_END_SESSION,
-    payload,
-    nativeMethodName: WEB_END_SESSION,
-    nativeMethodValue: payload[WEB_END_SESSION],
-    errorContext: WEB_END_SESSION,
-    toastMessage: 'Cannot end session on this device',
-  })
+  try {
+    if (appWindow.Android?.postMessage) {
+      appWindow.Android.postMessage(message)
+      isSent = true
+    }
+  } catch (e) {
+    console.error('Android.postMessage failed', e)
+  }
+
+  try {
+    if (!isSent && appWindow.Android?.WEB_END_SESSION) {
+      appWindow.Android.WEB_END_SESSION(payload[WEB_END_SESSION])
+      isSent = true
+    }
+  } catch (e) {
+    console.error(`Android.${WEB_END_SESSION} failed`, e)
+  }
+
+  try {
+    if (!isSent && appWindow.ReactNativeWebView?.postMessage) {
+      appWindow.ReactNativeWebView.postMessage(message)
+      isSent = true
+    }
+  } catch (e) {
+    console.error('ReactNativeWebView.postMessage failed', e)
+  }
+
+  try {
+    if (
+      !isSent &&
+      appWindow.webkit?.messageHandlers?.WEB_END_SESSION?.postMessage
+    ) {
+      appWindow.webkit.messageHandlers.WEB_END_SESSION.postMessage(payload)
+      isSent = true
+    }
+  } catch (e) {
+    console.error(`webkit ${WEB_END_SESSION} handler failed`, e)
+  }
+
+  try {
+    if (!isSent && appWindow.WEB_END_SESSION) {
+      appWindow.WEB_END_SESSION(payload[WEB_END_SESSION])
+      isSent = true
+    }
+  } catch (e) {
+    console.error(`global ${WEB_END_SESSION} failed`, e)
+  }
+
+  if (!isSent) {
+    console.error(`No native bridge available for ${WEB_END_SESSION}`, {
+      hasAndroid: !!appWindow.Android,
+      hasAndroidPostMessage: typeof appWindow.Android?.postMessage,
+      hasAndroidMethod: typeof appWindow.Android?.[WEB_END_SESSION],
+    })
+    toast.error('Cannot end session on this device')
+  }
 }
 
 export const downloadImage = (base64: string) => {
