@@ -100,9 +100,9 @@ const processQueue = (error: AxiosError | null, token: string | null) => {
 const handleLogoutClearData = () => {
   clearTokens()
   clearProfile()
+  debounceEndSession()
   const r = getRouter()
   if (r) {
-    debounceEndSession()
     void r.navigate({
       to: '/app/entry',
       replace: true,
