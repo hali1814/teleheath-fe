@@ -92,9 +92,7 @@ export const ServiceCard = ({
                 size="sm_12"
                 className="leading-[1.2] font-extrabold text-[#E22A36]"
               >
-                {promotionPrice !== 0 && promotionPrice
-                  ? formatPrice(promotionPrice)
-                  : 'Contact later'}
+                {formatPrice(promotionPrice)}
               </Text>
               <Text
                 size="sm_12"
