@@ -562,7 +562,7 @@ export function ReviewStep() {
                 </Text>
               </div>
             )}
-            {feeInfo.serviceFee > 0 && (
+            {/* {feeInfo.serviceFee > 0 && (
               <div className="flex items-center justify-between">
                 <Text className="leading-normal text-muted-foreground">
                   {t('appointment:serviceFee')}
@@ -571,7 +571,7 @@ export function ReviewStep() {
                   {formatPrice(feeInfo.serviceFee)}
                 </Text>
               </div>
-            )}
+            )} */}
             <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
               <Text
                 size="lg_16"
