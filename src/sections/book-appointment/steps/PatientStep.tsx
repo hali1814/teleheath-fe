@@ -8,6 +8,7 @@ import useDebounce from '#/hooks/use-debounce'
 import { keepPreviousData } from '@tanstack/react-query'
 import LoadingState from '#/components/LoadingState'
 import { useTranslation } from 'react-i18next'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export function PatientStep() {
   const { t } = useTranslation(['book-appointment'])
@@ -16,12 +17,11 @@ export function PatientStep() {
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   const {
-    data: {
-      data: { patients, canAddMore, maxAllowed },
-    } = {
+    data: { data: { patients, canAddMore, maxAllowed } } = {
       data: { patients: [], canAddMore: true, maxAllowed: 10 },
     },
     isLoading,
+    refetch,
   } = useGetListFamilyQuery({
     params: {
       name: debouncedSearchQuery,
@@ -41,34 +41,40 @@ export function PatientStep() {
     }
   }, [patients, patientProfile?.id, searchQuery, setData])
 
+  const handleRefresh = async () => {
+    await refetch()
+  }
+
   return (
-    <div className="flex flex-col gap-[16px] ">
-      <div className="px-[16px]">
-        <SearchBar
-          placeholder={t('patientStep.searchPlaceholder')}
-          value={searchQuery}
-          onSearch={(value) => setSearchQuery(value)}
-          onClear={() => setSearchQuery('')}
-        />
-      </div>
-      {isLoading ? (
-        <LoadingState className="h-[200px]" />
-      ) : (
-        <>
-          <PatientProfileList
-            profiles={patients}
-            selected={patientProfile?.id}
-            canAddMore={canAddMore}
-            maxAllowed={maxAllowed}
-            onClick={(patient) =>
-              setData({
-                patientProfile: patient,
-              })
-            }
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="flex flex-col gap-[16px] ">
+        <div className="px-[16px]">
+          <SearchBar
+            placeholder={t('patientStep.searchPlaceholder')}
+            value={searchQuery}
+            onSearch={(value) => setSearchQuery(value)}
+            onClear={() => setSearchQuery('')}
           />
-        </>
-      )}
-      <MedicalRecords />
-    </div>
+        </div>
+        {isLoading ? (
+          <LoadingState className="h-[200px]" />
+        ) : (
+          <>
+            <PatientProfileList
+              profiles={patients}
+              selected={patientProfile?.id}
+              canAddMore={canAddMore}
+              maxAllowed={maxAllowed}
+              onClick={(patient) =>
+                setData({
+                  patientProfile: patient,
+                })
+              }
+            />
+          </>
+        )}
+        <MedicalRecords />
+      </div>
+    </PullToRefresh>
   )
 }

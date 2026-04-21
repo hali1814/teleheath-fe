@@ -8,6 +8,7 @@ import { LocationCard } from '../LocationCard'
 import LoadingState from '#/components/LoadingState'
 import { useGetListBranchesByPackageQuery } from '#/services/query/package/list-branches-by-package'
 import { EmptyState } from '#/sections/search'
+import PullToRefresh from '#/components/PullToRefresh'
 
 const EMPTY_BRANCHES: Branch[] = []
 
@@ -83,35 +84,54 @@ export function LocationStep({ type }: { type: LocationStepType }) {
     next()
   }, [branches, branch, next, updateBranch])
 
+  const handleRefresh = async () => {
+    switch (type) {
+      case 'HOSPITAL':
+        await hospitalBranchesQuery.refetch()
+        break
+      case 'DOCTOR':
+        await doctorBranchesQuery.refetch()
+        break
+      case 'PACKAGE':
+        await packageBranchesQuery.refetch()
+        break
+    }
+  }
+
   return (
-    <div className="flex flex-col gap-[16px] px-[16px]">
-      <Text size="lg_16" className="font-semibold leading-[1.2] text-[#333333]">
-        Select Location
-      </Text>
-      {hospitalBranchesQuery.isLoading ||
-      doctorBranchesQuery.isLoading ||
-      packageBranchesQuery.isLoading ? (
-        <LoadingState />
-      ) : (
-        <>
-          {branches.length > 0 ? (
-            branches.map((item) => (
-              <LocationCard
-                key={String(item.branchId)}
-                selected={branch?.branchId === item.branchId}
-                onClick={() => updateBranch(item)}
-                branchId={String(item.branchId)}
-                nameVi={item.nameVi}
-                nameKh={item.nameKh}
-                nameEn={item.nameEn}
-                address={item.detailedAddress}
-              />
-            ))
-          ) : (
-            <EmptyState>No locations found</EmptyState>
-          )}
-        </>
-      )}
-    </div>
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="flex flex-col gap-[16px] px-[16px]">
+        <Text
+          size="lg_16"
+          className="font-semibold leading-[1.2] text-[#333333]"
+        >
+          Select Location
+        </Text>
+        {hospitalBranchesQuery.isLoading ||
+        doctorBranchesQuery.isLoading ||
+        packageBranchesQuery.isLoading ? (
+          <LoadingState />
+        ) : (
+          <>
+            {branches.length > 0 ? (
+              branches.map((item) => (
+                <LocationCard
+                  key={String(item.branchId)}
+                  selected={branch?.branchId === item.branchId}
+                  onClick={() => updateBranch(item)}
+                  branchId={String(item.branchId)}
+                  nameVi={item.nameVi}
+                  nameKh={item.nameKh}
+                  nameEn={item.nameEn}
+                  address={item.detailedAddress}
+                />
+              ))
+            ) : (
+              <EmptyState>No locations found</EmptyState>
+            )}
+          </>
+        )}
+      </div>
+    </PullToRefresh>
   )
 }
