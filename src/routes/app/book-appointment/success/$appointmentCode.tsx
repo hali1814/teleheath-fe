@@ -100,9 +100,9 @@ function RouteComponent() {
       "
       >
         <Button className="h-[45px] w-full rounded-[40px] bg-primary" asChild>
-          <Link to="/app/appointments">
+          <Link to="/app/history">
             <Text className="font-medium leading-normal text-white">
-              View My Appointment
+              View my booking
             </Text>
           </Link>
         </Button>
