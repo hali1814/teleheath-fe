@@ -170,7 +170,7 @@ export default function BookingPage({
       serviceIds: store.serviceIds,
       addonServiceTypeIds: store.addonServiceTypes?.map((x) => x.id),
       pickupTime: store.pickupTime,
-      pickupDate: store.pickupDate,
+      pickupAddress: store.pickupAddress,
       pickupNote: store.pickupNote,
     })
   }

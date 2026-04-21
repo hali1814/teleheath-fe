@@ -111,43 +111,43 @@ function RouteComponent() {
 
   return (
     <>
-      <SearchInput
-        value={query}
-        onSearch={handleSearch}
-        onSubmit={handleSubmitSearch}
-      />
-      {status === 'IDLE' && (
-        <RecentSearches
-          onSelect={handleSelect}
-          recentSearches={recentSearches}
-          onRemove={removeRecent}
-          onClear={clearRecent}
+      <PullToRefresh onRefresh={handleRefresh}>
+        <SearchInput
+          value={query}
+          onSearch={handleSearch}
+          onSubmit={handleSubmitSearch}
         />
-      )}
-      {status === 'TYPING' && (
-        <Suggestions
-          query={query}
-          items={suggestions}
-          onSelect={handleSelect}
-        />
-      )}
-      {status === 'LOADING' && <LoadingState />}
-      {status === 'RESULT' && (
-        <>
-          <PullToRefresh onRefresh={handleRefresh}>
+        {status === 'IDLE' && (
+          <RecentSearches
+            onSelect={handleSelect}
+            recentSearches={recentSearches}
+            onRemove={removeRecent}
+            onClear={clearRecent}
+          />
+        )}
+        {status === 'TYPING' && (
+          <Suggestions
+            query={query}
+            items={suggestions}
+            onSelect={handleSelect}
+          />
+        )}
+        {status === 'LOADING' && <LoadingState />}
+        {status === 'RESULT' && (
+          <>
             <SearchTabs value={tab} onChange={setTab} />
             <SearchResults data={searchResults} tab={tab} query={query} />
-          </PullToRefresh>
-        </>
-      )}
-      {status === 'EMPTY' && (
-        <>
-          <SearchTabs value={tab} onChange={setTab} />
-          <EmptyState>
-            <TransNoResultsFor query={query} />
-          </EmptyState>
-        </>
-      )}
+          </>
+        )}
+        {status === 'EMPTY' && (
+          <>
+            <SearchTabs value={tab} onChange={setTab} />
+            <EmptyState>
+              <TransNoResultsFor query={query} />
+            </EmptyState>
+          </>
+        )}
+      </PullToRefresh>
     </>
   )
 }

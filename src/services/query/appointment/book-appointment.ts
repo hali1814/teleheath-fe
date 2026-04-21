@@ -19,7 +19,7 @@ export interface BookAppointmentRequest {
   roomId?: number
   addonServiceIds?: number[]
   pickupTime?: string
-  pickupDate?: string
+  pickupAddress?: string
   pickupNote?: string
 }
 

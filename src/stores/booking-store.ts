@@ -54,7 +54,7 @@ export type BookingState = {
   }
   thumbnailUrl?: string
   pickupTime?: string
-  pickupDate?: string
+  pickupAddress?: string
   pickupNote?: string
 
   setStep: (step: number) => void
@@ -149,7 +149,7 @@ export const useBookingStore = create<BookingState>((set) => ({
       paymentMethod: undefined,
       thumbnailUrl: undefined,
       pickupTime: undefined,
-      pickupDate: undefined,
+      pickupAddress: undefined,
       pickupNote: undefined,
     }),
 }))
