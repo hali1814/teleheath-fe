@@ -13,6 +13,7 @@ import { Icon } from '#/components/icon'
 import { useTranslation } from 'react-i18next'
 import { useGetPackageDetailQuery } from '#/services/query/package/package-detail'
 import { Header } from '#/sections/home'
+import PullToRefresh from '#/components/PullToRefresh'
 
 export const Route = createFileRoute('/app/package/(commonLayout)/$id')({
   component: RouteComponent,
@@ -24,7 +25,7 @@ function RouteComponent() {
   const profile = useProfileStore((s) => s.profile)
   const navigate = useNavigate()
 
-  const { data: { data: packageData } = { data: null } } =
+  const { data: { data: packageData } = { data: null }, refetch } =
     useGetPackageDetailQuery({
       params: {
         packageId: parseInt(id),
@@ -33,8 +34,12 @@ function RouteComponent() {
 
   const branches = packageData?.branches
 
+  const handleRefresh = async () => {
+    await refetch()
+  }
+
   return (
-    <>
+    <PullToRefresh onRefresh={handleRefresh}>
       <Header title={t('detailTitle')} />
       <Image
         src={packageData?.imageUrl ?? ''}
@@ -81,6 +86,6 @@ function RouteComponent() {
           </Button>
         </div>
       </div>
-    </>
+    </PullToRefresh>
   )
 }

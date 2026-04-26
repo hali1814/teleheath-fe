@@ -1,9 +1,6 @@
 import Image from '#/components/image'
 import { cn } from '#/lib/utils'
-import {
-  useGetBannersQuery,
-  type BannersListRequest,
-} from '#/services/query/banner/list-banners'
+import type { BannerItem } from '#/services/query/banner/list-banners'
 import { navigateBannerTarget } from '#/utils/banner-navigation.util'
 import { useRouter } from '@tanstack/react-router'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -20,8 +17,6 @@ import {
 const scrollbarHide =
   '[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
 const AUTO_PLAY_INTERVAL_MS = 5000
-
-const BANNERS_QUERY_PARAMS: BannersListRequest = {}
 
 export type CarouselImageItem = {
   id: string | number
@@ -306,35 +301,36 @@ type SliderBannerProps = Omit<
   CarouselProps,
   'items' | 'children'
 > & {
-  /** Ghi đè dữ liệu tĩnh (dev / story); mặc định lấy từ GET /banners */
-  items?: CarouselImageItem[]
+  items?: BannerItem[]
+  isPending?: boolean
 }
 
 /**
- * Banner trang chủ: GET `/banners`, sort theo `sortOrder`, tap → INTERNAL/EXTERNAL.
+ * Banner trang chủ: nhận dữ liệu từ parent route.
  */
-export default function SliderBanner({ items: itemsOverride, ...carouselProps }: SliderBannerProps) {
+export default function SliderBanner({
+  items: bannerItems,
+  isPending = false,
+  ...carouselProps
+}: SliderBannerProps) {
   const router = useRouter()
-  const { data, isPending, isSuccess } = useGetBannersQuery({
-    params: BANNERS_QUERY_PARAMS,
-    staleTime: 1000 * 60 * 5,
-    isShowError: false,
-  })
-
   const items = useMemo((): CarouselImageItem[] | undefined => {
-    if (itemsOverride?.length) return itemsOverride
-    if (!isSuccess || !data?.success) return undefined
-    const list = [...data.data].sort((a, b) => a.sortOrder - b.sortOrder)
-    return list.map((b) => ({
-      id: b.id,
-      src: b.imageUrl,
-      alt: `Banner ${b.id}`,
+    if (!bannerItems?.length) return undefined
+    const list = [...bannerItems].sort((a, b) => a.sortOrder - b.sortOrder)
+    return list.map((banner) => ({
+      id: banner.id,
+      src: banner.imageUrl,
+      alt: `Banner ${banner.id}`,
       onPress: () =>
-        navigateBannerTarget(router, b.navigationTarget, b.navigationType),
+        navigateBannerTarget(
+          router,
+          banner.navigationTarget,
+          banner.navigationType,
+        ),
     }))
-  }, [itemsOverride, isSuccess, data, router])
+  }, [bannerItems, router])
 
-  if (isPending && !itemsOverride?.length) {
+  if (isPending && !items?.length) {
     return (
       <div
         className={cn(
