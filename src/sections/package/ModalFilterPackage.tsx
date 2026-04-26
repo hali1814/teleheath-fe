@@ -145,7 +145,7 @@ export default function ModalFilterPackage({
     }))
   }, [specialtiesData])
 
-  const isGeneralCategory = draftCategory.current === 'GENERAL'
+  const isSpecializeCategory = draftCategory.current === 'SPECIALIZE'
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -212,7 +212,7 @@ export default function ModalFilterPackage({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Category</Text>
+            <Text>Package Category</Text>
             <InputSelect
               defaultValue={effectiveDefaults.category || undefined}
               onValueChange={(value) => {
@@ -232,7 +232,7 @@ export default function ModalFilterPackage({
           <div
             className={cn(
               'flex flex-col gap-[8px]',
-              isGeneralCategory ? 'opacity-50' : '',
+              !isSpecializeCategory ? 'opacity-50' : '',
             )}
           >
             <Text>{t('filter.specialty')}</Text>
@@ -248,7 +248,7 @@ export default function ModalFilterPackage({
               }}
               placeholder={t('filter.specialty')}
               options={specialtyOptions}
-              disabled={isGeneralCategory}
+              disabled={!isSpecializeCategory}
             />
           </div>
           <div className="flex flex-col gap-[8px]">

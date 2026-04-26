@@ -111,28 +111,28 @@ function RouteComponent() {
 
   return (
     <>
-      <PullToRefresh onRefresh={handleRefresh}>
-        <SearchInput
-          value={query}
-          onSearch={handleSearch}
-          onSubmit={handleSubmitSearch}
+      <SearchInput
+        value={query}
+        onSearch={handleSearch}
+        onSubmit={handleSubmitSearch}
+      />
+      {status === 'IDLE' && (
+        <RecentSearches
+          onSelect={handleSelect}
+          recentSearches={recentSearches}
+          onRemove={removeRecent}
+          onClear={clearRecent}
         />
-        {status === 'IDLE' && (
-          <RecentSearches
-            onSelect={handleSelect}
-            recentSearches={recentSearches}
-            onRemove={removeRecent}
-            onClear={clearRecent}
-          />
-        )}
-        {status === 'TYPING' && (
-          <Suggestions
-            query={query}
-            items={suggestions}
-            onSelect={handleSelect}
-          />
-        )}
-        {status === 'LOADING' && <LoadingState />}
+      )}
+      {status === 'TYPING' && (
+        <Suggestions
+          query={query}
+          items={suggestions}
+          onSelect={handleSelect}
+        />
+      )}
+      {status === 'LOADING' && <LoadingState />}
+      <PullToRefresh onRefresh={handleRefresh}>
         {status === 'RESULT' && (
           <>
             <SearchTabs value={tab} onChange={setTab} />

@@ -18,6 +18,7 @@ import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-special
 import { useAppStore } from '#/stores/app'
 import { NotificationBell } from '#/sections/home'
 import PullToRefresh from '#/components/PullToRefresh'
+import { useGetBannersQuery } from '#/services/query/banner/list-banners'
 
 export const Route = createFileRoute('/app/home/')({
   component: RouteComponent,
@@ -28,6 +29,14 @@ function RouteComponent() {
   const viewAllLabel = t('common:actions.viewAll')
   const router = useRouter()
   const { activeCountry } = useAppStore()
+  const {
+    data: bannersResponse,
+    isPending: bannersPending,
+    refetch: refetchBanners,
+  } = useGetBannersQuery({
+    params: {},
+    isShowError: false,
+  })
 
   const {
     data,
@@ -85,6 +94,7 @@ function RouteComponent() {
 
   const handleRefresh = async () => {
     await Promise.all([
+      refetchBanners(),
       refetchHospitals(),
       refetchSpecialties(),
       refetchPackages(),
@@ -107,7 +117,10 @@ function RouteComponent() {
           <NotificationBell />
         </div>
         {/* <MenuList /> */}
-        <SliderBanner />
+        <SliderBanner
+          items={bannersResponse?.success ? bannersResponse.data : undefined}
+          isPending={bannersPending}
+        />
         {/* <PremiumService /> */}
         <CountryTab />
       </div>
