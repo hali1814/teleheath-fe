@@ -482,7 +482,9 @@
   "payment": {
     "generatingQr": "Đang tạo mã QR…",
     "loadQrError": "Không tải được mã QR thanh toán. Vui lòng thử lại.",
+    "qrExpired": "Mã QR đã hết hạn. Vui lòng tải lại để nhận mã mới.",
     "retry": "Thử lại",
+    "reloadQr": "Tải lại mã QR",
     "scanToPay": "Quét để thanh toán",
     "or": "hoặc",
     "downloadQr": "Tải mã QR",

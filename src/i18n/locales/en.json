@@ -482,7 +482,9 @@
   "payment": {
     "generatingQr": "Generating QR…",
     "loadQrError": "Could not load payment QR. Please try again.",
+    "qrExpired": "This QR has expired. Please reload to get a new one.",
     "retry": "Retry",
+    "reloadQr": "Reload QR",
     "scanToPay": "Scan to Pay",
     "or": "or",
     "downloadQr": "Download QR",
