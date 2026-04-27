@@ -12,7 +12,7 @@ import { Icon } from '#/components/icon'
 import { formatPrice } from '#/utils/price.util'
 import { downloadImage } from '#/utils/auth'
 import { useBookingStore } from '#/stores/booking-store'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -44,14 +44,17 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     })
 
   const khqr = data?.data
+  const [isQrExpired, setIsQrExpired] = useState(false)
 
   const onCheckStatusSuccess = useCallback(
     ({ data }: { data: CheckStatusPaymentResponse }) => {
       if (!data) return
       if (khqr?.expiredAt && new Date(khqr.expiredAt) < new Date()) {
-        router.history.back()
+        setIsQrExpired(true)
+        return
       }
       if (data.status === 'SUCCESS') {
+        if (!data.appointmentCode) return
         reset()
         navigate({
           to: '/app/book-appointment/success/$appointmentCode',
@@ -59,7 +62,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
         })
       }
     },
-    [khqr, router, reset, navigate, data?.appointmentCode],
+    [khqr?.expiredAt, reset, navigate],
   )
 
   const handleDownloadQr = useCallback(() => {
@@ -75,7 +78,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
 
   useCheckStatusPaymentQuery({
     params: { refId: khqr?.refId ?? '' },
-    enabled: !!khqr?.refId,
+    enabled: !!khqr?.refId && !isQrExpired,
     /** Tránh toast lặp mỗi lần poll lỗi */
     isShowError: false,
     refetchInterval: (query) => {
@@ -86,6 +89,11 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     },
     onSuccess: onCheckStatusSuccess,
   })
+
+  const handleReloadQr = useCallback(() => {
+    setIsQrExpired(false)
+    void refetch()
+  }, [refetch])
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
@@ -111,34 +119,52 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
           </div>
         ) : (
           <>
-            <Image
-              src={`data:image/png;base64,${khqr.qrImage}`}
-              alt={t('khqrQrAlt')}
-              className="h-[400px] w-[300px] object-cover"
-            />
-
-            <div className="flex flex-col items-center gap-[6px]">
-              <Text className="font-semibold leading-[1.2] text-black">
-                {t('scanToPay')}
-              </Text>
-              <Text className="leading-[1.2] text-black">{t('or')}</Text>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleDownloadQr}
-              className="flex flex-col items-center gap-[8px]"
-            >
-              <div className="flex justify-center items-center gap-[8px]">
-                <Icon name="download" className="text-white" />
-                <Text className="leading-[1.2] text-[#11BFC6]">
-                  {t('downloadQr')}
+            {isQrExpired ? (
+              <div className="flex h-[400px] w-[300px] flex-col items-center justify-center gap-[10px] rounded-[12px] border border-primary px-[14px] py-[12px]">
+                <Text className="text-center font-medium text-muted-foreground">
+                  {t('qrExpired')}
                 </Text>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="rounded-full"
+                  onClick={handleReloadQr}
+                >
+                  {t('reloadQr')}
+                </Button>
               </div>
-              <Text className="max-w-[230px] text-center text-[#808080] leading-normal">
-                {t('khqrMobileBankingHint')}
-              </Text>
-            </button>
+            ) : (
+              <>
+                <Image
+                  src={`data:image/png;base64,${khqr.qrImage}`}
+                  alt={t('khqrQrAlt')}
+                  className="h-[400px] w-[300px] object-cover"
+                />
+
+                <div className="flex flex-col items-center gap-[6px]">
+                  <Text className="font-semibold leading-[1.2] text-black">
+                    {t('scanToPay')}
+                  </Text>
+                  <Text className="leading-[1.2] text-black">{t('or')}</Text>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadQr}
+                  className="flex flex-col items-center gap-[8px]"
+                >
+                  <div className="flex justify-center items-center gap-[8px]">
+                    <Icon name="download" className="text-white" />
+                    <Text className="leading-[1.2] text-[#11BFC6]">
+                      {t('downloadQr')}
+                    </Text>
+                  </div>
+                  <Text className="max-w-[230px] text-center text-[#808080] leading-normal">
+                    {t('khqrMobileBankingHint')}
+                  </Text>
+                </button>
+              </>
+            )}
 
             <div className="w-full flex flex-col gap-[14px] p-[16px]">
               <div className="flex justify-between items-center">
