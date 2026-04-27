@@ -11,44 +11,44 @@ import { RoomStep } from './steps/RoomStep'
 import { ServiceStep } from './steps/ServiceStep'
 
 export type BookingStepConfig = {
-  title: string
+  titleKey: string
   component: ComponentType
   validate: (s: BookingState) => boolean
 }
 
 export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
   {
-    title: 'Select Specialty',
+    titleKey: 'stepTitles.selectSpecialty',
     component: SpecialtyStep,
     validate: (s) => !!s.specialty,
   },
   {
-    title: 'Select Location',
+    titleKey: 'stepTitles.selectLocation',
     component: () => LocationStep({ type: 'HOSPITAL' }),
     validate: (s) => !!s.branch,
   },
   {
-    title: 'Select Room',
+    titleKey: 'stepTitles.selectRoom',
     component: () => RoomStep({ type: 'HOSPITAL' }),
     validate: (s) => !!s.room,
   },
   {
-    title: 'Select Schedule',
+    titleKey: 'stepTitles.selectSchedule',
     component: ScheduleStep,
     validate: (s) => !!s.appointmentDate && !!s.startTime && !!s.endTime,
   },
   {
-    title: 'Select Patient & Medical Records',
+    titleKey: 'stepTitles.selectPatientMedicalRecord',
     component: PatientStep,
     validate: (s) => !!s.patientProfile,
   },
   {
-    title: 'Select add-on services',
+    titleKey: 'stepTitles.selectAddonServices',
     component: ServiceStep,
     validate: () => true,
   },
   {
-    title: 'Review & Confirm',
+    titleKey: 'stepTitles.reviewConfirm',
     component: ReviewStep,
     validate: (s) =>
       (!!s.paymentMethod && s.feeInfo.totalAmount > 0) ||
@@ -58,27 +58,27 @@ export const BOOKING_STEPS_HOSPITAL: BookingStepConfig[] = [
 
 export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
   {
-    title: 'Select Location',
+    titleKey: 'stepTitles.selectLocation',
     component: () => LocationStep({ type: 'DOCTOR' }),
     validate: (s) => !!s.branch,
   },
   {
-    title: 'Select Schedule',
+    titleKey: 'stepTitles.selectSchedule',
     component: ScheduleStep,
     validate: (s) => !!s.appointmentDate && !!s.startTime && !!s.endTime,
   },
   {
-    title: 'Select Patient & Medical Record',
+    titleKey: 'stepTitles.selectPatientMedicalRecord',
     component: PatientStep,
     validate: (s) => !!s.patientProfile,
   },
   {
-    title: 'Select add-on services',
+    titleKey: 'stepTitles.selectAddonServices',
     component: ServiceStep,
     validate: () => true,
   },
   {
-    title: 'Review & Confirm',
+    titleKey: 'stepTitles.reviewConfirm',
     component: ReviewStep,
     validate: (s) =>
       (!!s.paymentMethod && s.feeInfo.totalAmount > 0) ||
@@ -88,27 +88,27 @@ export const BOOKING_STEPS_DOCTOR: BookingStepConfig[] = [
 
 export const BOOKING_STEPS_PACKAGE: BookingStepConfig[] = [
   {
-    title: 'Select Location',
+    titleKey: 'stepTitles.selectLocation',
     component: () => LocationStep({ type: 'PACKAGE' }),
     validate: (s) => !!s.branch,
   },
   {
-    title: 'Select Schedule',
+    titleKey: 'stepTitles.selectSchedule',
     component: ScheduleStep,
     validate: (s) => !!s.appointmentDate && !!s.startTime && !!s.endTime,
   },
   {
-    title: 'Select Patient & Medical Record',
+    titleKey: 'stepTitles.selectPatientMedicalRecord',
     component: PatientStep,
     validate: (s) => !!s.patientProfile,
   },
   {
-    title: 'Select add-on services',
+    titleKey: 'stepTitles.selectAddonServices',
     component: ServiceStep,
     validate: () => true,
   },
   {
-    title: 'Review & Confirm',
+    titleKey: 'stepTitles.reviewConfirm',
     component: ReviewStep,
     validate: (s) =>
       (!!s.paymentMethod && s.feeInfo.totalAmount > 0) ||

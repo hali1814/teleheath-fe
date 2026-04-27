@@ -18,6 +18,7 @@
     },
     "noData": "គ្មានទិន្នន័យ",
     "noDataAvailable": "គ្មានទិន្នន័យ",
+    "search": "ស្វែងរក",
     "markAllAsRead": "សម្គាល់ទាំងអស់ថាបានអាន",
     "actions": {
       "cancel": "លុបចោល",
@@ -73,6 +74,18 @@
       "title": "ត្រូវការចូលគណនី",
       "description": "សូមចូលគណនីដើម្បីមើលព័ត៌មានបន្ថែម និងប្រើមុខងារទាំងអស់។",
       "button": "ចូលគណនី"
+    },
+    "network": {
+      "sessionExpired": "សម័យបានផុតកំណត់",
+      "pleaseLoginAgain": "សូមចូលគណនីម្តងទៀត។",
+      "connectionError": "កំហុសការតភ្ជាប់",
+      "checkInternetConnection": "សូមពិនិត្យការតភ្ជាប់អ៊ីនធឺណិតរបស់អ្នក។"
+    },
+    "priceRange": {
+      "under100": "ក្រោម 100$",
+      "100to300": "100 - 300$",
+      "300to500": "300 - 500$",
+      "above500": "លើស 500$"
     }
   },
   "home": {
@@ -205,7 +218,10 @@
       "country": "តម្រង",
       "hospital": "កម្ពុជា",
       "specialty": "ឯកទេស",
-      "priceRange": "ចន្លោះតម្លៃ"
+      "priceRange": "ចន្លោះតម្លៃ",
+      "packageCategory": "ប្រភេទកញ្ចប់",
+      "generalPackage": "កញ្ចប់ទូទៅ",
+      "simplePackage": "កញ្ចប់សាមញ្ញ"
     }
   },
   "doctor": {
@@ -224,7 +240,13 @@
       "gender": "ភេទ",
       "experienceYears": "ឆ្នាំនៃបទពិសោធន៍ការងារ",
       "consultationType": "ប្រភេទនៃការពិគ្រោះ",
-      "priceRange": "ចន្លោះតម្លៃ"
+      "priceRange": "ចន្លោះតម្លៃ",
+      "genderMale": "ប្រុស",
+      "genderFemale": "ស្រី",
+      "experienceUnder5Years": "ក្រោម 5 ឆ្នាំ",
+      "experience5To10Years": "5 - 10 ឆ្នាំ",
+      "experience10To15Years": "10 - 15 ឆ្នាំ",
+      "experienceOver20Years": "លើស 20 ឆ្នាំ"
     },
     "experienceYears": "{{years}} ឆ្នាំនៃបទពិសោធន៍ការងារ"
   },
@@ -266,6 +288,25 @@
       "searchPlaceholder": "ស្វែងរកសេវាកម្ម",
       "empty": "រកមិនឃើញសេវាកម្ម",
       "filterAriaLabel": "តម្រង"
+    },
+    "stepTitles": {
+      "selectSpecialty": "ជ្រើសរើសឯកទេស",
+      "selectLocation": "ជ្រើសរើសទីតាំង",
+      "selectRoom": "ជ្រើសរើសបន្ទប់",
+      "selectSchedule": "ជ្រើសរើសកាលវិភាគ",
+      "selectPatientMedicalRecord": "ជ្រើសរើសអ្នកជំងឺ និងកំណត់ត្រាវេជ្ជសាស្ត្រ",
+      "selectAddonServices": "ជ្រើសសេវាបន្ថែម",
+      "reviewConfirm": "ពិនិត្យឡើងវិញ និងបញ្ជាក់"
+    },
+    "stepLayout": {
+      "stepOf": "ជំហាន {{current}} ក្នុងចំណោម {{total}}",
+      "back": "ត្រឡប់ក្រោយ",
+      "continue": "បន្ត",
+      "bookNow": "កក់ឥឡូវនេះ"
+    },
+    "locationStep": {
+      "title": "ជ្រើសរើសទីតាំង",
+      "empty": "រកមិនឃើញទីតាំង"
     },
     "roomStep": {
       "empty": "រកមិនឃើញបន្ទប់",
@@ -405,7 +446,15 @@
     "addonPriceDisclaimer": "តម្លៃបង្ហាញសម្រាប់យោងតែប៉ុណ្ណោះ។ អ្នកប្រើប្រាស់បង់ផ្ទាល់ទៅអ្នកផ្តល់សេវា មិនមែនតាមកម្មវិធីទេ។",
     "reviewBadgeBookByHospital": "កក់តាមមន្ទីរពេទ្យ",
     "reviewBadgeBookByDoctor": "កក់តាមវេជ្ជបណ្ឌិត",
-    "reviewBadgeBookByPackage": "កក់តាមកញ្ចប់"
+    "reviewBadgeBookByPackage": "កក់តាមកញ្ចប់",
+    "bookingRequestReceived": "បានទទួលសំណើកក់ការណាត់ជួប",
+    "bookingRequestReceivedDescription": "ក្រុមសេវាអតិថិជនរបស់យើងនឹងទាក់ទងអ្នកក្នុងរយៈពេល 24 ម៉ោង ដើម្បីបញ្ជាក់ការកក់។",
+    "bookingIdLabel": "លេខកក់:",
+    "copyBookingId": "ចម្លងលេខកក់",
+    "bookingIdCopied": "បានចម្លងលេខកក់",
+    "failedToCopyBookingId": "ចម្លងលេខកក់មិនជោគជ័យ",
+    "viewMyBooking": "មើលការកក់របស់ខ្ញុំ",
+    "goToHomepage": "ទៅទំព័រដើម"
   },
   "search": {
     "tabs": {

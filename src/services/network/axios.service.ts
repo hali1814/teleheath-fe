@@ -184,15 +184,15 @@ axiosInstance.interceptors.response.use(
       }
 
       handleLogoutClearData()
-      toast.error('Session expired', {
-        description: 'Please login again.',
+      toast.error(i18n.t('common:network.sessionExpired'), {
+        description: i18n.t('common:network.pleaseLoginAgain'),
       })
 
       return rejectAxiosError(error)
     }
     if (error?.code === 'ERR_NETWORK') {
-      toast.error('Connection error', {
-        description: 'Please check your internet connection.',
+      toast.error(i18n.t('common:network.connectionError'), {
+        description: i18n.t('common:network.checkInternetConnection'),
       })
     }
     return rejectAxiosError(error)
