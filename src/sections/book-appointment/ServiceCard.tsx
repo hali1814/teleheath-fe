@@ -125,12 +125,13 @@ export const ServiceCard = ({
         </button>
       </div>
       {isBest && (
-        <div className="absolute -top-2.5 left-0">
-          {/* <Image
-            src="/best-service.svg"
-            alt="Best service"
-            className="h-[23px] object-contain"
-          /> */}
+        <div className="absolute top-0 left-0 z-50 px-[8px] py-[4px] bg-[#BD001A] rounded-tl-[8px] rounded-br-[12px]">
+          <Text
+            size="xs_10"
+            className="leading-[15px] font-semibold text-white uppercase"
+          >
+            Best service
+          </Text>
         </div>
       )}
       {selected && (
