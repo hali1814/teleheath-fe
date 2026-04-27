@@ -68,9 +68,7 @@ export function StepLayout({
             }
           }}
         >
-          <Text className="font-medium leading-normal text-placeholder-input">
-            Back
-          </Text>
+          <Text className="font-medium leading-normal">Back</Text>
         </Button>
 
         <Button
