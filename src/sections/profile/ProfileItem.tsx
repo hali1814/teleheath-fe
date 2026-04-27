@@ -1,6 +1,7 @@
 import Text from '#/components/text'
 import { useRouter } from '@tanstack/react-router'
 import Avatar from './Avatar'
+import { useTranslation } from 'react-i18next'
 
 export type RelationshipLabel = 'SELF' | 'SIBLING' | string
 
@@ -30,6 +31,55 @@ export default function ProfileItem({
   id,
 }: ProfileItemProps) {
   const router = useRouter()
+  const { t } = useTranslation(['common'])
+
+  const relationshipOptions = [
+    {
+      label: t('common:relationships.self'),
+      value: 'SELF',
+    },
+    {
+      label: t('common:relationships.father'),
+      value: 'FATHER',
+    },
+    {
+      label: t('common:relationships.mother'),
+      value: 'MOTHER',
+    },
+    {
+      label: t('common:relationships.husband'),
+      value: 'HUSBAND',
+    },
+    {
+      label: t('common:relationships.wife'),
+      value: 'WIFE',
+    },
+    {
+      label: t('common:relationships.child'),
+      value: 'CHILD',
+    },
+    {
+      label: t('common:relationships.grandfather'),
+      value: 'GRANDFATHER',
+    },
+    {
+      label: t('common:relationships.grandmother'),
+      value: 'GRANDMOTHER',
+    },
+    {
+      label: t('common:relationships.sibling'),
+      value: 'SIBLING',
+    },
+    {
+      label: t('common:relationships.relative'),
+      value: 'RELATIVE',
+    },
+    {
+      label: t('common:relationships.friend'),
+      value: 'FRIEND',
+    },
+  ]
+
   return (
     <div
       className={['w-full rounded-xl bg-white p-4', className ?? ''].join(' ')}
@@ -59,8 +109,12 @@ export default function ProfileItem({
               {name}
             </Text>
             <span className="inline-flex items-center justify-center rounded-full bg-[#D331311A] px-[8px] py-[2px]">
-              <Text size="xs_10" className="font-bold uppercase text-[#A8071A]">
-                {relationshipLabel}
+              <Text size="xs_10" className="font-bold uppercase text-primary">
+                {
+                  relationshipOptions.find(
+                    (option) => option.value === relationshipLabel,
+                  )?.label
+                }
               </Text>
             </span>
           </div>

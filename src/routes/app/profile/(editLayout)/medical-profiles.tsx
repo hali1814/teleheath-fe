@@ -62,7 +62,7 @@ function RouteComponent() {
                   avatarSrc={member.avatarUrl ?? undefined}
                   name={member.fullName ?? ''}
                   relationshipLabel={relationshipLabel}
-                  patientIdLabel={`PATIENT ID: #${member.profileCode ?? '--'}`}
+                  patientIdLabel={`${t('patientId')}: #${member.profileCode ?? '--'}`}
                   dateOfBirth={formatDate(
                     member.dob,
                     DATE_TIME_TYPE.MMM_DD_YYYY,

@@ -4,6 +4,7 @@ import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
 import { useGetListBranchesQuery } from '#/services/query/hospital/list-branches'
 import { getGoogleMapsHref } from '#/utils/google-maps.util'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { formatWorkingHours, isClosedLabel } from '#/utils/working-hours.util'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useState } from 'react'
@@ -150,7 +151,7 @@ const LIMIT_BRANCH = 3
 
 export default function BranchList({ hospitalId }: { hospitalId: string }) {
   const [expanded, setExpanded] = useState(false)
-  const { t } = useTranslation(['hospital', 'common'])
+  const { t, i18n } = useTranslation(['hospital', 'common'])
 
   const { data: { data: branches } = { data: [] } } = useGetListBranchesQuery({
     params: {
@@ -171,7 +172,12 @@ export default function BranchList({ hospitalId }: { hospitalId: string }) {
             {branches.slice(0, limitBranch).map((branch, index) => (
               <BranchCard
                 key={index}
-                name={branch.nameVi}
+                name={getLocalizedTextByLang(
+                  branch.nameVi,
+                  branch.nameKh,
+                  branch.nameEn,
+                  i18n.language as AppLanguage,
+                )}
                 address={branch.detailedAddress}
                 phone={branch.contactNumber1}
                 email={branch.workEmail}
