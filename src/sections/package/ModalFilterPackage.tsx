@@ -17,7 +17,7 @@ import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
 import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
 import { ALL_PAGINATION } from '#/const/pagination'
-import { PACKAGE_PRICE_RANGE_OPTIONS } from '#/sections/package/package-filter-price'
+import { getPackagePriceRangeOptions } from '#/sections/package/package-filter-price'
 import { cn } from '#/lib/utils'
 
 const emptyFilter = (): FilterPackage => ({
@@ -212,7 +212,7 @@ export default function ModalFilterPackage({
             />
           </div>
           <div className="flex flex-col gap-[8px]">
-            <Text>Package Category</Text>
+            <Text>{t('filter.packageCategory')}</Text>
             <InputSelect
               defaultValue={effectiveDefaults.category || undefined}
               onValueChange={(value) => {
@@ -222,10 +222,10 @@ export default function ModalFilterPackage({
                 }
                 rerender()
               }}
-              placeholder="Package Category"
+              placeholder={t('filter.packageCategory')}
               options={[
-                { label: 'General Package', value: 'GENERAL' },
-                { label: 'Simple Package', value: 'SPECIALIZE' },
+                { label: t('filter.generalPackage'), value: 'GENERAL' },
+                { label: t('filter.simplePackage'), value: 'SPECIALIZE' },
               ]}
             />
           </div>
@@ -260,7 +260,7 @@ export default function ModalFilterPackage({
                 rerender()
               }}
               placeholder={t('filter.priceRange')}
-              options={PACKAGE_PRICE_RANGE_OPTIONS}
+              options={getPackagePriceRangeOptions((key) => t(key as any))}
             />
           </div>
         </div>

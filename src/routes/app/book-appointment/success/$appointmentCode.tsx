@@ -4,6 +4,7 @@ import { Button } from '#/components/ui/button'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import { createFileRoute, Link, useParams } from '@tanstack/react-router'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute(
   '/app/book-appointment/success/$appointmentCode',
@@ -12,6 +13,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+  const { t } = useTranslation(['appointment'])
   const { appointmentCode } = useParams({
     from: '/app/book-appointment/success/$appointmentCode',
   })
@@ -19,9 +21,9 @@ function RouteComponent() {
   const handleCopyBookingId = async () => {
     try {
       await navigator.clipboard.writeText(appointmentCode)
-      toast.success('Booking ID copied')
+      toast.success(t('bookingIdCopied'))
     } catch {
-      toast.error('Failed to copy Booking ID')
+      toast.error(t('failedToCopyBookingId'))
     }
   }
 
@@ -34,21 +36,20 @@ function RouteComponent() {
             size="4xl_24"
             className="text-center font-semibold leading-normal text-black"
           >
-            Booking Request Received
+            {t('bookingRequestReceived')}
           </Text>
           <Text className="text-center leading-normal text-muted-foreground">
-            Our customer service team will contact you within 24 hours to
-            confirm your booking.
+            {t('bookingRequestReceivedDescription')}
           </Text>
           <div className="flex items-center gap-[8px]">
             <Text className="font-medium leading-normal text-muted-foreground">
-              Booking ID:{' '}
+              {t('bookingIdLabel')}{' '}
               <span className="text-dust-red-8">#{appointmentCode}</span>
             </Text>
             <button
               type="button"
               onClick={handleCopyBookingId}
-              aria-label="Copy booking ID"
+              aria-label={t('copyBookingId')}
             >
               <Icon name="copy" className="w-[16px] h-[16px] text-dust-red-8" />
             </button>
@@ -70,26 +71,26 @@ function RouteComponent() {
         <div className="flex items-center gap-[8px]">
           <Icon name="warning" className="w-[15px] h-[15px] text-[#F0B133]" />
           <Text className="font-semibold leading-[1.2] text-[#F0B133]">
-            Important Reminders
+            {t('importantReminders')}
           </Text>
         </div>
         <div className="flex flex-col gap-[8px]">
           <div className="flex items-center gap-[8px]">
             <div className="flex h-[6px] w-[6px] items-center justify-center rounded-full bg-[#F0B133]" />
             <Text size="sm_12" className="leading-[1.3] text-[#334155]">
-              Please arrive 15 minutes early for check-in.
+              {t('reminderArriveEarly')}
             </Text>
           </div>
           <div className="flex items-center gap-[8px]">
             <div className="flex h-[6px] w-[6px] items-center justify-center rounded-full bg-[#F0B133]" />
             <Text size="sm_12" className="leading-[1.3] text-[#334155]">
-              Bring your ID or Passport for verification.
+              {t('reminderBringId')}
             </Text>
           </div>
           <div className="flex items-center gap-[8px]">
             <div className="flex h-[6px] w-[6px] items-center justify-center rounded-full bg-[#F0B133]" />
             <Text size="sm_12" className="leading-[1.3] text-[#334155]">
-              Bring original medical records and recent test results.
+              {t('reminderBringMedicalRecords')}
             </Text>
           </div>
         </div>
@@ -102,7 +103,7 @@ function RouteComponent() {
         <Button className="h-[45px] w-full rounded-[40px] bg-primary" asChild>
           <Link to="/app/history">
             <Text className="font-medium leading-normal text-white">
-              View my booking
+              {t('viewMyBooking')}
             </Text>
           </Link>
         </Button>
@@ -110,7 +111,7 @@ function RouteComponent() {
         <Button className="h-[45px] w-full rounded-[40px] bg-[#E6E6E6]" asChild>
           <Link to="/app/home">
             <Text className="font-medium leading-normal text-[#333333]">
-              Go to Homepage
+              {t('goToHomepage')}
             </Text>
           </Link>
         </Button>
