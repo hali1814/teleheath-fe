@@ -541,7 +541,7 @@ export function ReviewStep() {
           </div>
         )}
 
-        {(consultationFee > 0 || feeInfo.serviceFee > 0) && (
+        {consultationFee > 0 && (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
             <Text size="lg_16" className="font-semibold leading-[1.2]">
               {t('appointment:paymentDetails')}
@@ -556,16 +556,6 @@ export function ReviewStep() {
                 </Text>
               </div>
             )}
-            {/* {feeInfo.serviceFee > 0 && (
-              <div className="flex items-center justify-between">
-                <Text className="leading-normal text-muted-foreground">
-                  {t('appointment:serviceFee')}
-                </Text>
-                <Text className="leading-normal font-medium text-[#333333]">
-                  {formatPrice(feeInfo.serviceFee)}
-                </Text>
-              </div>
-            )} */}
             <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
               <Text
                 size="lg_16"
