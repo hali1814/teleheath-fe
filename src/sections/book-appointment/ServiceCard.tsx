@@ -51,76 +51,87 @@ export const ServiceCard = ({
         alt={service.partner.name}
         className="aspect-3/2 object-cover rounded-tl-[12px] rounded-se-[12px]"
       />
-      <div className="flex flex-col gap-[8px] p-[12px]">
-        <Text size="sm_12" className="leading-[14px] font-semibold">
-          {typeName}
-        </Text>
-        <div className="flex items-center flex-wrap gap-[8px]">
-          {amenities &&
-            amenities.map((amenity: Amenity) => (
-              <Image
-                src={amenity.iconUrl}
-                alt={amenity.name}
-                className="size-[12px] object-contain"
-              />
-            ))}
-        </div>
-        {price !== 0 && price && (
-          <div className="flex flex-col">
-            <Text size="xs_10" className="leading-[14px] text-[#475569]">
-              Reference price
-            </Text>
-            {hasActiveDiscount ? (
-              <div className="flex flex-wrap items-center gap-x-[8px] gap-y-[4px]">
+      <div className="h-full flex flex-col gap-[8px] p-[12px]">
+        <div className="flex-1 flex flex-col gap-[8px]">
+          <Text size="sm_12" className="leading-[14px] font-semibold">
+            {typeName}
+          </Text>
+          <div className="flex items-center flex-wrap gap-[8px]">
+            {amenities &&
+              amenities.map((amenity: Amenity) => (
+                <Image
+                  src={amenity.iconUrl}
+                  alt={amenity.name}
+                  className="size-[12px] object-contain"
+                />
+              ))}
+          </div>
+          {price !== 0 && price && (
+            <div className="flex flex-col">
+              <Text size="xs_10" className="leading-[14px] text-[#475569]">
+                Reference price
+              </Text>
+              {hasActiveDiscount ? (
+                <div className="flex flex-wrap items-center gap-x-[8px] gap-y-[4px]">
+                  <Text
+                    size="lg_16"
+                    className="leading-[22px] font-medium text-[#EC5B13]"
+                  >
+                    {formatPrice(promotionPrice)}
+                  </Text>
+                  <Text
+                    size="lg_16"
+                    className="leading-[22px] font-medium text-muted-foreground line-through"
+                  >
+                    {originalPrice !== 0 && originalPrice
+                      ? formatPrice(originalPrice)
+                      : 'Contact later'}
+                  </Text>
+                </div>
+              ) : (
                 <Text
                   size="lg_16"
                   className="leading-[22px] font-medium text-[#EC5B13]"
-                >
-                  {formatPrice(promotionPrice)}
-                </Text>
-                <Text
-                  size="lg_16"
-                  className="leading-[22px] font-medium text-muted-foreground line-through"
                 >
                   {originalPrice !== 0 && originalPrice
                     ? formatPrice(originalPrice)
                     : 'Contact later'}
                 </Text>
-              </div>
-            ) : (
-              <Text
-                size="lg_16"
-                className="leading-[22px] font-medium text-[#EC5B13]"
-              >
-                {originalPrice !== 0 && originalPrice
-                  ? formatPrice(originalPrice)
-                  : 'Contact later'}
+              )}
+            </div>
+          )}
+          {service.partner.distanceFromHospital && (
+            <div className="flex flex-col">
+              <Text size="xs_10" className="leading-[14px] text-[#475569]">
+                *Distance from hospital
               </Text>
-            )}
-          </div>
-        )}
-        {service.partner.distanceFromHospital && (
-          <div className="flex flex-col">
-            <Text size="xs_10" className="leading-[14px] text-[#475569]">
-              *Distance from hospital
-            </Text>
-            <Text
-              size="sm_12"
-              className="leading-[1.2] font-medium text-muted-foreground"
-            >
-              {service.partner.distanceFromHospital}
-            </Text>
-          </div>
-        )}
+              <Text
+                size="sm_12"
+                className="leading-[1.2] font-medium text-muted-foreground"
+              >
+                {service.partner.distanceFromHospital}
+              </Text>
+            </div>
+          )}
+        </div>
         <button
-          className="w-full h-[28px] bg-dust-red-1 rounded-[6px]"
+          className={cn(
+            'w-full h-[28px] bg-dust-red-1 rounded-[6px]',
+            selected && 'bg-muted-foreground/10',
+          )}
           onClick={(e) => {
             e.stopPropagation()
             onClick()
           }}
         >
-          <Text size="sm_12" className="leading-[1.3] font-medium text-primary">
-            Select
+          <Text
+            size="sm_12"
+            className={cn(
+              'leading-[1.3] font-medium text-primary',
+              selected && 'text-muted-foreground/70',
+            )}
+          >
+            {selected ? 'Selected' : 'Select'}
           </Text>
         </button>
       </div>
