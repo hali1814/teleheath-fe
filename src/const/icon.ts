@@ -102,6 +102,7 @@ import HospitalSolidIcon from '#/assets/icons/common/hospital-solid.svg?react'
 import AddUserIcon from '#/assets/icons/common/add-user.svg?react'
 import DoctorMaleIcon from '#/assets/icons/common/doctor-male.svg?react'
 import DoctorFemaleIcon from '#/assets/icons/common/doctor-female.svg?react'
+import StarFallIcon from '#/assets/icons/common/star-fall.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -201,6 +202,7 @@ const ICONS_TEMPLATE = {
   add_user: AddUserIcon,
   doctor_male: DoctorMaleIcon,
   doctor_female: DoctorFemaleIcon,
+  star_fall: StarFallIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

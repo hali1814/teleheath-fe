@@ -90,9 +90,12 @@ export function ServiceStep() {
       <PullToRefresh onRefresh={handleRefresh}>
         <div className="flex min-w-0 w-full flex-col gap-[16px] px-[16px]">
           <div className="flex flex-col gap-[6px]">
-            <Text size="base_14" className="leading-[24px] font-semibold">
-              What do we have for you?
-            </Text>
+            <div className="flex items-center">
+              <Icon name="star_fall" />
+              <Text size="base_14" className="leading-[24px] font-semibold">
+                What do we have for you?
+              </Text>
+            </div>
             <Text size="sm_12" className="leading-[1.2] text-[#5D3F3D]">
               Select add-on services to ensure a seamless recovery and
               stress-free journey to your clinic:
@@ -155,15 +158,6 @@ export function ServiceStep() {
                                 (item) => item.addonServiceId === service.id,
                               )
                               .map((serviceType) => {
-                                const pickedForAddon = addonServiceTypes?.find(
-                                  (p) =>
-                                    p.addonServiceId ===
-                                    serviceType.addonServiceId,
-                                )
-                                const selectionDisabled =
-                                  pickedForAddon != null &&
-                                  pickedForAddon.id !== serviceType.id
-
                                 return (
                                   <ServiceCard
                                     key={serviceType.id}
@@ -173,7 +167,6 @@ export function ServiceStep() {
                                         (p) => p.id === serviceType.id,
                                       ) ?? false
                                     }
-                                    disabled={selectionDisabled}
                                     onClick={() => {
                                       const current = addonServiceTypes ?? []
                                       const already = current.some(
@@ -181,11 +174,6 @@ export function ServiceStep() {
                                       )
 
                                       if (already) {
-                                        setData({
-                                          addonServiceTypes: current.filter(
-                                            (p) => p.id !== serviceType.id,
-                                          ),
-                                        })
                                         return
                                       }
 
