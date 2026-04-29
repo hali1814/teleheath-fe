@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react'
 import { Header } from '../home'
 import { useRouter } from '@tanstack/react-router'
 import { useBookingStore } from '#/stores/booking-store'
+import { useTranslation } from 'react-i18next'
 
 export function StepLayout({
   title,
@@ -16,6 +17,7 @@ export function StepLayout({
   disableNext,
   onSubmit,
 }: any) {
+  const { t } = useTranslation('book-appointment')
   const router = useRouter()
   const routerRef = useRef(router)
   routerRef.current = router
@@ -44,7 +46,7 @@ export function StepLayout({
             size="sm_12"
             className="font-normal leading-[1.3] text-muted-foreground uppercase"
           >
-            {`Step ${step + 1} of ${total}`}
+            {t('stepLayout.stepOf', { current: step + 1, total })}
           </Text>
         </div>
         <Progress
@@ -68,8 +70,8 @@ export function StepLayout({
             }
           }}
         >
-          <Text className="font-medium leading-normal text-placeholder-input">
-            Back
+          <Text className="font-medium leading-normal">
+            {t('stepLayout.back')}
           </Text>
         </Button>
 
@@ -85,7 +87,9 @@ export function StepLayout({
           disabled={disableNext}
         >
           <Text className="font-medium leading-normal text-white">
-            {step === total - 1 ? 'Book Now' : 'Continue'}
+            {step === total - 1
+              ? t('stepLayout.bookNow')
+              : t('stepLayout.continue')}
           </Text>
         </Button>
       </div>

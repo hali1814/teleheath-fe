@@ -3,6 +3,7 @@ import Text from '#/components/text'
 import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import type { Doctor } from '#/entities/doctorEntity'
+import { cn } from '#/lib/utils'
 import { useTranslation } from 'react-i18next'
 
 export default function DoctorInfoHeader({
@@ -27,7 +28,12 @@ export default function DoctorInfoHeader({
         <Text size="4xl_24" className="font-semibold leading-normal">
           {name}
         </Text>
-        <div className="grid grid-cols-1 gap-[8px]">
+        <div
+          className={cn(
+            'grid gap-[8px]',
+            specialties?.length > 1 ? 'grid-cols-2' : 'grid-cols-1',
+          )}
+        >
           {specialties.map((specialty, index) => (
             <Text
               key={`${name}-spec-${index}`}

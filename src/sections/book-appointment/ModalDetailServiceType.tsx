@@ -63,7 +63,7 @@ export function ModalDetailServiceType({
           <DialogTitle></DialogTitle>
         </DialogHeader>
 
-        <div className="flex max-h-[min(60vh,520px)] flex-col gap-[32px] overflow-y-auto px-[20px] py-[24px]">
+        <div className="flex max-h-[90vh] flex-col gap-[32px] overflow-y-auto px-[20px] py-[24px]">
           <div className="flex items-center justify-between">
             <Text size="lg_16" className="leading-[1.2] font-semibold">
               View Details

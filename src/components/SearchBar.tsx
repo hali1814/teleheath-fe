@@ -2,6 +2,7 @@ import { cn } from '#/lib/utils'
 import { Icon } from './icon'
 import Text from './text'
 import { useLayoutEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   value?: string
@@ -124,7 +125,7 @@ function HomeSearchAutoScrollPlaceholder({
 
 export default function SearchBar({
   value,
-  placeholder = 'Search',
+  placeholder,
   autoFocus = false,
   isHome = false,
   isAutoScroll = false,
@@ -133,6 +134,8 @@ export default function SearchBar({
   onClick,
   onClear,
 }: Props) {
+  const { t } = useTranslation('common')
+  const resolvedPlaceholder = placeholder ?? t('search')
   const content = (
     <>
       <Icon name="search_icon" className="w-[20px] h-[20px]" />
@@ -144,17 +147,17 @@ export default function SearchBar({
               size="base_14"
               className="text-[#999999] truncate text-start leading-normal"
             >
-              {placeholder}
+              {resolvedPlaceholder}
             </Text>
           </div>
         ) : (
-          <HomeSearchAutoScrollPlaceholder placeholder={placeholder} />
+          <HomeSearchAutoScrollPlaceholder placeholder={resolvedPlaceholder} />
         )
       ) : (
         <input
           autoFocus={autoFocus}
           value={value}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           onChange={(e) => onSearch?.(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
@@ -189,7 +192,7 @@ export default function SearchBar({
       <button
         type="button"
         onClick={onClick}
-        aria-label={placeholder}
+        aria-label={resolvedPlaceholder}
         className="
           w-full flex items-center gap-[10px]
           px-[14px] py-[12px]

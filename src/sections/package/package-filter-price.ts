@@ -1,13 +1,20 @@
 /** Giá trị `value` của InputSelect khoảng giá — map sang query API */
 export const PACKAGE_PRICE_RANGE_OPTIONS: {
-  label: string
+  labelKey: string
   value: string
 }[] = [
-  { label: 'Under 100$', value: '0-100' },
-  { label: '100 - 300$', value: '100-300' },
-  { label: '300 - 500$', value: '300-500' },
-  { label: 'Above 500$', value: '500' },
+  { labelKey: 'common:priceRange.under100', value: '0-100' },
+  { labelKey: 'common:priceRange.100to300', value: '100-300' },
+  { labelKey: 'common:priceRange.300to500', value: '300-500' },
+  { labelKey: 'common:priceRange.above500', value: '500' },
 ]
+
+export function getPackagePriceRangeOptions(t: (key: string) => string) {
+  return PACKAGE_PRICE_RANGE_OPTIONS.map((option) => ({
+    label: t(option.labelKey),
+    value: option.value,
+  }))
+}
 
 export function priceRangeKeyToMinMax(
   key: string,

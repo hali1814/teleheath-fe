@@ -47,7 +47,7 @@ export function RoomCard({
           className="w-[20px] h-[20px] text-primary"
         />
       ) : (
-        <div className="w-[20px] h-[20px] rounded-full border border-[#D3313133]" />
+        <div className="w-[20px] h-[20px] rounded-full border border-[#D3313180]" />
       )}
     </div>
   )

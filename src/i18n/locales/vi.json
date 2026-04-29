@@ -18,6 +18,7 @@
     },
     "noData": "Không có dữ liệu",
     "noDataAvailable": "Không có dữ liệu",
+    "search": "Tìm kiếm",
     "markAllAsRead": "Đánh dấu tất cả đã đọc",
     "actions": {
       "cancel": "Hủy",
@@ -72,6 +73,18 @@
       "title": "Yêu cầu đăng nhập",
       "description": "Vui lòng đăng nhập để xem thêm thông tin và sử dụng đầy đủ tính năng.",
       "button": "Đăng nhập"
+    },
+    "network": {
+      "sessionExpired": "Phiên đăng nhập đã hết hạn",
+      "pleaseLoginAgain": "Vui lòng đăng nhập lại.",
+      "connectionError": "Lỗi kết nối",
+      "checkInternetConnection": "Vui lòng kiểm tra kết nối internet của bạn."
+    },
+    "priceRange": {
+      "under100": "Dưới 100$",
+      "100to300": "100 - 300$",
+      "300to500": "300 - 500$",
+      "above500": "Trên 500$"
     }
   },
   "home": {
@@ -204,7 +217,10 @@
       "country": "Quốc gia",
       "hospital": "Bệnh viện",
       "specialty": "Chuyên khoa",
-      "priceRange": "Khoảng giá"
+      "priceRange": "Khoảng giá",
+      "packageCategory": "Danh mục gói",
+      "generalPackage": "Gói tổng quát",
+      "simplePackage": "Gói cơ bản"
     }
   },
   "doctor": {
@@ -223,7 +239,13 @@
       "gender": "Giới tính",
       "experienceYears": "Số năm kinh nghiệm",
       "consultationType": "Loại tư vấn",
-      "priceRange": "Khoảng giá"
+      "priceRange": "Khoảng giá",
+      "genderMale": "Nam",
+      "genderFemale": "Nữ",
+      "experienceUnder5Years": "Dưới 5 năm",
+      "experience5To10Years": "5 - 10 năm",
+      "experience10To15Years": "10 - 15 năm",
+      "experienceOver20Years": "Trên 20 năm"
     },
     "experienceYears": "{{years}} năm kinh nghiệm"
   },
@@ -265,6 +287,25 @@
       "searchPlaceholder": "Tìm dịch vụ",
       "empty": "Không tìm thấy dịch vụ",
       "filterAriaLabel": "Lọc"
+    },
+    "stepTitles": {
+      "selectSpecialty": "Chọn chuyên khoa",
+      "selectLocation": "Chọn địa điểm",
+      "selectRoom": "Chọn phòng",
+      "selectSchedule": "Chọn lịch khám",
+      "selectPatientMedicalRecord": "Chọn bệnh nhân & hồ sơ y tế",
+      "selectAddonServices": "Chọn dịch vụ bổ sung",
+      "reviewConfirm": "Xem lại & xác nhận"
+    },
+    "stepLayout": {
+      "stepOf": "Bước {{current}} / {{total}}",
+      "back": "Quay lại",
+      "continue": "Tiếp tục",
+      "bookNow": "Đặt lịch ngay"
+    },
+    "locationStep": {
+      "title": "Chọn địa điểm",
+      "empty": "Không tìm thấy địa điểm"
     },
     "roomStep": {
       "empty": "Không tìm thấy phòng",
@@ -404,7 +445,15 @@
     "addonPriceDisclaimer": "Giá chỉ mang tính tham khảo. Người dùng thanh toán trực tiếp với nhà cung cấp, không qua ứng dụng.",
     "reviewBadgeBookByHospital": "ĐẶT THEO BỆNH VIỆN",
     "reviewBadgeBookByDoctor": "ĐẶT THEO BÁC SĨ",
-    "reviewBadgeBookByPackage": "ĐẶT THEO GÓI"
+    "reviewBadgeBookByPackage": "ĐẶT THEO GÓI",
+    "bookingRequestReceived": "Yêu cầu đặt lịch đã được ghi nhận",
+    "bookingRequestReceivedDescription": "Đội ngũ chăm sóc khách hàng sẽ liên hệ bạn trong vòng 24 giờ để xác nhận lịch hẹn.",
+    "bookingIdLabel": "Mã đặt lịch:",
+    "copyBookingId": "Sao chép mã đặt lịch",
+    "bookingIdCopied": "Đã sao chép mã đặt lịch",
+    "failedToCopyBookingId": "Sao chép mã đặt lịch thất bại",
+    "viewMyBooking": "Xem lịch đặt của tôi",
+    "goToHomepage": "Về trang chủ"
   },
   "search": {
     "tabs": {
@@ -433,7 +482,9 @@
   "payment": {
     "generatingQr": "Đang tạo mã QR…",
     "loadQrError": "Không tải được mã QR thanh toán. Vui lòng thử lại.",
+    "qrExpired": "Mã QR đã hết hạn. Vui lòng tải lại để nhận mã mới.",
     "retry": "Thử lại",
+    "reloadQr": "Tải lại mã QR",
     "scanToPay": "Quét để thanh toán",
     "or": "hoặc",
     "downloadQr": "Tải mã QR",
