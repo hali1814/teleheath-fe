@@ -2,39 +2,24 @@ import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
-import { useGetListBranchesQuery } from '#/services/query/hospital/list-branches'
+import type { Hospital } from '#/entities/hospitalEntity'
 import { getGoogleMapsHref } from '#/utils/google-maps.util'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
-import { formatWorkingHours, isClosedLabel } from '#/utils/working-hours.util'
+import { isClosedLabel } from '#/utils/working-hours.util'
 import ExpandViewButton from '../common/ExpandViewButton'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface Branch {
-  name: string
-  address: string
-  phone: string
-  email: string
-  working_hours: {
-    dayOfWeek: string
-    morningStart: string | null
-    morningEnd: string | null
-    afternoonStart: string | null
-    afternoonEnd: string | null
-    closed: boolean
-  }[]
-  emergency24h: boolean
-  googleMapsEmbed: string
-}
+type Branch = Hospital['branches'][number]
 
 const BranchCard = ({
+  id,
   name,
   address,
   phone,
   email,
-  working_hours,
+  operatingHours,
+  googleMaps,
   emergency24h,
-  googleMapsEmbed,
 }: Branch) => {
   const { t, i18n } = useTranslation(['hospital', 'common'])
 
@@ -46,7 +31,7 @@ const BranchCard = ({
           type="button"
           className="flex items-center gap-[4px]"
           onClick={() => {
-            const href = getGoogleMapsHref(googleMapsEmbed, address)
+            const href = getGoogleMapsHref(googleMaps, address)
             if (!href) return
 
             window.open(href, '_blank', 'noopener,noreferrer')
@@ -107,9 +92,7 @@ const BranchCard = ({
             {t('operatingHours.title')}
           </Text>
         </div>
-        {Object.entries(
-          formatWorkingHours(working_hours, i18n.language as AppLanguage),
-        ).map(([label, value], index) => (
+        {Object.entries(operatingHours).map(([label, value], index) => (
           <div key={index} className="flex justify-between items-center">
             <Text
               size="sm_12"
@@ -149,15 +132,9 @@ const BranchCard = ({
 
 const LIMIT_BRANCH = 3
 
-export default function BranchList({ hospitalId }: { hospitalId: string }) {
+export default function BranchList({ branches }: { branches: Branch[] }) {
   const [expanded, setExpanded] = useState(false)
-  const { t, i18n } = useTranslation(['hospital', 'common'])
-
-  const { data: { data: branches } = { data: [] } } = useGetListBranchesQuery({
-    params: {
-      hospitalId,
-    },
-  })
+  const { t } = useTranslation(['hospital', 'common'])
 
   const limitBranch = expanded ? branches.length : LIMIT_BRANCH
 
@@ -172,18 +149,14 @@ export default function BranchList({ hospitalId }: { hospitalId: string }) {
             {branches.slice(0, limitBranch).map((branch, index) => (
               <BranchCard
                 key={index}
-                name={getLocalizedTextByLang(
-                  branch.nameVi,
-                  branch.nameKh,
-                  branch.nameEn,
-                  i18n.language as AppLanguage,
-                )}
-                address={branch.detailedAddress}
-                phone={branch.contactNumber1}
-                email={branch.workEmail}
-                working_hours={branch.workingHours}
+                id={branch.id}
+                name={branch.name}
+                address={branch.address}
+                phone={branch.phone}
+                email={branch.email}
+                operatingHours={branch.operatingHours}
+                googleMaps={branch.googleMaps}
                 emergency24h={branch.emergency24h}
-                googleMapsEmbed={branch.googleMapsEmbed}
               />
             ))}
             {branches.length > LIMIT_BRANCH && (

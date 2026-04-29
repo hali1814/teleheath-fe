@@ -54,7 +54,7 @@ function RouteComponent() {
             hospitalData?.specialties?.length > 0 && (
               <SpecialtyList specialties={hospitalData?.specialties ?? []} />
             )}
-          <BranchList hospitalId={id} />
+          <BranchList branches={hospitalData?.branches ?? []} />
         </div>
         <div className="fixed bottom-0 left-0 right-0 pt-[10px] pb-[35px] px-[20px] bg-background">
           <Button

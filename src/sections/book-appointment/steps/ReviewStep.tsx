@@ -511,7 +511,7 @@ export function ReviewStep() {
             <Text size="lg_16" className="leading-[1.2] font-semibold">
               {t('appointment:addonServices')}
             </Text>
-            <div className="flex items-center gap-[8px] px-[10px] py-[6px] rounded-[8px] bg-[#F0B13312]">
+            {/* <div className="flex items-center gap-[8px] px-[10px] py-[6px] rounded-[8px] bg-[#F0B13312]">
               <Icon
                 name="warning"
                 className="w-[16px] h-[16px] text-[#F0B133]"
@@ -522,7 +522,7 @@ export function ReviewStep() {
               >
                 {t('appointment:addonPriceDisclaimer')}
               </Text>
-            </div>
+            </div> */}
             {addonServiceTypes?.map((service, index) => (
               <>
                 <ServiceItem
@@ -541,7 +541,7 @@ export function ReviewStep() {
           </div>
         )}
 
-        {consultationFee > 0 && (
+        {(consultationFee > 0 || feeInfo.serviceFee > 0) && (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
             <Text size="lg_16" className="font-semibold leading-[1.2]">
               {t('appointment:paymentDetails')}
@@ -556,6 +556,19 @@ export function ReviewStep() {
                 </Text>
               </div>
             )}
+            {addonServiceTypes &&
+              addonServiceTypes?.length > 0 &&
+              addonServiceTypes.map((service) => (
+                <div className="flex items-center justify-between">
+                  <Text className="leading-normal text-muted-foreground">
+                    {service.typeName}
+                  </Text>
+                  <Text className="leading-normal font-medium text-[#333333]">
+                    {formatPrice(service.promotionPrice ?? service.price)}
+                  </Text>
+                </div>
+              ))}
+
             <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
               <Text
                 size="lg_16"
@@ -567,7 +580,7 @@ export function ReviewStep() {
                 size="xl_18"
                 className="leading-normal font-semibold text-primary"
               >
-                {formatPrice(consultationFee)}
+                {formatPrice(feeInfo.totalAmount)}
               </Text>
             </div>
           </div>

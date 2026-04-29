@@ -86,13 +86,15 @@ export const useBookingStore = create<BookingState>((set) => ({
     set((s) => {
       const serviceFee =
         s.addonServiceTypes?.reduce((acc, addonServiceType) => {
-          return acc + addonServiceType.price
+          return (
+            acc + (addonServiceType.promotionPrice ?? addonServiceType.price)
+          )
         }, 0) ?? 0
 
       const next = {
         consultationFee,
         serviceFee,
-        totalAmount: consultationFee,
+        totalAmount: consultationFee + serviceFee,
       }
       const p = s.feeInfo
       if (

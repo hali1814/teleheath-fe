@@ -174,6 +174,11 @@ export function ServiceStep() {
                                       )
 
                                       if (already) {
+                                        setData({
+                                          addonServiceTypes: current.filter(
+                                            (p) => p.id !== serviceType.id,
+                                          ),
+                                        })
                                         return
                                       }
 
