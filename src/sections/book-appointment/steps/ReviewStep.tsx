@@ -141,7 +141,7 @@ const PaymentMethodItem = ({
           className="w-[20px] h-[20px] text-primary"
         />
       ) : (
-        <div className="w-[20px] h-[20px] rounded-full border border-[#D3313133]" />
+        <div className="w-[20px] h-[20px] rounded-full border border-[#D3313180]" />
       )}
     </div>
   )
@@ -232,12 +232,7 @@ export function ReviewStep() {
                   {t('appointment:reviewBadgeBookByDoctor')}
                 </Text>
                 <Text className="leading-[1.2] font-semibold text-[#333333]">
-                  {getLocalizedTextByLang(
-                    doctor?.nameVi ?? '',
-                    doctor?.nameKh ?? '',
-                    doctor?.nameEn ?? '',
-                    i18n.language as AppLanguage,
-                  )}
+                  {doctor?.name}
                 </Text>
               </div>
               <div
@@ -256,38 +251,37 @@ export function ReviewStep() {
               <Text size="lg_16" className="leading-[1.2] font-semibold">
                 {t('appointment:medicalProfessional')}
               </Text>
-              <div className="flex items-center gap-[16px]">
+              <div className="flex items-start gap-[16px]">
                 <Image
                   src={doctor?.avatarUrl ?? ''}
-                  alt={getLocalizedTextByLang(
-                    doctor?.nameVi ?? '',
-                    doctor?.nameKh ?? '',
-                    doctor?.nameEn ?? '',
-                    i18n.language as AppLanguage,
-                  )}
+                  alt={doctor?.name}
                   className="w-[80px] h-[80px] rounded-full"
                 />
-                <div className="flex flex-col gap-[10px]">
+                <div className="flex-1 flex flex-col gap-[10px]">
                   <Text className="leading-normal font-medium text-[#333333]">
-                    {getLocalizedTextByLang(
-                      doctor?.nameVi ?? '',
-                      doctor?.nameKh ?? '',
-                      doctor?.nameEn ?? '',
-                      i18n.language as AppLanguage,
-                    )}
+                    {doctor?.name}
                   </Text>
-                  {doctor?.specialties &&
-                    doctor?.specialties.length > 0 &&
-                    doctor?.specialties.map((specialty, index) => (
-                      <Text
-                        key={`${doctor?.doctorId}-spec-h-${index}`}
-                        size="sm_12"
-                        className="flex items-center gap-[8px] font-normal text-muted-foreground leading-[1.3]"
-                      >
-                        <div className="size-[4px] rounded-full bg-muted-foreground" />
-                        {specialty}
-                      </Text>
-                    ))}
+                  <div
+                    className={cn(
+                      'grid gap-[8px] items-start',
+                      doctor?.specialties?.length > 1
+                        ? 'grid-cols-2'
+                        : 'grid-cols-1',
+                    )}
+                  >
+                    {doctor?.specialties &&
+                      doctor?.specialties.length > 0 &&
+                      doctor?.specialties.map((specialty, index) => (
+                        <Text
+                          key={`${doctor?.doctorId}-spec-h-${index}`}
+                          size="sm_12"
+                          className="flex items-center gap-[8px] font-normal text-muted-foreground leading-[1.3]"
+                        >
+                          <div className="size-[4px] rounded-full bg-muted-foreground" />
+                          {specialty}
+                        </Text>
+                      ))}
+                  </div>
                   <div className="flex items-center gap-[8px]">
                     <Icon
                       name="money"
@@ -547,7 +541,7 @@ export function ReviewStep() {
           </div>
         )}
 
-        {(consultationFee > 0 || feeInfo.serviceFee > 0) && (
+        {consultationFee > 0 && (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
             <Text size="lg_16" className="font-semibold leading-[1.2]">
               {t('appointment:paymentDetails')}
@@ -562,16 +556,6 @@ export function ReviewStep() {
                 </Text>
               </div>
             )}
-            {/* {feeInfo.serviceFee > 0 && (
-              <div className="flex items-center justify-between">
-                <Text className="leading-normal text-muted-foreground">
-                  {t('appointment:serviceFee')}
-                </Text>
-                <Text className="leading-normal font-medium text-[#333333]">
-                  {formatPrice(feeInfo.serviceFee)}
-                </Text>
-              </div>
-            )} */}
             <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
               <Text
                 size="lg_16"

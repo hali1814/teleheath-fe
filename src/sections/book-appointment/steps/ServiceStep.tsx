@@ -4,30 +4,23 @@ import Text from '#/components/text'
 import { Checkbox } from '#/components/ui/checkbox'
 import { useBookingStore } from '#/stores/booking-store'
 import { ServiceCard } from '../ServiceCard'
-import SearchBar from '#/components/SearchBar'
 import { useGetListAddonServicesByBranchQuery } from '#/services/query/services/list-addon-services-by-branch'
 import { useGetListServiceTypeQuery } from '#/services/query/services/list-service-type'
 import { ModalDetailServiceType } from '../ModalDetailServiceType'
 import type { ServiceType } from '#/types/service'
-import { Icon } from '#/components/icon'
-import { Badge } from '#/components/ui/badge'
-import { useSearch } from '@tanstack/react-router'
-import ModalFilterServiceType from '../ModalFilterServiceType'
 import { EmptyState } from '#/sections/search'
 import LoadingState from '#/components/LoadingState'
 import { useTranslation } from 'react-i18next'
 import PullToRefresh from '#/components/PullToRefresh'
+import { Icon } from '#/components/icon'
 
 export function ServiceStep() {
   const { t } = useTranslation(['book-appointment'])
-  const [openFilter, setOpenFilter] = useState(false)
   const { addonServiceTypes, serviceIds, setData, branch } = useBookingStore()
-  const [search, setSearch] = useState('')
   const [openDetailService, setOpenDetailService] = useState(false)
   const [selectedService, setSelectedService] = useState<
     ServiceType | undefined
   >(undefined)
-  const [country, setCountry] = useState<string | undefined>(undefined)
 
   const {
     data: addonServices,
@@ -70,31 +63,10 @@ export function ServiceStep() {
 
   const filteredServiceTypes = useMemo(() => {
     const list = serviceTypes?.data ?? []
-    const byAddon = list.filter((item) =>
+    return list.filter((item) =>
       (serviceIds ?? []).includes(item.addonServiceId),
     )
-
-    const byCountry = country
-      ? byAddon.filter((item) =>
-          (item.partner?.country ?? []).find((c) => c.code === country),
-        )
-      : byAddon
-
-    const q = search.trim().toLowerCase()
-    if (!q) return byCountry
-
-    return byCountry.filter((item) => {
-      const partnerName = (item.partnerName ?? '').toLowerCase()
-      const typeName = (item.typeName ?? '').toLowerCase()
-      const addonServiceName = (item.addonServiceName ?? '').toLowerCase()
-
-      return (
-        partnerName.includes(q) ||
-        typeName.includes(q) ||
-        addonServiceName.includes(q)
-      )
-    })
-  }, [serviceTypes?.data, serviceIds, search, country])
+  }, [serviceTypes?.data, serviceIds])
 
   // Bỏ service type đã chọn nếu user bỏ tick addon service tương ứng
   useEffect(() => {
@@ -117,144 +89,131 @@ export function ServiceStep() {
     <>
       <PullToRefresh onRefresh={handleRefresh}>
         <div className="flex min-w-0 w-full flex-col gap-[16px] px-[16px]">
-          <div className="flex items-center gap-[10px]">
-            <SearchBar
-              placeholder={t('serviceStep.searchPlaceholder')}
-              value={search}
-              onSearch={(value) => setSearch(value)}
-              onClear={() => setSearch('')}
-            />
-            <button
-              type="button"
-              className="relative flex shrink-0 items-center justify-center"
-              onClick={() => setOpenFilter(true)}
-              aria-label={t('serviceStep.filterAriaLabel')}
-            >
-              <Icon name="filter" className="text-icon" />
-              <Badge className="absolute -top-2 -right-2 flex h-[16px] min-w-[16px] items-center justify-center rounded-full p-0 px-[4px] text-[10px]">
-                <Text size="xs_10" className="leading-[1.3] text-white">
-                  {country ? 1 : 0}
-                </Text>
-              </Badge>
-            </button>
+          <div className="flex flex-col gap-[6px]">
+            <div className="flex items-center">
+              <Icon name="star_fall" />
+              <Text size="base_14" className="leading-[24px] font-semibold">
+                What do we have for you?
+              </Text>
+            </div>
+            <Text size="sm_12" className="leading-[1.2] text-[#5D3F3D]">
+              Select add-on services to ensure a seamless recovery and
+              stress-free journey to your clinic:
+            </Text>
           </div>
-
           <div className="flex max-w-full flex-wrap gap-x-[16px] gap-y-[12px]">
-            {addonServices?.data?.map((service, index) => (
+            {addonServices?.data?.map((service) => (
               <Fragment key={service.id}>
-                <div className="flex shrink-0 items-center gap-[12px]">
-                  <Checkbox
-                    className="w-[20px] h-[20px] text-white border-secondary/20"
-                    checked={serviceIds?.includes(service.id)}
-                    onClick={() => {
-                      if (serviceIds?.includes(service.id)) {
-                        setData({
-                          serviceIds: serviceIds?.filter(
-                            (s) => s !== service.id,
-                          ),
-                        })
-                      } else {
-                        setData({
-                          serviceIds: [...(serviceIds ?? []), service.id],
-                        })
-                      }
-                    }}
-                  />
-                  <Text
-                    size="sm_12"
-                    className="leading-normal text-muted-foreground"
-                  >
+                <div
+                  className="flex shrink-0 items-center gap-[6px] p-[8px] rounded-[20px] border border-[#BD001A] bg-white"
+                  onClick={() => {
+                    if (serviceIds?.includes(service.id)) {
+                      setData({
+                        serviceIds: serviceIds?.filter((s) => s !== service.id),
+                      })
+                    } else {
+                      setData({
+                        serviceIds: [...(serviceIds ?? []), service.id],
+                      })
+                    }
+                  }}
+                >
+                  {serviceIds?.includes(service.id) ? (
+                    <Icon
+                      name="check_circle_solid"
+                      className="size-[16px] text-[#BD001A]"
+                    />
+                  ) : (
+                    <div className="size-[16px] rounded-full border border-[#BD001A]/50" />
+                  )}
+                  <Text size="sm_12" className="leading-normal font-medium">
                     {service.name}
                   </Text>
                 </div>
-                {index < addonServices?.data?.length - 1 && (
-                  <div className="w-px shrink-0 self-stretch bg-[#DFDFDF]" />
-                )}
               </Fragment>
             ))}
           </div>
 
-          {isAddonServicesLoading || isServiceTypesLoading ? (
-            <LoadingState className="h-[200px]" />
-          ) : (
-            <>
-              {filteredServiceTypes.length > 0 ? (
-                <>
-                  {filteredServiceTypes.map((serviceType) => {
-                    const pickedForAddon = addonServiceTypes?.find(
-                      (p) => p.addonServiceId === serviceType.addonServiceId,
-                    )
-                    const selectionDisabled =
-                      pickedForAddon != null &&
-                      pickedForAddon.id !== serviceType.id
+          {addonServices?.data
+            ?.filter((service) => serviceIds?.includes(service.id))
+            .map((service) => (
+              <Fragment key={service.id}>
+                <div className="flex flex-col gap-[16px]">
+                  <Text size="lg_16" className="leading-[22px] font-semibold">
+                    {service.name}
+                  </Text>
+                </div>
+                <div className="w-full">
+                  {isAddonServicesLoading || isServiceTypesLoading ? (
+                    <LoadingState className="h-[200px]" />
+                  ) : (
+                    <>
+                      {filteredServiceTypes.filter(
+                        (item) => item.addonServiceId === service.id,
+                      ).length > 0 ? (
+                        <div className="w-full overflow-x-auto p-px">
+                          <div className="flex min-w-max gap-x-[6px]">
+                            {filteredServiceTypes
+                              .filter(
+                                (item) => item.addonServiceId === service.id,
+                              )
+                              .map((serviceType) => {
+                                return (
+                                  <ServiceCard
+                                    key={serviceType.id}
+                                    service={serviceType}
+                                    selected={
+                                      addonServiceTypes?.some(
+                                        (p) => p.id === serviceType.id,
+                                      ) ?? false
+                                    }
+                                    onClick={() => {
+                                      const current = addonServiceTypes ?? []
+                                      const already = current.some(
+                                        (p) => p.id === serviceType.id,
+                                      )
 
-                    return (
-                      <ServiceCard
-                        key={serviceType.id}
-                        service={serviceType}
-                        selected={
-                          addonServiceTypes?.some(
-                            (p) => p.id === serviceType.id,
-                          ) ?? false
-                        }
-                        disabled={selectionDisabled}
-                        onClick={() => {
-                          const current = addonServiceTypes ?? []
-                          const already = current.some(
-                            (p) => p.id === serviceType.id,
-                          )
+                                      if (already) {
+                                        return
+                                      }
 
-                          if (already) {
-                            setData({
-                              addonServiceTypes: current.filter(
-                                (p) => p.id !== serviceType.id,
-                              ),
-                            })
-                            return
-                          }
-
-                          // Mỗi addon service chỉ 1 partner: bỏ partner khác cùng addonServiceId rồi chọn partner này
-                          const withoutSameAddon = current.filter(
-                            (p) =>
-                              p.addonServiceId !== serviceType.addonServiceId,
-                          )
-                          setData({
-                            addonServiceTypes: [
-                              ...withoutSameAddon,
-                              serviceType,
-                            ],
-                          })
-                        }}
-                        onDetailClick={() => {
-                          setSelectedService(serviceType)
-                          setOpenDetailService(true)
-                        }}
-                      />
-                    )
-                  })}
-                </>
-              ) : (
-                <EmptyState className="h-auto">
-                  {t('serviceStep.empty')}
-                </EmptyState>
-              )}
-            </>
-          )}
+                                      // Mỗi addon service chỉ 1 partner: bỏ partner khác cùng addonServiceId rồi chọn partner này
+                                      const withoutSameAddon = current.filter(
+                                        (p) =>
+                                          p.addonServiceId !==
+                                          serviceType.addonServiceId,
+                                      )
+                                      setData({
+                                        addonServiceTypes: [
+                                          ...withoutSameAddon,
+                                          serviceType,
+                                        ],
+                                      })
+                                    }}
+                                    onDetailClick={() => {
+                                      setSelectedService(serviceType)
+                                      setOpenDetailService(true)
+                                    }}
+                                  />
+                                )
+                              })}
+                          </div>
+                        </div>
+                      ) : (
+                        <EmptyState className="h-auto">
+                          {t('serviceStep.empty')}
+                        </EmptyState>
+                      )}
+                    </>
+                  )}
+                </div>
+              </Fragment>
+            ))}
         </div>
         <ModalDetailServiceType
           serviceType={selectedService}
           open={openDetailService}
           onOpenChange={setOpenDetailService}
-        />
-        <ModalFilterServiceType
-          open={openFilter}
-          onOpenChange={setOpenFilter}
-          onApply={(filter) => {
-            setCountry(filter.country)
-          }}
-          appliedFilter={{
-            country: country ?? '',
-          }}
         />
       </PullToRefresh>
     </>

@@ -61,7 +61,7 @@ export function RoomStep({ type }: { type: Type }) {
     })
   }, [rooms, room, setData])
 
-  if (!rooms) return <EmptyState>No rooms found</EmptyState>
+  if (!rooms) return <EmptyState>{t('roomStep.empty')}</EmptyState>
 
   const handleRefresh = async () => {
     await refetch()

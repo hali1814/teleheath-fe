@@ -18,19 +18,21 @@
     },
     "noData": "គ្មានទិន្នន័យ",
     "noDataAvailable": "គ្មានទិន្នន័យ",
+    "search": "ស្វែងរក",
     "markAllAsRead": "សម្គាល់ទាំងអស់ថាបានអាន",
     "actions": {
-      "cancel": "បោះបង់",
+      "cancel": "លុបចោល",
+      "back": "តាមការចងចាំ",
       "done": "រួចរាល់",
-      "viewAll": "សាកល្បងទាំងអស់",
-      "bookAppointment": "ការជ្រើសរើសចំណាំ",
-      "viewLess": "សាកល្បងតិចជាង",
-      "viewMore": "សាកល្បងច្រើនជាង",
+      "viewAll": "មើលទាំងអស់",
+      "bookAppointment": "កក់ការណាត់ជួប",
+      "viewLess": "បង្រួម",
+      "viewMore": "មើលបន្ថែម",
       "close": "បិទ",
-      "clearAllFilters": "សង្គ្រោះចងការជ្រើសរើសចំណាំ",
+      "clearAllFilters": "កំណត់ឡើងវិញ",
       "apply": "បញ្ចូល",
-      "onlineConsultation": "ការជ្រើសរើសចំណាំ",
-      "bookingOffline": "ការជ្រើសរើសចំណាំ",
+      "onlineConsultation": "ការពិគ្រោះយោបល់តាមអនឡាញ",
+      "bookingOffline": "ការកក់ការណាត់ជួបដោយផ្ទាល់",
       "details": "ព័ត៌មានលម្អិត"
     },
     "notificationsTitle": "ការជូនដំណឹង",
@@ -53,11 +55,11 @@
       "friend": "មិត្ត"
     },
     "bottomNavigation": {
-      "home": "ផ្ទះម៉ាស៊ីន",
-      "appointments": "ការជ្រើសរើសចំណាំ",
-      "book": "ការជ្រើសរើសចំណាំ",
-      "history": "ការជ្រើសរើសចំណាំ",
-      "profile": "ការជ្រើសរើសចំណាំ"
+      "home": "ទំព័រដើម",
+      "appointments": "ការណាត់ជួប",
+      "book": "ការកក់",
+      "history": "ប្រវត្តិ",
+      "profile": "ប្រវត្តិរូប"
     },
     "entry": {
       "verifyingTitle": "កំពុងផ្ទៀងផ្ទាត់ការចូលប្រើ",
@@ -72,32 +74,44 @@
       "title": "ត្រូវការចូលគណនី",
       "description": "សូមចូលគណនីដើម្បីមើលព័ត៌មានបន្ថែម និងប្រើមុខងារទាំងអស់។",
       "button": "ចូលគណនី"
+    },
+    "network": {
+      "sessionExpired": "សម័យបានផុតកំណត់",
+      "pleaseLoginAgain": "សូមចូលគណនីម្តងទៀត។",
+      "connectionError": "កំហុសការតភ្ជាប់",
+      "checkInternetConnection": "សូមពិនិត្យការតភ្ជាប់អ៊ីនធឺណិតរបស់អ្នក។"
+    },
+    "priceRange": {
+      "under100": "ក្រោម 100$",
+      "100to300": "100 - 300$",
+      "300to500": "300 - 500$",
+      "above500": "លើស 500$"
     }
   },
   "home": {
-    "kicker": "សាកល្បង Theme និង Language",
+    "kicker": "សាកល្បង ប្រធានបទកម្មវិធីនិង ភាសា",
     "title": "ប្ដូរ dark mode និងភាសា",
     "description": "ប្រើប៊ូតុងខាងក្រោមដើម្បីពិនិត្យ light/dark mode ហើយសាកប្ដូររវាង English, Khmer និង Vietnamese។",
-    "searchPlaceholder": "ស្វែងរកអ្នកឆ្លាស់ប្រជាជន, កម្ពុជា, ការជ្រើសរើសចំណាំ...",
+    "searchPlaceholder": "ស្វែងរកមន្ទីរពេទ្យ ជំនាញ វេជ្ជបណ្ឌិត កញ្ចប់សេវាកម្ម",
     "menu": {
-      "bookingOffline": "ការជ្រើសរើសចំណាំ",
+      "bookingOffline": "ការកក់ការណាត់ជួបដោយផ្ទាល់",
       "onlineDoctor": "អ្នកឆ្លាស់ប្រជាជន",
-      "aiChatbot": "ការជ្រើសរើសចំណាំ"
+      "aiChatbot": "ឆាតបត AI"
     },
     "premiumService": {
-      "tag": "ការជ្រើសរើសចំណាំ",
-      "title": "ការជ្រើសរើសចំណាំ",
+      "tag": "សេវាកម្មកម្រិតខ្ពស់",
+      "title": "ដំណើរនៃការថែទាំពេញលេញ",
       "benefits": {
-        "bookAppointments": "ការជ្រើសរើសចំណាំ",
-        "doorToDoorTransport": "ការជ្រើសរើសចំណាំ",
-        "supportStaff": "ការជ្រើសរើសចំណាំ"
+        "bookAppointments": "កក់ការណាត់ជួប",
+        "doorToDoorTransport": "សេវាកម្មដឹកជញ្ជូនដល់ទីកន្លែង",
+        "supportStaff": "បុគ្គលិកជំនួយ"
       },
-      "bookNow": "ការជ្រើសរើសចំណាំ"
+      "bookNow": "កក់ឥឡូវនេះ"
     },
-    "topHospitals": "កម្ពុជា",
+    "topHospitals": "មន្ទីរពេទ្យឈានមុខ",
     "specialties": "ឯកទេស",
-    "specializedPackages": "ការជ្រើសរើសចំណាំ",
-    "featuredDoctors": "ការជ្រើសរើសចំណាំ"
+    "specializedPackages": "កញ្ចប់សេវាកម្មស៊ីជម្រៅ",
+    "featuredDoctors": "វេជ្ជបណ្ឌិតឆ្នើម"
   },
   "about": {
     "kicker": "អំពី",
@@ -105,7 +119,7 @@
     "description": "TanStack Start ផ្តល់ routing មាន type safety, server functions និង modern defaults។ អ្នកអាចប្រើវាជាគ្រឹះស្អាតមួយ ហើយបន្ថែម routes, styling និង add-ons របស់អ្នកបន្ត។"
   },
   "profile": {
-    "title": "មើល Profile សាកល្បង",
+    "title": "មើលប្រវត្តិរូបជាមុន",
     "description": "នេះជាឧទាហរណ៍ namespace សម្រាប់ profile ដើម្បីឱ្យអ្នកអាចសាក translation តាម page បានលឿន។",
     "editProfile": "កែសម្រួលប្រវត្តិរូប",
     "patientInformation": "ព័ត៌មានអ្នកជំងឺ",
@@ -152,7 +166,7 @@
     "tooOldDateOfBirth": "អាយុមិនអាចលើសពី ១២០ ឆ្នាំបានទេ។",
     "requiredGender": "សូមជ្រើសរើសភេទ។",
     "requiredPhoneNumber": "សូមបញ្ចូលលេខទូរស័ព្ទ។",
-    "invalidPhoneFormat": "លេខទូរស័ព្ទកម្ពុជា (+855) មិនត្រឹមត្រូវ។ សូមពិនិត្យលេខកូដប្រតិបត្តិករ និងចំនួនខ្ទង់ (8–9 ខ្ទង់)។",
+    "invalidPhoneFormat": "លេខទូរស័ព្ទកម្ពុជា (+855) មិនត្រឹមត្រូវទេ។ សូមពិនិត្យមើលលេខផ្ដើម និងចំនួនលេខ (៨-៩ ខ្ទង់)",
     "requiredCountry": "សូមជ្រើសរើសប្រទេស។",
     "requiredCity": "សូមជ្រើសរើសរាជធានី/ខេត្ត។",
     "requiredDistrict": "សូមជ្រើសរើសស្រុក/ខណ្ឌ។",
@@ -164,8 +178,8 @@
     "emptyMedicalProfilesDescription": "បន្ថែមប្រវត្តិរូបរបស់អ្នក ឬសមាជិកគ្រួសារ ដើម្បីចាប់ផ្តើមកក់ការណាត់ជួប និងគ្រប់គ្រងកំណត់ត្រាវេជ្ជសាស្ត្រងាយស្រួល។",
     "emptyMedicalProfilesManageFamilyTitle": "គ្រប់គ្រងគ្រួសារ",
     "emptyMedicalProfilesManageFamilySubtitle": "រក្សាទុកកំណត់ត្រារបស់មនុស្សគ្រប់គ្នានៅកន្លែងតែមួយ",
-    "emptyMedicalProfilesFasterBookingTitle": "កក់លឿនជាងមុន",
-    "emptyMedicalProfilesFasterBookingSubtitle": "ប្រើប្រវត្តិរូបដែលបានរក្សាទុកសម្រាប់ការកក់ 1 ចុច",
+    "emptyMedicalProfilesFasterBookingTitle": "ការកក់បានកាន់តែរហ័ស",
+    "emptyMedicalProfilesFasterBookingSubtitle": "ប្រើទម្រង់ដែលបានរក្សាទុកសម្រាប់ការកក់រហ័ស",
     "emptyMedicalProfilesAddNewProfile": "បន្ថែមប្រវត្តិរូបថ្មី",
     "viewDetails": "មើលព័ត៌មានលម្អិត",
     "edit": "កែសម្រួល",
@@ -178,75 +192,84 @@
     "fileTooLargeDescription": "សូមអាប់ឡូដឯកសារដែលតូចជាង {{size}}MB។"
   },
   "hospital": {
-    "title": "កម្ពុជា",
-    "searchPlaceholder": "ស្វែងរកកម្ពុជា",
-    "detailTitle": "ព័ត៌មានប្រវត្តិរូប",
+    "title": "មន្ទីរពេទ្យ",
+    "searchPlaceholder": "ស្វែងរកមន្ទីរពេទ្យ",
+    "detailTitle": "ព័ត៌មានលម្អិតអំពីមន្ទីរពេទ្យ",
     "gallery": "រូបភាព",
     "aboutUs": "អំពីយើង",
-    "specialties": "ការជ្រើសរើសចំណាំ",
-    "ourBranches": "ការជ្រើសរើសចំណាំ",
+    "specialties": "ឯកទេសនានា",
+    "ourBranches": "សាខា",
     "operatingHours": {
-      "title": "វិនាទុក",
-      "mon_sat": "ថ្ងៃចូលរួន - ថ្ងៃចាស់",
+      "title": "ម៉ោងធ្វើការ",
+      "mon_sat": "ថ្ងៃច័ន្ទ ដល់ ថ្ងៃសុក្រ",
       "sun": "ថ្ងៃអាទិត្យ",
-      "emergency": "ការជ្រើសរើសចំណាំ",
-      "map": "ការជ្រើសរើសចំណាំ"
+      "emergency": "សង្គ្រោះបន្ទាន់",
+      "map": "ផែនទី"
     }
   },
   "package": {
-    "title": "ការជ្រើសរើសចំណាំ",
-    "searchPlaceholder": "ស្វែងរកការជ្រើសរើសចំណាំ",
-    "detailTitle": "ព័ត៌មានប្រវត្តិរូបការជ្រើសរើសចំណាំ",
-    "whatIsIncluded": "នានារូបភាពការជ្រើសរើសចំណាំ",
-    "branch": "ការជ្រើសរើសចំណាំ",
+    "title": "កញ្ចប់សេវាកម្ម",
+    "searchPlaceholder": "ស្វែងរកកញ្ចប់សេវាកម្ម",
+    "detailTitle": "ព័ត៌មានលម្អិតអំពីកញ្ចប់សេវាកម្ម",
+    "whatIsIncluded": "អ្វីដែលរួមបញ្ចូល",
+    "branch": "សាខា",
     "filter": {
-      "title": "ចងការជ្រើសរើសចំណាំ",
-      "country": "ទីតារណីការិយាល័យ",
+      "title": "តម្រង",
+      "country": "តម្រង",
       "hospital": "កម្ពុជា",
       "specialty": "ឯកទេស",
-      "priceRange": "ចន្លោះតម្លៃ"
+      "priceRange": "ចន្លោះតម្លៃ",
+      "packageCategory": "ប្រភេទកញ្ចប់",
+      "generalPackage": "កញ្ចប់ទូទៅ",
+      "simplePackage": "កញ្ចប់សាមញ្ញ"
     }
   },
   "doctor": {
-    "title": "អ្នកឆ្លាស់ប្រជាជន",
-    "searchPlaceholder": "ស្វែងរកអ្នកឆ្លាស់ប្រជាជន",
-    "detailTitle": "ព័ត៌មានប្រវត្តិរូបអ្នកឆ្លាស់ប្រជាជន",
-    "consultationFee": "តម្លៃការជ្រើសរើសចំណាំ",
-    "perVisit": "ការជ្រើសរើសចំណាំ",
+    "title": "វេជ្ជបណ្ឌិត",
+    "searchPlaceholder": "ស្វែងរកវេជ្ជបណ្ឌិត",
+    "detailTitle": "ព័ត៌មានលម្អិតអំពីវេជ្ជបណ្ឌិត",
+    "consultationFee": "តម្លៃពិគ្រោះយោបល់",
+    "perVisit": "តម្លៃក្នុងមួយដង",
     "about": "អំពី",
-    "currentLocation": "ទីតារណីការិយាល័យចុងក្រោយ",
-    "educationCertifications": "ការជ្រើសរើសចំណាំ",
+    "currentLocation": "ទីតាំងបច្ចុប្បន្ន",
+    "educationCertifications": "កម្រិតវប្បធម៌ និង សញ្ញាបត្រ",
     "filter": {
-      "title": "ចងការជ្រើសរើសចំណាំ",
-      "country": "ទីតារណីការិយាល័យ",
-      "specialty": "ការជ្រើសរើសចំណាំ",
+      "title": "តម្រង",
+      "country": "ប្រទេស",
+      "specialty": "ឯកទេស",
       "gender": "ភេទ",
-      "experienceYears": "ឆ្នាំសិក្សា",
-      "consultationType": "ប្រភពការជ្រើសរើសចំណាំ",
-      "priceRange": "ចន្លោះតម្លៃ"
+      "experienceYears": "ឆ្នាំនៃបទពិសោធន៍ការងារ",
+      "consultationType": "ប្រភេទនៃការពិគ្រោះ",
+      "priceRange": "ចន្លោះតម្លៃ",
+      "genderMale": "ប្រុស",
+      "genderFemale": "ស្រី",
+      "experienceUnder5Years": "ក្រោម 5 ឆ្នាំ",
+      "experience5To10Years": "5 - 10 ឆ្នាំ",
+      "experience10To15Years": "10 - 15 ឆ្នាំ",
+      "experienceOver20Years": "លើស 20 ឆ្នាំ"
     },
-    "experienceYears": "{{years}} ឆ្នាំសិក្សា"
+    "experienceYears": "{{years}} ឆ្នាំនៃបទពិសោធន៍ការងារ"
   },
   "book-appointment": {
-    "title": "ការជ្រើសរើសចំណាំ",
+    "title": "កក់ការណាត់ជួប",
     "banner": {
-      "title": "ការជ្រើសរើសចំណាំ",
-      "description": "ការជ្រើសរើសចំណាំ"
+      "title": "ពិនិត្យសុខភាពរហ័ស",
+      "description": "ការពិគ្រោះយោបល់អាទិភាព"
     },
-    "description": "ការជ្រើសរើសចំណាំ",
+    "description": "សូមជ្រើសរើសវិធីសាស្ត្រកក់ការពិនិត្យដែលអ្នកពេញចិត្ត",
     "bookingOffline": {
-      "title": "ការជ្រើសរើសចំណាំ",
-      "bookByHospital": "ការជ្រើសរើសចំណាំ",
-      "bookByHospitalDescription": "ការជ្រើសរើសចំណាំ",
-      "bookByMedicalPackage": "ការជ្រើសរើសចំណាំ",
-      "bookByMedicalPackageDescription": "ការជ្រើសរើសចំណាំ",
-      "bookByDoctor": "ការជ្រើសរើសចំណាំ",
-      "bookByDoctorDescription": "ការជ្រើសរើសចំណាំ"
+      "title": "ការកក់ការណាត់ជួបដោយផ្ទាល់",
+      "bookByHospital": "កក់តាមមន្ទីរពេទ្យ",
+      "bookByHospitalDescription": "ស្វែងរកមូលដ្ឋានព្យាបាលនៅក្បែរអ្នក",
+      "bookByMedicalPackage": "កក់តាមកញ្ចប់សេវាសុខភាព",
+      "bookByMedicalPackageDescription": "ជ្រើសរើសកញ្ចប់ពិនិត្យសុខភាព",
+      "bookByDoctor": "កក់តាមវេជ្ជបណ្ឌិត",
+      "bookByDoctorDescription": "ជ្រើសរើសគ្រូពេទ្យជំនាញដែលអ្នកទុកចិត្ត"
     },
     "onlineDoctor": {
-      "title": "ការជ្រើសរើសចំណាំ",
-      "bookByDoctor": "ការជ្រើសរើសចំណាំ",
-      "bookByDoctorDescription": "ការជ្រើសរើសចំណាំ"
+      "title": "វេជ្ជបណ្ឌិតអនឡាញ",
+      "bookByDoctor": "វេជ្ជបណ្ឌិតអនឡាញ",
+      "bookByDoctorDescription": "ការពិគ្រោះតាមវីដេអូ"
     },
     "schedule": {
       "selectDate": "ជ្រើសរើសកាលបរិច្ឆេទ",
@@ -254,7 +277,7 @@
       "chooseTimePrefix": "ជ្រើសរើសពេលវេលាដែលសាកសមសម្រាប់អ្នកនៅ",
       "morningSessions": "វគ្គព្រឹក",
       "afternoonSessions": "វគ្គល្ងាច",
-      "noSlotsThisDate": "មិនមានការណាត់ជួបនៅថ្ងៃនេះទេ។ សូមជ្រើសរើសថ្ងៃផ្សេង។"
+      "noSlotsThisDate": "មិនមានកាលវិភាគទំនេរសម្រាប់ថ្ងៃនេះទេ។ សូមជ្រើសរើសថ្ងៃផ្សេងទៀត។"
     },
     "specialtyStep": {
       "searchPlaceholder": "ស្វែងរកឯកទេស",
@@ -265,6 +288,25 @@
       "searchPlaceholder": "ស្វែងរកសេវាកម្ម",
       "empty": "រកមិនឃើញសេវាកម្ម",
       "filterAriaLabel": "តម្រង"
+    },
+    "stepTitles": {
+      "selectSpecialty": "ជ្រើសរើសឯកទេស",
+      "selectLocation": "ជ្រើសរើសទីតាំង",
+      "selectRoom": "ជ្រើសរើសបន្ទប់",
+      "selectSchedule": "ជ្រើសរើសកាលវិភាគ",
+      "selectPatientMedicalRecord": "ជ្រើសរើសអ្នកជំងឺ និងកំណត់ត្រាវេជ្ជសាស្ត្រ",
+      "selectAddonServices": "ជ្រើសសេវាបន្ថែម",
+      "reviewConfirm": "ពិនិត្យឡើងវិញ និងបញ្ជាក់"
+    },
+    "stepLayout": {
+      "stepOf": "ជំហាន {{current}} ក្នុងចំណោម {{total}}",
+      "back": "ត្រឡប់ក្រោយ",
+      "continue": "បន្ត",
+      "bookNow": "កក់ឥឡូវនេះ"
+    },
+    "locationStep": {
+      "title": "ជ្រើសរើសទីតាំង",
+      "empty": "រកមិនឃើញទីតាំង"
     },
     "roomStep": {
       "empty": "រកមិនឃើញបន្ទប់",
@@ -280,7 +322,7 @@
       "formatsHint": "PDF, JPG, PNG (អតិបរមា 10MB)",
       "selectFiles": "ជ្រើសរើសឯកសារ",
       "describeManual": "ពិពណ៌នាប្រវត្តិវេជ្ជសាស្ត្រដោយដៃ",
-      "manualPlaceholder": "ប្រាប់យើងបន្ថែមអំពីរោគសញ្ញាឬប្រវត្តិវេជ្ជសាស្ត្រ...",
+      "manualPlaceholder": "រៀបរាប់បន្ថែមអំពីអការៈជំងឺ ឬប្រវត្តិជំងឺរបស់អ្នក...",
       "additionalNotes": "កំណត់ចំណាំបន្ថែម",
       "notesPlaceholder": "ព័ត៌មានផ្សេងទៀតដែលអ្នកចង់ចែករំលែក?",
       "uploading": "កំពុងផ្ទុក…",
@@ -293,11 +335,11 @@
       "wordLimitExceeded": "អនុញ្ញាតអតិបរមា {{max}} ពាក្យ។"
     },
     "pickup": {
-      "timeLabel": "ម៉ោងទៅយក",
-      "addressLabel": "អាសយដ្ឋានទៅយក",
+      "timeLabel": "ម៉ោងទៅទទួល",
+      "addressLabel": "អាសយដ្ឋានទៅទទួល",
       "noteLabel": "កំណត់ចំណាំ",
       "placeholderTime": "00:00",
-      "placeholderAddress": "អាសយដ្ឋានទៅយក",
+      "placeholderAddress": "អាសយដ្ឋានទៅទទួល",
       "placeholderNote": "ឧទាហរណ៍៖ ចំនួនកៅអី"
     },
     "paymentMethodName": {
@@ -308,8 +350,8 @@
   },
   "appointment": {
     "title": "ការណាត់ជួបរបស់ខ្ញុំ",
-    "cancelAppointmentTitle": "បោះបង់ការណាត់ជួប",
-    "cancelAppointmentDescription": "តើអ្នកប្រាកដថាចង់បោះបង់ការណាត់ជួបនេះមែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់ក្រោយបានទេ។",
+    "cancelAppointmentTitle": "លុបចោលការណាត់ជួប",
+    "cancelAppointmentDescription": "តើអ្នកប្រាកដថាចង់លុបចោលការណាត់ជួបនេះមែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់ក្រោយបានទេ។",
     "importantReminders": "ការរំលឹកសំខាន់ៗ",
     "reminderJoinBefore": "សូមចូលមុនម៉ោងណាត់ 5 នាទី។",
     "reminderCheckDevice": "សូមពិនិត្យកាមេរ៉ា មីក្រូហ្វូន និងអ៊ីនធឺណិតរបស់អ្នក។",
@@ -331,12 +373,12 @@
     "specialty": "ឯកទេស",
     "selectedServices": "សេវាកម្មដែលបានជ្រើសរើស",
     "doorToDoorTransport": "ដឹកជញ្ជូនដល់ផ្ទះ",
-    "supportStaff": "បុគ្គលិកគាំទ្រ",
-    "cancelAppointment": "បោះបង់ការណាត់ជួប",
+    "supportStaff": "បុគ្គលិកជំនួយ",
+    "cancelAppointment": "លុបចោលការណាត់ជួប",
     "consultation": "ការពិគ្រោះ",
     "videoConsultation": "ការពិគ្រោះតាមវីដេអូ",
     "inPersonVisit": "ពិនិត្យផ្ទាល់",
-    "getDirections": "មើលផ្លូវ",
+    "getDirections": "ការណែនាំផ្លូវ",
     "getDirectionsDescription": "មិនមានអាសយដ្ឋាន ឬតំណផែនទីសម្រាប់ទីតាំងនេះទេ។",
     "neurosurgeryAndSpineSurgery": "វះកាត់ប្រព័ន្ធប្រសាទ និងឆ្អឹងខ្នង",
     "joinCall": "ចូលរួមការហៅ",
@@ -359,8 +401,8 @@
     "thisWeek": "សប្តាហ៍នេះ",
     "nextWeek": "សប្តាហ៍ក្រោយ",
     "later": "ពេលក្រោយ",
-    "completed": "បានបញ្ចប់",
-    "cancelled": "បានបោះបង់",
+    "completed": "រួចរាល់",
+    "cancelled": "លុបចោល",
     "waitingConfirm": "កំពុងរង់ចាំការបញ្ជាក់",
     "pending": "កំពុងរង់ចាំ",
     "noShow": "មិនបានមក",
@@ -379,7 +421,7 @@
     "detailBannerCancelled": "មូលហេតុនៃការលុបចោល",
     "detailBannerCompleted": "ការណាត់ជួបនេះបានបញ្ចប់រួចហើយ។",
     "medicalFileOpenInNewTab": "បើកក្នុងផ្ទាំងថ្មី",
-    "medicalFilePreviewUnsupported": "មិនអាចមើលជាមុនបានទេ។ សូមបើកតាម \"បើកក្នុងផ្ទាំងថ្មី\"។",
+    "medicalFilePreviewUnsupported": "ប្រភេទឯកសារនេះមិនអាចមើលជាមុនបានទេ។ សូមបើកក្នុងផ្ទាំងថ្មី។",
     "thisMonth": "ខែនេះ",
     "months": {
       "january": "មករា",
@@ -404,7 +446,15 @@
     "addonPriceDisclaimer": "តម្លៃបង្ហាញសម្រាប់យោងតែប៉ុណ្ណោះ។ អ្នកប្រើប្រាស់បង់ផ្ទាល់ទៅអ្នកផ្តល់សេវា មិនមែនតាមកម្មវិធីទេ។",
     "reviewBadgeBookByHospital": "កក់តាមមន្ទីរពេទ្យ",
     "reviewBadgeBookByDoctor": "កក់តាមវេជ្ជបណ្ឌិត",
-    "reviewBadgeBookByPackage": "កក់តាមកញ្ចប់"
+    "reviewBadgeBookByPackage": "កក់តាមកញ្ចប់",
+    "bookingRequestReceived": "បានទទួលសំណើកក់ការណាត់ជួប",
+    "bookingRequestReceivedDescription": "ក្រុមសេវាអតិថិជនរបស់យើងនឹងទាក់ទងអ្នកក្នុងរយៈពេល 24 ម៉ោង ដើម្បីបញ្ជាក់ការកក់។",
+    "bookingIdLabel": "លេខកក់:",
+    "copyBookingId": "ចម្លងលេខកក់",
+    "bookingIdCopied": "បានចម្លងលេខកក់",
+    "failedToCopyBookingId": "ចម្លងលេខកក់មិនជោគជ័យ",
+    "viewMyBooking": "មើលការកក់របស់ខ្ញុំ",
+    "goToHomepage": "ទៅទំព័រដើម"
   },
   "search": {
     "tabs": {
@@ -433,13 +483,15 @@
   "payment": {
     "generatingQr": "កំពុងបង្កើត QR…",
     "loadQrError": "មិនអាចផ្ទុក QR ទូទាត់បានទេ។ សូមព្យាយាមម្តងទៀត។",
+    "qrExpired": "QR នេះផុតកំណត់ហើយ។ សូមផ្ទុកឡើងវិញដើម្បីយក QR ថ្មី។",
     "retry": "ព្យាយាមម្តងទៀត",
-    "scanToPay": "ស្កេនដើម្បីបង់",
+    "reloadQr": "ផ្ទុក QR ឡើងវិញ",
+    "scanToPay": "ស្កេនដើម្បីទូទាត់",
     "or": "ឬ",
     "downloadQr": "ទាញយក QR",
     "downloadQrSuccess": "ទាញយករូបភាពដោយជោគជ័យ។",
     "downloadQrError": "មិនអាចទាញយក QR បានទេ។ សូមព្យាយាមម្តងទៀត។",
-    "khqrMobileBankingHint": "ហើយផ្ទុកឡើងទៅកម្មវិធីធនាគារចល័តដែលគាំទ្រ KHQR",
+    "khqrMobileBankingHint": "បង្ហោះទៅកាន់កម្មវិធីធនាគារដែលប្រើ KHQR",
     "subtotal": "សរុបរង",
     "total": "សរុប",
     "back": "ត្រឡប់ក្រោយ",

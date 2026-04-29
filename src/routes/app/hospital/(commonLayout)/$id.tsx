@@ -1,4 +1,5 @@
 import { Icon } from '#/components/icon'
+import PullToRefresh from '#/components/PullToRefresh'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Header } from '#/sections/home'
@@ -24,7 +25,7 @@ function RouteComponent() {
   const { id } = useParams({ from: '/app/hospital/(commonLayout)/$id' })
   const profile = useProfileStore((s) => s.profile)
   const navigate = useNavigate()
-  const { data: { data: hospitalData } = { data: null } } =
+  const { data: { data: hospitalData } = { data: null }, refetch } =
     useGetHospitalDetailQuery({
       params: {
         hospitalId: id,
@@ -33,8 +34,12 @@ function RouteComponent() {
 
   if (!hospitalData) return null
 
+  const handleRefresh = async () => {
+    await refetch()
+  }
+
   return (
-    <>
+    <PullToRefresh onRefresh={handleRefresh}>
       <Header title={t('hospital:detailTitle')} />
       <div className="pb-[100px]">
         <HospitalDetailHeader hospital={hospitalData} />
@@ -76,6 +81,6 @@ function RouteComponent() {
           </Button>
         </div>
       </div>
-    </>
+    </PullToRefresh>
   )
 }

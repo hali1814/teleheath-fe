@@ -13,6 +13,7 @@ import { StepLayout } from './StepLayout'
 import { useGetHospitalDetailQuery } from '#/services/query/hospital/hospital-detail'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import type { Hospital } from '#/entities/hospitalEntity'
+import { useTranslation } from 'react-i18next'
 
 export default function BookingPage({
   steps,
@@ -22,6 +23,7 @@ export default function BookingPage({
   context: BookingRouteContext
 }) {
   const navigate = useNavigate()
+  const { t } = useTranslation('book-appointment')
   const store = useBookingStore()
   const setData = useBookingStore((s) => s.setData)
   const current = steps[store.step]
@@ -177,7 +179,7 @@ export default function BookingPage({
 
   return (
     <StepLayout
-      title={current.title}
+      title={t(current.titleKey as any)}
       step={store.step}
       total={steps.length}
       onNext={store.next}

@@ -18,6 +18,7 @@
     },
     "noData": "No data",
     "noDataAvailable": "No data available",
+    "search": "Search",
     "markAllAsRead": "Mark all as read",
     "actions": {
       "cancel": "Cancel",
@@ -72,6 +73,18 @@
       "title": "Sign in required",
       "description": "Please sign in to view more information and access all features.",
       "button": "Sign in"
+    },
+    "network": {
+      "sessionExpired": "Session expired",
+      "pleaseLoginAgain": "Please login again.",
+      "connectionError": "Connection error",
+      "checkInternetConnection": "Please check your internet connection."
+    },
+    "priceRange": {
+      "under100": "Under 100$",
+      "100to300": "100 - 300$",
+      "300to500": "300 - 500$",
+      "above500": "Above 500$"
     }
   },
   "home": {
@@ -204,7 +217,10 @@
       "country": "Country",
       "hospital": "Hospital",
       "specialty": "Specialty",
-      "priceRange": "Price Range"
+      "priceRange": "Price Range",
+      "packageCategory": "Package Category",
+      "generalPackage": "General Package",
+      "simplePackage": "Simple Package"
     }
   },
   "doctor": {
@@ -223,7 +239,13 @@
       "gender": "Gender",
       "experienceYears": "Experience Years",
       "consultationType": "Consultation Type",
-      "priceRange": "Price Range"
+      "priceRange": "Price Range",
+      "genderMale": "Male",
+      "genderFemale": "Female",
+      "experienceUnder5Years": "Under 5 years",
+      "experience5To10Years": "5 - 10 years",
+      "experience10To15Years": "10 - 15 years",
+      "experienceOver20Years": "Over 20 years"
     },
     "experienceYears": "{{years}} Years Experience"
   },
@@ -265,6 +287,25 @@
       "searchPlaceholder": "Search for services",
       "empty": "No services found",
       "filterAriaLabel": "Filter"
+    },
+    "stepTitles": {
+      "selectSpecialty": "Select Specialty",
+      "selectLocation": "Select Location",
+      "selectRoom": "Select Room",
+      "selectSchedule": "Select Schedule",
+      "selectPatientMedicalRecord": "Select Patient & Medical Record",
+      "selectAddonServices": "Select add-on services",
+      "reviewConfirm": "Review & Confirm"
+    },
+    "stepLayout": {
+      "stepOf": "Step {{current}} of {{total}}",
+      "back": "Back",
+      "continue": "Continue",
+      "bookNow": "Book Now"
+    },
+    "locationStep": {
+      "title": "Select Location",
+      "empty": "No locations found"
     },
     "roomStep": {
       "empty": "No rooms found",
@@ -404,7 +445,15 @@
     "addonPriceDisclaimer": "Prices are shown for reference only. Users pay directly to the provider, not through the app.",
     "reviewBadgeBookByHospital": "BOOK BY HOSPITAL",
     "reviewBadgeBookByDoctor": "BOOK BY DOCTOR",
-    "reviewBadgeBookByPackage": "BOOK BY PACKAGE"
+    "reviewBadgeBookByPackage": "BOOK BY PACKAGE",
+    "bookingRequestReceived": "Booking Request Received",
+    "bookingRequestReceivedDescription": "Our customer service team will contact you within 24 hours to confirm your booking.",
+    "bookingIdLabel": "Booking ID:",
+    "copyBookingId": "Copy booking ID",
+    "bookingIdCopied": "Booking ID copied",
+    "failedToCopyBookingId": "Failed to copy Booking ID",
+    "viewMyBooking": "View my booking",
+    "goToHomepage": "Go to Homepage"
   },
   "search": {
     "tabs": {
@@ -433,7 +482,9 @@
   "payment": {
     "generatingQr": "Generating QR…",
     "loadQrError": "Could not load payment QR. Please try again.",
+    "qrExpired": "This QR has expired. Please reload to get a new one.",
     "retry": "Retry",
+    "reloadQr": "Reload QR",
     "scanToPay": "Scan to Pay",
     "or": "or",
     "downloadQr": "Download QR",

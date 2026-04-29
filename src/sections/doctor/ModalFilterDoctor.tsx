@@ -17,6 +17,7 @@ import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-special
 import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
 import { useEffect, useMemo, useState } from 'react'
 import { ALL_PAGINATION } from '#/const/pagination'
+import { getPackagePriceRangeOptions } from '../package/package-filter-price'
 
 const emptyFilter = (): FilterDoctor => ({
   country: '',
@@ -26,13 +27,6 @@ const emptyFilter = (): FilterDoctor => ({
   experienceYears: '',
   priceRange: '',
 })
-
-const PRICE_OPTIONS = [
-  { label: 'Under 100$', value: '0-100' },
-  { label: '100 - 300$', value: '100-300' },
-  { label: '300 - 500$', value: '300-500' },
-  { label: 'Above 500$', value: '500' },
-]
 
 export default function ModalFilterDoctor({
   open,
@@ -181,8 +175,8 @@ export default function ModalFilterDoctor({
             <InputSelect
               placeholder={t('filter.gender')}
               options={[
-                { label: 'Male', value: 'MALE' },
-                { label: 'Female', value: 'FEMALE' },
+                { label: t('filter.genderMale'), value: 'MALE' },
+                { label: t('filter.genderFemale'), value: 'FEMALE' },
               ]}
               value={draft.gender}
               onValueChange={(value) =>
@@ -195,10 +189,10 @@ export default function ModalFilterDoctor({
             <InputSelect
               placeholder={t('filter.experienceYears')}
               options={[
-                { label: 'Under 5 years', value: 'under-5' },
-                { label: '5 - 10 years', value: '5-10' },
-                { label: '10 - 15 years', value: '10-15' },
-                { label: 'Over 20 years', value: 'over-20' },
+                { label: t('filter.experienceUnder5Years'), value: 'under-5' },
+                { label: t('filter.experience5To10Years'), value: '5-10' },
+                { label: t('filter.experience10To15Years'), value: '10-15' },
+                { label: t('filter.experienceOver20Years'), value: 'over-20' },
               ]}
               value={draft.experienceYears}
               onValueChange={(value) =>
@@ -210,7 +204,7 @@ export default function ModalFilterDoctor({
             <Text>{t('filter.priceRange')}</Text>
             <InputSelect
               placeholder={t('filter.priceRange')}
-              options={PRICE_OPTIONS}
+              options={getPackagePriceRangeOptions((key) => t(key as any))}
               value={draft.priceRange}
               onValueChange={(value) =>
                 setDraft((prev) => ({ ...prev, priceRange: value }))

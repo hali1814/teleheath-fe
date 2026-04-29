@@ -49,7 +49,7 @@ export default function DoctorCard({
         to="/app/doctor/$id"
         params={{ id: doctorId.toString() }}
         className={cn(
-          'w-full flex flex-row items-center gap-[16px] shrink-0 rounded-[12px] border-none bg-white p-[16px]',
+          'w-full flex flex-row items-start gap-[16px] shrink-0 rounded-[12px] border-none bg-white p-[16px]',
           className,
         )}
       >
@@ -74,17 +74,24 @@ export default function DoctorCard({
           >
             {name}
           </Text>
-          {specialties?.length > 0 &&
-            specialties.map((specialty, index) => (
-              <Text
-                key={`${doctorId}-spec-h-${index}`}
-                size="sm_12"
-                className="flex items-center gap-[8px] font-normal text-muted-foreground leading-[1.3]"
-              >
-                <div className="size-[4px] rounded-full bg-muted-foreground" />
-                {specialty}
-              </Text>
-            ))}
+          <div
+            className={cn(
+              'grid gap-[4px] align-top',
+              specialties?.length > 1 ? 'grid-cols-2' : 'grid-cols-1',
+            )}
+          >
+            {specialties?.length > 0 &&
+              specialties.map((specialty, index) => (
+                <Text
+                  key={`${doctorId}-spec-h-${index}`}
+                  size="sm_12"
+                  className="flex items-center gap-[8px] font-normal text-muted-foreground leading-[1.3]"
+                >
+                  <div className="size-[4px] rounded-full bg-muted-foreground" />
+                  {specialty}
+                </Text>
+              ))}
+          </div>
           <div className="flex items-center gap-[6px]">
             <Icon
               name="work_history_outline"
@@ -170,17 +177,24 @@ export default function DoctorCard({
             {name}
           </Text>
         )}
-        {specialties?.length > 0 &&
-          specialties.map((specialty, index) => (
-            <Text
-              key={`${doctorId}-spec-v-${index}`}
-              size="xs_10"
-              className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
-            >
-              <div className="size-[4px] rounded-full bg-muted-foreground" />
-              {specialty}
-            </Text>
-          ))}
+        <div
+          className={cn(
+            'grid gap-[4px]',
+            specialties?.length > 1 ? 'grid-cols-2' : 'grid-cols-1',
+          )}
+        >
+          {specialties?.length > 0 &&
+            specialties.map((specialty, index) => (
+              <Text
+                key={`${doctorId}-spec-v-${index}`}
+                size="xs_10"
+                className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
+              >
+                <div className="size-[4px] rounded-full bg-muted-foreground" />
+                {specialty}
+              </Text>
+            ))}
+        </div>
         {!hideBookAppointment && (
           <Button
             className="w-full h-[32px] bg-dust-red-1"

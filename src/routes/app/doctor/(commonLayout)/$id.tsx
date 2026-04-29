@@ -1,3 +1,4 @@
+import PullToRefresh from '#/components/PullToRefresh'
 import {
   DoctorInfoHeader,
   DoctorConsultationFee,
@@ -19,15 +20,19 @@ function RouteComponent() {
   const { t } = useTranslation(['doctor'])
   const { id } = useParams({ from: '/app/doctor/(commonLayout)/$id' })
 
-  const { data: { data: doctorData } = { data: null } } =
+  const { data: { data: doctorData } = { data: null }, refetch } =
     useGetDoctorDetailQuery({
       params: {
         doctorId: id,
       },
     })
 
+  const handleRefresh = async () => {
+    await refetch()
+  }
+
   return (
-    <>
+    <PullToRefresh onRefresh={handleRefresh}>
       <Header title={t('detailTitle')} />
       <div className="flex flex-col items-center gap-[16px] p-[16px] pb-[120px]">
         <DoctorInfoHeader
@@ -50,6 +55,6 @@ function RouteComponent() {
         )}
         <DoctorActions />
       </div>
-    </>
+    </PullToRefresh>
   )
 }

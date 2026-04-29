@@ -9,12 +9,14 @@ import LoadingState from '#/components/LoadingState'
 import { useGetListBranchesByPackageQuery } from '#/services/query/package/list-branches-by-package'
 import { EmptyState } from '#/sections/search'
 import PullToRefresh from '#/components/PullToRefresh'
+import { useTranslation } from 'react-i18next'
 
 const EMPTY_BRANCHES: Branch[] = []
 
 export type LocationStepType = 'HOSPITAL' | 'DOCTOR' | 'PACKAGE'
 
 export function LocationStep({ type }: { type: LocationStepType }) {
+  const { t } = useTranslation('book-appointment')
   const { branch, setData, hospital, packageData, doctor, next } =
     useBookingStore()
 
@@ -105,7 +107,7 @@ export function LocationStep({ type }: { type: LocationStepType }) {
           size="lg_16"
           className="font-semibold leading-[1.2] text-[#333333]"
         >
-          Select Location
+          {t('locationStep.title')}
         </Text>
         {hospitalBranchesQuery.isLoading ||
         doctorBranchesQuery.isLoading ||
@@ -127,7 +129,7 @@ export function LocationStep({ type }: { type: LocationStepType }) {
                 />
               ))
             ) : (
-              <EmptyState>No locations found</EmptyState>
+              <EmptyState>{t('locationStep.empty')}</EmptyState>
             )}
           </>
         )}
