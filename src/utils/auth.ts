@@ -11,13 +11,13 @@ let lastWebIntentBridgeSentAt = 0
 
 type NativeBridgeWindow = Window & {
   Android?: {
-    postMessage?: (message: string) => void
+    postMessage?: (message?: string) => void
   } & Record<string, ((value?: string) => void) | undefined>
-  ReactNativeWebView?: { postMessage?: (message: string) => void }
+  ReactNativeWebView?: { postMessage?: (message?: string) => void }
   webkit?: {
     messageHandlers?: Record<
       string,
-      { postMessage?: (message: string | Record<string, string>) => void }
+      { postMessage?: (message?: string | Record<string, string>) => void }
     >
   }
 } & Record<string, ((value?: string) => void) | undefined>
@@ -130,7 +130,7 @@ export const endSession = () => {
 
   try {
     if (appWindow.Android?.postMessage) {
-      appWindow.Android.postMessage(message)
+      appWindow.Android.postMessage()
       isSent = true
     }
   } catch (e) {
@@ -139,7 +139,7 @@ export const endSession = () => {
 
   try {
     if (!isSent && appWindow.Android?.WEB_END_SESSION) {
-      appWindow.Android.WEB_END_SESSION(payload[WEB_END_SESSION])
+      appWindow.Android.WEB_END_SESSION()
       isSent = true
     }
   } catch (e) {
@@ -148,7 +148,7 @@ export const endSession = () => {
 
   try {
     if (!isSent && appWindow.ReactNativeWebView?.postMessage) {
-      appWindow.ReactNativeWebView.postMessage(message)
+      appWindow.ReactNativeWebView.postMessage(undefined)
       isSent = true
     }
   } catch (e) {
@@ -160,7 +160,7 @@ export const endSession = () => {
       !isSent &&
       appWindow.webkit?.messageHandlers?.WEB_END_SESSION?.postMessage
     ) {
-      appWindow.webkit.messageHandlers.WEB_END_SESSION.postMessage(payload)
+      appWindow.webkit.messageHandlers.WEB_END_SESSION.postMessage(undefined)
       isSent = true
     }
   } catch (e) {
@@ -169,7 +169,7 @@ export const endSession = () => {
 
   try {
     if (!isSent && appWindow.WEB_END_SESSION) {
-      appWindow.WEB_END_SESSION(payload[WEB_END_SESSION])
+      appWindow.WEB_END_SESSION()
       isSent = true
     }
   } catch (e) {
