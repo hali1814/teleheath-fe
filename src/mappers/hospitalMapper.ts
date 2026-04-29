@@ -1,12 +1,13 @@
 import type { ApiHospital } from '#/dto/hospitalDto'
 import type { Hospital } from '#/entities/hospitalEntity'
 import type { AppLanguage } from '#/i18n'
+import i18n from '#/i18n'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { formatWorkingHours } from '#/utils/working-hours.util'
 
 export const mapApiHospital = (
   api: ApiHospital,
-  language: AppLanguage = 'en',
+  language: AppLanguage = (i18n.language as AppLanguage) ?? 'en',
 ): Hospital => ({
   hospitalId: api.hospitalId,
   thumbnailUrl: api.thumbnailUrl,
@@ -34,6 +35,7 @@ export const mapApiHospital = (
           address: branch.detailedAddress,
           googleMaps: branch.googleMapsEmbed,
           operatingHours: formatWorkingHours(branch.workingHours, language),
+          emergency24h: branch.emergency24h,
         }))
       : [],
 })

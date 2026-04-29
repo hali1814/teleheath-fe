@@ -116,19 +116,20 @@ export const ServiceCard = ({
         </div>
         <button
           className={cn(
-            'w-full h-[28px] bg-dust-red-1 rounded-[6px]',
-            selected && 'bg-muted-foreground/10',
+            'w-full flex items-center justify-center gap-[8px] h-[28px] bg-dust-red-1 rounded-[6px]',
+            selected && 'bg-primary',
           )}
           onClick={(e) => {
             e.stopPropagation()
             onClick()
           }}
         >
+          {selected && <Icon name="check" className="size-[12px] text-white" />}
           <Text
             size="sm_12"
             className={cn(
               'leading-[1.3] font-medium text-primary',
-              selected && 'text-muted-foreground/70',
+              selected && 'text-white',
             )}
           >
             {selected ? 'Selected' : 'Select'}

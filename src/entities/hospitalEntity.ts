@@ -12,6 +12,7 @@ interface Branch {
   address: string
   googleMaps: string
   operatingHours: Record<string, string>
+  emergency24h: boolean
 }
 
 export interface Hospital {
