@@ -12,6 +12,7 @@ import type { ServiceType } from '#/types/service'
 import { formatPrice } from '#/utils/price.util'
 import Text from '#/components/text'
 import { Icon } from '#/components/icon'
+import { useTranslation } from 'react-i18next'
 
 export type ModalDetailServiceTypeProps = {
   serviceType?: ServiceType
@@ -37,6 +38,7 @@ export function ModalDetailServiceType({
   onOpenChange,
   className,
 }: ModalDetailServiceTypeProps) {
+  const { t } = useTranslation(['appointment', 'common', 'profile'])
   const safeDescriptionHtml = useMemo(
     () => sanitizeTipTapHtml(serviceType?.description),
     [serviceType?.description],
@@ -66,7 +68,7 @@ export function ModalDetailServiceType({
         <div className="flex max-h-[90vh] flex-col gap-[32px] overflow-y-auto px-[20px] py-[24px]">
           <div className="flex items-center justify-between">
             <Text size="lg_16" className="leading-[1.2] font-semibold">
-              View Details
+              {t('profile:viewDetails')}
             </Text>
             <Icon
               name="close"
@@ -84,7 +86,7 @@ export function ModalDetailServiceType({
 
             <SectionHeading>
               <Text className="font-semibold leading-[1.2] text-[#333333]">
-                Address
+                {t('appointment:address')}
               </Text>
               <Text
                 size="sm_12"
@@ -96,7 +98,7 @@ export function ModalDetailServiceType({
 
             <SectionHeading>
               <Text className="font-semibold leading-[1.2] text-[#333333]">
-                Price
+                {t('common:price')}
               </Text>
               {hasActiveDiscount ? (
                 <div className="flex items-center gap-[8px]">
@@ -123,7 +125,7 @@ export function ModalDetailServiceType({
             {serviceType.amenities.length > 0 && (
               <SectionHeading>
                 <Text className="font-semibold leading-[1.2] text-[#333333]">
-                  Amenities in the car
+                  {t('common:amenitiesInCar')}
                 </Text>
                 <div
                   className="prose prose-sm max-w-none [&_img]:my-[16px] [&_img]:rounded-[6px]"

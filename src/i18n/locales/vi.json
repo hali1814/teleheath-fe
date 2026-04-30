@@ -2,9 +2,9 @@
   "common": {
     "language": {
       "label": "Ngon ngu",
-      "en": "Tieng Anh",
-      "km": "Tieng Khmer",
-      "vi": "Tieng Việt"
+      "en": "Tiếng Anh",
+      "km": "Tiếng Khmer",
+      "vi": "Tiếng Việt"
     },
     "theme": {
       "light": "Light",
@@ -18,6 +18,8 @@
     },
     "noData": "Không có dữ liệu",
     "noDataAvailable": "Không có dữ liệu",
+    "amenitiesInCar": "Tiện nghi trong xe",
+    "price": "Giá",
     "search": "Tìm kiếm",
     "markAllAsRead": "Đánh dấu tất cả đã đọc",
     "actions": {
@@ -35,6 +37,10 @@
       "details": "Chi tiết"
     },
     "notificationsTitle": "Thông báo",
+    "calendar": {
+      "previousMonth": "Tháng trước",
+      "nextMonth": "Tháng sau"
+    },
     "countries": {
       "all": "Tất cả",
       "vietnam": "Việt Nam",
@@ -125,6 +131,7 @@
     "personalInformation": "Thông tin cá nhân",
     "dateOfBirth": "Ngày sinh",
     "gender": "Giới tính",
+    "age": "tuổi",
     "phoneNumber": "Số điện thoại",
     "email": "Email",
     "address": "Địa chỉ",
@@ -180,6 +187,7 @@
     "emptyMedicalProfilesFasterBookingTitle": "Đặt lịch nhanh hơn",
     "emptyMedicalProfilesFasterBookingSubtitle": "Dùng hồ sơ đã lưu để đặt lịch chỉ 1 lần chạm",
     "emptyMedicalProfilesAddNewProfile": "Thêm hồ sơ mới",
+    "addPatientProfile": "Thêm hồ sơ bệnh nhân",
     "viewDetails": "Xem chi tiết",
     "edit": "Chỉnh sửa",
     "patientId": "Mã bệnh nhân",
@@ -203,7 +211,8 @@
       "mon_sat": "Thứ Hai - Thứ Sáu",
       "sun": "Chủ Nhật",
       "emergency": "Khẩn cấp",
-      "map": "Bản đồ"
+      "map": "Bản đồ",
+      "open247": "Làm việc 24/7"
     }
   },
   "package": {
@@ -286,7 +295,14 @@
     "serviceStep": {
       "searchPlaceholder": "Tìm dịch vụ",
       "empty": "Không tìm thấy dịch vụ",
-      "filterAriaLabel": "Lọc"
+      "filterAriaLabel": "Lọc",
+      "whatDoWeHaveForYou": "Chúng tôi có gì cho bạn?",
+      "selectAddonServicesDescription": "Hãy chọn dịch vụ bổ sung để đảm bảo phục hồi liền mạch và hành trình đến phòng khám nhẹ nhàng, không áp lực:",
+      "bestService": "Dịch vụ tốt nhất",
+      "referencePrice": "Giá tham khảo",
+      "distanceFromHospital": "Khoảng cách từ bệnh viện",
+      "selectService": "Chọn",
+      "selectedService": "Đã chọn"
     },
     "stepTitles": {
       "selectSpecialty": "Chọn chuyên khoa",
@@ -339,7 +355,8 @@
       "noteLabel": "Ghi chú",
       "placeholderTime": "00:00",
       "placeholderAddress": "Địa chỉ đón",
-      "placeholderNote": "Ví dụ: Số chỗ ngồi"
+      "placeholderNote": "Ví dụ: Số chỗ ngồi",
+      "invalidTimeFormat": "Vui lòng nhập thời gian hợp lệ theo định dạng HH:mm"
     },
     "paymentMethodName": {
       "khqr": "KHQR",
@@ -453,7 +470,8 @@
     "bookingIdCopied": "Đã sao chép mã đặt lịch",
     "failedToCopyBookingId": "Sao chép mã đặt lịch thất bại",
     "viewMyBooking": "Xem lịch đặt của tôi",
-    "goToHomepage": "Về trang chủ"
+    "goToHomepage": "Về trang chủ",
+    "selectedHospital": "Bệnh viện đã chọn"
   },
   "search": {
     "tabs": {

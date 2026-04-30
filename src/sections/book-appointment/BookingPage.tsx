@@ -23,7 +23,7 @@ export default function BookingPage({
   context: BookingRouteContext
 }) {
   const navigate = useNavigate()
-  const { t } = useTranslation('book-appointment')
+  const { t, i18n } = useTranslation('book-appointment')
   const store = useBookingStore()
   const setData = useBookingStore((s) => s.setData)
   const current = steps[store.step]
@@ -157,6 +157,7 @@ export default function BookingPage({
       appointmentDate: formatDate(
         store.appointmentDate,
         DATE_TIME_TYPE.YYYY_MM_DD,
+        i18n.language,
       ),
       startTime: store.startTime,
       endTime: store.endTime,

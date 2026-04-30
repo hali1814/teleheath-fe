@@ -194,7 +194,7 @@ export function ProfileForm({
               size="base_14"
               className="w-full text-center font-medium text-[#999999]"
             >
-              Close
+              {t('common:actions.close')}
             </Text>
           </Button>
           <Button

@@ -1,12 +1,8 @@
 import { Icon } from '#/components/icon'
 import Image from '#/components/image'
-import LocationBadge from '#/components/LocationBadge'
 import Text from '#/components/text'
-import { Avatar, AvatarImage } from '#/components/ui/avatar'
-import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
 import type { Amenity, ServiceType } from '#/types/service'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { formatPrice } from '#/utils/price.util'
 import { useTranslation } from 'react-i18next'
 
@@ -23,7 +19,7 @@ export const ServiceCard = ({
   onClick: () => void
   onDetailClick: () => void
 }) => {
-  const { i18n } = useTranslation()
+  const { t } = useTranslation(['book-appointment'])
   const { typeName, originalPrice, promotionPrice, price, amenities, isBest } =
     service
 
@@ -69,7 +65,7 @@ export const ServiceCard = ({
           {price !== 0 && price && (
             <div className="flex flex-col">
               <Text size="xs_10" className="leading-[14px] text-[#475569]">
-                Reference price
+                {t('serviceStep.referencePrice')}
               </Text>
               {hasActiveDiscount ? (
                 <div className="flex flex-wrap items-center gap-x-[8px] gap-y-[4px]">
@@ -103,7 +99,7 @@ export const ServiceCard = ({
           {service.partner.distanceFromHospital && (
             <div className="flex flex-col">
               <Text size="xs_10" className="leading-[14px] text-[#475569]">
-                *Distance from hospital
+                *{t('serviceStep.distanceFromHospital')}
               </Text>
               <Text
                 size="sm_12"
@@ -132,7 +128,9 @@ export const ServiceCard = ({
               selected && 'text-white',
             )}
           >
-            {selected ? 'Selected' : 'Select'}
+            {selected
+              ? t('serviceStep.selectedService')
+              : t('serviceStep.selectService')}
           </Text>
         </button>
       </div>
@@ -142,7 +140,7 @@ export const ServiceCard = ({
             size="xs_10"
             className="leading-[15px] font-semibold text-white uppercase"
           >
-            Best service
+            {t('serviceStep.bestService')}
           </Text>
         </div>
       )}

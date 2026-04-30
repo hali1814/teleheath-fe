@@ -10,6 +10,7 @@ import {
 import type { ListFamilyPatient } from '#/services/query/profile/listFamily'
 import type { PatientProfileResponse } from '#/services/query/profile/getProfile'
 import FormProfile from './FormProfile'
+import { useTranslation } from 'react-i18next'
 
 export default function ProfileFormModal({
   defaultValues,
@@ -22,6 +23,8 @@ export default function ProfileFormModal({
   onOpenChange: (open: boolean) => void
   onSuccess?: (profile?: PatientProfileResponse) => void
 }) {
+  const { t } = useTranslation(['profile', 'common'])
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -36,8 +39,8 @@ export default function ProfileFormModal({
             </div>
             <Text size="lg_16" className="font-semibold leading-[1.2]">
               {defaultValues
-                ? 'Edit Patient Profile'
-                : 'Add New Patient Profile'}
+                ? t('editPatientProfile')
+                : t('addPatientProfile')}
             </Text>
             <Icon
               name="close"
@@ -67,7 +70,7 @@ export default function ProfileFormModal({
                   size="base_14"
                   className="w-full text-center font-medium text-[#999999]"
                 >
-                  Close
+                  {t('common:actions.close')}
                 </Text>
               </Button>
               <Button
@@ -85,7 +88,7 @@ export default function ProfileFormModal({
                       className="w-[20px] h-[20px] text-white"
                     />
                   )}
-                  {defaultValues ? 'Save' : 'Add Profile'}
+                  {defaultValues ? t('save') : t('addProfile')}
                 </Text>
               </Button>
             </div>

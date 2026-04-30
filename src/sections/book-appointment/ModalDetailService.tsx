@@ -10,6 +10,7 @@ import { formatPrice } from '#/utils/price.util'
 import Text from '#/components/text'
 import { Icon } from '#/components/icon'
 import type { ServiceType } from '#/types/service'
+import { useTranslation } from 'react-i18next'
 
 export type ModalDetailServiceProps = {
   serviceType?: ServiceType
@@ -35,6 +36,8 @@ export function ModalDetailService({
   onOpenChange,
   className,
 }: ModalDetailServiceProps) {
+  const { t } = useTranslation(['appointment', 'common'])
+
   if (!serviceType) {
     return null
   }
@@ -77,7 +80,7 @@ export function ModalDetailService({
 
             <SectionHeading>
               <Text className="font-semibold leading-[1.2] text-[#333333]">
-                Address
+                {t('appointment:address')}
               </Text>
               <Text
                 size="sm_12"
@@ -89,7 +92,7 @@ export function ModalDetailService({
 
             <SectionHeading>
               <Text className="font-semibold leading-[1.2] text-[#333333]">
-                Price
+                {t('common:price')}
               </Text>
               {hasActiveDiscount ? (
                 <div className="flex items-center gap-[8px]">

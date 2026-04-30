@@ -18,6 +18,8 @@
     },
     "noData": "គ្មានទិន្នន័យ",
     "noDataAvailable": "គ្មានទិន្នន័យ",
+    "amenitiesInCar": "បរិក្ខារក្នុងរថយន្ត",
+    "price": "តម្លៃ",
     "search": "ស្វែងរក",
     "markAllAsRead": "សម្គាល់ទាំងអស់ថាបានអាន",
     "actions": {
@@ -36,6 +38,10 @@
       "details": "ព័ត៌មានលម្អិត"
     },
     "notificationsTitle": "ការជូនដំណឹង",
+    "calendar": {
+      "previousMonth": "ខែមុន",
+      "nextMonth": "ខែក្រោយ"
+    },
     "countries": {
       "all": "ទាំងអស់",
       "vietnam": "វៀតណាម",
@@ -126,15 +132,16 @@
     "personalInformation": "ព័ត៌មានផ្ទាល់ខ្លួន",
     "dateOfBirth": "ថ្ងៃកំណើត",
     "gender": "ភេទ",
+    "age": "អាយុ",
     "phoneNumber": "លេខទូរស័ព្ទ",
     "email": "អ៉ីមែល",
     "address": "អាសយដ្ឋាន",
     "medicalProfiles": "ប្រវត្តិរូបវេជ្ជសាស្ត្រ",
     "language": "ភាសា",
     "pleaseSelectLanguage": "សូមជ្រើសរើសភាសា",
-    "profileInformation": "ព័ត៌មានប្រវត្តិរូប",
+    "profileInformation": "ព័ត៌មានអ្នកជំងឺ",
     "uploadPhoto": "អាប់ឡូដរូបថត",
-    "uploadPhotoPatient": "បង្ហោះរូបថតអ្នកជំងឺ",
+    "uploadPhotoPatient": "ដាក់រូបថតអ្នកជំងឺ",
     "choosePhotoSource": "ជ្រើសរើសរូបថត",
     "photoFromCamera": "កាមេរ៉ា",
     "photoFromLibrary": "បណ្ណាល័យរូបភាព",
@@ -181,6 +188,7 @@
     "emptyMedicalProfilesFasterBookingTitle": "ការកក់បានកាន់តែរហ័ស",
     "emptyMedicalProfilesFasterBookingSubtitle": "ប្រើទម្រង់ដែលបានរក្សាទុកសម្រាប់ការកក់រហ័ស",
     "emptyMedicalProfilesAddNewProfile": "បន្ថែមប្រវត្តិរូបថ្មី",
+    "addPatientProfile": "បន្ថែមប្រវត្តិរូបអ្នកជំងឺ",
     "viewDetails": "មើលព័ត៌មានលម្អិត",
     "edit": "កែសម្រួល",
     "patientId": "លេខសម្គាល់អ្នកជំងឺ",
@@ -204,7 +212,8 @@
       "mon_sat": "ថ្ងៃច័ន្ទ ដល់ ថ្ងៃសុក្រ",
       "sun": "ថ្ងៃអាទិត្យ",
       "emergency": "សង្គ្រោះបន្ទាន់",
-      "map": "ផែនទី"
+      "map": "ផែនទី",
+      "open247": "បើកបម្រើ ២៤/៧"
     }
   },
   "package": {
@@ -219,7 +228,7 @@
       "hospital": "កម្ពុជា",
       "specialty": "ឯកទេស",
       "priceRange": "ចន្លោះតម្លៃ",
-      "packageCategory": "ប្រភេទកញ្ចប់",
+      "packageCategory": "ប្រភេទកញ្ចប់សេវាកម្ម",
       "generalPackage": "កញ្ចប់ទូទៅ",
       "simplePackage": "កញ្ចប់សាមញ្ញ"
     }
@@ -287,7 +296,14 @@
     "serviceStep": {
       "searchPlaceholder": "ស្វែងរកសេវាកម្ម",
       "empty": "រកមិនឃើញសេវាកម្ម",
-      "filterAriaLabel": "តម្រង"
+      "filterAriaLabel": "តម្រង",
+      "whatDoWeHaveForYou": "តើយើងខ្ញុំមានអ្វីខ្លះសម្រាប់អ្នក?",
+      "selectAddonServicesDescription": "សូមជ្រើសរើសសេវាកម្មបន្ថែម ដើម្បីធានាបាននូវការជាសះស្បើយយ៉ាងរហ័ស និងការធ្វើដំណើរទៅកាន់គ្លីនិកដោយភាពងាយស្រួលបំផុត៖",
+      "bestService": "សេវាកម្មល្អបំផុត",
+      "referencePrice": "តម្លៃយោង",
+      "distanceFromHospital": "ចម្ងាយពីមន្ទីរពេទ្យ",
+      "selectService": "ជ្រើសរើស",
+      "selectedService": "បានជ្រើសរើស"
     },
     "stepTitles": {
       "selectSpecialty": "ជ្រើសរើសឯកទេស",
@@ -340,7 +356,8 @@
       "noteLabel": "កំណត់ចំណាំ",
       "placeholderTime": "00:00",
       "placeholderAddress": "អាសយដ្ឋានទៅទទួល",
-      "placeholderNote": "ឧទាហរណ៍៖ ចំនួនកៅអី"
+      "placeholderNote": "ឧទាហរណ៍៖ ចំនួនកៅអី",
+      "invalidTimeFormat": "សូមបញ្ចូលម៉ោងឱ្យបានត្រឹមត្រូវ តាមទម្រង់ HH:mm"
     },
     "paymentMethodName": {
       "khqr": "KHQR",
@@ -408,7 +425,7 @@
     "noShow": "មិនបានមក",
     "paymentDetails": "ព័ត៌មានលម្អិតការទូទាត់",
     "consultationFee": "ថ្លៃពិគ្រោះ",
-    "deposit": "ការបង់បន្ថែម",
+    "deposit": "ប្រាក់កក់",
     "totalAmount": "ទឹកប្រាក់សរុប",
     "paymentMethod": "វិធីសាស្រ្តទូទាត់",
     "paid": "បានទូទាត់",
@@ -447,14 +464,15 @@
     "reviewBadgeBookByHospital": "កក់តាមមន្ទីរពេទ្យ",
     "reviewBadgeBookByDoctor": "កក់តាមវេជ្ជបណ្ឌិត",
     "reviewBadgeBookByPackage": "កក់តាមកញ្ចប់",
-    "bookingRequestReceived": "បានទទួលសំណើកក់ការណាត់ជួប",
-    "bookingRequestReceivedDescription": "ក្រុមសេវាអតិថិជនរបស់យើងនឹងទាក់ទងអ្នកក្នុងរយៈពេល 24 ម៉ោង ដើម្បីបញ្ជាក់ការកក់។",
-    "bookingIdLabel": "លេខកក់:",
+    "bookingRequestReceived": "ទទួលបានសំណើកក់របស់អ្នកហើយ",
+    "bookingRequestReceivedDescription": "ក្រុមការងារផ្នែកបម្រើអតិថិជនរបស់យើងខ្ញុំ នឹងទាក់ទងទៅលោកអ្នកក្នុងរយៈពេល ២៤ ម៉ោង ដើម្បីបញ្ជាក់ពីការកក់របស់អ្នក។",
+    "bookingIdLabel": "លេខកូដកក់",
     "copyBookingId": "ចម្លងលេខកក់",
     "bookingIdCopied": "បានចម្លងលេខកក់",
     "failedToCopyBookingId": "ចម្លងលេខកក់មិនជោគជ័យ",
-    "viewMyBooking": "មើលការកក់របស់ខ្ញុំ",
-    "goToHomepage": "ទៅទំព័រដើម"
+    "viewMyBooking": "មើលការណាត់ជួបរបស់ខ្ញុំ",
+    "goToHomepage": "ទៅកាន់ទំព័រដើម",
+    "selectedHospital": "មន្ទីរពេទ្យដែលបានជ្រើសរើស"
   },
   "search": {
     "tabs": {

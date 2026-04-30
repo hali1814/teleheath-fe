@@ -162,6 +162,7 @@ export default function AppointmentInformation({
             {formatDate(
               appointment?.appointmentDate,
               DATE_TIME_TYPE.MMM_DD_YYYY,
+              i18n.language,
             )}
           </Text>
         </div>

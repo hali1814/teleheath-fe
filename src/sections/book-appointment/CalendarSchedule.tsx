@@ -1,9 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { format } from 'date-fns'
+import { enUS, km, vi } from 'date-fns/locale'
+import { useEffect, useMemo, useState } from 'react'
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
 import { cn } from '#/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 export interface CalendarScheduleProps {
   /** Ngày đang chọn (controlled) */
@@ -27,6 +30,7 @@ export function CalendarSchedule({
   defaultMonth,
   disablePastDates = false,
 }: CalendarScheduleProps) {
+  const { t, i18n } = useTranslation('common')
   const [currentDate, setCurrentDate] = useState(
     () => defaultMonth ?? selected ?? new Date(),
   )
@@ -47,22 +51,21 @@ export function CalendarSchedule({
     })
   }, [selectedDayKey])
 
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ]
+  const dateLocale = useMemo(() => {
+    const language = (i18n.language ?? '').toLowerCase()
+    if (language.startsWith('km')) return km
+    if (language.startsWith('vi')) return vi
+    return enUS
+  }, [i18n.language])
 
-  const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+  const dayNames = useMemo(
+    () =>
+      [0, 1, 2, 3, 4, 5, 6].map(
+        (dayIndex) =>
+          dateLocale.localize?.day(dayIndex as any, { width: 'narrow' }) ?? '',
+      ),
+    [dateLocale],
+  )
 
   const today = startOfDay(new Date())
 
@@ -146,7 +149,7 @@ export function CalendarSchedule({
             className={`p-1 rounded transition-colors ${
               disablePreviousMonth ? 'cursor-not-allowed opacity-30' : ''
             }`}
-            aria-label="Previous month"
+            aria-label={t('calendar.previousMonth')}
             aria-disabled={disablePreviousMonth}
           >
             <Icon
@@ -159,14 +162,14 @@ export function CalendarSchedule({
             size="lg_16"
             className="font-medium leading-normal text-[#333333]"
           >
-            {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+            {format(currentDate, 'MMMM yyyy', { locale: dateLocale })}
           </Text>
 
           <button
             type="button"
             onClick={nextMonth}
             className="p-1 rounded transition-colors"
-            aria-label="Next month"
+            aria-label={t('calendar.nextMonth')}
           >
             <Icon name="polygon" className="w-[8px] h-[16px] text-primary" />
           </button>

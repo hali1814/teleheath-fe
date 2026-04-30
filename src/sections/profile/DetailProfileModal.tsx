@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import Image from '#/components/image'
 import Text from '#/components/text'
@@ -13,15 +14,6 @@ export interface DetailProfileModalProps {
   onEdit?: () => void
 }
 
-function getAgeText(dateOfBirth?: string) {
-  if (!dateOfBirth) return undefined
-  const parsed = dayjs(dateOfBirth, ['DD-MM-YYYY', 'YYYY-MM-DD'], true)
-  const fallbackParsed = parsed.isValid() ? parsed : dayjs(dateOfBirth)
-  if (!fallbackParsed.isValid()) return undefined
-  const age = dayjs().diff(fallbackParsed, 'year')
-  return `${age} years old`
-}
-
 export default function DetailProfileModal({
   open,
   onOpenChange,
@@ -29,7 +21,14 @@ export default function DetailProfileModal({
   onEdit,
 }: DetailProfileModalProps) {
   const { t } = useTranslation(['profile', 'common'])
-  const ageText = getAgeText(patient.dob ?? '')
+  const ageText = useMemo(() => {
+    if (!patient.dob) return undefined
+    const parsed = dayjs(patient.dob, ['DD-MM-YYYY', 'YYYY-MM-DD'], true)
+    const fallbackParsed = parsed.isValid() ? parsed : dayjs(patient.dob)
+    if (!fallbackParsed.isValid()) return undefined
+    const age = dayjs().diff(fallbackParsed, 'year')
+    return `${age} ${t('profile:age')}`
+  }, [patient.dob, t])
   const genderText =
     patient.gender === 'MALE'
       ? t('profile:genderMale', { defaultValue: 'Male' })

@@ -54,7 +54,7 @@ export default function EmptyPatientProfiles({
         >
           <Icon name="add_profile" className="size-[16px]" />
           <Text className="font-medium text-white leading-normal">
-            Add Profile
+            {t('addProfile')}
           </Text>
         </Button>
       </div>

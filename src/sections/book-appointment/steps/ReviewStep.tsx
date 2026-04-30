@@ -474,7 +474,11 @@ export function ReviewStep() {
                 {t('appointment:date')}
               </Text>
               <Text className="leading-normal font-medium text-[#333333]">
-                {formatDate(appointmentDate, DATE_TIME_TYPE.MMM_DD_YYYY)}
+                {formatDate(
+                  appointmentDate,
+                  DATE_TIME_TYPE.MMM_DD_YYYY,
+                  i18n.language,
+                )}
               </Text>
             </div>
             <div className="flex-1 flex flex-col gap-[4px] p-[12px] rounded-[8px] bg-dust-red-1 border border-dust-red-2">

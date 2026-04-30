@@ -20,7 +20,7 @@ export const Route = createFileRoute('/app/profile/(commonLayout)/')({
 })
 
 function RouteComponent() {
-  const { t } = useTranslation('profile')
+  const { t, i18n } = useTranslation('profile')
   const navigate = useNavigate()
   const [openBottomSheet, setOpenBottomSheet] = useState(false)
   const user = useProfileStore((s) => s.profile)
@@ -79,7 +79,7 @@ function RouteComponent() {
 
             <InfoRow
               label={t('dateOfBirth')}
-              value={formatDate(user?.dob) || '--'}
+              value={formatDate(user?.dob, undefined, i18n.language) || '--'}
             />
             <InfoRow
               label={t('gender')}

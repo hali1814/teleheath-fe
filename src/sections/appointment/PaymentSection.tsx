@@ -1,10 +1,9 @@
-import dayjs from 'dayjs'
-
 import Image from '#/components/image'
 import Text from '#/components/text'
 import { getBookingPaymentMethodMeta } from '#/const/payment-methods'
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
 import { useTranslation } from 'react-i18next'
+import { DATE_TIME_TYPE, formatDate } from '#/utils/date.util'
 
 function formatMoney(amount: number, currency: string) {
   try {
@@ -22,7 +21,7 @@ export interface PaymentSectionProps {
 }
 
 export default function PaymentSection({ appointment }: PaymentSectionProps) {
-  const { t } = useTranslation(['appointment'])
+  const { t, i18n } = useTranslation(['appointment'])
   const payment = appointment?.payment
 
   if (!payment || payment.status !== 'SUCCESS') {
@@ -30,12 +29,15 @@ export default function PaymentSection({ appointment }: PaymentSectionProps) {
   }
 
   const currency = payment.currency?.trim() || 'USD'
-  const serviceFee = appointment?.serviceFee ?? 0
   const totalAmount =
     payment.transTotalAmount > 0 ? payment.transTotalAmount : payment.amount
   const methodMeta = getBookingPaymentMethodMeta(payment.method)
   const paidAtLabel = payment.paidAt
-    ? dayjs(payment.paidAt).format('MMM DD, YYYY • hh:mm A')
+    ? formatDate(
+        payment.paidAt,
+        DATE_TIME_TYPE.MMM_DD_YYYY_HH_mm_A,
+        i18n.language,
+      )
     : ''
 
   const labelClass = 'text-[14px] font-normal leading-[150%] text-[#64748B]'

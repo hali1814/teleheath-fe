@@ -121,7 +121,7 @@ const BranchCard = ({
               {t('operatingHours.emergency')}
             </Text>
             <Text size="sm_12" className="font-medium leading-[1.3]">
-              24/7
+              {t('operatingHours.open247')}
             </Text>
           </div>
         )}

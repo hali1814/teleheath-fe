@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { format } from 'date-fns'
 import {
   DayPicker,
   getDefaultClassNames,
@@ -38,8 +39,12 @@ function Calendar({
       captionLayout={captionLayout}
       locale={locale}
       formatters={{
-        formatMonthDropdown: (date) =>
-          date.toLocaleString(locale?.code, { month: 'short' }),
+        formatMonthDropdown: (date) => {
+          if (locale?.localize && locale?.formatLong) {
+            return format(date, 'MMM', { locale: locale as any })
+          }
+          return date.toLocaleString(undefined, { month: 'short' })
+        },
         ...formatters,
       }}
       classNames={{
