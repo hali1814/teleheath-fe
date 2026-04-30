@@ -18,7 +18,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const { t } = useTranslation(['profile', 'common'])
+  const { t, i18n } = useTranslation(['profile', 'common'])
   const router = useRouter()
   const {
     data: familyList,
@@ -66,6 +66,7 @@ function RouteComponent() {
                   dateOfBirth={formatDate(
                     member.dob,
                     DATE_TIME_TYPE.MMM_DD_YYYY,
+                    i18n.language,
                   )}
                   phone={member.contactNumber ?? ''}
                   id={member.id}

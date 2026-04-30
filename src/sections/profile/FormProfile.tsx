@@ -199,7 +199,7 @@ export default function FormProfile({
       return
     }
 
-    setLayoutTitle('Add Patient Profile')
+    setLayoutTitle(t('addPatientProfile'))
   }, [isUserProfile, idMember, editModeMemberFamily, setLayoutTitle, t])
 
   useEffect(() => {

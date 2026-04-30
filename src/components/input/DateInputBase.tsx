@@ -1,5 +1,7 @@
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
+import { enUS, km, vi } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 
 import { Icon } from '#/components/icon'
 import Text from '#/components/text'
@@ -39,6 +41,7 @@ export default function DateInputBase({
   placeholder = 'DD-MM-YYYY',
   ...props
 }: DateInputBaseProps) {
+  const { i18n } = useTranslation()
   const isControlled = value !== undefined
   const [internalValue, setInternalValue] = useState<string>(defaultValue ?? '')
   const [open, setOpen] = useState(false)
@@ -73,6 +76,12 @@ export default function DateInputBase({
     [],
   )
   const endMonth = useMemo(() => dayjs().endOf('month').toDate(), [])
+  const calendarLocale = useMemo(() => {
+    const language = (i18n.language ?? '').toLowerCase()
+    if (language.startsWith('km')) return km
+    if (language.startsWith('vi')) return vi
+    return enUS
+  }, [i18n.language])
 
   const commitValue = (nextIso: string) => {
     if (!isControlled) setInternalValue(nextIso)
@@ -143,6 +152,7 @@ export default function DateInputBase({
           <div className="w-full min-h-[340px] shrink-0 rounded-xl bg-white shadow-sm">
             <Calendar
               mode="single"
+              locale={calendarLocale}
               month={calendarMonth}
               onMonthChange={setCalendarMonth}
               startMonth={startMonth}

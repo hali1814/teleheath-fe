@@ -13,7 +13,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  const { t } = useTranslation(['appointment'])
+  const { t, i18n } = useTranslation(['appointment'])
   const { appointmentCode } = useParams({
     from: '/app/book-appointment/success/$appointmentCode',
   })
@@ -58,6 +58,7 @@ function RouteComponent() {
             {formatDate(
               new Date().toISOString(),
               DATE_TIME_TYPE.MMM_DD_YYYY_HH_mm_A,
+              i18n.language,
             )}
           </Text>
         </div>

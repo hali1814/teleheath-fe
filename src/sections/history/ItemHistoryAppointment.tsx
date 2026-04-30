@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import GetStatus from '../appointment/GetStatus'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import type { AppLanguage } from '#/i18n'
+import { DATE_TIME_TYPE, formatDate } from '#/utils/date.util'
 
 export interface ItemHistoryAppointmentProps {
   item: MyAppointmentItem
@@ -50,35 +51,17 @@ export default function ItemHistoryAppointment({
   }, [item?.thumbnailUrl])
 
   const scheduleLabel = useMemo(() => {
-    const locale = (i18n.language ?? '').startsWith('vi')
-      ? 'vi-VN'
-      : (i18n.language ?? '').startsWith('km')
-        ? 'km-KH'
-        : 'en-US'
-
-    const dateLabel = dayjs(item.appointmentDate).isValid()
-      ? (() => {
-          const date = dayjs(item.appointmentDate).toDate()
-          const weekday = new Intl.DateTimeFormat(locale, {
-            weekday: 'short',
-          }).format(date)
-          const day = dayjs(item.appointmentDate).format('DD')
-          const month = new Intl.DateTimeFormat(locale, {
-            month: 'short',
-          }).format(date)
-
-          return `${weekday}, ${day} ${month}`
-        })()
-      : item.appointmentDate
+    const dateLabel =
+      formatDate(
+        item.appointmentDate,
+        DATE_TIME_TYPE.MMM_DD_YYYY,
+        i18n.language,
+      ) || item.appointmentDate
 
     const formatTime = (value: string) => {
       const parsed = dayjs(value, ['HH:mm:ss', 'HH:mm', 'hh:mm A'], true)
       if (parsed.isValid()) {
-        return new Intl.DateTimeFormat(locale, {
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true,
-        }).format(parsed.toDate())
+        return parsed.format('hh:mm A')
       }
       return value
     }

@@ -93,12 +93,11 @@ export function ServiceStep() {
             <div className="flex items-center">
               <Icon name="star_fall" />
               <Text size="base_14" className="leading-[24px] font-semibold">
-                What do we have for you?
+                {t('serviceStep.whatDoWeHaveForYou')}
               </Text>
             </div>
             <Text size="sm_12" className="leading-[1.2] text-[#5D3F3D]">
-              Select add-on services to ensure a seamless recovery and
-              stress-free journey to your clinic:
+              {t('serviceStep.selectAddonServicesDescription')}
             </Text>
           </div>
           <div className="flex max-w-full flex-wrap gap-x-[16px] gap-y-[12px]">

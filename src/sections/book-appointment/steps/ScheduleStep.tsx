@@ -22,7 +22,7 @@ const emptySchedules: ListScheduleByBranchResponse = {
 }
 
 export function ScheduleStep() {
-  const { t } = useTranslation(['book-appointment'])
+  const { t, i18n } = useTranslation(['book-appointment'])
   const {
     bookingType,
     branch,
@@ -47,7 +47,7 @@ export function ScheduleStep() {
 
   const dateParam =
     appointmentDate != null
-      ? formatDate(appointmentDate, DATE_TIME_TYPE.YYYY_MM_DD)
+      ? formatDate(appointmentDate, DATE_TIME_TYPE.YYYY_MM_DD, i18n.language)
       : undefined
 
   const {
@@ -102,7 +102,11 @@ export function ScheduleStep() {
 
   const selectedDateLabel =
     appointmentDate != null
-      ? formatDate(appointmentDate, DATE_TIME_TYPE.DDDD_MMM_D_YYYY)
+      ? formatDate(
+          appointmentDate,
+          DATE_TIME_TYPE.DDDD_MMM_D_YYYY,
+          i18n.language,
+        )
       : '—'
 
   const slotTimesMorning = useMemo(() => {

@@ -1,7 +1,10 @@
 import dayjs from 'dayjs'
+import 'dayjs/locale/km'
+import 'dayjs/locale/vi'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import i18n, { type AppLanguage } from '#/i18n'
 
 // Extend dayjs with plugins
 dayjs.extend(customParseFormat)
@@ -33,6 +36,7 @@ export enum DATE_TIME_TYPE {
 export const formatDate = (
   date: string | Date | null | undefined,
   option?: DATE_TIME_TYPE,
+  language?: AppLanguage | string,
 ): string => {
   if (!date) return ''
 
@@ -41,9 +45,25 @@ export const formatDate = (
     if (!dayjsDate.isValid()) return ''
 
     const format = option || DATE_TIME_TYPE.DD_MM_YYYY
-    return dayjsDate.format(format)
+    const locale = getDayjsLocale(language)
+    return dayjsDate.locale(locale).format(format)
   } catch (error) {
     console.error('Error formatting date:', error)
     return ''
   }
+}
+
+const getDayjsLocale = (language?: AppLanguage | string): string => {
+  const normalized = (
+    language ??
+    i18n.resolvedLanguage ??
+    i18n.language ??
+    'en'
+  )
+    .toLowerCase()
+    .split('-')[0]
+
+  if (normalized === 'vi') return 'vi'
+  if (normalized === 'km') return 'km'
+  return 'en'
 }

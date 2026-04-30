@@ -19,13 +19,13 @@ const emptySchedules: ListScheduleByDoctorResponse = {
 }
 
 export function ScheduleStepByDoctor() {
-  const { t } = useTranslation(['book-appointment'])
+  const { t, i18n } = useTranslation(['book-appointment'])
   const { doctor, appointmentDate, startTime, endTime, setData, branch } =
     useBookingStore()
 
   const dateParam =
     appointmentDate != null
-      ? formatDate(appointmentDate, DATE_TIME_TYPE.YYYY_MM_DD)
+      ? formatDate(appointmentDate, DATE_TIME_TYPE.YYYY_MM_DD, i18n.language)
       : undefined
 
   const { data: { data: schedules } = { data: emptySchedules } } =
@@ -41,7 +41,7 @@ export function ScheduleStepByDoctor() {
 
   const selectedDateLabel =
     appointmentDate != null
-      ? formatDate(appointmentDate, DATE_TIME_TYPE.DD_MM_YYYY)
+      ? formatDate(appointmentDate, DATE_TIME_TYPE.DD_MM_YYYY, i18n.language)
       : '—'
 
   const slotTimesMorning = useMemo(() => {

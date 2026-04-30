@@ -71,7 +71,7 @@ export default function HospitalCard({
             </Text>
             {showBadge && emergency24h && (
               <Badge className="bg-[#DCFCE7] text-[#15803D] px-[8px] py-[4px] rounded-[6px]">
-                Open 24/7
+                {t('operatingHours.open247', { ns: 'hospital' })}
               </Badge>
             )}
           </div>

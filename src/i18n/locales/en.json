@@ -18,6 +18,8 @@
     },
     "noData": "No data",
     "noDataAvailable": "No data available",
+    "amenitiesInCar": "Amenities in the car",
+    "price": "Price",
     "search": "Search",
     "markAllAsRead": "Mark all as read",
     "actions": {
@@ -35,6 +37,10 @@
       "details": "Details"
     },
     "notificationsTitle": "Notifications",
+    "calendar": {
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month"
+    },
     "countries": {
       "all": "All",
       "vietnam": "Vietnam",
@@ -125,6 +131,7 @@
     "personalInformation": "Personal Information",
     "dateOfBirth": "Date of Birth",
     "gender": "Gender",
+    "age": "years old",
     "phoneNumber": "Phone Number",
     "email": "Email",
     "address": "Address",
@@ -180,6 +187,7 @@
     "emptyMedicalProfilesFasterBookingTitle": "Faster Booking",
     "emptyMedicalProfilesFasterBookingSubtitle": "Use saved profiles for 1-click booking",
     "emptyMedicalProfilesAddNewProfile": "Add New Profile",
+    "addPatientProfile": "Add Patient Profile",
     "viewDetails": "View Details",
     "edit": "Edit",
     "patientId": "Patient ID",
@@ -203,7 +211,8 @@
       "mon_sat": "Monday - Friday",
       "sun": "Sunday",
       "emergency": "Emergency",
-      "map": "Map"
+      "map": "Map",
+      "open247": "Open 24/7"
     }
   },
   "package": {
@@ -286,7 +295,14 @@
     "serviceStep": {
       "searchPlaceholder": "Search for services",
       "empty": "No services found",
-      "filterAriaLabel": "Filter"
+      "filterAriaLabel": "Filter",
+      "whatDoWeHaveForYou": "What do we have for you?",
+      "selectAddonServicesDescription": "Select add-on services to ensure a seamless recovery and stress-free journey to your clinic:",
+      "bestService": "Best service",
+      "referencePrice": "Reference price",
+      "distanceFromHospital": "Distance from hospital",
+      "selectService": "Select",
+      "selectedService": "Selected"
     },
     "stepTitles": {
       "selectSpecialty": "Select Specialty",
@@ -339,7 +355,8 @@
       "noteLabel": "Note",
       "placeholderTime": "00:00",
       "placeholderAddress": "Address to pick-up",
-      "placeholderNote": "Example: Number of seats"
+      "placeholderNote": "Example: Number of seats",
+      "invalidTimeFormat": "Please enter a valid time in HH:mm format"
     },
     "paymentMethodName": {
       "khqr": "KHQR",
@@ -453,7 +470,8 @@
     "bookingIdCopied": "Booking ID copied",
     "failedToCopyBookingId": "Failed to copy Booking ID",
     "viewMyBooking": "View my booking",
-    "goToHomepage": "Go to Homepage"
+    "goToHomepage": "Go to Homepage",
+    "selectedHospital": "Selected hospital"
   },
   "search": {
     "tabs": {

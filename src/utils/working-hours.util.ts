@@ -21,31 +21,31 @@ const DAY_ORDER = [
 
 const DAY_LABELS: Record<AppLanguage, Record<string, string>> = {
   en: {
-    MONDAY: 'Mon',
-    TUESDAY: 'Tue',
-    WEDNESDAY: 'Wed',
-    THURSDAY: 'Thu',
-    FRIDAY: 'Fri',
-    SATURDAY: 'Sat',
-    SUNDAY: 'Sun',
+    MON: 'Mon',
+    TUE: 'Tue',
+    WED: 'Wed',
+    THU: 'Thu',
+    FRI: 'Fri',
+    SAT: 'Sat',
+    SUN: 'Sun',
   },
   vi: {
-    MONDAY: 'Th 2',
-    TUESDAY: 'Th 3',
-    WEDNESDAY: 'Th 4',
-    THURSDAY: 'Th 5',
-    FRIDAY: 'Th 6',
-    SATURDAY: 'Th 7',
-    SUNDAY: 'CN',
+    MON: 'T2',
+    TUE: 'T3',
+    WED: 'T4',
+    THU: 'T5',
+    FRI: 'T6',
+    SAT: 'T7',
+    SUN: 'CN',
   },
   km: {
-    MONDAY: 'ចន្ទ',
-    TUESDAY: 'អង្គារ',
-    WEDNESDAY: 'ពុធ',
-    THURSDAY: 'ព្រហស្បតិ៍',
-    FRIDAY: 'សុក្រ',
-    SATURDAY: 'សៅរ៍',
-    SUNDAY: 'អាទិត្យ',
+    MON: 'ថ្ងៃច័ន្ទ',
+    TUE: 'ថ្ងៃអង្គារ',
+    WED: 'ថ្ងៃពុធ',
+    THU: 'ថ្ងៃព្រហស្បតិ៍',
+    FRI: 'ថ្ងៃសុក្រ',
+    SAT: 'ថ្ងៃសៅរ៍',
+    SUN: 'ថ្ងៃអាទិត្យ',
   },
 }
 
@@ -116,7 +116,9 @@ export const formatWorkingHours = (
 }
 
 const formatTimeRange = (hour: WorkingHour) => {
-  const starts = [hour.morningStart, hour.afternoonStart].filter(Boolean) as string[]
+  const starts = [hour.morningStart, hour.afternoonStart].filter(
+    Boolean,
+  ) as string[]
   const ends = [hour.morningEnd, hour.afternoonEnd].filter(Boolean) as string[]
 
   if (!starts.length || !ends.length) return null
