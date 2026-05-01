@@ -2,8 +2,10 @@ import type { IPagingResponse } from '#/model/paging.model'
 
 export interface ApiCountry {
   code: string
+  name: string
   nameVi: string
   nameEn: string
+  nameKh: string
 }
 
 export interface ApiProvince {

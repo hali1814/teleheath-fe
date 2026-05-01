@@ -11,8 +11,6 @@ import { Button } from '#/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import type { FilterPackage } from '#/routes/app/package/(commonLayout)'
 import { useGetCountryListQuery } from '#/services/query/country/country-list'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
-import { type AppLanguage } from '#/i18n'
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
 import { useGetListSpecialtyQuery } from '#/services/query/hospital/list-specialty'
@@ -188,12 +186,7 @@ export default function ModalFilterPackage({
               placeholder={t('filter.country')}
               options={
                 countryList?.data.map((country) => ({
-                  label: getLocalizedTextByLang(
-                    country.nameVi,
-                    null,
-                    country.nameEn,
-                    i18n.language as AppLanguage,
-                  ),
+                  label: country.name,
                   value: country.code,
                 })) ?? []
               }

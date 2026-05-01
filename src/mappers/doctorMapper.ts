@@ -1,7 +1,5 @@
 import type { ApiDoctor, Education } from '#/dto/doctorDto'
 import type { Doctor } from '#/entities/doctorEntity'
-import type { AppLanguage } from '#/i18n'
-import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 
 const getEducations = (educations: Education[]): string[] => {
   return educations?.length > 0
@@ -15,10 +13,7 @@ const getEducations = (educations: Education[]): string[] => {
     : []
 }
 
-export const mapApiDoctor = (
-  api: ApiDoctor,
-  language: AppLanguage = 'en',
-): Doctor => ({
+export const mapApiDoctor = (api: ApiDoctor): Doctor => ({
   doctorId: api.doctorId,
   avatarUrl: api.avatarUrl,
   name: api.name,
@@ -26,14 +21,7 @@ export const mapApiDoctor = (
     api?.specialties?.length > 0
       ? api?.specialties?.map((specialty) => specialty.name)
       : [],
-  countryName: api?.country
-    ? getLocalizedTextByLang(
-        api.country.nameVi,
-        null,
-        api.country.nameEn,
-        language,
-      )
-    : '',
+  countryName: api?.country ? api.country.name : '',
   experienceYears: api.experienceYears,
   consultationFee: api.consultationFee,
   bio: api.bio,
