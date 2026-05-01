@@ -6,6 +6,7 @@ export interface GetCountriesRequest {}
 
 export interface CountryItem {
   code: string
+  name: string
   nameVi: string
   nameEn: string
   nameKh: string

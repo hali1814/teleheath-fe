@@ -2,12 +2,15 @@ import type { IPagingResponse } from '#/model/paging.model'
 
 export interface CountryDto {
   code: string
+  name: string
   nameVi: string
   nameEn: string
+  nameKh: string
 }
 
 export interface CheckupTypeDto {
   id: number
+  name: string
   nameEn: string
   nameVi: string
   nameKh: string

@@ -15,7 +15,7 @@ const getPackageDetail = async (
   const response = await http.get<ApiPackage>(`/packages/${params.packageId}`, {
     signal,
   })
-
+  console.log(response)
   const mappedData = mapApiPackage(response.data)
 
   return {

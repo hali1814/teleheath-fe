@@ -133,12 +133,7 @@ export default function ModalFilterDoctor({
               placeholder={t('filter.country')}
               options={
                 countryList?.data.map((country) => ({
-                  label: getLocalizedTextByLang(
-                    country.nameVi,
-                    null,
-                    country.nameEn,
-                    i18n.language as AppLanguage,
-                  ),
+                  label: country.name,
                   value: country.code,
                 })) ?? []
               }

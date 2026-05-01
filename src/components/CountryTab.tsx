@@ -50,12 +50,7 @@ export default function CountryTab() {
             size="base_14"
             className="font-medium leading-normal text-center text-primary"
           >
-            {getLocalizedTextByLang(
-              country.nameVi,
-              country.nameKh,
-              country.nameEn,
-              i18n.language as AppLanguage,
-            )}
+            {country.name}
           </Text>
         </div>
       ))}
