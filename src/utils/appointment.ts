@@ -1,5 +1,4 @@
 import dayjs from 'dayjs'
-import type { TFunction } from 'i18next'
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
 
 type UpcomingBucket = 'today' | 'tomorrow' | 'thisWeek' | 'nextWeek' | 'later'
@@ -33,7 +32,7 @@ const formatDayMonth = (date: Date, locale: string) => {
 }
 
 export function getUpcomingAppointmentLabels(
-  t?: TFunction,
+  t?: (key: string) => string,
 ): UpcomingAppointmentLabels {
   if (!t) return FALLBACK_LABELS
 

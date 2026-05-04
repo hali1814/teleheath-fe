@@ -25,6 +25,7 @@ export enum DATE_TIME_TYPE {
   MMM_DD_YYYY_HH_mm_A = 'MMM DD, YYYY • hh:mm A',
   MMM_DD_YYYY = 'MMM DD, YYYY',
   DDDD_MMM_D_YYYY = 'dddd, MMM D, YYYY',
+  CUSTOM_WEEKDAY_DD_MMM = 'ddd, DD MMM',
 }
 
 /**

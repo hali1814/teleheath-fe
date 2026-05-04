@@ -5,7 +5,7 @@ import EmptyAppointment from '#/sections/appointment/EmptyAppointment'
 import ItemAppointment from '#/sections/appointment/ItemAppointment'
 import Text from '#/components/text'
 import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appointments'
-import { groupAppointmentsByUpcomingWindow } from '#/utils'
+import { getUpcomingAppointmentLabels, groupAppointmentsByUpcomingWindow } from '#/utils'
 import dayjs from 'dayjs'
 import LoadingState from '#/components/LoadingState'
 import { useProfileStore } from '#/stores/profile'
@@ -19,7 +19,7 @@ export const Route = createFileRoute('/app/appointments/(commonLayout)/')({
 })
 
 function RouteComponent() {
-  const { t } = useTranslation(['appointment'])
+  const { t, i18n } = useTranslation(['appointment'])
   const title = t('title')
   const parentRef = useRef<HTMLDivElement>(null)
   const { profile } = useProfileStore()
@@ -44,8 +44,11 @@ function RouteComponent() {
   }
 
   const groupedAppointments = useMemo(() => {
-    return groupAppointmentsByUpcomingWindow(appointments?.data?.content ?? [])
-  }, [appointments?.data])
+    return groupAppointmentsByUpcomingWindow(appointments?.data?.content ?? [], {
+      labels: getUpcomingAppointmentLabels(t as unknown as (key: string) => string),
+      language: i18n.language,
+    })
+  }, [appointments?.data, i18n.language, t])
 
   const rows = useMemo(() => {
     return Object.entries(groupedAppointments).flatMap(([key, value]) => {
@@ -80,6 +83,7 @@ function RouteComponent() {
   if (isLoadingAppointments) {
     return (
       <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={title} isCenter />
         <LoadingState />
       </PullToRefresh>
     )
@@ -92,6 +96,7 @@ function RouteComponent() {
   if (rows.length === 0) {
     return (
       <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={title} isCenter />
         <EmptyAppointment variant="upcoming" />
       </PullToRefresh>
     )
