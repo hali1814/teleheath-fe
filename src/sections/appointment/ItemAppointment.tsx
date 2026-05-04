@@ -12,6 +12,7 @@ import type { AppLanguage } from '#/i18n'
 import { getGoogleMapsHref } from '#/utils/google-maps.util'
 import { webIntent } from '#/utils/auth'
 import { toast } from 'sonner'
+import { DATE_TIME_TYPE, formatDate } from '#/utils'
 
 export interface ItemAppointmentProps {
   appointment: MyAppointmentItem
@@ -63,20 +64,12 @@ export default function ItemAppointment({ appointment }: ItemAppointmentProps) {
         ? 'km-KH'
         : 'en-US'
 
-    const dateLabel = dayjs(appointment.appointmentDate).isValid()
-      ? (() => {
-          const date = dayjs(appointment.appointmentDate).toDate()
-          const weekday = new Intl.DateTimeFormat(locale, {
-            weekday: 'short',
-          }).format(date)
-          const day = dayjs(appointment.appointmentDate).format('DD')
-          const month = new Intl.DateTimeFormat(locale, {
-            month: 'short',
-          }).format(date)
-
-          return `${weekday}, ${day} ${month}`
-        })()
-      : appointment.appointmentDate
+    const dateLabel =
+      formatDate(
+        appointment.appointmentDate,
+        DATE_TIME_TYPE.CUSTOM_WEEKDAY_DD_MMM,
+        i18n.language,
+      ) || appointment.appointmentDate
 
     const formatTime = (value: string) => {
       const parsed = dayjs(value, ['HH:mm:ss', 'HH:mm', 'hh:mm A'], true)

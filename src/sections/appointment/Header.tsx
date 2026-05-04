@@ -11,7 +11,7 @@ interface AppointmentHeaderProps {
 }
 
 export default function Header({ appointment }: AppointmentHeaderProps) {
-  const { t, i18n } = useTranslation(['appointment'])
+  const { t } = useTranslation(['appointment'])
   const bookingType = appointment?.bookingType
 
   if (bookingType === 'HOSPITAL') return null
@@ -32,7 +32,7 @@ export default function Header({ appointment }: AppointmentHeaderProps) {
         <div className="mt-4 flex items-stretch gap-6">
           <Image
             src={appointment?.thumbnailUrl ?? ''}
-            alt={appointment?.doctor?.nameEn ?? ''}
+            alt={appointment?.doctor?.name ?? ''}
             className="size-[70px] rounded-full"
           />
           <div className="flex min-w-0 flex-1 flex-col justify-between">
@@ -40,9 +40,7 @@ export default function Header({ appointment }: AppointmentHeaderProps) {
               size="base_14"
               className="font-semibold leading-[17px] text-[#0F172A]"
             >
-              {i18n.language === 'vi'
-                ? (appointment?.doctor?.nameVi ?? '')
-                : (appointment?.doctor?.nameEn ?? '')}
+              {appointment?.doctor?.name ?? ''}
             </Text>
             <Text
               size="sm_12"

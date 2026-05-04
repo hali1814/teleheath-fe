@@ -18,6 +18,7 @@ export interface MyAppointmentsRequest extends IPagingRequest {
 
 interface AppointmentHospital {
   hospitalId: string
+  name: string
   nameVi: string
   nameEn: string
   address: string

@@ -1,6 +1,8 @@
 import { Header } from '#/sections/home'
 import FormProfile from '#/sections/profile/FormProfile'
+import { useProfileEditLayoutTitleStore } from '#/stores/profile-edit-layout-title'
 import { createFileRoute } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
@@ -27,9 +29,22 @@ export const Route = createFileRoute('/app/profile/(editLayout)/edit')({
 function RouteComponent() {
   const { idMember, isUserProfile } = Route.useSearch()
   const { t } = useTranslation(['profile'])
+  const layoutTitle = useProfileEditLayoutTitleStore((s) => s.title)
+  const setLayoutTitle = useProfileEditLayoutTitleStore((s) => s.setTitle)
+
+  const fallbackTitle = isUserProfile
+    ? t('profileInformation')
+    : idMember
+      ? t('patientProfile')
+      : t('addPatientProfile')
+
+  useEffect(() => {
+    setLayoutTitle(fallbackTitle)
+  }, [fallbackTitle, setLayoutTitle])
+
   return (
     <>
-      <Header title={t('editPatientProfile')} />
+      <Header title={layoutTitle || fallbackTitle} />
 
       <FormProfile idMember={idMember} isUserProfile={isUserProfile} />
     </>

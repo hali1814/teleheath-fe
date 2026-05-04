@@ -73,9 +73,7 @@ export default function AppointmentInformation({
             size="lg_16"
             className="font-semibold leading-[24px] text-text-primary"
           >
-            {i18n.language === 'vi'
-              ? (appointment?.hospital?.nameVi ?? '')
-              : (appointment?.hospital?.nameEn ?? '')}
+            {appointment?.hospital?.name ?? ''}
           </Text>
           <Text
             size="base_14"
