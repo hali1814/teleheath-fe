@@ -590,7 +590,7 @@ export function ReviewStep() {
           </div>
         )}
 
-        {consultationFee > 0 && (
+        {feeInfo.totalAmount > 0 && (
           <div className="flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white">
             <Text size="lg_16" className="font-semibold leading-[1.2]">
               {t('appointment:paymentMethodsHeading')}
