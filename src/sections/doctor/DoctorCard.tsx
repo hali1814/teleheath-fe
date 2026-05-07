@@ -154,50 +154,52 @@ export default function DoctorCard({
           </Text>
         </AvatarFallback>
       </Avatar>
-      <div className="w-full flex flex-col items-center gap-[8px]">
-        <LocationBadge
-          location={countryName}
-          className="text-muted-foreground leading-[1.3]"
-          textSize="xs_10"
-        />
-        {truncateName ? (
-          <div className="w-full min-w-0 self-stretch text-center">
+      <div className="flex min-h-0 w-full flex-1 flex-col gap-[8px]">
+        <div className="flex min-h-0 flex-1 flex-col items-center gap-[8px]">
+          <LocationBadge
+            location={countryName}
+            className="text-muted-foreground leading-[1.3]"
+            textSize="xs_10"
+          />
+          {truncateName ? (
+            <div className="w-full min-w-0 self-stretch text-center">
+              <Text
+                size="base_14"
+                className="w-full min-w-0 truncate text-center font-semibold leading-[1.2]"
+              >
+                {name}
+              </Text>
+            </div>
+          ) : (
             <Text
               size="base_14"
-              className="w-full min-w-0 truncate text-center font-semibold leading-[1.2]"
+              className="text-center font-semibold leading-[1.2]"
             >
               {name}
             </Text>
-          </div>
-        ) : (
-          <Text
-            size="base_14"
-            className="text-center font-semibold leading-[1.2]"
-          >
-            {name}
-          </Text>
-        )}
-        <div
-          className={cn(
-            'grid gap-[4px]',
-            specialties?.length > 1 ? 'grid-cols-2' : 'grid-cols-1',
           )}
-        >
-          {specialties?.length > 0 &&
-            specialties.map((specialty, index) => (
-              <Text
-                key={`${doctorId}-spec-v-${index}`}
-                size="xs_10"
-                className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
-              >
-                <div className="size-[4px] rounded-full bg-muted-foreground" />
-                {specialty}
-              </Text>
-            ))}
+          <div
+            className={cn(
+              'grid gap-[4px]',
+              specialties?.length > 1 ? 'grid-cols-2' : 'grid-cols-1',
+            )}
+          >
+            {specialties?.length > 0 &&
+              specialties.map((specialty, index) => (
+                <Text
+                  key={`${doctorId}-spec-v-${index}`}
+                  size="xs_10"
+                  className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
+                >
+                  <div className="size-[4px] rounded-full bg-muted-foreground" />
+                  {specialty}
+                </Text>
+              ))}
+          </div>
         </div>
         {!hideBookAppointment && (
           <Button
-            className="w-full h-[32px] bg-dust-red-1"
+            className="h-[32px] w-full shrink-0 bg-dust-red-1"
             onClick={(e) => {
               e.preventDefault()
               if (!profile?.id) {

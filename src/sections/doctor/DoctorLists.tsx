@@ -30,7 +30,7 @@ export default function DoctorLists({
           </Text>
         </Link>
       </div>
-      <div className="w-full flex gap-[14px] overflow-x-auto pl-[16px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex w-full items-stretch gap-[14px] overflow-x-auto pl-[16px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {doctors.map((doctor) => (
           <DoctorCard
             key={doctor.doctorId}
