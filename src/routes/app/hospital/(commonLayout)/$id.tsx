@@ -15,6 +15,7 @@ import { useProfileStore } from '#/stores/profile'
 import { goBackToAppMobile } from '#/utils/auth'
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import LoadingState from '#/components/LoadingState'
 
 export const Route = createFileRoute('/app/hospital/(commonLayout)/$id')({
   component: RouteComponent,
@@ -25,18 +26,27 @@ function RouteComponent() {
   const { id } = useParams({ from: '/app/hospital/(commonLayout)/$id' })
   const profile = useProfileStore((s) => s.profile)
   const navigate = useNavigate()
-  const { data: { data: hospitalData } = { data: null }, refetch } =
+  const { data: { data: hospitalData } = { data: null }, refetch, isPending } =
     useGetHospitalDetailQuery({
       params: {
         hospitalId: id,
       },
     })
 
-  if (!hospitalData) return null
-
   const handleRefresh = async () => {
     await refetch()
   }
+
+  if (isPending) {
+    return (
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={t('hospital:detailTitle')} />
+        <LoadingState />
+      </PullToRefresh>
+    )
+  }
+
+  if (!hospitalData) return null
 
   return (
     <PullToRefresh onRefresh={handleRefresh}>
