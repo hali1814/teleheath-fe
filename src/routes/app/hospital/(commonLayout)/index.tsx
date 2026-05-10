@@ -13,6 +13,7 @@ import { z } from 'zod'
 import { EmptyState } from '#/sections/search'
 import Text from '#/components/text'
 import PullToRefresh from '#/components/PullToRefresh'
+import LoadingState from '#/components/LoadingState'
 
 const optionalTrim = (s: string | undefined) => s?.trim() || undefined
 
@@ -67,6 +68,7 @@ function RouteComponent() {
       data: { content: [] },
     },
     refetch,
+    isPending,
   } = useGetListHospitalsQuery({
     params: {
       ...ALL_PAGINATION,
@@ -79,6 +81,15 @@ function RouteComponent() {
 
   const handleRefresh = async () => {
     await refetch()
+  }
+
+  if (isPending) {
+    return (
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={t('hospital:title')} />
+        <LoadingState />
+      </PullToRefresh>
+    )
   }
 
   return (

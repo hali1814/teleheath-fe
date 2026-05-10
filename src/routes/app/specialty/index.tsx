@@ -9,6 +9,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import PullToRefresh from '#/components/PullToRefresh'
+import LoadingState from '#/components/LoadingState'
 
 export const Route = createFileRoute('/app/specialty/')({
   component: RouteComponent,
@@ -19,7 +20,7 @@ function RouteComponent() {
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 300)
 
-  const { data, refetch } = useGetListSpecialtyQuery({
+  const { data, refetch, isPending } = useGetListSpecialtyQuery({
     params: {
       keyword: debouncedQuery,
     },
@@ -29,6 +30,15 @@ function RouteComponent() {
 
   const handleRefresh = async () => {
     await refetch()
+  }
+
+  if (isPending) {
+    return (
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={t('home:specialties')} />
+        <LoadingState />
+      </PullToRefresh>
+    )
   }
 
   return (

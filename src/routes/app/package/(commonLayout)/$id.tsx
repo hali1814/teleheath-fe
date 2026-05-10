@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { useGetPackageDetailQuery } from '#/services/query/package/package-detail'
 import { Header } from '#/sections/home'
 import PullToRefresh from '#/components/PullToRefresh'
+import LoadingState from '#/components/LoadingState'
 
 export const Route = createFileRoute('/app/package/(commonLayout)/$id')({
   component: RouteComponent,
@@ -25,7 +26,7 @@ function RouteComponent() {
   const profile = useProfileStore((s) => s.profile)
   const navigate = useNavigate()
 
-  const { data: { data: packageData } = { data: null }, refetch } =
+  const { data: { data: packageData } = { data: null }, refetch, isPending } =
     useGetPackageDetailQuery({
       params: {
         packageId: parseInt(id),
@@ -36,6 +37,15 @@ function RouteComponent() {
 
   const handleRefresh = async () => {
     await refetch()
+  }
+
+  if (isPending) {
+    return (
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={t('detailTitle')} />
+        <LoadingState />
+      </PullToRefresh>
+    )
   }
 
   return (

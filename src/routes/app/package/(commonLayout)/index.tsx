@@ -20,6 +20,7 @@ import { keepPreviousData } from '@tanstack/react-query'
 import { EmptyState } from '#/sections/search'
 import type { Package } from '#/entities/packageEntity'
 import PullToRefresh from '#/components/PullToRefresh'
+import LoadingState from '#/components/LoadingState'
 
 function parseSearchInt(v: unknown): number | undefined {
   if (v === undefined || v === null || v === '') return undefined
@@ -91,6 +92,7 @@ function RouteComponent() {
       data: { content: [] },
     },
     refetch,
+    isPending,
   } = useGetListPackagesQuery({
     params: {
       ...ALL_PAGINATION,
@@ -136,6 +138,15 @@ function RouteComponent() {
 
   const handleRefresh = async () => {
     await refetch()
+  }
+
+  if (isPending) {
+    return (
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={t('title')} />
+        <LoadingState />
+      </PullToRefresh>
+    )
   }
 
   return (

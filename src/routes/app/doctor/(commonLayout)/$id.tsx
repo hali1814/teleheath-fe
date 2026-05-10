@@ -1,4 +1,5 @@
 import PullToRefresh from '#/components/PullToRefresh'
+import LoadingState from '#/components/LoadingState'
 import {
   DoctorInfoHeader,
   DoctorConsultationFee,
@@ -20,7 +21,7 @@ function RouteComponent() {
   const { t } = useTranslation(['doctor'])
   const { id } = useParams({ from: '/app/doctor/(commonLayout)/$id' })
 
-  const { data: { data: doctorData } = { data: null }, refetch } =
+  const { data: { data: doctorData } = { data: null }, refetch, isPending } =
     useGetDoctorDetailQuery({
       params: {
         doctorId: id,
@@ -29,6 +30,15 @@ function RouteComponent() {
 
   const handleRefresh = async () => {
     await refetch()
+  }
+
+  if (isPending) {
+    return (
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Header title={t('detailTitle')} />
+        <LoadingState />
+      </PullToRefresh>
+    )
   }
 
   return (
