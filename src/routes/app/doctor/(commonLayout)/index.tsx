@@ -160,15 +160,6 @@ function RouteComponent() {
     await refetch()
   }
 
-  if (isPending) {
-    return (
-      <PullToRefresh onRefresh={handleRefresh}>
-        <Header title={t('doctor:title')} />
-        <LoadingState />
-      </PullToRefresh>
-    )
-  }
-
   return (
     <>
       <PullToRefresh onRefresh={handleRefresh}>
@@ -195,7 +186,9 @@ function RouteComponent() {
               </Badge>
             </button>
           </div>
-          {doctorsData.length > 0 ? (
+          {isPending ? (
+            <LoadingState />
+          ) : doctorsData.length > 0 ? (
             <>
               {doctorsData.map((doctor) => (
                 <DoctorCard

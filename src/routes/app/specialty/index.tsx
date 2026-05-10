@@ -32,37 +32,28 @@ function RouteComponent() {
     await refetch()
   }
 
-  if (isPending) {
-    return (
-      <PullToRefresh onRefresh={handleRefresh}>
-        <Header title={t('home:specialties')} />
-        <LoadingState />
-      </PullToRefresh>
-    )
-  }
-
   return (
-    <>
-      <PullToRefresh onRefresh={handleRefresh}>
-        <Header title={t('home:specialties')} />
-        <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
-          <SearchBar
-            placeholder={t('search:specialtyIndexPlaceholder')}
-            value={query}
-            onSearch={(value) => setQuery(value)}
-            onClear={() => setQuery('')}
-          />
-          {specialties.length > 0 ? (
-            <div className="grid grid-cols-3 mt-[10px] gap-y-[36px]">
-              {specialties.map((specialty) => (
-                <SpecialtyItem key={specialty.specialtyId} {...specialty} />
-              ))}
-            </div>
-          ) : (
-            <EmptyState>{t('search:empty.specialties')}</EmptyState>
-          )}
-        </div>
-      </PullToRefresh>
-    </>
+    <PullToRefresh onRefresh={handleRefresh}>
+      <Header title={t('home:specialties')} />
+      <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
+        <SearchBar
+          placeholder={t('search:specialtyIndexPlaceholder')}
+          value={query}
+          onSearch={(value) => setQuery(value)}
+          onClear={() => setQuery('')}
+        />
+        {isPending ? (
+          <LoadingState />
+        ) : specialties.length > 0 ? (
+          <div className="grid grid-cols-3 mt-[10px] gap-y-[36px]">
+            {specialties.map((specialty) => (
+              <SpecialtyItem key={specialty.specialtyId} {...specialty} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState>{t('search:empty.specialties')}</EmptyState>
+        )}
+      </div>
+    </PullToRefresh>
   )
 }
