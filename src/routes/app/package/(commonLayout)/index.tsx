@@ -140,15 +140,6 @@ function RouteComponent() {
     await refetch()
   }
 
-  if (isPending) {
-    return (
-      <PullToRefresh onRefresh={handleRefresh}>
-        <Header title={t('title')} />
-        <LoadingState />
-      </PullToRefresh>
-    )
-  }
-
   return (
     <>
       <PullToRefresh onRefresh={handleRefresh}>
@@ -175,7 +166,9 @@ function RouteComponent() {
               </Badge>
             </button>
           </div>
-          {packagesData.length > 0 ? (
+          {isPending ? (
+            <LoadingState />
+          ) : packagesData.length > 0 ? (
             <>
               {packagesData.map((p: Package) => (
                 <PackageCard key={p.packageId} {...p} truncateName={false} />

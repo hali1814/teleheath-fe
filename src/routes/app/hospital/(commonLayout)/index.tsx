@@ -11,7 +11,6 @@ import { keepPreviousData } from '@tanstack/react-query'
 import { Header } from '#/sections/home'
 import { z } from 'zod'
 import { EmptyState } from '#/sections/search'
-import Text from '#/components/text'
 import PullToRefresh from '#/components/PullToRefresh'
 import LoadingState from '#/components/LoadingState'
 
@@ -83,45 +82,36 @@ function RouteComponent() {
     await refetch()
   }
 
-  if (isPending) {
-    return (
-      <PullToRefresh onRefresh={handleRefresh}>
-        <Header title={t('hospital:title')} />
-        <LoadingState />
-      </PullToRefresh>
-    )
-  }
-
   return (
-    <>
-      <PullToRefresh onRefresh={handleRefresh}>
-        <Header title={t('hospital:title')} />
-        <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
-          <SearchBar
-            placeholder={t('searchPlaceholder')}
-            value={query}
-            onSearch={(value) => setQuery(value)}
-            onClear={() => setQuery('')}
-          />
-          <CountryList activeCountry={activeCountry} onClick={setCountry} />
-          {hospitalsData.length > 0 ? (
-            <>
-              {hospitalsData.map((hospital) => (
-                <HospitalCard
-                  key={hospital.hospitalId}
-                  size="md"
-                  variantButton="solid"
-                  showBadge={true}
-                  showAddress={true}
-                  {...hospital}
-                />
-              ))}
-            </>
-          ) : (
-            <EmptyState>{t('search:empty.hospitals')}</EmptyState>
-          )}
-        </div>
-      </PullToRefresh>
-    </>
+    <PullToRefresh onRefresh={handleRefresh}>
+      <Header title={t('hospital:title')} />
+      <div className="flex flex-col gap-[16px] p-[16px] pb-[35px]">
+        <SearchBar
+          placeholder={t('searchPlaceholder')}
+          value={query}
+          onSearch={(value) => setQuery(value)}
+          onClear={() => setQuery('')}
+        />
+        <CountryList activeCountry={activeCountry} onClick={setCountry} />
+        {isPending ? (
+          <LoadingState />
+        ) : hospitalsData.length > 0 ? (
+          <>
+            {hospitalsData.map((hospital) => (
+              <HospitalCard
+                key={hospital.hospitalId}
+                size="md"
+                variantButton="solid"
+                showBadge={true}
+                showAddress={true}
+                {...hospital}
+              />
+            ))}
+          </>
+        ) : (
+          <EmptyState>{t('search:empty.hospitals')}</EmptyState>
+        )}
+      </div>
+    </PullToRefresh>
   )
 }
