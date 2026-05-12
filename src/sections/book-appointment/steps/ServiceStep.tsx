@@ -5,7 +5,7 @@ import { Checkbox } from '#/components/ui/checkbox'
 import { useBookingStore } from '#/stores/booking-store'
 import { ServiceCard } from '../ServiceCard'
 import { useGetListAddonServicesByBranchQuery } from '#/services/query/services/list-addon-services-by-branch'
-import { useGetListServiceTypeQuery } from '#/services/query/services/list-service-type'
+import { useGetListAddonPartnersByBranchQuery } from '#/services/query/services/list-addon-partners-by-branch'
 import { ModalDetailServiceType } from '../ModalDetailServiceType'
 import type { ServiceType } from '#/types/service'
 import { EmptyState } from '#/sections/search'
@@ -34,14 +34,15 @@ export function ServiceStep() {
   })
 
   const {
-    data: serviceTypes,
+    data: addonPartners,
     isLoading: isServiceTypesLoading,
     refetch: refetchServiceTypes,
-  } = useGetListServiceTypeQuery({
+  } = useGetListAddonPartnersByBranchQuery({
     params: {
+      branchId: branch?.branchId ?? 0,
       addonServiceIds: serviceIds ?? [],
     },
-    enabled: (serviceIds?.length ?? 0) > 0,
+    enabled: !!branch?.branchId && (serviceIds?.length ?? 0) > 0,
   })
 
   const addonServiceIds = useMemo(
@@ -61,12 +62,42 @@ export function ServiceStep() {
     setData({ serviceIds: [...addonServiceIds] })
   }, [branch?.branchId, addonServiceIds, setData])
 
-  const filteredServiceTypes = useMemo(() => {
-    const list = serviceTypes?.data ?? []
-    return list.filter((item) =>
-      (serviceIds ?? []).includes(item.addonServiceId),
-    )
-  }, [serviceTypes?.data, serviceIds])
+  // API mới trả về theo partner (mỗi partner có nhiều serviceTypes).
+  // Flatten về dạng ServiceType[] để giữ tương thích với ServiceCard / ModalDetailServiceType / booking store.
+  const filteredServiceTypes = useMemo<ServiceType[]>(() => {
+    const partners = addonPartners?.data ?? []
+    const selectedIds = serviceIds ?? []
+
+    return partners
+      .filter((partner) => selectedIds.includes(partner.addonServiceId))
+      .flatMap((partner) =>
+        (partner.serviceTypes ?? []).map<ServiceType>((serviceType) => ({
+          id: serviceType.id,
+          isBest: false,
+          typeName: serviceType.typeName,
+          originalPrice: serviceType.price,
+          price: serviceType.price,
+          promotionPrice: serviceType.promotionPrice,
+          description: serviceType.description,
+          addonServiceId: partner.addonServiceId,
+          addonServiceName: partner.addonServiceName,
+          partnerId: partner.id,
+          partnerName: partner.name,
+          partner: {
+            id: partner.id,
+            name: partner.name,
+            nameVi: partner.nameVi,
+            nameEn: partner.nameEn,
+            nameKh: partner.nameKh,
+            photoUrl: partner.photoUrl,
+            country: partner.country,
+            address: '',
+            distanceFromHospital: partner.distanceFromHospital,
+          },
+          amenities: serviceType.amenities ?? [],
+        })),
+      )
+  }, [addonPartners?.data, serviceIds])
 
   // Bỏ service type đã chọn nếu user bỏ tick addon service tương ứng
   useEffect(() => {
