@@ -12,7 +12,7 @@ import { Icon } from '#/components/icon'
 import { formatPrice } from '#/utils/price.util'
 import { downloadImage } from '#/utils/auth'
 import { useBookingStore } from '#/stores/booking-store'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -44,13 +44,88 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     })
 
   const khqr = data?.data
-  const [isQrExpired, setIsQrExpired] = useState(false)
+  const [stopPaymentPoll, setStopPaymentPoll] = useState(false)
+  const qrExpiredHandledRef = useRef(false)
+
+  useEffect(() => {
+    qrExpiredHandledRef.current = false
+    setStopPaymentPoll(false)
+  }, [bookingToken])
+
+  const handleQrExpired = useCallback(() => {
+    if (qrExpiredHandledRef.current) return
+    qrExpiredHandledRef.current = true
+    setStopPaymentPoll(true)
+
+    toast.info(t('qrExpired'))
+
+    const { bookingType, hospital, doctor, packageData } =
+      useBookingStore.getState()
+
+    reset()
+
+    if (bookingType === 'HOSPITAL' && hospital?.hospitalId != null) {
+      void navigate({
+        to: '/app/book-appointment/hospital/$hospitalId',
+        params: { hospitalId: String(hospital.hospitalId) },
+        replace: true,
+      })
+      return
+    }
+    if (bookingType === 'DOCTOR' && doctor?.doctorId) {
+      void navigate({
+        to: '/app/book-appointment/doctor/$doctorId',
+        params: { doctorId: doctor.doctorId },
+        replace: true,
+      })
+      return
+    }
+    const resolvedPackageId =
+      (packageData as { packageId?: number } | undefined)?.packageId ??
+      packageData?.id
+
+    if (
+      bookingType === 'PACKAGE' &&
+      resolvedPackageId != null &&
+      resolvedPackageId !== 0
+    ) {
+      void navigate({
+        to: '/app/book-appointment/package/$packageId',
+        params: { packageId: String(resolvedPackageId) },
+        replace: true,
+      })
+      return
+    }
+
+    void navigate({ to: '/app/book-appointment', replace: true })
+  }, [navigate, reset, t])
+
+  useEffect(() => {
+    if (!khqr?.expiredAt) return
+
+    const runIfExpired = () => {
+      if (new Date(khqr.expiredAt) <= new Date()) {
+        handleQrExpired()
+      }
+    }
+
+    runIfExpired()
+
+    const ms = new Date(khqr.expiredAt).getTime() - Date.now()
+    if (ms <= 0) return
+
+    const timerId = window.setTimeout(() => {
+      handleQrExpired()
+    }, ms)
+
+    return () => window.clearTimeout(timerId)
+  }, [khqr?.expiredAt, handleQrExpired])
 
   const onCheckStatusSuccess = useCallback(
     ({ data }: { data: CheckStatusPaymentResponse }) => {
       if (!data) return
-      if (khqr?.expiredAt && new Date(khqr.expiredAt) < new Date()) {
-        setIsQrExpired(true)
+      if (khqr?.expiredAt && new Date(khqr.expiredAt) <= new Date()) {
+        handleQrExpired()
         return
       }
       if (data.status === 'SUCCESS') {
@@ -62,7 +137,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
         })
       }
     },
-    [khqr?.expiredAt, reset, navigate],
+    [khqr?.expiredAt, handleQrExpired, reset, navigate],
   )
 
   const handleDownloadQr = useCallback(() => {
@@ -78,7 +153,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
 
   useCheckStatusPaymentQuery({
     params: { refId: khqr?.refId ?? '' },
-    enabled: !!khqr?.refId && !isQrExpired,
+    enabled: !!khqr?.refId && !stopPaymentPoll,
     /** Tránh toast lặp mỗi lần poll lỗi */
     isShowError: false,
     refetchInterval: (query) => {
@@ -89,11 +164,6 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     },
     onSuccess: onCheckStatusSuccess,
   })
-
-  const handleReloadQr = useCallback(() => {
-    setIsQrExpired(false)
-    void refetch()
-  }, [refetch])
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
@@ -119,52 +189,34 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
           </div>
         ) : (
           <>
-            {isQrExpired ? (
-              <div className="flex h-[400px] w-[300px] flex-col items-center justify-center gap-[10px] rounded-[12px] border border-primary px-[14px] py-[12px]">
-                <Text className="text-center font-medium text-muted-foreground">
-                  {t('qrExpired')}
+            <Image
+              src={`data:image/png;base64,${khqr.qrImage}`}
+              alt={t('khqrQrAlt')}
+              className="h-[400px] w-[300px] object-cover"
+            />
+
+            <div className="flex flex-col items-center gap-[6px]">
+              <Text className="font-semibold leading-[1.2] text-black">
+                {t('scanToPay')}
+              </Text>
+              <Text className="leading-[1.2] text-black">{t('or')}</Text>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleDownloadQr}
+              className="flex flex-col items-center gap-[8px]"
+            >
+              <div className="flex justify-center items-center gap-[8px]">
+                <Icon name="download" className="text-white" />
+                <Text className="leading-[1.2] text-[#11BFC6]">
+                  {t('downloadQr')}
                 </Text>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  className="rounded-full"
-                  onClick={handleReloadQr}
-                >
-                  {t('reloadQr')}
-                </Button>
               </div>
-            ) : (
-              <>
-                <Image
-                  src={`data:image/png;base64,${khqr.qrImage}`}
-                  alt={t('khqrQrAlt')}
-                  className="h-[400px] w-[300px] object-cover"
-                />
-
-                <div className="flex flex-col items-center gap-[6px]">
-                  <Text className="font-semibold leading-[1.2] text-black">
-                    {t('scanToPay')}
-                  </Text>
-                  <Text className="leading-[1.2] text-black">{t('or')}</Text>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={handleDownloadQr}
-                  className="flex flex-col items-center gap-[8px]"
-                >
-                  <div className="flex justify-center items-center gap-[8px]">
-                    <Icon name="download" className="text-white" />
-                    <Text className="leading-[1.2] text-[#11BFC6]">
-                      {t('downloadQr')}
-                    </Text>
-                  </div>
-                  <Text className="max-w-[230px] text-center text-[#808080] leading-normal">
-                    {t('khqrMobileBankingHint')}
-                  </Text>
-                </button>
-              </>
-            )}
+              <Text className="max-w-[230px] text-center text-[#808080] leading-normal">
+                {t('khqrMobileBankingHint')}
+              </Text>
+            </button>
 
             <div className="w-full flex flex-col gap-[14px] p-[16px]">
               <div className="flex justify-between items-center">

@@ -184,16 +184,16 @@ export function ReviewStep() {
         name: t('paymentMethodName.khqr'),
         logo: '/payment-method/khqr.png',
       },
-      {
-        id: 2,
-        name: t('paymentMethodName.emoney'),
-        logo: '/payment-method/e-money.png',
-      },
-      {
-        id: 3,
-        name: t('paymentMethodName.aba'),
-        logo: '/payment-method/aba-bank.png',
-      },
+      //   {
+      //     id: 2,
+      //     name: t('paymentMethodName.emoney'),
+      //     logo: '/payment-method/e-money.png',
+      //   },
+      //   {
+      //     id: 3,
+      //     name: t('paymentMethodName.aba'),
+      //     logo: '/payment-method/aba-bank.png',
+      //   },
     ],
     [t],
   )
