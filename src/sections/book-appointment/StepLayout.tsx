@@ -62,13 +62,8 @@ export function StepLayout({
       <div className="fixed bottom-0 left-0 right-0 flex justify-between items-center pt-[10px] pb-[32px] px-[20px] bg-background">
         <Button
           className="w-[120px] h-[45px] rounded-[40px] bg-[#FFFFFF] border border-[#F2F2F2]"
-          onClick={() => {
-            if (step > 0) {
-              onBack()
-            } else {
-              router.history.back()
-            }
-          }}
+          disabled={step === 0}
+          onClick={onBack}
         >
           <Text className="font-medium leading-normal">
             {t('stepLayout.back')}
