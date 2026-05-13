@@ -73,7 +73,7 @@ export function ServiceStep() {
       .flatMap((partner) =>
         (partner.serviceTypes ?? []).map<ServiceType>((serviceType) => ({
           id: serviceType.id,
-          isBest: false,
+          isBest: serviceType.isBest ?? false,
           typeName: serviceType.typeName,
           originalPrice: serviceType.price,
           price: serviceType.price,
@@ -90,8 +90,12 @@ export function ServiceStep() {
             nameEn: partner.nameEn,
             nameKh: partner.nameKh,
             photoUrl: partner.photoUrl,
-            country: partner.country,
-            address: '',
+            country: (partner.country ?? []).map((c) => ({
+              code: c.code,
+              nameVi: c.nameVi,
+              nameEn: c.nameEn,
+            })),
+            address: partner.address ?? '',
             distanceFromHospital: partner.distanceFromHospital,
           },
           amenities: serviceType.amenities ?? [],
@@ -190,7 +194,7 @@ export function ServiceStep() {
                               .map((serviceType) => {
                                 return (
                                   <ServiceCard
-                                    key={serviceType.id}
+                                    key={`${serviceType.partnerId}-${serviceType.id}`}
                                     service={serviceType}
                                     selected={
                                       addonServiceTypes?.some(
