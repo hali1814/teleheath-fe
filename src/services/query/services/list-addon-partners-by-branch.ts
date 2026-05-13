@@ -21,6 +21,7 @@ interface AddonPartnerAmenity {
 
 export interface AddonPartnerServiceType {
   id: number
+  isBest?: boolean
   typeName: string
   price: number
   promotionPrice: number
@@ -38,6 +39,7 @@ export interface AddonPartnerByBranchResponse {
   nameKh: string
   photoUrl: string
   country: AddonPartnerCountry[]
+  address: string
   distanceFromHospital: string
   serviceTypes: AddonPartnerServiceType[]
 }
