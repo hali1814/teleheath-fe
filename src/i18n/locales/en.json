@@ -500,7 +500,9 @@
   "payment": {
     "generatingQr": "Generating QR…",
     "loadQrError": "Could not load payment QR. Please try again.",
-    "qrExpired": "This QR code is no longer valid. Returning you to booking.",
+    "qrExpiredModalTitle": "Payment QR expired",
+    "qrExpiredModalDescription": "This payment QR has timed out and is no longer valid.\nTap Close to return to booking. You can confirm your details again to generate a new code.",
+    "qrExpiredClose": "Close",
     "retry": "Retry",
     "scanToPay": "Scan to Pay",
     "or": "or",
