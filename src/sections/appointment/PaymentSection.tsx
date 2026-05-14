@@ -4,6 +4,8 @@ import { getBookingPaymentMethodMeta } from '#/const/payment-methods'
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
 import { useTranslation } from 'react-i18next'
 import { DATE_TIME_TYPE, formatDate } from '#/utils/date.util'
+import { getLocalizedTextByLang } from '#/utils/localized-text.util'
+import type { AppLanguage } from '#/i18n'
 
 function formatMoney(amount: number, currency: string) {
   try {
@@ -29,8 +31,9 @@ export default function PaymentSection({ appointment }: PaymentSectionProps) {
   }
 
   const currency = payment.currency?.trim() || 'USD'
-  const totalAmount =
-    payment.transTotalAmount > 0 ? payment.transTotalAmount : payment.amount
+  const totalAmount = appointment?.totalAmount ?? 0
+  const services = appointment?.services ?? []
+  const lang = i18n.language as AppLanguage
   const methodMeta = getBookingPaymentMethodMeta(payment.method)
   const paidAtLabel = payment.paidAt
     ? formatDate(
@@ -54,11 +57,31 @@ export default function PaymentSection({ appointment }: PaymentSectionProps) {
       </Text>
 
       <div className="mt-4 flex items-center justify-between gap-3">
-        <Text className={labelClass}>{t('consultationFee')}</Text>
+        <Text className={labelClass}>{t('deposit')}</Text>
         <Text className={valueClass}>
           {formatMoney(appointment?.consultationFee ?? 0, currency)}
         </Text>
       </div>
+
+      {services.map((service) => {
+        const serviceName = getLocalizedTextByLang(
+          service.nameVi || service.name || '',
+          service.nameKh || service.name || '',
+          service.nameEn || service.name || '',
+          lang,
+        )
+        return (
+          <div
+            key={service.id}
+            className="mt-4 flex items-center justify-between gap-3"
+          >
+            <Text className={labelClass}>{serviceName}</Text>
+            <Text className={valueClass}>
+              {formatMoney(service.price ?? 0, currency)}
+            </Text>
+          </div>
+        )
+      })}
 
       <div className="my-3 h-px w-full bg-[#E2E8F0]" />
 
