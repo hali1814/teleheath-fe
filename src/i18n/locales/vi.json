@@ -500,7 +500,9 @@
   "payment": {
     "generatingQr": "Đang tạo mã QR…",
     "loadQrError": "Không tải được mã QR thanh toán. Vui lòng thử lại.",
-    "qrExpired": "Mã QR hết hiệu lực",
+    "qrExpiredModalTitle": "Mã QR thanh toán đã hết hạn",
+    "qrExpiredModalDescription": "Mã QR đã quá thời gian hiệu lực và không thể dùng để thanh toán.\nNhấn Đóng để quay lại bước đặt lịch. Bạn có thể xác nhận lại để tạo mã QR mới.",
+    "qrExpiredClose": "Đóng",
     "retry": "Thử lại",
     "scanToPay": "Quét để thanh toán",
     "or": "hoặc",

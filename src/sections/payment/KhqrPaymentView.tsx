@@ -1,5 +1,12 @@
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '#/components/ui/dialog'
 import { Spinner } from '#/components/ui/spinner'
 import {
   useCheckStatusPaymentQuery,
@@ -14,6 +21,7 @@ import { downloadImage } from '#/utils/auth'
 import { useBookingStore } from '#/stores/booking-store'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { XIcon } from 'lucide-react'
 import { toast } from 'sonner'
 
 const POLL_INTERVAL_MS = 10_000
@@ -32,6 +40,40 @@ function isTerminalPaymentStatus(status: string) {
   ].includes(s)
 }
 
+function QrExpiredWarningGraphic() {
+  return (
+    <div
+      className="relative mx-auto mb-1 flex h-[100px] w-full max-w-[220px] items-center justify-center"
+      aria-hidden
+    >
+      <span className="absolute left-[6%] top-0 text-xl font-light text-red-200">
+        ×
+      </span>
+      <span className="absolute right-[8%] top-3 text-sm text-red-200">×</span>
+      <span className="absolute bottom-2 left-[18%] text-lg text-red-200">
+        ×
+      </span>
+      <span className="absolute bottom-4 right-[14%] text-xs text-red-200">
+        ×
+      </span>
+      <span className="absolute left-[28%] top-6 text-[10px] text-red-100">
+        ×
+      </span>
+      <svg
+        className="relative z-10 h-[76px] w-[76px] shrink-0 text-[#EF4444]"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path
+          fillRule="evenodd"
+          d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.002 4.5-2.599 4.5H4.645c-1.597 0-3.753-2.5-2.599-4.5L9.401 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z"
+          clipRule="evenodd"
+        />
+      </svg>
+    </div>
+  )
+}
+
 export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   const { t } = useTranslation(['payment'])
   const router = useRouter()
@@ -45,67 +87,34 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
 
   const khqr = data?.data
   const [stopPaymentPoll, setStopPaymentPoll] = useState(false)
-  const qrExpiredHandledRef = useRef(false)
+  const [qrExpiredDialogOpen, setQrExpiredDialogOpen] = useState(false)
+  const qrExpiredDialogGateRef = useRef(false)
 
   useEffect(() => {
-    qrExpiredHandledRef.current = false
+    qrExpiredDialogGateRef.current = false
     setStopPaymentPoll(false)
+    setQrExpiredDialogOpen(false)
   }, [bookingToken])
 
-  const handleQrExpired = useCallback(() => {
-    if (qrExpiredHandledRef.current) return
-    qrExpiredHandledRef.current = true
+  const openQrExpiredDialog = useCallback(() => {
+    if (qrExpiredDialogGateRef.current) return
+    qrExpiredDialogGateRef.current = true
     setStopPaymentPoll(true)
+    setQrExpiredDialogOpen(true)
+  }, [])
 
-    toast.info(t('qrExpired'))
-
-    const { bookingType, hospital, doctor, packageData } =
-      useBookingStore.getState()
-
+  const handleQrExpiredClose = useCallback(() => {
+    setQrExpiredDialogOpen(false)
     reset()
-
-    if (bookingType === 'HOSPITAL' && hospital?.hospitalId != null) {
-      void navigate({
-        to: '/app/book-appointment/hospital/$hospitalId',
-        params: { hospitalId: String(hospital.hospitalId) },
-        replace: true,
-      })
-      return
-    }
-    if (bookingType === 'DOCTOR' && doctor?.doctorId) {
-      void navigate({
-        to: '/app/book-appointment/doctor/$doctorId',
-        params: { doctorId: doctor.doctorId },
-        replace: true,
-      })
-      return
-    }
-    const resolvedPackageId =
-      (packageData as { packageId?: number } | undefined)?.packageId ??
-      packageData?.id
-
-    if (
-      bookingType === 'PACKAGE' &&
-      resolvedPackageId != null &&
-      resolvedPackageId !== 0
-    ) {
-      void navigate({
-        to: '/app/book-appointment/package/$packageId',
-        params: { packageId: String(resolvedPackageId) },
-        replace: true,
-      })
-      return
-    }
-
-    void navigate({ to: '/app/book-appointment', replace: true })
-  }, [navigate, reset, t])
+    router.history.back()
+  }, [router, reset])
 
   useEffect(() => {
     if (!khqr?.expiredAt) return
 
     const runIfExpired = () => {
       if (new Date(khqr.expiredAt) <= new Date()) {
-        handleQrExpired()
+        openQrExpiredDialog()
       }
     }
 
@@ -115,17 +124,17 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     if (ms <= 0) return
 
     const timerId = window.setTimeout(() => {
-      handleQrExpired()
+      openQrExpiredDialog()
     }, ms)
 
     return () => window.clearTimeout(timerId)
-  }, [khqr?.expiredAt, handleQrExpired])
+  }, [khqr?.expiredAt, openQrExpiredDialog])
 
   const onCheckStatusSuccess = useCallback(
     ({ data }: { data: CheckStatusPaymentResponse }) => {
       if (!data) return
       if (khqr?.expiredAt && new Date(khqr.expiredAt) <= new Date()) {
-        handleQrExpired()
+        openQrExpiredDialog()
         return
       }
       if (data.status === 'SUCCESS') {
@@ -137,7 +146,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
         })
       }
     },
-    [khqr?.expiredAt, handleQrExpired, reset, navigate],
+    [khqr?.expiredAt, openQrExpiredDialog, reset, navigate],
   )
 
   const handleDownloadQr = useCallback(() => {
@@ -166,8 +175,53 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   })
 
   return (
-    <div className="flex min-h-dvh flex-col bg-background">
-      <div className="flex flex-1 flex-col items-center gap-[16px] px-[16px] pb-[100px] pt-[40px]">
+    <>
+      <Dialog open={qrExpiredDialogOpen} onOpenChange={() => {}}>
+        <DialogContent
+          showCloseButton={false}
+          className="gap-0 overflow-hidden rounded-[24px] p-0 sm:max-w-[min(calc(100%-2rem),360px)]"
+          onPointerDownOutside={(e) => e.preventDefault()}
+          onEscapeKeyDown={(e) => e.preventDefault()}
+        >
+          {/** Inner relative so X positions to card; avoid `relative` on Content (overrides dialog `fixed`). */}
+          <div className="relative">
+            <button
+              type="button"
+              className="absolute right-3 top-3 z-10 rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              onClick={handleQrExpiredClose}
+              aria-label={t('qrExpiredClose')}
+            >
+              <XIcon className="size-5" />
+            </button>
+
+            <div className="flex flex-col items-center px-6 pb-2 pt-14 text-center">
+              <QrExpiredWarningGraphic />
+              <DialogHeader className="w-full space-y-0 text-center">
+                <DialogTitle className="text-lg font-semibold leading-snug tracking-tight text-[#282828]">
+                  {t('qrExpiredModalTitle')}
+                </DialogTitle>
+              </DialogHeader>
+              <DialogDescription className="mt-3 max-w-[300px] px-0.5 text-center text-sm leading-relaxed text-[#808080] whitespace-pre-line">
+                {t('qrExpiredModalDescription')}
+              </DialogDescription>
+            </div>
+
+            <div className="px-6 pb-6 pt-5">
+              <Button
+                type="button"
+                variant="default"
+                className="h-[48px] w-full rounded-full text-base font-medium shadow-sm"
+                onClick={handleQrExpiredClose}
+              >
+                {t('qrExpiredClose')}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <div className="flex min-h-dvh flex-col bg-background">
+        <div className="flex flex-1 flex-col items-center gap-[16px] px-[16px] pb-[100px] pt-[40px]">
         {isLoading || isFetching ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-[16px]">
             <Spinner className="h-8 w-8 text-primary" />
@@ -257,7 +311,8 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
             </div>
           </>
         )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
