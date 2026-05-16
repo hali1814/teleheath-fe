@@ -3,11 +3,10 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import CountryList from '#/sections/country/CountryList'
 import { HospitalCard } from '#/sections/hospital'
 import { useTranslation } from 'react-i18next'
-import { useGetListHospitalsQuery } from '#/services/query/hospital/list-hospitals'
-import { useState } from 'react'
+import { useGetListHospitalsInfiniteQuery } from '#/services/query/hospital/list-hospitals'
+import { useMemo, useRef, useState } from 'react'
 import useDebounce from '#/hooks/use-debounce'
-import { ALL_PAGINATION } from '#/const/pagination'
-import { keepPreviousData } from '@tanstack/react-query'
+import { useInfiniteScroll } from '#/hooks/use-infinite-scroll'
 import { Header } from '#/sections/home'
 import { z } from 'zod'
 import { EmptyState } from '#/sections/search'
@@ -63,19 +62,36 @@ function RouteComponent() {
   }
 
   const {
-    data: { data: { content: hospitalsData } = { content: [] } } = {
-      data: { content: [] },
-    },
+    data: hospitalsResponse,
     refetch,
     isPending,
-  } = useGetListHospitalsQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetListHospitalsInfiniteQuery({
     params: {
-      ...ALL_PAGINATION,
+      size: 10,
       keyword: debouncedQuery,
       hasRoomAvailable: true,
       ...(search.country ? { country: search.country } : {}),
     },
-    placeholderData: keepPreviousData,
+  })
+
+  const hospitalsData = useMemo(
+    () =>
+      hospitalsResponse?.pages.flatMap(
+        (page) => page?.data?.content ?? [],
+      ) ?? [],
+    [hospitalsResponse?.pages],
+  )
+
+  const loaderRef = useRef<HTMLDivElement>(null)
+
+  useInfiniteScroll({
+    targetRef: loaderRef,
+    hasNextPage: !!hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   })
 
   const handleRefresh = async () => {
@@ -107,6 +123,16 @@ function RouteComponent() {
                 {...hospital}
               />
             ))}
+            {hasNextPage ? (
+              <div
+                ref={loaderRef}
+                className="flex items-center justify-center py-4"
+              >
+                {isFetchingNextPage ? (
+                  <span className="size-5 animate-spin rounded-full border-2 border-[#FFE8E6] border-t-[#A8071A]" />
+                ) : null}
+              </div>
+            ) : null}
           </>
         ) : (
           <EmptyState>{t('search:empty.hospitals')}</EmptyState>

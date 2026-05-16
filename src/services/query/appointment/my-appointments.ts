@@ -1,3 +1,6 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
@@ -97,6 +100,9 @@ interface AppointmentMedicalFile {
 interface AppointmentService {
   id: number
   name: string
+  nameVi?: string
+  nameKh?: string
+  nameEn?: string
   price: number
 }
 
@@ -162,5 +168,50 @@ export const useGetMyAppointmentsQuery = (
     queryKey: ['my-appointments', options.params],
     queryFn: ({ signal }) => getMyAppointments(options.params, signal),
     ...options,
+  })
+}
+
+export type MyAppointmentsInfiniteParams = Omit<
+  MyAppointmentsRequest,
+  'page'
+> & {
+  size?: number
+}
+
+export const useGetMyAppointmentsInfiniteQuery = ({
+  params,
+  enabled,
+  staleTime,
+}: {
+  params: MyAppointmentsInfiniteParams
+  enabled?: boolean
+  staleTime?: number
+}) => {
+  const { i18n } = useTranslation()
+  const size = params.size ?? 10
+
+  return useInfiniteQuery({
+    queryKey: ['my-appointments-infinite', { ...params, size }, i18n.language],
+    queryFn: ({ pageParam = 0, signal }) =>
+      getMyAppointments(
+        {
+          page: pageParam,
+          size,
+          status: params.status,
+          fromDate: params.fromDate,
+          toDate: params.toDate,
+          sortBy: params.sortBy,
+          sortDir: params.sortDir,
+        },
+        signal,
+      ),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const pageInfo = lastPage?.data
+      if (!pageInfo || pageInfo.last) return undefined
+      return pageInfo.page + 1
+    },
+    enabled,
+    staleTime,
   })
 }

@@ -1,3 +1,6 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+
 import type { ApiDoctorList } from '#/dto/doctorDto'
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import { mapApiDoctor } from '#/mappers/doctorMapper'
@@ -53,5 +56,43 @@ export const useGetListDoctorQuery = (
     onError: (error) => {
       console.log(error)
     },
+  })
+}
+
+export type ListDoctorInfiniteParams = Omit<ListDoctorRequest, 'page'> & {
+  size?: number
+}
+
+export const useGetListDoctorInfiniteQuery = ({
+  params,
+  enabled,
+  staleTime,
+}: {
+  params: ListDoctorInfiniteParams
+  enabled?: boolean
+  staleTime?: number
+}) => {
+  const { i18n } = useTranslation()
+  const size = params.size ?? 10
+
+  return useInfiniteQuery({
+    queryKey: ['list-doctor-infinite', { ...params, size }, i18n.language],
+    queryFn: ({ pageParam = 0, signal }) =>
+      getListDoctor(
+        {
+          ...params,
+          page: pageParam,
+          size,
+        },
+        signal,
+      ),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const pageInfo = lastPage?.data
+      if (!pageInfo || pageInfo.last) return undefined
+      return pageInfo.page + 1
+    },
+    enabled,
+    staleTime,
   })
 }

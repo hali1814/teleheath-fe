@@ -13,8 +13,9 @@ import ModalHistoryFilter, {
   getHistoryFilterActiveFieldCount,
   type HistoryAppointmentFilter,
 } from '#/sections/history/ModalHistoryFilter'
-import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appointments'
+import { useGetMyAppointmentsInfiniteQuery } from '#/services/query/appointment/my-appointments'
 import type { MyAppointmentItem } from '#/services/query/appointment/my-appointments'
+import { useInfiniteScroll } from '#/hooks/use-infinite-scroll'
 import { cn } from '#/lib/utils'
 import {
   getAppointmentMonthLabels,
@@ -51,13 +52,15 @@ function RouteComponent() {
   const { profile } = useProfileStore()
 
   const {
-    data: appointments,
+    data: appointmentsData,
     isLoading,
     refetch,
-  } = useGetMyAppointmentsQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetMyAppointmentsInfiniteQuery({
     params: {
-      page: 0,
-      size: 1805,
+      size: 10,
       fromDate: appliedFilter.dateFrom,
       toDate: appliedFilter.dateTo,
       status: appliedFilter.statuses.join(','),
@@ -67,8 +70,9 @@ function RouteComponent() {
   })
 
   const items = useMemo(
-    () => appointments?.data?.content ?? [],
-    [appointments?.data?.content],
+    () =>
+      appointmentsData?.pages.flatMap((page) => page?.data?.content ?? []) ?? [],
+    [appointmentsData?.pages],
   )
 
   const groupedAppointments = useMemo(() => {
@@ -99,6 +103,15 @@ function RouteComponent() {
     getScrollElement: () => parentRef.current,
     estimateSize: (index) => (rows[index]?.kind === 'title' ? 44 : 140),
     overscan: 6,
+  })
+
+  const loaderRef = useRef<HTMLDivElement>(null)
+
+  useInfiniteScroll({
+    targetRef: loaderRef,
+    hasNextPage: !!hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   })
 
   const handleRefresh = async () => {
@@ -238,6 +251,16 @@ function RouteComponent() {
                   )
                 })}
               </div>
+              {hasNextPage ? (
+                <div
+                  ref={loaderRef}
+                  className="flex items-center justify-center py-4"
+                >
+                  {isFetchingNextPage ? (
+                    <span className="size-5 animate-spin rounded-full border-2 border-[#FFE8E6] border-t-[#A8071A]" />
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           )}
         </div>

@@ -3,11 +3,10 @@ import SearchBar from '#/components/SearchBar'
 import { Badge } from '#/components/ui/badge'
 import { PackageCard } from '#/sections/package'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import ModalFilterPackage from '#/sections/package/ModalFilterPackage'
 import { useTranslation } from 'react-i18next'
-import { useGetListPackagesQuery } from '#/services/query/package/list-packages'
-import { ALL_PAGINATION } from '#/const/pagination'
+import { useGetListPackagesInfiniteQuery } from '#/services/query/package/list-packages'
 import { Header } from '#/sections/home'
 import { z } from 'zod'
 import Text from '#/components/text'
@@ -16,7 +15,7 @@ import {
   priceRangeKeyToMinMax,
 } from '#/sections/package/package-filter-price'
 import useDebounce from '#/hooks/use-debounce'
-import { keepPreviousData } from '@tanstack/react-query'
+import { useInfiniteScroll } from '#/hooks/use-infinite-scroll'
 import { EmptyState } from '#/sections/search'
 import type { Package } from '#/entities/packageEntity'
 import PullToRefresh from '#/components/PullToRefresh'
@@ -88,25 +87,42 @@ function RouteComponent() {
   const appliedFilter = searchToFilter(search)
 
   const {
-    data: { data: { content: packagesData } = { content: [] } } = {
-      data: { content: [] },
-    },
+    data: packagesResponse,
     refetch,
     isPending,
-  } = useGetListPackagesQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetListPackagesInfiniteQuery({
     params: {
-      ...ALL_PAGINATION,
+      size: 10,
       keyword: debouncedKeyword,
       ...(search.country ? { country: search.country } : {}),
       ...(search.hospitalId ? { hospitalId: search.hospitalId } : {}),
-      ...(search.category ? { category: search.category } : {}),
+      ...(search.category
+        ? { category: search.category as 'GENERAL' | 'SPECIALIZE' }
+        : {}),
       ...(search.specialtyId != null
         ? { specialtyId: search.specialtyId }
         : {}),
       ...(search.minPrice !== undefined ? { minPrice: search.minPrice } : {}),
       ...(search.maxPrice !== undefined ? { maxPrice: search.maxPrice } : {}),
     },
-    placeholderData: keepPreviousData,
+  })
+
+  const packagesData = useMemo(
+    () =>
+      packagesResponse?.pages.flatMap((page) => page?.data?.content ?? []) ?? [],
+    [packagesResponse?.pages],
+  )
+
+  const loaderRef = useRef<HTMLDivElement>(null)
+
+  useInfiniteScroll({
+    targetRef: loaderRef,
+    hasNextPage: !!hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   })
 
   const hasPriceFilter =
@@ -173,6 +189,16 @@ function RouteComponent() {
               {packagesData.map((p: Package) => (
                 <PackageCard key={p.packageId} {...p} truncateName={false} />
               ))}
+              {hasNextPage ? (
+                <div
+                  ref={loaderRef}
+                  className="flex items-center justify-center py-4"
+                >
+                  {isFetchingNextPage ? (
+                    <span className="size-5 animate-spin rounded-full border-2 border-[#FFE8E6] border-t-[#A8071A]" />
+                  ) : null}
+                </div>
+              ) : null}
             </>
           ) : (
             <EmptyState>{t('search:empty.packages')}</EmptyState>

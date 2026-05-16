@@ -10,7 +10,7 @@
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "workbench.colorTheme": "Default Dark Modern",
+  "workbench.colorTheme": "Dark Modern",
   "workbench.statusBar.visible": true,
   "workbench.tips.enabled": true,
   "workbench.tree.enableStickyScroll": true

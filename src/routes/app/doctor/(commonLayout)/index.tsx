@@ -1,14 +1,13 @@
 import { Icon } from '#/components/icon'
 import SearchBar from '#/components/SearchBar'
 import { Badge } from '#/components/ui/badge'
-import { ALL_PAGINATION } from '#/const/pagination'
 import useDebounce from '#/hooks/use-debounce'
+import { useInfiniteScroll } from '#/hooks/use-infinite-scroll'
 import { DoctorCard, ModalFilterDoctor } from '#/sections/doctor'
 import { Header } from '#/sections/home'
-import { useGetListDoctorQuery } from '#/services/query/doctor/list-doctor'
-import { keepPreviousData } from '@tanstack/react-query'
+import { useGetListDoctorInfiniteQuery } from '#/services/query/doctor/list-doctor'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 import Text from '#/components/text'
@@ -98,14 +97,15 @@ function RouteComponent() {
   const appliedFilter = searchToFilter(search)
 
   const {
-    data: { data: { content: doctorsData = [] } = { content: [] } } = {
-      data: { content: [] },
-    },
+    data: doctorsResponse,
     refetch,
     isPending,
-  } = useGetListDoctorQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetListDoctorInfiniteQuery({
     params: {
-      ...ALL_PAGINATION,
+      size: 10,
       keyword: debouncedKeyword || undefined,
       ...(search.country ? { country: search.country } : {}),
       ...(search.hospitalId ? { hospitalId: search.hospitalId } : {}),
@@ -122,7 +122,21 @@ function RouteComponent() {
       ...(search.minPrice != null ? { minPrice: search.minPrice } : {}),
       ...(search.maxPrice != null ? { maxPrice: search.maxPrice } : {}),
     },
-    placeholderData: keepPreviousData,
+  })
+
+  const doctorsData = useMemo(
+    () =>
+      doctorsResponse?.pages.flatMap((page) => page?.data?.content ?? []) ?? [],
+    [doctorsResponse?.pages],
+  )
+
+  const loaderRef = useRef<HTMLDivElement>(null)
+
+  useInfiniteScroll({
+    targetRef: loaderRef,
+    hasNextPage: !!hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   })
 
   const activeFilterCount = [
@@ -197,6 +211,16 @@ function RouteComponent() {
                   {...doctor}
                 />
               ))}
+              {hasNextPage ? (
+                <div
+                  ref={loaderRef}
+                  className="flex items-center justify-center py-4"
+                >
+                  {isFetchingNextPage ? (
+                    <span className="size-5 animate-spin rounded-full border-2 border-[#FFE8E6] border-t-[#A8071A]" />
+                  ) : null}
+                </div>
+              ) : null}
             </>
           ) : (
             <EmptyState>{t('search:empty.doctors')}</EmptyState>

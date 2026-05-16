@@ -1,3 +1,6 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
 import type { IPagingRequest, IPagingResponse } from '#/model/paging.model'
 import { http, type HttpCommonResponse } from '#/services/network/http-request'
@@ -47,5 +50,43 @@ export const useGetListPackagesQuery = (
     queryKey: ['list-packages', options.params],
     queryFn: ({ signal }) => getListPackages(options.params, signal),
     ...options,
+  })
+}
+
+export type ListPackagesInfiniteParams = Omit<ListPackagesRequest, 'page'> & {
+  size?: number
+}
+
+export const useGetListPackagesInfiniteQuery = ({
+  params,
+  enabled,
+  staleTime,
+}: {
+  params: ListPackagesInfiniteParams
+  enabled?: boolean
+  staleTime?: number
+}) => {
+  const { i18n } = useTranslation()
+  const size = params.size ?? 10
+
+  return useInfiniteQuery({
+    queryKey: ['list-packages-infinite', { ...params, size }, i18n.language],
+    queryFn: ({ pageParam = 0, signal }) =>
+      getListPackages(
+        {
+          ...params,
+          page: pageParam,
+          size,
+        },
+        signal,
+      ),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const pageInfo = lastPage?.data
+      if (!pageInfo || pageInfo.last) return undefined
+      return pageInfo.page + 1
+    },
+    enabled,
+    staleTime,
   })
 }
