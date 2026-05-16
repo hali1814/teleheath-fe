@@ -1,3 +1,6 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+
 import type { ApiHospitalList } from '#/dto/hospitalDto'
 import type { Hospital } from '#/entities/hospitalEntity'
 import { useQuery, type UseQueryOptions } from '#/hooks/use-query'
@@ -43,5 +46,47 @@ export const useGetListHospitalsQuery = (
     queryKey: ['list-hospitals', options.params],
     queryFn: ({ signal }) => getListHospitals(options.params, signal),
     ...options,
+  })
+}
+
+export type ListHospitalsInfiniteParams = Omit<ListHospitalsRequest, 'page'> & {
+  size?: number
+}
+
+export const useGetListHospitalsInfiniteQuery = ({
+  params,
+  enabled,
+  staleTime,
+}: {
+  params: ListHospitalsInfiniteParams
+  enabled?: boolean
+  staleTime?: number
+}) => {
+  const { i18n } = useTranslation()
+  const size = params.size ?? 10
+
+  return useInfiniteQuery({
+    queryKey: ['list-hospitals-infinite', { ...params, size }, i18n.language],
+    queryFn: ({ pageParam = 0, signal }) =>
+      getListHospitals(
+        {
+          page: pageParam,
+          size,
+          keyword: params.keyword,
+          country: params.country,
+          hasRoomAvailable: params.hasRoomAvailable,
+          sortBy: params.sortBy,
+          sortDir: params.sortDir,
+        },
+        signal,
+      ),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const pageInfo = lastPage?.data
+      if (!pageInfo || pageInfo.last) return undefined
+      return pageInfo.page + 1
+    },
+    enabled,
+    staleTime,
   })
 }

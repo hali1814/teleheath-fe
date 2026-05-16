@@ -4,7 +4,8 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import EmptyAppointment from '#/sections/appointment/EmptyAppointment'
 import ItemAppointment from '#/sections/appointment/ItemAppointment'
 import Text from '#/components/text'
-import { useGetMyAppointmentsQuery } from '#/services/query/appointment/my-appointments'
+import { useGetMyAppointmentsInfiniteQuery } from '#/services/query/appointment/my-appointments'
+import { useInfiniteScroll } from '#/hooks/use-infinite-scroll'
 import { getUpcomingAppointmentLabels, groupAppointmentsByUpcomingWindow } from '#/utils'
 import dayjs from 'dayjs'
 import LoadingState from '#/components/LoadingState'
@@ -22,16 +23,19 @@ function RouteComponent() {
   const { t, i18n } = useTranslation(['appointment'])
   const title = t('title')
   const parentRef = useRef<HTMLDivElement>(null)
+  const loaderRef = useRef<HTMLDivElement>(null)
   const { profile } = useProfileStore()
   const {
-    data: appointments,
+    data: appointmentsData,
     isLoading: isLoadingAppointments,
     refetch,
-  } = useGetMyAppointmentsQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetMyAppointmentsInfiniteQuery({
     params: {
       status: 'CONFIRMED',
-      page: 0,
-      size: 1805,
+      size: 10,
       fromDate: dayjs().format('YYYY-MM-DD'),
       sortDir: 'DESC',
     },
@@ -43,12 +47,25 @@ function RouteComponent() {
     await refetch()
   }
 
+  const appointmentItems = useMemo(
+    () =>
+      appointmentsData?.pages.flatMap((page) => page?.data?.content ?? []) ?? [],
+    [appointmentsData?.pages],
+  )
+
   const groupedAppointments = useMemo(() => {
-    return groupAppointmentsByUpcomingWindow(appointments?.data?.content ?? [], {
+    return groupAppointmentsByUpcomingWindow(appointmentItems, {
       labels: getUpcomingAppointmentLabels(t as unknown as (key: string) => string),
       language: i18n.language,
     })
-  }, [appointments?.data, i18n.language, t])
+  }, [appointmentItems, i18n.language, t])
+
+  useInfiniteScroll({
+    targetRef: loaderRef,
+    hasNextPage: !!hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  })
 
   const rows = useMemo(() => {
     return Object.entries(groupedAppointments).flatMap(([key, value]) => {
@@ -133,6 +150,16 @@ function RouteComponent() {
             )
           })}
         </div>
+        {hasNextPage ? (
+          <div
+            ref={loaderRef}
+            className="flex items-center justify-center py-4"
+          >
+            {isFetchingNextPage ? (
+              <span className="size-5 animate-spin rounded-full border-2 border-[#FFE8E6] border-t-[#A8071A]" />
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </PullToRefresh>
   )
