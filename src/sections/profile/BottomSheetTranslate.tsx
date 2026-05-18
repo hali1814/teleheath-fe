@@ -4,6 +4,7 @@ import { Button } from '#/components/ui/button'
 import { cn } from '#/lib/utils'
 import { useTranslation } from 'react-i18next'
 import { LANGUAGE_STORAGE_KEY, type AppLanguage } from '@/i18n'
+import { changeLanguage as changeLanguageNative } from '#/utils/auth'
 import { useEffect, useMemo, useState } from 'react'
 import FlagKhmer from '#/assets/icons/profile/flag-cambodia.svg?react'
 import FlagEnglish from '#/assets/icons/profile/flag-england.svg?react'
@@ -81,6 +82,7 @@ export function BottomSheetTranslate({
                 selectedLanguage,
               )
               await i18n.changeLanguage(selectedLanguage)
+              changeLanguageNative(selectedLanguage)
               onClose()
             }}
           >
