@@ -3,6 +3,14 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent } from '#/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '#/components/ui/dialog'
 import CardNavigate from '#/sections/common/CardNavigate'
 import Avatar from '#/sections/profile/Avatar'
 import effectPng from '#/assets/images/profile/effect.png'
@@ -11,7 +19,9 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { BottomSheetTranslate } from '#/sections/profile/BottomSheetTranslate'
-import { useProfileStore } from '#/stores/profile'
+import { clearProfile, useProfileStore } from '#/stores/profile'
+import { clearTokens } from '#/stores/token'
+import { debounceEndSession } from '#/services/network/axios.service'
 import { concatAddress, formatDate, getInitialsFromName } from '#/utils'
 import RequireLogin from '#/components/RequireLogin'
 
@@ -23,6 +33,14 @@ function RouteComponent() {
   const { t, i18n } = useTranslation('profile')
   const navigate = useNavigate()
   const [openBottomSheet, setOpenBottomSheet] = useState(false)
+  const [openLogoutConfirm, setOpenLogoutConfirm] = useState(false)
+
+  const handleLogout = () => {
+    clearTokens()
+    clearProfile()
+    debounceEndSession()
+    setOpenLogoutConfirm(false)
+  }
   const user = useProfileStore((s) => s.profile)
 
   if (!user?.id) {
@@ -112,7 +130,42 @@ function RouteComponent() {
             icon="language"
             onClick={() => setOpenBottomSheet(true)}
           />
+
+          <CardNavigate
+            title={t('logout')}
+            icon="logout"
+            hideArrow
+            onClick={() => setOpenLogoutConfirm(true)}
+          />
         </div>
+
+        <Dialog open={openLogoutConfirm} onOpenChange={setOpenLogoutConfirm}>
+          <DialogContent className="gap-0 rounded-2xl bg-white p-6 max-w-[min(calc(100%-3rem),300px)]">
+            <DialogHeader className="space-y-2 text-center">
+              <DialogTitle className="text-lg font-semibold text-text-primary">
+                {t('logoutConfirmTitle')}
+              </DialogTitle>
+              <DialogDescription className="text-sm text-placeholder-input">
+                {t('logoutConfirmDescription')}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="mt-6 flex-row gap-3 sm:justify-stretch">
+              <Button
+                variant="outline"
+                className="flex-1 rounded-full"
+                onClick={() => setOpenLogoutConfirm(false)}
+              >
+                {t('logoutCancel')}
+              </Button>
+              <Button
+                className="flex-1 rounded-full bg-secondary"
+                onClick={handleLogout}
+              >
+                {t('logoutConfirm')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         <BottomSheetTranslate
           open={openBottomSheet}
