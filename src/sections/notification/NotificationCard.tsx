@@ -37,10 +37,15 @@ export default function NotificationCard({
   }
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleClick()
+      }}
       className={cn(
-        'w-full flex gap-3 p-[16px] border border-secondary/5',
+        'w-full flex gap-3 p-[16px] border border-secondary/5 cursor-pointer',
         bgContainer,
       )}
     >
@@ -75,7 +80,7 @@ export default function NotificationCard({
             size="sm_12"
             className="leading-[1.3] text-muted-foreground text-left"
           >
-            {body}
+            {renderBodyWithLinks(body)}
           </Text>
         </div>
       </div>
@@ -83,6 +88,38 @@ export default function NotificationCard({
       <Text size="xs_10" className="font-medium leading-[1.3] text-[#333333]">
         {formatTimeAgo(sentAt)}
       </Text>
-    </button>
+    </div>
   )
+}
+
+const URL_REGEX = /(https?:\/\/[^\s]+|www\.[^\s]+)/gi
+
+function renderBodyWithLinks(body: string) {
+  if (!body) return body
+  const parts = body.split(URL_REGEX)
+  return parts.map((part, index) => {
+    if (URL_REGEX.test(part)) {
+      URL_REGEX.lastIndex = 0
+      const href = part.startsWith('http') ? part : `https://${part}`
+      return (
+        <a
+          key={index}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+          onPointerDown={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+          className="relative inline-block py-1 px-0.5 -my-1 text-blue-600 underline break-all"
+        >
+          {part}
+        </a>
+      )
+    }
+    return <span key={index}>{part}</span>
+  })
 }
