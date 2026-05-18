@@ -21,6 +21,7 @@ import CameraIcon from '#/assets/icons/profile/camera.svg?react'
 import LanguageIcon from '#/assets/icons/profile/language.svg?react'
 import PencilIcon from '#/assets/icons/profile/pencil.svg?react'
 import ClipboardIcon from '#/assets/icons/profile/clipboard.svg?react'
+import LogoutIcon from '#/assets/icons/profile/logout.svg?react'
 import PlumpWebIcon from '#/assets/icons/common/plump-web.svg?react'
 import CallOutlineIcon from '#/assets/icons/common/call-outline.svg?react'
 import MailIcon from '#/assets/icons/common/mail.svg?react'
@@ -130,6 +131,7 @@ const ICONS_TEMPLATE = {
   language: LanguageIcon,
   pencil: PencilIcon,
   clipboard: ClipboardIcon,
+  logout: LogoutIcon,
   plump_web: PlumpWebIcon,
   call_outline: CallOutlineIcon,
   mail: MailIcon,

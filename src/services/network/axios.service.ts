@@ -77,7 +77,7 @@ let failedQueue: {
 }[] = []
 let endSessionDebounceTimer: ReturnType<typeof setTimeout> | null = null
 
-const debounceEndSession = () => {
+export const debounceEndSession = () => {
   if (endSessionDebounceTimer) return
 
   endSession()
