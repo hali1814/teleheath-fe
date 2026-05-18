@@ -5,9 +5,11 @@ const WEB_END_SESSION = 'WEB_END_SESSION'
 const DOWNLOAD_IMAGE = 'DOWNLOAD_IMAGE'
 const WEB_INTENT = 'WEB_INTENT'
 const NATIVE_BRIDGE_THROTTLE_MS = 1000
+const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE'
 let lastGoBackBridgeSentAt = 0
 let lastDownloadImageBridgeSentAt = 0
 let lastWebIntentBridgeSentAt = 0
+let lastChangeLanguageBridgeSentAt = 0
 
 type NativeBridgeWindow = Window & {
   Android?: {
@@ -117,6 +119,25 @@ export const goBackToAppMobile = () => {
     nativeMethodValue: path,
     errorContext: TELEHEALTH_AUTHEN_KEY,
     toastMessage: 'Please login to continue',
+  })
+}
+
+export const changeLanguage = (language: string) => {
+  if (typeof window === 'undefined') return
+
+  const now = Date.now()
+  if (now - lastChangeLanguageBridgeSentAt < NATIVE_BRIDGE_THROTTLE_MS) return
+  lastChangeLanguageBridgeSentAt = now
+
+  const payload = { [CHANGE_LANGUAGE]: language }
+
+  postMessageToNativeBridge({
+    key: CHANGE_LANGUAGE,
+    payload,
+    nativeMethodName: CHANGE_LANGUAGE,
+    nativeMethodValue: language,
+    errorContext: CHANGE_LANGUAGE,
+    toastMessage: 'Cannot change language',
   })
 }
 
