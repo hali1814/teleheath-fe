@@ -145,6 +145,8 @@
     "searchMedicalProfileCancel": "បោះបង់",
     "searchMedicalProfileRequest": "ស្នើសុំ",
     "medicalProfileResultTitle": "ប្រវត្តិរូបវេជ្ជសាស្ត្រ",
+    "searchMedicalProfileNotFound": "រកមិនឃើញប្រវត្តិរូបអ្នកជំងឺ",
+    "searchMedicalProfileError": "មិនអាចស្វែងរកប្រវត្តិរូបវេជ្ជសាស្ត្រ",
     "language": "ភាសា",
     "logout": "ចាកចេញ",
     "logoutConfirmTitle": "ចាកចេញ?",

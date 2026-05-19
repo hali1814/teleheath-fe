@@ -144,6 +144,8 @@
     "searchMedicalProfileCancel": "Hủy",
     "searchMedicalProfileRequest": "Yêu cầu",
     "medicalProfileResultTitle": "Hồ sơ y tế",
+    "searchMedicalProfileNotFound": "Không tìm thấy hồ sơ bệnh nhân",
+    "searchMedicalProfileError": "Không thể tìm kiếm hồ sơ y tế",
     "language": "Ngôn ngữ",
     "logout": "Đăng xuất",
     "logoutConfirmTitle": "Đăng xuất?",

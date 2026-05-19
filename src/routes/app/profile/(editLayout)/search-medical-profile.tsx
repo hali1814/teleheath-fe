@@ -1,10 +1,13 @@
 import TextInputBase from '#/components/input/TextInputBase'
-import Text from '#/components/text'
+import LoadingBlocking from '#/components/LoadingBlocking'
 import { Button } from '#/components/ui/button'
 import { Header } from '#/sections/home'
+import { useSearchMedicalProfileMutation } from '#/services/query/profile/searchMedicalProfile'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 export const Route = createFileRoute(
   '/app/profile/(editLayout)/search-medical-profile',
@@ -17,14 +20,40 @@ function RouteComponent() {
   const router = useRouter()
   const [patientId, setPatientId] = useState('')
 
+  const { mutateAsync: searchMedicalProfile, isPending } =
+    useSearchMedicalProfileMutation({ isShowError: false })
+
   const handleCancel = () => {
     router.history.back()
   }
 
-  const handleRequest = () => {
-    if (!patientId.trim()) return
-    // TODO: integrate request OTP API
-    router.navigate({ to: '/app/profile/medical-profile-result' })
+  const handleRequest = async () => {
+    const trimmed = patientId.trim()
+    if (!trimmed) return
+
+    try {
+      const res = await searchMedicalProfile({ patientId: trimmed })
+      const hasProfile = !!res?.data?.profile
+      const hasContent = (res?.data?.content?.length ?? 0) > 0
+
+      if (!res?.success || !hasProfile || !hasContent) {
+        toast.error(t('searchMedicalProfileNotFound'))
+        return
+      }
+
+      router.navigate({
+        to: '/app/profile/medical-profile-result',
+        search: { patientId: trimmed },
+      })
+    } catch (error) {
+      const axiosError = error as AxiosError<{ data?: { errorCode?: string } }>
+      const errorCode = axiosError?.response?.data?.data?.errorCode
+      toast.error(
+        errorCode === 'PROFILE_NOT_FOUND'
+          ? t('searchMedicalProfileNotFound')
+          : t('searchMedicalProfileError'),
+      )
+    }
   }
 
   return (
@@ -49,19 +78,22 @@ function RouteComponent() {
             type="button"
             className="h-[45px] flex-1 rounded-full bg-[#E6E6E6] text-text-primary hover:bg-[#E6E6E6]/80"
             onClick={handleCancel}
+            disabled={isPending}
           >
             {t('searchMedicalProfileCancel')}
           </Button>
           <Button
             type="button"
             className="bg-secondary h-[45px] flex-1 rounded-full"
-            disabled={!patientId.trim()}
+            disabled={!patientId.trim() || isPending}
             onClick={handleRequest}
           >
             {t('searchMedicalProfileRequest')}
           </Button>
         </div>
       </div>
+
+      <LoadingBlocking isLoading={isPending} />
     </>
   )
 }
