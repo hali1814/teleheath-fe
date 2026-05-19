@@ -16,7 +16,7 @@ import { useGetPrecinctsQuery } from '#/services/query/profile/getPrecinct'
 import { useProfileStore } from '#/stores/profile'
 import { useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod/v4'
@@ -33,7 +33,6 @@ import {
   useGetListFamilyQuery,
   useGetPatientProfileMutation,
 } from '#/services/query/profile/listFamily'
-import { useCheckPhoneMutation } from '#/services/query/profile/checkPhone'
 import type { HttpCommonResponse } from '#/services/network/http-request'
 import type { PatientProfileResponse } from '#/services/query/profile/getProfile'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
@@ -67,7 +66,7 @@ interface FormValues {
 }
 
 const stripCountryCode = (phone: string) =>
-  phone.replace(/^(\+855|00855|855)/, '').replace(/^0/, '')
+  phone.replace(/^(\+855|00855|855)/, '').replace(/^0+/, '')
 
 export default function FormProfile({
   containerClassName,
@@ -133,7 +132,6 @@ export default function FormProfile({
   const {
     control,
     setValue,
-    setError,
     handleSubmit,
     clearErrors,
     formState: { errors },
@@ -154,8 +152,6 @@ export default function FormProfile({
       avatarUrl: '',
     },
   })
-
-  const originalPhoneRef = useRef('')
 
   const user = useProfileStore((s) => s.profile)
   const setProfile = useProfileStore((s) => s.setProfile)
@@ -376,7 +372,6 @@ export default function FormProfile({
       setValue('dateOfBirth', data.data.dateOfBirth || data.data.dob || '')
       setValue('gender', (data.data.gender as GenderValue) ?? 'MALE')
       const rawPhone = data.data.phone || data.data.contactNumber || ''
-      originalPhoneRef.current = rawPhone
       setValue('phoneNumber', stripCountryCode(rawPhone))
       setValue('email', data.data.email ?? '')
       setValue('country', data.data.nationality ?? '')
@@ -394,7 +389,6 @@ export default function FormProfile({
     setValue('dateOfBirth', user?.dob || user?.dateOfBirth || '')
     setValue('gender', (user?.gender as GenderValue) ?? 'MALE')
     const rawPhone = user?.phone || user?.contactNumber || ''
-    originalPhoneRef.current = rawPhone
     setValue('phoneNumber', stripCountryCode(rawPhone))
     setValue('email', user?.email ?? '')
     setValue('country', user?.nationality ?? '')
@@ -427,29 +421,16 @@ export default function FormProfile({
   } = useUpdatePatientProfileMutation()
   const { mutateAsync: deletePatientProfile, isPending: isDeletingProfile } =
     useDeletePatientProfileMutation()
-  const { mutateAsync: checkPhone } = useCheckPhoneMutation()
   const onValidSubmit = async (data: FormValues) => {
     if (!validateAndToast()) return
 
-    if (!isUserProfile && !isPhoneLockedByAge) {
-      const res = await checkPhone(
-        data.phoneNumber?.startsWith('+855')
-          ? data.phoneNumber
-          : `+855${data.phoneNumber}`,
-      )
-      if (res.data?.exists && res.data?.phone !== originalPhoneRef.current) {
-        setError('phoneNumber', { message: t('phoneLinkedToProfile') })
-        return
-      }
-    }
+    const localPhone = `0${stripCountryCode(data.phoneNumber ?? '')}`
 
     const request = {
       name: data.fullName,
       dob: data.dateOfBirth,
       gender: data.gender,
-      phone: data.phoneNumber?.startsWith('+855')
-        ? data.phoneNumber
-        : `+855${data.phoneNumber}`,
+      phone: localPhone,
       email: data.email || '',
       avatarUrl: data.avatarUrl,
       relationship: data.relationship,
@@ -651,7 +632,7 @@ export default function FormProfile({
               onChange={(event) => {
                 const digits = event.target.value
                   .replace(/\D/g, '')
-                  .replace(/^0/, '')
+                  .replace(/^0+/, '')
                 setValue('phoneNumber', digits, { shouldValidate: true })
               }}
               onBlur={() => {}}

@@ -126,6 +126,14 @@ function RouteComponent() {
           />
 
           <CardNavigate
+            title={t('searchMedicalProfiles')}
+            icon="search_medical_profile"
+            onClick={() =>
+              navigate({ to: '/app/profile/search-medical-profile' })
+            }
+          />
+
+          <CardNavigate
             title={t('language')}
             icon="language"
             onClick={() => setOpenBottomSheet(true)}
