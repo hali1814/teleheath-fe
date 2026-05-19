@@ -57,6 +57,8 @@ import ExpressIcon from '#/assets/icons/profile/express.svg?react'
 import MedicalProfileSearchIcon from '#/assets/icons/profile/medical-profile-search.svg?react'
 //add-profile
 import AddProfileIcon from '#/assets/icons/profile/add-profile.svg?react'
+//search-medical-profile
+import SearchMedicalProfileIcon from '#/assets/icons/profile/search-medical-profile.svg?react'
 import ChatAiIcon from '#/assets/icons/common/chat-ai.svg?react'
 import CheckCircleOutlineIcon from '#/assets/icons/common/check-circle-outline.svg?react'
 import MedicalWebServiceSolidIcon from '#/assets/icons/common/medical-web-service-solid.svg?react'
@@ -158,6 +160,7 @@ const ICONS_TEMPLATE = {
   express: ExpressIcon,
   medical_profile_search: MedicalProfileSearchIcon,
   add_profile: AddProfileIcon,
+  search_medical_profile: SearchMedicalProfileIcon,
   chat_ai: ChatAiIcon,
   check_circle_outline: CheckCircleOutlineIcon,
   medical_web_service_solid: MedicalWebServiceSolidIcon,

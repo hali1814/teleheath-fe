@@ -43,7 +43,9 @@ import { Route as AppDoctorcommonLayoutIndexRouteImport } from './routes/app/doc
 import { Route as AppBookAppointmentcommonLayoutIndexRouteImport } from './routes/app/book-appointment/(commonLayout)/index'
 import { Route as AppAppointmentscommonLayoutIndexRouteImport } from './routes/app/appointments/(commonLayout)/index'
 import { Route as AppSpecialtySearchSpecialtyIdRouteImport } from './routes/app/specialty/search/$specialtyId'
+import { Route as AppProfileeditLayoutSearchMedicalProfileRouteImport } from './routes/app/profile/(editLayout)/search-medical-profile'
 import { Route as AppProfileeditLayoutMedicalProfilesRouteImport } from './routes/app/profile/(editLayout)/medical-profiles'
+import { Route as AppProfileeditLayoutMedicalProfileResultRouteImport } from './routes/app/profile/(editLayout)/medical-profile-result'
 import { Route as AppProfileeditLayoutEditRouteImport } from './routes/app/profile/(editLayout)/edit'
 import { Route as AppPackagecommonLayoutIdRouteImport } from './routes/app/package/(commonLayout)/$id'
 import { Route as AppHospitalcommonLayoutIdRouteImport } from './routes/app/hospital/(commonLayout)/$id'
@@ -250,10 +252,22 @@ const AppSpecialtySearchSpecialtyIdRoute =
     path: '/$specialtyId',
     getParentRoute: () => AppSpecialtySearchRouteRoute,
   } as any)
+const AppProfileeditLayoutSearchMedicalProfileRoute =
+  AppProfileeditLayoutSearchMedicalProfileRouteImport.update({
+    id: '/search-medical-profile',
+    path: '/search-medical-profile',
+    getParentRoute: () => AppProfileeditLayoutRouteRoute,
+  } as any)
 const AppProfileeditLayoutMedicalProfilesRoute =
   AppProfileeditLayoutMedicalProfilesRouteImport.update({
     id: '/medical-profiles',
     path: '/medical-profiles',
+    getParentRoute: () => AppProfileeditLayoutRouteRoute,
+  } as any)
+const AppProfileeditLayoutMedicalProfileResultRoute =
+  AppProfileeditLayoutMedicalProfileResultRouteImport.update({
+    id: '/medical-profile-result',
+    path: '/medical-profile-result',
     getParentRoute: () => AppProfileeditLayoutRouteRoute,
   } as any)
 const AppProfileeditLayoutEditRoute =
@@ -380,7 +394,9 @@ export interface FileRoutesByFullPath {
   '/app/hospital/$id': typeof AppHospitalcommonLayoutIdRoute
   '/app/package/$id': typeof AppPackagecommonLayoutIdRoute
   '/app/profile/edit': typeof AppProfileeditLayoutEditRoute
+  '/app/profile/medical-profile-result': typeof AppProfileeditLayoutMedicalProfileResultRoute
   '/app/profile/medical-profiles': typeof AppProfileeditLayoutMedicalProfilesRoute
+  '/app/profile/search-medical-profile': typeof AppProfileeditLayoutSearchMedicalProfileRoute
   '/app/specialty/search/$specialtyId': typeof AppSpecialtySearchSpecialtyIdRoute
   '/app/appointments/': typeof AppAppointmentscommonLayoutIndexRoute
   '/app/book-appointment/': typeof AppBookAppointmentcommonLayoutIndexRoute
@@ -418,7 +434,9 @@ export interface FileRoutesByTo {
   '/app/hospital/$id': typeof AppHospitalcommonLayoutIdRoute
   '/app/package/$id': typeof AppPackagecommonLayoutIdRoute
   '/app/profile/edit': typeof AppProfileeditLayoutEditRoute
+  '/app/profile/medical-profile-result': typeof AppProfileeditLayoutMedicalProfileResultRoute
   '/app/profile/medical-profiles': typeof AppProfileeditLayoutMedicalProfilesRoute
+  '/app/profile/search-medical-profile': typeof AppProfileeditLayoutSearchMedicalProfileRoute
   '/app/specialty/search/$specialtyId': typeof AppSpecialtySearchSpecialtyIdRoute
   '/app/book-appointment': typeof AppBookAppointmentcommonLayoutIndexRoute
   '/app/doctor': typeof AppDoctorcommonLayoutIndexRoute
@@ -469,7 +487,9 @@ export interface FileRoutesById {
   '/app/hospital/(commonLayout)/$id': typeof AppHospitalcommonLayoutIdRoute
   '/app/package/(commonLayout)/$id': typeof AppPackagecommonLayoutIdRoute
   '/app/profile/(editLayout)/edit': typeof AppProfileeditLayoutEditRoute
+  '/app/profile/(editLayout)/medical-profile-result': typeof AppProfileeditLayoutMedicalProfileResultRoute
   '/app/profile/(editLayout)/medical-profiles': typeof AppProfileeditLayoutMedicalProfilesRoute
+  '/app/profile/(editLayout)/search-medical-profile': typeof AppProfileeditLayoutSearchMedicalProfileRoute
   '/app/specialty/search/$specialtyId': typeof AppSpecialtySearchSpecialtyIdRoute
   '/app/appointments/(commonLayout)/': typeof AppAppointmentscommonLayoutIndexRoute
   '/app/book-appointment/(commonLayout)/': typeof AppBookAppointmentcommonLayoutIndexRoute
@@ -521,7 +541,9 @@ export interface FileRouteTypes {
     | '/app/hospital/$id'
     | '/app/package/$id'
     | '/app/profile/edit'
+    | '/app/profile/medical-profile-result'
     | '/app/profile/medical-profiles'
+    | '/app/profile/search-medical-profile'
     | '/app/specialty/search/$specialtyId'
     | '/app/appointments/'
     | '/app/book-appointment/'
@@ -559,7 +581,9 @@ export interface FileRouteTypes {
     | '/app/hospital/$id'
     | '/app/package/$id'
     | '/app/profile/edit'
+    | '/app/profile/medical-profile-result'
     | '/app/profile/medical-profiles'
+    | '/app/profile/search-medical-profile'
     | '/app/specialty/search/$specialtyId'
     | '/app/book-appointment'
     | '/app/doctor'
@@ -609,7 +633,9 @@ export interface FileRouteTypes {
     | '/app/hospital/(commonLayout)/$id'
     | '/app/package/(commonLayout)/$id'
     | '/app/profile/(editLayout)/edit'
+    | '/app/profile/(editLayout)/medical-profile-result'
     | '/app/profile/(editLayout)/medical-profiles'
+    | '/app/profile/(editLayout)/search-medical-profile'
     | '/app/specialty/search/$specialtyId'
     | '/app/appointments/(commonLayout)/'
     | '/app/book-appointment/(commonLayout)/'
@@ -871,11 +897,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSpecialtySearchSpecialtyIdRouteImport
       parentRoute: typeof AppSpecialtySearchRouteRoute
     }
+    '/app/profile/(editLayout)/search-medical-profile': {
+      id: '/app/profile/(editLayout)/search-medical-profile'
+      path: '/search-medical-profile'
+      fullPath: '/app/profile/search-medical-profile'
+      preLoaderRoute: typeof AppProfileeditLayoutSearchMedicalProfileRouteImport
+      parentRoute: typeof AppProfileeditLayoutRouteRoute
+    }
     '/app/profile/(editLayout)/medical-profiles': {
       id: '/app/profile/(editLayout)/medical-profiles'
       path: '/medical-profiles'
       fullPath: '/app/profile/medical-profiles'
       preLoaderRoute: typeof AppProfileeditLayoutMedicalProfilesRouteImport
+      parentRoute: typeof AppProfileeditLayoutRouteRoute
+    }
+    '/app/profile/(editLayout)/medical-profile-result': {
+      id: '/app/profile/(editLayout)/medical-profile-result'
+      path: '/medical-profile-result'
+      fullPath: '/app/profile/medical-profile-result'
+      preLoaderRoute: typeof AppProfileeditLayoutMedicalProfileResultRouteImport
       parentRoute: typeof AppProfileeditLayoutRouteRoute
     }
     '/app/profile/(editLayout)/edit': {
@@ -1186,14 +1226,20 @@ const AppProfilecommonLayoutRouteRouteWithChildren =
 
 interface AppProfileeditLayoutRouteRouteChildren {
   AppProfileeditLayoutEditRoute: typeof AppProfileeditLayoutEditRoute
+  AppProfileeditLayoutMedicalProfileResultRoute: typeof AppProfileeditLayoutMedicalProfileResultRoute
   AppProfileeditLayoutMedicalProfilesRoute: typeof AppProfileeditLayoutMedicalProfilesRoute
+  AppProfileeditLayoutSearchMedicalProfileRoute: typeof AppProfileeditLayoutSearchMedicalProfileRoute
 }
 
 const AppProfileeditLayoutRouteRouteChildren: AppProfileeditLayoutRouteRouteChildren =
   {
     AppProfileeditLayoutEditRoute: AppProfileeditLayoutEditRoute,
+    AppProfileeditLayoutMedicalProfileResultRoute:
+      AppProfileeditLayoutMedicalProfileResultRoute,
     AppProfileeditLayoutMedicalProfilesRoute:
       AppProfileeditLayoutMedicalProfilesRoute,
+    AppProfileeditLayoutSearchMedicalProfileRoute:
+      AppProfileeditLayoutSearchMedicalProfileRoute,
   }
 
 const AppProfileeditLayoutRouteRouteWithChildren =
