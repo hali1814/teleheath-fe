@@ -1,5 +1,6 @@
 import Text from '#/components/text'
 import { Icon } from '#/components/icon'
+import LoadingBlocking from '#/components/LoadingBlocking'
 import {
   Collapsible,
   CollapsibleContent,
@@ -9,33 +10,44 @@ import { Header } from '#/sections/home'
 import Avatar from '#/sections/profile/Avatar'
 import ItemHistoryAppointment from '#/sections/history/ItemHistoryAppointment'
 import {
-  MOCK_APPOINTMENT_HISTORY,
-  MOCK_PATIENT_PROFILE,
-  type MockPatientProfile,
-} from '#/mocks/medical-profile-result'
+  useSearchMedicalProfileQuery,
+  type SearchMedicalProfilePatient,
+} from '#/services/query/profile/searchMedicalProfile'
 import {
   getAppointmentMonthLabels,
   groupAppointmentsByMonth,
 } from '#/utils/history'
 import { DATE_TIME_TYPE, formatDate } from '#/utils/date.util'
+import { concatAddress } from '#/utils'
 import { cn } from '#/lib/utils'
 import { createFileRoute } from '@tanstack/react-router'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { z } from 'zod'
+
+const searchParamsSchema = z.object({
+  patientId: z.string(),
+})
 
 export const Route = createFileRoute(
   '/app/profile/(editLayout)/medical-profile-result',
 )({
+  validateSearch: (search) => searchParamsSchema.parse(search),
   component: RouteComponent,
 })
 
 function RouteComponent() {
   const { t, i18n } = useTranslation(['profile', 'appointment'])
   const [expanded, setExpanded] = useState(false)
+  const { patientId } = Route.useSearch()
 
-  const profile = MOCK_PATIENT_PROFILE
-  const items = MOCK_APPOINTMENT_HISTORY
+  const { data: response, isLoading } = useSearchMedicalProfileQuery({
+    params: { patientId },
+  })
+
+  const profile = response?.data?.profile ?? null
+  const items = response?.data?.content ?? []
 
   const monthLabels = useMemo(() => getAppointmentMonthLabels(t), [t])
 
@@ -68,38 +80,47 @@ function RouteComponent() {
     [grouped],
   )
 
+  if (isLoading) {
+    return (
+      <>
+        <Header title={t('medicalProfileResultTitle')} />
+        <LoadingBlocking />
+      </>
+    )
+  }
+
   return (
     <>
       <Header title={t('medicalProfileResultTitle')} />
 
       <div className="flex flex-col gap-3 px-4 pt-4 pb-6">
-        {/* Section 1: collapsible profile card */}
-        <ProfileSummaryCard
-          profile={profile}
-          expanded={expanded}
-          onToggle={setExpanded}
-          dobLabel={
-            formatDate(
-              profile.dob,
-              DATE_TIME_TYPE.MMM_DD_YYYY,
-              i18n.language,
-            ) || '--'
-          }
-          dobValueExpanded={
-            formatDate(profile.dob, undefined, i18n.language) || '--'
-          }
-          genderLabel={
-            profile.gender === 'MALE'
-              ? t('genderMale')
-              : profile.gender === 'FEMALE'
-                ? t('genderFemale')
-                : '--'
-          }
-        />
+        {profile ? (
+          <ProfileSummaryCard
+            profile={profile}
+            expanded={expanded}
+            onToggle={setExpanded}
+            dobLabel={
+              formatDate(
+                profile.dob,
+                DATE_TIME_TYPE.MMM_DD_YYYY,
+                i18n.language,
+              ) || '--'
+            }
+            dobValueExpanded={
+              formatDate(profile.dob, undefined, i18n.language) || '--'
+            }
+            genderLabel={
+              profile.gender === 'MALE'
+                ? t('genderMale')
+                : profile.gender === 'FEMALE'
+                  ? t('genderFemale')
+                  : '--'
+            }
+          />
+        ) : null}
 
         <div className="h-px bg-[#F0F0F0]" aria-hidden />
 
-        {/* Section 2: appointment history list */}
         <div className="flex flex-col gap-3">
           {rows.map((row) =>
             row.kind === 'title' ? (
@@ -131,7 +152,7 @@ function RouteComponent() {
 }
 
 interface ProfileSummaryCardProps {
-  profile: MockPatientProfile
+  profile: SearchMedicalProfilePatient
   expanded: boolean
   onToggle: (value: boolean) => void
   dobLabel: string
@@ -149,6 +170,10 @@ function ProfileSummaryCard({
 }: ProfileSummaryCardProps) {
   const { t } = useTranslation('profile')
 
+  const addressLabel = profile.address
+    ? concatAddress(profile.address) || profile.address.fullAddress || '--'
+    : '--'
+
   return (
     <Collapsible
       open={expanded}
@@ -159,7 +184,7 @@ function ProfileSummaryCard({
       <div className="flex gap-4 p-4">
         <div className="shrink-0">
           <Avatar
-            src={profile.avatarUrl}
+            src={profile.avatarUrl ?? ''}
             alt={profile.fullName}
             size={88}
             hideCamera
@@ -176,7 +201,7 @@ function ProfileSummaryCard({
             {dobLabel}
           </Text>
           <Text size="sm_12" className="text-[#64748B] font-normal">
-            {profile.phone}
+            {profile.contactNumber}
           </Text>
           <div className="mt-1 inline-flex w-fit items-center justify-center rounded-full border border-[#FFCCC7] bg-[#FFF1F0] px-3 py-1">
             <Text
@@ -196,9 +221,12 @@ function ProfileSummaryCard({
           </Text>
           <InfoRow label={t('dateOfBirth')} value={dobValueExpanded} />
           <InfoRow label={t('gender')} value={genderLabel} />
-          <InfoRow label={t('phoneNumber')} value={profile.phone || '--'} />
+          <InfoRow
+            label={t('phoneNumber')}
+            value={profile.contactNumber || '--'}
+          />
           <InfoRow label={t('email')} value={profile.email || '--'} />
-          <InfoRow label={t('address')} value={profile.address || '--'} />
+          <InfoRow label={t('address')} value={addressLabel} />
         </div>
       </CollapsibleContent>
 

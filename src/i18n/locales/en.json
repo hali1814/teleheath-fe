@@ -144,6 +144,8 @@
     "searchMedicalProfileCancel": "Cancel",
     "searchMedicalProfileRequest": "Request",
     "medicalProfileResultTitle": "Medical profile",
+    "searchMedicalProfileNotFound": "Patient profile not found",
+    "searchMedicalProfileError": "Could not search medical profile",
     "language": "Language",
     "logout": "Log out",
     "logoutConfirmTitle": "Log out?",
