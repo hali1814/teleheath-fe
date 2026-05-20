@@ -30,7 +30,7 @@ function getApiBaseURL(): string {
   if (import.meta.env.PROD) {
     return '/api'
   }
-  return 'http://teleheath.site/api'
+  return 'https://c90f-115-78-93-73.ngrok-free.app/api'
 }
 
 export const axiosInstance = axios.create({
