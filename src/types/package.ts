@@ -30,6 +30,9 @@ export interface Package {
   description: string
   category: string
   price: number
+  promotionPrice?: number
+  promotionStart?: string
+  promotionEnd?: string
   durationMinutes: number
   imageUrl: string
   countries: Country[]
