@@ -17,10 +17,12 @@ export interface Doctor {
   country: Country | null
   branches: Branch[]
   avatarUrl: string
+  name?: string
   nameVi: string
   nameKh: string | null
   nameEn: string
   gender: string
+  bio?: string
   bioVi: string
   bioKh: string | null
   bioEn: string
