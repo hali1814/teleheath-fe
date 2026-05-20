@@ -206,6 +206,8 @@
     "viewDetails": "Xem chi tiết",
     "edit": "Chỉnh sửa",
     "patientId": "Mã bệnh nhân",
+    "copied": "Đã sao chép",
+    "copyFailed": "Sao chép thất bại",
     "useAccountInformationTitle": "Dùng thông tin tài khoản?",
     "useAccountInformationMessage": "Thông tin bạn đã nhập sẽ được thay thế bằng thông tin tài khoản.",
     "invalidEmail": "Email không đúng định dạng.",

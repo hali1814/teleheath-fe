@@ -207,6 +207,8 @@
     "viewDetails": "មើលព័ត៌មានលម្អិត",
     "edit": "កែសម្រួល",
     "patientId": "លេខសម្គាល់អ្នកជំងឺ",
+    "copied": "បានចម្លង",
+    "copyFailed": "ការចម្លងបរាជ័យ",
     "useAccountInformationTitle": "ប្រើព័ត៌មានគណនី?",
     "useAccountInformationMessage": "ព័ត៌មានដែលអ្នកបានបញ្ចូល នឹងត្រូវបានជំនួសដោយព័ត៌មានគណនី។",
     "invalidEmail": "អ៊ីមែលមិនមានទម្រង់ត្រឹមត្រូវ។",

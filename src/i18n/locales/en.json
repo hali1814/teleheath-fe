@@ -206,6 +206,8 @@
     "viewDetails": "View Details",
     "edit": "Edit",
     "patientId": "Patient ID",
+    "copied": "Copied to clipboard",
+    "copyFailed": "Failed to copy",
     "useAccountInformationTitle": "Use account information?",
     "useAccountInformationMessage": "Your entered information will be replaced with account details.",
     "invalidEmail": "Invalid email format.",
