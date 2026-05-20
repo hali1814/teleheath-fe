@@ -16,6 +16,10 @@ export interface ListNotificationResponse {
   appointmentId: number
   title: string
   body: string
+  titleVi?: string
+  bodyVi?: string
+  titleKh?: string
+  bodyKh?: string
   iconUrl: string
   type: string
   eventCode: string

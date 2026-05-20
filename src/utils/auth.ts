@@ -129,6 +129,16 @@ export const changeLanguage = (language: string) => {
   if (now - lastChangeLanguageBridgeSentAt < NATIVE_BRIDGE_THROTTLE_MS) return
   lastChangeLanguageBridgeSentAt = now
 
+  const appWindow = window as unknown as NativeBridgeWindow
+  const hasNativeBridge =
+    !!appWindow.Android?.postMessage ||
+    !!appWindow.Android?.[CHANGE_LANGUAGE] ||
+    !!appWindow.ReactNativeWebView?.postMessage ||
+    !!appWindow.webkit?.messageHandlers?.[CHANGE_LANGUAGE]?.postMessage ||
+    !!appWindow[CHANGE_LANGUAGE]
+
+  if (!hasNativeBridge) return
+
   const payload = { [CHANGE_LANGUAGE]: language }
 
   postMessageToNativeBridge({
