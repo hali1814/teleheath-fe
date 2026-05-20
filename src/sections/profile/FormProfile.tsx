@@ -572,14 +572,30 @@ export default function FormProfile({
       </div>
 
       {!!idMember && (
-        <Text
-          size="lg_16"
-          className="text-primary font-medium mt-2 text-center"
-        >
-          {t('patientId')}: #
-          {patientProfile?.data?.patientCode ||
-            patientProfile?.data?.profileCode}
-        </Text>
+        <div className="mt-2 flex items-center justify-center gap-2">
+          <Text size="lg_16" className="text-primary font-medium">
+            {t('patientId')}: #
+            {patientProfile?.data?.patientCode ||
+              patientProfile?.data?.profileCode}
+          </Text>
+          <button
+            type="button"
+            onClick={() => {
+              const code =
+                patientProfile?.data?.patientCode ||
+                patientProfile?.data?.profileCode
+              if (!code) return
+              navigator.clipboard
+                .writeText(`#${code}`)
+                .then(() => toast.success(t('copied')))
+                .catch(() => toast.error(t('copyFailed')))
+            }}
+            className="text-primary shrink-0"
+            aria-label="Copy patient ID"
+          >
+            <Icon name="copy" className="size-4" />
+          </button>
+        </div>
       )}
 
       <div className="mt-6 gap-4 flex flex-col">
