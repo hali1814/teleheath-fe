@@ -16,13 +16,29 @@ export default function NotificationCard({
   title,
   appointmentId,
   body,
-  type,
   status,
   sentAt,
   iconUrl,
+  titleVi,
+  bodyVi,
+  titleKh,
+  bodyKh,
 }: ListNotificationResponse) {
   const navigate = useNavigate()
-  const { t } = useTranslation(['common'])
+  const { t, i18n } = useTranslation(['common'])
+  const lang = i18n.language
+  const localizedTitle =
+    (lang.startsWith('vi') ? titleVi : lang.startsWith('km') ? titleKh : title) ||
+    title ||
+    titleVi ||
+    titleKh ||
+    ''
+  const localizedBody =
+    (lang.startsWith('vi') ? bodyVi : lang.startsWith('km') ? bodyKh : body) ||
+    body ||
+    bodyVi ||
+    bodyKh ||
+    ''
   const isRead = status === 'READ'
   const accentBg = isRead ? `#5858581A` : `#CF13221A`
   const bgContainer = isRead ? 'bg-background' : 'bg-[#FFF4F4]'
@@ -38,7 +54,7 @@ export default function NotificationCard({
     if (!lineHeight) return
     const maxHeight = lineHeight * NOTIFICATION_BODY_MAX_LINES + 1
     setIsOverflowing(el.scrollHeight > maxHeight)
-  }, [body])
+  }, [localizedBody])
 
   useEffect(() => {
     const el = bodyRef.current
@@ -97,7 +113,7 @@ export default function NotificationCard({
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-1">
             <Text className="font-medium leading-normal text-[#333333]">
-              {title}{' '}
+              {localizedTitle}{' '}
             </Text>
             {isRead ? null : (
               <Icon
@@ -123,7 +139,7 @@ export default function NotificationCard({
                   }
             }
           >
-            {renderBodyWithLinks(body)}
+            {renderBodyWithLinks(localizedBody)}
           </div>
           {isOverflowing && (
             <button
