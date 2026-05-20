@@ -2,7 +2,7 @@ import {
   createFileRoute,
   Outlet,
   useLocation,
-  useNavigate,
+  useRouter,
 } from '@tanstack/react-router'
 import { clearTokens, getToken, setTokens } from '#/stores/token'
 import { useGetProfileQuery } from '#/services/query/profile/getProfile'
@@ -36,7 +36,7 @@ function App() {
     enabled: !!getToken(),
   })
 
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const { search } = useLocation()
 
@@ -63,7 +63,7 @@ function App() {
           refreshToken: data.data.refreshToken,
         })
         if (path) {
-          navigate({ to: path })
+          router.navigate({ href: path })
         }
         // setProfile(data.data.user)
       }
@@ -71,7 +71,7 @@ function App() {
     onError: () => {
       clearTokens()
       clearProfile()
-      navigate({ to: '/app/entry' })
+      router.navigate({ to: '/app/entry' })
     },
   })
 
