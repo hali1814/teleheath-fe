@@ -6,7 +6,7 @@
  *
  * Mọi path dưới backend origin (vd. `/api/uploads/…`, `/files/…`) đều được quy về path tương đối.
  */
-const DEFAULT_BACKEND_ORIGIN = 'http://teleheath.site/api'
+const DEFAULT_BACKEND_ORIGIN = 'https://teleheath.site/api'
 
 function backendOrigin(): string {
   const fromEnv = import.meta.env.VITE_PUBLIC_BACKEND_ORIGIN as

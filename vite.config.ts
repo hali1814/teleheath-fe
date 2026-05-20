@@ -12,7 +12,7 @@ const config = defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://teleheath.site/api',
+        target: 'https://teleheath.site/api',
         changeOrigin: true,
       },
     },
@@ -21,7 +21,7 @@ const config = defineConfig({
   preview: {
     proxy: {
       '/api': {
-        target: 'http://teleheath.site/api',
+        target: 'https://teleheath.site/api',
         changeOrigin: true,
       },
     },
