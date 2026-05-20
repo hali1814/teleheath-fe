@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://c90f-115-78-93-73.ngrok-free.app/api/:path*"
+      "destination": "https://teleheath.site/api/:path*"
     },
     { "source": "/(.*)", "destination": "/" }
   ]
