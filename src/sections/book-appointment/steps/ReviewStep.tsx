@@ -61,7 +61,7 @@ const ServiceItem = ({
   return (
     <div className="flex flex-col gap-[8px]">
       <div className="flex items-center justify-between gap-[16px]">
-        <Text className="leading-normal">{service.typeName}</Text>
+        <Text className="leading-normal">{service.addonServiceName}</Text>
         <button
           className="flex items-center gap-[4px] px-[8px] py-[6px] rounded-[6px] bg-dust-red-1"
           onClick={onDetailClick}
@@ -338,7 +338,7 @@ export function ReviewStep() {
               addonServiceTypes.map((service) => (
                 <div className="flex items-center justify-between">
                   <Text className="leading-normal text-muted-foreground">
-                    {service.typeName}
+                    {service.addonServiceName}
                   </Text>
                   <Text className="leading-normal font-medium text-[#333333]">
                     {formatPrice(service.promotionPrice ?? service.price)}
