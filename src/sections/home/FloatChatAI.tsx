@@ -1,6 +1,8 @@
 import Image from '#/components/image'
 
 export const FloatChatAI = () => {
+  return null
+  //Tạm ẩn
   return (
     <div className="float-chat-ai fixed bottom-[100px] right-[16px] h-[52px] w-[52px]">
       <Image
