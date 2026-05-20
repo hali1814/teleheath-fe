@@ -6,6 +6,10 @@ import type { ListNotificationResponse } from '#/services/query/notification/lis
 import { useMarkReadNotificationMutation } from '#/services/query/notification/mark-read-notification'
 import { formatTimeAgo } from '#/utils/time.util'
 import { useNavigate } from '@tanstack/react-router'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+const NOTIFICATION_BODY_MAX_LINES = 5
 
 export default function NotificationCard({
   notifId,
@@ -18,9 +22,36 @@ export default function NotificationCard({
   iconUrl,
 }: ListNotificationResponse) {
   const navigate = useNavigate()
+  const { t } = useTranslation(['common'])
   const isRead = status === 'READ'
   const accentBg = isRead ? `#5858581A` : `#CF13221A`
   const bgContainer = isRead ? 'bg-background' : 'bg-[#FFF4F4]'
+
+  const bodyRef = useRef<HTMLDivElement>(null)
+  const [expanded, setExpanded] = useState(false)
+  const [isOverflowing, setIsOverflowing] = useState(false)
+
+  useLayoutEffect(() => {
+    const el = bodyRef.current
+    if (!el) return
+    const lineHeight = parseFloat(getComputedStyle(el).lineHeight)
+    if (!lineHeight) return
+    const maxHeight = lineHeight * NOTIFICATION_BODY_MAX_LINES + 1
+    setIsOverflowing(el.scrollHeight > maxHeight)
+  }, [body])
+
+  useEffect(() => {
+    const el = bodyRef.current
+    if (!el) return
+    const observer = new ResizeObserver(() => {
+      const lineHeight = parseFloat(getComputedStyle(el).lineHeight)
+      if (!lineHeight) return
+      const maxHeight = lineHeight * NOTIFICATION_BODY_MAX_LINES + 1
+      setIsOverflowing(el.scrollHeight > maxHeight)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const { mutateAsync: markReadNotification } =
     useMarkReadNotificationMutation()
@@ -76,12 +107,45 @@ export default function NotificationCard({
             )}
           </div>
 
-          <Text
-            size="sm_12"
-            className="leading-[1.3] text-muted-foreground text-left"
+          <div
+            ref={bodyRef}
+            className={cn(
+              'text-sm leading-[1.3] text-muted-foreground text-left whitespace-pre-wrap',
+              !expanded && 'overflow-hidden',
+            )}
+            style={
+              expanded
+                ? undefined
+                : {
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: NOTIFICATION_BODY_MAX_LINES,
+                  }
+            }
           >
             {renderBodyWithLinks(body)}
-          </Text>
+          </div>
+          {isOverflowing && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                setExpanded((v) => !v)
+              }}
+              className="self-start flex items-center gap-[6px] mt-[2px]"
+            >
+              <Text
+                size="sm_12"
+                className="text-dust-red-8 font-medium leading-[1.3]"
+              >
+                {expanded ? t('actions.viewLess') : t('actions.viewMore')}
+              </Text>
+              <Icon
+                name={expanded ? 'arrow_up' : 'arrow_down'}
+                className="w-[8px] h-[8px] text-dust-red-8"
+              />
+            </button>
+          )}
         </div>
       </div>
 
