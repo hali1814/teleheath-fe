@@ -585,8 +585,9 @@ export default function FormProfile({
                 patientProfile?.data?.patientCode ||
                 patientProfile?.data?.profileCode
               if (!code) return
+              const clipboardCode = code.trim().replace(/^#+/, '')
               navigator.clipboard
-                .writeText(`#${code}`)
+                .writeText(clipboardCode)
                 .then(() => toast.success(t('copied')))
                 .catch(() => toast.error(t('copyFailed')))
             }}
