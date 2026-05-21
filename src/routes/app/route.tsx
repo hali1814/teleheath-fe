@@ -67,23 +67,19 @@ function App() {
           router.navigate({ href: path })
           return
         }
-        // Không có redirect param → check resume để khôi phục màn thanh toán
-        // khi WebView bị thu hồi. Case WebView còn sống thì nhánh này không
-        // chạy (SSO không re-run).
+        // Không có redirect param → chỉ resume khi BE xác nhận user còn đang
+        // đợi thanh toán (PENDING + QR còn hạn). Các trường hợp khác giữ
+        // hành vi cũ.
         try {
           const resume = await getPaymentResume()
           const r = resume?.data
           if (r?.status === 'PENDING' && r.bookingToken) {
-            router.navigate({
+            // Seed home vào history để Back từ màn QR không bị kẹt khi app
+            // vừa bootstrap lại.
+            await router.navigate({ to: '/app/home', replace: true })
+            await router.navigate({
               to: '/app/payment/khqr/$bookingToken',
               params: { bookingToken: r.bookingToken },
-            })
-            return
-          }
-          if (r?.status === 'SUCCESS' && r.appointmentCode) {
-            router.navigate({
-              to: '/app/book-appointment/success/$appointmentCode',
-              params: { appointmentCode: r.appointmentCode },
             })
             return
           }

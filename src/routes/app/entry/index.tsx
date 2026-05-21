@@ -41,23 +41,19 @@ function RouteComponent() {
         })
         // useProfileStore.getState().setProfile(data.data.user)
 
-        // Resume nếu WebView bị OS thu hồi giữa flow thanh toán: đưa user về
-        // đúng màn QR / success thay vì home. Khi WebView còn sống, entry này
-        // không chạy → không ảnh hưởng case bình thường.
+        // Chỉ resume khi user còn đang đợi thanh toán (BE đảm bảo điều kiện
+        // PENDING + QR còn hạn). Mọi trạng thái khác → giữ điều hướng mặc định.
         try {
           const resume = await getPaymentResume()
           const r = resume?.data
           if (r?.status === 'PENDING' && r.bookingToken) {
-            navigate({
+            // Seed /app/home vào history trước khi push QR để nút Back ở màn
+            // QR back về home được, không bị kẹt do history rỗng (app vừa
+            // bootstrap lại sau khi WebView bị kill).
+            await navigate({ to: '/app/home', replace: true })
+            await navigate({
               to: '/app/payment/khqr/$bookingToken',
               params: { bookingToken: r.bookingToken },
-            })
-            return
-          }
-          if (r?.status === 'SUCCESS' && r.appointmentCode) {
-            navigate({
-              to: '/app/book-appointment/success/$appointmentCode',
-              params: { appointmentCode: r.appointmentCode },
             })
             return
           }
