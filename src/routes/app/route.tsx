@@ -8,6 +8,7 @@ import { clearTokens, getToken, setTokens } from '#/stores/token'
 import { useGetProfileQuery } from '#/services/query/profile/getProfile'
 import { useProfileStore } from '#/stores/profile'
 import { useAuthCamIDMutation } from '#/services/query/auth/authCamID'
+import { getPaymentResume } from '#/services/query/payment/get-payment-resume'
 import LoadingBlocking from '#/components/LoadingBlocking'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -56,7 +57,7 @@ function App() {
   const { i18n, t } = useTranslation('common')
 
   const { mutate: authCamID } = useAuthCamIDMutation({
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.success) {
         setTokens({
           accessToken: data.data.accessToken,
@@ -64,6 +65,30 @@ function App() {
         })
         if (path) {
           router.navigate({ href: path })
+          return
+        }
+        // Không có redirect param → check resume để khôi phục màn thanh toán
+        // khi WebView bị thu hồi. Case WebView còn sống thì nhánh này không
+        // chạy (SSO không re-run).
+        try {
+          const resume = await getPaymentResume()
+          const r = resume?.data
+          if (r?.status === 'PENDING' && r.bookingToken) {
+            router.navigate({
+              to: '/app/payment/khqr/$bookingToken',
+              params: { bookingToken: r.bookingToken },
+            })
+            return
+          }
+          if (r?.status === 'SUCCESS' && r.appointmentCode) {
+            router.navigate({
+              to: '/app/book-appointment/success/$appointmentCode',
+              params: { appointmentCode: r.appointmentCode },
+            })
+            return
+          }
+        } catch {
+          // Resume lỗi → giữ hành vi cũ
         }
         // setProfile(data.data.user)
       }

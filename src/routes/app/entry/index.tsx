@@ -9,6 +9,7 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import { Spinner } from '#/components/ui/spinner'
 import { useAuthCamIDMutation } from '#/services/query/auth/authCamID'
+import { getPaymentResume } from '#/services/query/payment/get-payment-resume'
 import { setTokens } from '#/stores/token'
 import i18n from '#/i18n'
 
@@ -32,13 +33,37 @@ function RouteComponent() {
 
   const [isVerifying, setIsVerifying] = useState(true)
   const { mutate: authCamID } = useAuthCamIDMutation({
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.success) {
         setTokens({
           accessToken: data.data.accessToken,
           refreshToken: data.data.refreshToken,
         })
         // useProfileStore.getState().setProfile(data.data.user)
+
+        // Resume nếu WebView bị OS thu hồi giữa flow thanh toán: đưa user về
+        // đúng màn QR / success thay vì home. Khi WebView còn sống, entry này
+        // không chạy → không ảnh hưởng case bình thường.
+        try {
+          const resume = await getPaymentResume()
+          const r = resume?.data
+          if (r?.status === 'PENDING' && r.bookingToken) {
+            navigate({
+              to: '/app/payment/khqr/$bookingToken',
+              params: { bookingToken: r.bookingToken },
+            })
+            return
+          }
+          if (r?.status === 'SUCCESS' && r.appointmentCode) {
+            navigate({
+              to: '/app/book-appointment/success/$appointmentCode',
+              params: { appointmentCode: r.appointmentCode },
+            })
+            return
+          }
+        } catch {
+          // Resume lỗi → fallback về home, không chặn flow
+        }
 
         navigate({ to: '/app/home' })
         return
