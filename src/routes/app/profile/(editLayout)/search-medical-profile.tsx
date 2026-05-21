@@ -34,9 +34,8 @@ function RouteComponent() {
     try {
       const res = await searchMedicalProfile({ patientId: trimmed })
       const hasProfile = !!res?.data?.profile
-      const hasContent = (res?.data?.content?.length ?? 0) > 0
 
-      if (!res?.success || !hasProfile || !hasContent) {
+      if (!res?.success || !hasProfile) {
         toast.error(t('searchMedicalProfileNotFound'))
         return
       }
