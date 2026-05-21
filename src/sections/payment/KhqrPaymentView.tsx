@@ -11,7 +11,9 @@ import { Spinner } from '#/components/ui/spinner'
 import {
   useCheckStatusPaymentQuery,
   type CheckStatusPaymentResponse,
+  type PaymentFailureEventType,
 } from '#/services/query/payment/check-status-payment'
+import { PaymentFailedDialog } from '#/sections/payment/PaymentFailedDialog'
 import { useGenerateKhqrQuery } from '#/services/query/payment/generate-khqr'
 import { useNavigate, useRouter } from '@tanstack/react-router'
 import Image from '#/components/image'
@@ -88,12 +90,15 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   const khqr = data?.data
   const [stopPaymentPoll, setStopPaymentPoll] = useState(false)
   const [qrExpiredDialogOpen, setQrExpiredDialogOpen] = useState(false)
+  const [paymentFailedReason, setPaymentFailedReason] =
+    useState<PaymentFailureEventType | null>(null)
   const qrExpiredDialogGateRef = useRef(false)
 
   useEffect(() => {
     qrExpiredDialogGateRef.current = false
     setStopPaymentPoll(false)
     setQrExpiredDialogOpen(false)
+    setPaymentFailedReason(null)
   }, [bookingToken])
 
   const openQrExpiredDialog = useCallback(() => {
@@ -133,10 +138,22 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   const onCheckStatusSuccess = useCallback(
     ({ data }: { data: CheckStatusPaymentResponse }) => {
       if (!data) return
+
+      // Ưu tiên 1: BE báo 1 trong 3 event_type cần show popup Payment Failed
+      // (AMOUNT_MISMATCH, OUT_SLOT, DUPLICATE_CALLBACK) — không chờ expired.
+      if (data.eventType) {
+        setStopPaymentPoll(true)
+        setPaymentFailedReason(data.eventType)
+        return
+      }
+
+      // Ưu tiên 2: QR đã hết hạn theo timer client
       if (khqr?.expiredAt && new Date(khqr.expiredAt) <= new Date()) {
         openQrExpiredDialog()
         return
       }
+
+      // Ưu tiên 3: thanh toán thành công
       if (data.status === 'SUCCESS') {
         if (!data.appointmentCode) return
         reset()
@@ -148,6 +165,12 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     },
     [khqr?.expiredAt, openQrExpiredDialog, reset, navigate],
   )
+
+  const handlePaymentFailedClose = useCallback(() => {
+    setPaymentFailedReason(null)
+    reset()
+    router.history.back()
+  }, [router, reset])
 
   const handleDownloadQr = useCallback(() => {
     if (!khqr?.qrImage) return
@@ -176,6 +199,10 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
 
   return (
     <>
+      <PaymentFailedDialog
+        open={!!paymentFailedReason}
+        onClose={handlePaymentFailedClose}
+      />
       <Dialog open={qrExpiredDialogOpen} onOpenChange={() => {}}>
         <DialogContent
           showCloseButton={false}

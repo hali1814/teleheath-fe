@@ -5,6 +5,11 @@ interface CheckStatusPaymentRequest {
   refId: string
 }
 
+export type PaymentFailureEventType =
+  | 'AMOUNT_MISMATCH'
+  | 'OUT_SLOT'
+  | 'DUPLICATE_CALLBACK'
+
 export interface CheckStatusPaymentResponse {
   refId: string
   status: string
@@ -13,6 +18,8 @@ export interface CheckStatusPaymentResponse {
   appointmentId: string
   appointmentCode?: string
   appointmentStatus: string
+  /** BE trả non-null khi payment_log gần nhất thuộc 1 trong 3 case cần show popup Payment Failed. */
+  eventType?: PaymentFailureEventType | null
 }
 
 const checkStatusPayment = async (
