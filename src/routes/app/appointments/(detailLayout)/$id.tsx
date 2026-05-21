@@ -74,9 +74,7 @@ function RouteComponent() {
         medicalFiles={appointmentData?.data?.medicalFiles}
         notes={appointmentData?.data?.notes}
       />
-      {type === 'history' && (
-        <PaymentSection appointment={appointmentData?.data} />
-      )}
+      <PaymentSection appointment={appointmentData?.data} />
       {(appointmentData?.data?.status === 'CONFIRMED' ||
         appointmentData?.data?.status === 'WAITING_CONFIRM') && (
         <div
