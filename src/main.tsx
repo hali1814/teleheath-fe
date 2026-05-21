@@ -50,7 +50,4 @@ if (!rootElement.innerHTML) {
       </QueryClientProvider>
     </ThemeProvider>,
   )
-  requestAnimationFrame(() => {
-    document.getElementById('initial-loader')?.remove()
-  })
 }
