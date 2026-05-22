@@ -38,6 +38,21 @@ const ALLOWED_MIMES = new Set([
   'application/pdf',
 ])
 
+const BACKEND_ACCEPTED_MIMES = new Set([
+  'application/pdf',
+  'image/jpeg',
+  'image/png',
+])
+
+const MIME_BY_EXT: Record<string, string> = {
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  pdf: 'application/pdf',
+  heic: 'image/heic',
+  heif: 'image/heif',
+}
+
 function getFileExtension(file: File): string {
   const name = file.name ?? ''
   const dotIdx = name.lastIndexOf('.')
@@ -76,6 +91,20 @@ function ensureNamedFile(file: File): File {
   const fallbackName = `upload-${Date.now()}.${ext}`
   return new File([file], fallbackName, {
     type: file.type || 'application/octet-stream',
+    lastModified: file.lastModified,
+  })
+}
+
+// Webview camera/picker may return a File with empty/incorrect `type`;
+// infer MIME from extension so the multipart part has the right Content-Type.
+function normalizeFileMime(file: File): File {
+  const currentMime = (file.type || '').toLowerCase()
+  const ext = getFileExtension(file)
+  const inferred = MIME_BY_EXT[ext]
+  if (!inferred) return file
+  if (currentMime === inferred) return file
+  return new File([file], file.name, {
+    type: inferred,
     lastModified: file.lastModified,
   })
 }
@@ -222,8 +251,15 @@ export function MedicalRecords() {
     void (async () => {
       for (const rawFile of accepted) {
         let file = ensureNamedFile(rawFile)
+        file = normalizeFileMime(file)
         if (needsJpegConversion(file)) {
           file = ensureNamedFile(await convertImageToJpeg(file))
+        }
+        if (!BACKEND_ACCEPTED_MIMES.has(file.type)) {
+          toast.error(
+            t('medicalRecords.toastFileNotAllowed', { fileName: file.name }),
+          )
+          continue
         }
         const id = crypto.randomUUID()
         appendMedicalFile(id, file)
