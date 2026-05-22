@@ -4,6 +4,10 @@ import { Spinner } from '#/components/ui/spinner'
 import { Textarea } from '#/components/ui/textarea'
 import { useUploadImageMutation } from '#/services/query/upload/use-upload-image-mutate'
 import { useBookingStore, type FileRowStatus } from '#/stores/booking-store'
+import {
+  convertImageToJpeg,
+  needsJpegConversion,
+} from '#/utils/compress-image.util'
 import { useId } from 'react'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -217,7 +221,10 @@ export function MedicalRecords() {
 
     void (async () => {
       for (const rawFile of accepted) {
-        const file = ensureNamedFile(rawFile)
+        let file = ensureNamedFile(rawFile)
+        if (needsJpegConversion(file)) {
+          file = ensureNamedFile(await convertImageToJpeg(file))
+        }
         const id = crypto.randomUUID()
         appendMedicalFile(id, file)
 
