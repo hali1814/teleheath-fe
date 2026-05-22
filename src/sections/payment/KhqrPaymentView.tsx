@@ -141,7 +141,10 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
 
       // Ưu tiên 1: BE báo 1 trong 3 event_type cần show popup Payment Failed
       // (AMOUNT_MISMATCH, OUT_SLOT, DUPLICATE_CALLBACK) — không chờ expired.
+      // Đóng cổng QR Expired để timer setTimeout (chạy độc lập với polling) không
+      // mở popup expired chồng lên popup Payment Failed khi tới expiredAt.
       if (data.eventType) {
+        qrExpiredDialogGateRef.current = true
         setStopPaymentPoll(true)
         setPaymentFailedReason(data.eventType)
         return
