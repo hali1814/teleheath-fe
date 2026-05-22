@@ -3,6 +3,40 @@
  * Trả về `File` JPEG; nếu không đọc được ảnh hoặc lỗi thì trả về file gốc.
  */
 
+const JPEG_PASSTHROUGH_MIMES = new Set(['image/jpeg', 'image/png'])
+
+export function needsJpegConversion(file: File): boolean {
+  const mime = (file.type || '').toLowerCase()
+  if (!mime.startsWith('image/')) return false
+  return !JPEG_PASSTHROUGH_MIMES.has(mime)
+}
+
+export async function convertImageToJpeg(
+  file: File,
+  quality = 0.95,
+): Promise<File> {
+  if (!file.type.startsWith('image/')) return file
+  try {
+    const img = await loadImageFromFile(file)
+    const w = img.naturalWidth || img.width
+    const h = img.naturalHeight || img.height
+    if (!w || !h) return file
+    const canvas = document.createElement('canvas')
+    canvas.width = w
+    canvas.height = h
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return file
+    ctx.drawImage(img, 0, 0, w, h)
+    const blob = await canvasToJpegBlob(canvas, quality)
+    return new File([blob], buildOutputName(file.name), {
+      type: 'image/jpeg',
+      lastModified: Date.now(),
+    })
+  } catch {
+    return file
+  }
+}
+
 export interface CompressImageFileOptions {
   /** Cạnh dài nhất (px) sau khi scale; mặc định 1920 */
   maxSide?: number
