@@ -17,7 +17,22 @@ function formatFileSize(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-const ALLOWED_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'pdf'])
+const ALLOWED_EXTENSIONS = new Set([
+  'png',
+  'jpg',
+  'jpeg',
+  'pdf',
+  'heic',
+  'heif',
+])
+
+const ALLOWED_MIMES = new Set([
+  'image/png',
+  'image/jpeg',
+  'image/heic',
+  'image/heif',
+  'application/pdf',
+])
 
 function getFileExtension(file: File): string {
   const name = file.name ?? ''
@@ -29,11 +44,49 @@ function getFileExtension(file: File): string {
 function isAllowedFile(file: File): boolean {
   const ext = getFileExtension(file)
   if (ALLOWED_EXTENSIONS.has(ext)) return true
-  // Fallback theo MIME type (một số môi trường có thể thiếu ext)
   const mime = file.type?.toLowerCase?.() ?? ''
-  return (
-    mime === 'image/png' || mime === 'image/jpeg' || mime === 'application/pdf'
-  )
+  return ALLOWED_MIMES.has(mime)
+}
+
+function getMimeExtension(mime: string): string {
+  switch (mime) {
+    case 'image/png':
+      return 'png'
+    case 'image/jpeg':
+      return 'jpg'
+    case 'image/heic':
+      return 'heic'
+    case 'image/heif':
+      return 'heif'
+    case 'application/pdf':
+      return 'pdf'
+    default:
+      return 'bin'
+  }
+}
+
+function ensureNamedFile(file: File): File {
+  const name = file.name ?? ''
+  if (name && name.includes('.')) return file
+  const ext = getMimeExtension(file.type?.toLowerCase?.() ?? '')
+  const fallbackName = `upload-${Date.now()}.${ext}`
+  return new File([file], fallbackName, {
+    type: file.type || 'application/octet-stream',
+    lastModified: file.lastModified,
+  })
+}
+
+function extractUploadErrorMessage(err: unknown): string | undefined {
+  if (!err || typeof err !== 'object') return undefined
+  const anyErr = err as Record<string, unknown>
+  const message = anyErr.message
+  if (typeof message === 'string' && message.length > 0) return message
+  const response = anyErr.response as Record<string, unknown> | undefined
+  const data = response?.data as Record<string, unknown> | undefined
+  const dataMessage = data?.message
+  if (typeof dataMessage === 'string' && dataMessage.length > 0)
+    return dataMessage
+  return undefined
 }
 
 function countCharacters(value?: string | null): number {
@@ -163,7 +216,8 @@ export function MedicalRecords() {
     if (!accepted.length) return
 
     void (async () => {
-      for (const file of accepted) {
+      for (const rawFile of accepted) {
+        const file = ensureNamedFile(rawFile)
         const id = crypto.randomUUID()
         appendMedicalFile(id, file)
 
@@ -175,9 +229,17 @@ export function MedicalRecords() {
             throw new Error('Missing fileId')
           }
           updateMedicalFile(id, fileId, 'success')
-        } catch {
+        } catch (err) {
+          console.error('[MedicalRecords] upload failed', {
+            fileName: file.name,
+            fileType: file.type,
+            fileSize: file.size,
+            error: err,
+          })
+          const backendMessage = extractUploadErrorMessage(err)
           toast.error(
             t('medicalRecords.toastUploadError', { fileName: file.name }),
+            backendMessage ? { description: backendMessage } : undefined,
           )
           updateMedicalFile(id, '', 'error')
         }
