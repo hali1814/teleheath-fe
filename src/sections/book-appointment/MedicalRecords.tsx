@@ -4,10 +4,7 @@ import { Spinner } from '#/components/ui/spinner'
 import { Textarea } from '#/components/ui/textarea'
 import { useUploadImageMutation } from '#/services/query/upload/use-upload-image-mutate'
 import { useBookingStore, type FileRowStatus } from '#/stores/booking-store'
-import {
-  convertImageToJpeg,
-  needsJpegConversion,
-} from '#/utils/compress-image.util'
+import { convertImageToJpeg } from '#/utils/compress-image.util'
 import { useId } from 'react'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -235,12 +232,6 @@ export function MedicalRecords() {
         )
         continue
       }
-      if (file.size > MAX_FILE_BYTES) {
-        toast.error(
-          t('medicalRecords.toastFileTooLarge', { fileName: file.name }),
-        )
-        continue
-      }
       accepted.push(file)
     }
 
@@ -252,12 +243,21 @@ export function MedicalRecords() {
       for (const rawFile of accepted) {
         let file = ensureNamedFile(rawFile)
         file = normalizeFileMime(file)
-        if (needsJpegConversion(file)) {
-          file = ensureNamedFile(await convertImageToJpeg(file))
+        const isImage = file.type.startsWith('image/')
+        if (isImage) {
+          // Camera capture can produce 10–15MB JPEG/HEIC; re-encode to JPEG
+          // without scaling so BE's 10MB limit isn't tripped (no resize like avatar).
+          file = ensureNamedFile(await convertImageToJpeg(file, 0.92))
         }
         if (!BACKEND_ACCEPTED_MIMES.has(file.type)) {
           toast.error(
             t('medicalRecords.toastFileNotAllowed', { fileName: file.name }),
+          )
+          continue
+        }
+        if (file.size > MAX_FILE_BYTES) {
+          toast.error(
+            t('medicalRecords.toastFileTooLarge', { fileName: file.name }),
           )
           continue
         }
