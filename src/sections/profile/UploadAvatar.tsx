@@ -39,6 +39,8 @@ export default function UploadAvatar({
   }, [value])
 
   const { mutateAsync, isPending } = useUploadImageMutation()
+  const [isCompressing, setIsCompressing] = useState(false)
+  const isBusy = isPending || isCompressing
 
   const uploadFile = useCallback(
     async (file: File) => {
@@ -58,10 +60,18 @@ export default function UploadAvatar({
       if (!file) return
 
       const targetMaxBytes = Math.floor(MAX_AVATAR_SIZE_BYTES * 0.95)
-      const toUpload =
+      const needsCompression =
         file.type.startsWith('image/') && file.size > targetMaxBytes
-          ? await compressImageFile(file, { maxBytes: targetMaxBytes })
-          : file
+
+      let toUpload = file
+      if (needsCompression) {
+        setIsCompressing(true)
+        try {
+          toUpload = await compressImageFile(file, { maxBytes: targetMaxBytes })
+        } finally {
+          setIsCompressing(false)
+        }
+      }
 
       if (toUpload.size > MAX_AVATAR_SIZE_BYTES) {
         toast.error(
@@ -113,7 +123,7 @@ export default function UploadAvatar({
 
       <button
         type="button"
-        disabled={isPending || disabled}
+        disabled={isBusy || disabled}
         onClick={() => setSheetOpen(true)}
         className="relative flex h-[128px] w-[128px] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-[#D331311A] p-0 disabled:opacity-60"
         aria-label={t('uploadPhoto')}
@@ -121,7 +131,7 @@ export default function UploadAvatar({
         {avatarUrl ? (
           <>
             <Avatar src={avatarUrl} alt="" />
-            {isPending ? (
+            {isBusy ? (
               <div
                 className="absolute inset-0 flex items-center justify-center bg-black/35"
                 aria-hidden
@@ -147,7 +157,7 @@ export default function UploadAvatar({
                 strokeDasharray="6 4"
               />
             </svg>
-            {isPending ? (
+            {isBusy ? (
               <Spinner className="size-8 text-[#D33131]" />
             ) : (
               <Icon name="upload_camera" className="pointer-events-none" />
@@ -174,7 +184,7 @@ export default function UploadAvatar({
           <Button
             type="button"
             variant="ghost"
-            disabled={isPending}
+            disabled={isBusy}
             className="flex h-auto w-full items-center justify-start gap-3 rounded-2xl px-4 py-4 shadow-none hover:bg-muted/60"
             onClick={() => openInputAfterSheetClose(cameraInputRef)}
           >
@@ -186,7 +196,7 @@ export default function UploadAvatar({
           <Button
             type="button"
             variant="ghost"
-            disabled={isPending}
+            disabled={isBusy}
             className="flex h-auto w-full items-center justify-start gap-3 rounded-2xl px-4 py-4 shadow-none hover:bg-muted/60"
             onClick={() => openInputAfterSheetClose(libraryInputRef)}
           >
