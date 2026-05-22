@@ -22,6 +22,7 @@ import { BottomSheetTranslate } from '#/sections/profile/BottomSheetTranslate'
 import { clearProfile, useProfileStore } from '#/stores/profile'
 import { clearTokens } from '#/stores/token'
 import { debounceEndSession } from '#/services/network/axios.service'
+import { http } from '#/services/network/http-request'
 import { concatAddress, formatDate, getInitialsFromName } from '#/utils'
 import RequireLogin from '#/components/RequireLogin'
 
@@ -35,7 +36,12 @@ function RouteComponent() {
   const [openBottomSheet, setOpenBottomSheet] = useState(false)
   const [openLogoutConfirm, setOpenLogoutConfirm] = useState(false)
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await http.post('/auth/logout', {})
+    } catch {
+      // Native shell will clear local session even if the network is unavailable.
+    }
     clearTokens()
     clearProfile()
     debounceEndSession()
