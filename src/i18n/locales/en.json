@@ -533,6 +533,7 @@
     "subtotal": "Subtotal",
     "total": "TOTAL",
     "back": "Back",
-    "khqrQrAlt": "KHQR Payment QR"
+    "khqrQrAlt": "KHQR Payment QR",
+    "qrExpiresIn": "QR expires in"
   }
 }

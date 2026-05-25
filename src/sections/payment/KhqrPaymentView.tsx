@@ -93,6 +93,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   const [paymentFailedReason, setPaymentFailedReason] =
     useState<PaymentFailureEventType | null>(null)
   const qrExpiredDialogGateRef = useRef(false)
+  const [remainingMs, setRemainingMs] = useState<number | null>(null)
 
   useEffect(() => {
     qrExpiredDialogGateRef.current = false
@@ -100,6 +101,30 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     setQrExpiredDialogOpen(false)
     setPaymentFailedReason(null)
   }, [bookingToken])
+
+  useEffect(() => {
+    if (!khqr?.expiredAt) {
+      setRemainingMs(null)
+      return
+    }
+    const expiredAtMs = new Date(khqr.expiredAt).getTime()
+    const tick = () => {
+      const diff = expiredAtMs - Date.now()
+      setRemainingMs(diff > 0 ? diff : 0)
+    }
+    tick()
+    const intervalId = window.setInterval(tick, 1000)
+    return () => window.clearInterval(intervalId)
+  }, [khqr?.expiredAt])
+
+  const formatCountdown = (ms: number) => {
+    const totalSeconds = Math.max(0, Math.floor(ms / 1000))
+    const mm = Math.floor(totalSeconds / 60)
+      .toString()
+      .padStart(2, '0')
+    const ss = (totalSeconds % 60).toString().padStart(2, '0')
+    return `${mm}:${ss}`
+  }
 
   const openQrExpiredDialog = useCallback(() => {
     if (qrExpiredDialogGateRef.current) return
@@ -273,6 +298,21 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
           </div>
         ) : (
           <>
+            {remainingMs !== null && (
+              <div className="flex flex-col items-center gap-[4px]">
+                <Text className="text-sm text-[#808080]">
+                  {t('qrExpiresIn')}
+                </Text>
+                <Text
+                  size="lg_16"
+                  className={`font-semibold leading-[1.2] tabular-nums ${
+                    remainingMs <= 60_000 ? 'text-[#EF4444]' : 'text-[#11BFC6]'
+                  }`}
+                >
+                  {formatCountdown(remainingMs)}
+                </Text>
+              </div>
+            )}
             <Image
               src={`data:image/png;base64,${khqr.qrImage}`}
               alt={t('khqrQrAlt')}

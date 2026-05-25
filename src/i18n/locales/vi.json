@@ -533,6 +533,7 @@
     "subtotal": "Tạm tính",
     "total": "TỔNG CỘNG",
     "back": "Quay lại",
-    "khqrQrAlt": "Mã QR thanh toán KHQR"
+    "khqrQrAlt": "Mã QR thanh toán KHQR",
+    "qrExpiresIn": "Mã QR hết hạn sau"
   }
 }
