@@ -372,6 +372,8 @@
       "addressLabel": "អាសយដ្ឋានទៅទទួល",
       "noteLabel": "កំណត់ចំណាំ",
       "placeholderTime": "00:00",
+      "placeholderHour": "ម៉ោង",
+      "placeholderMinute": "នាទី",
       "placeholderAddress": "អាសយដ្ឋានទៅទទួល",
       "placeholderNote": "ឧទាហរណ៍៖ ចំនួនកៅអី",
       "invalidTimeFormat": "សូមបញ្ចូលម៉ោងឱ្យបានត្រឹមត្រូវ តាមទម្រង់ HH:mm"
