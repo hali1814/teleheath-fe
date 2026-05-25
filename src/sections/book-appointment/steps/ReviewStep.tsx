@@ -12,33 +12,25 @@ import { useTranslation } from 'react-i18next'
 import { ModalDetailService } from '../ModalDetailService'
 import type { ServiceType } from '#/types/service'
 import TextInputBase from '#/components/input/TextInputBase'
+import InputSelect from '#/components/input/InputSelect'
 import { AppointmentDetailSheet } from '../AppointmentDetailSheet'
 
 const PICK_UP_SERVICE_ID = 1
 
-const formatTimeInput = (value: string) => {
-  const digits = value.replace(/\D/g, '').slice(0, 4)
+const HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => {
+  const v = i.toString().padStart(2, '0')
+  return { label: v, value: v }
+})
 
-  if (digits.length <= 2) {
-    return digits
-  }
+const MINUTE_OPTIONS = Array.from({ length: 60 }, (_, i) => {
+  const v = i.toString().padStart(2, '0')
+  return { label: v, value: v }
+})
 
-  const hour = Math.min(Number(digits.slice(0, 2) || '0'), 23)
-  const minuteRaw = digits.slice(2)
-
-  if (minuteRaw.length === 1) {
-    return `${hour.toString().padStart(2, '0')}:${minuteRaw}`
-  }
-
-  const minute = Math.min(Number(minuteRaw || '0'), 59)
-  return `${hour.toString().padStart(2, '0')}:${minute
-    .toString()
-    .padStart(2, '0')}`
-}
-
-const isValidPickupTime = (value?: string) => {
-  if (!value) return false
-  return /^([01]\d|2[0-3]):[0-5]\d$/.test(value)
+const splitPickupTime = (value?: string): [string, string] => {
+  if (!value) return ['', '']
+  const [h = '', m = ''] = value.split(':')
+  return [h, m]
 }
 
 const ServiceItem = ({
@@ -50,13 +42,17 @@ const ServiceItem = ({
 }) => {
   const { t } = useTranslation(['book-appointment', 'common'])
   const { pickupTime, pickupAddress, pickupNote, setData } = useBookingStore()
-  const [isPickupTimeTouched, setIsPickupTimeTouched] = useState(false)
-  const pickupTimeError =
-    isPickupTimeTouched && pickupTime && !isValidPickupTime(pickupTime)
-      ? t('pickup.invalidTimeFormat', {
-          defaultValue: 'Please enter a valid time in HH:mm format',
-        })
-      : undefined
+  const [pickupHour, pickupMinute] = splitPickupTime(pickupTime)
+
+  const handlePickupHourChange = (value: string) => {
+    const minute = pickupMinute || '00'
+    setData({ pickupTime: `${value}:${minute}` })
+  }
+
+  const handlePickupMinuteChange = (value: string) => {
+    const hour = pickupHour || '00'
+    setData({ pickupTime: `${hour}:${value}` })
+  }
 
   return (
     <div className="flex flex-col gap-[8px]">
@@ -74,21 +70,29 @@ const ServiceItem = ({
       </div>
       {service.id === PICK_UP_SERVICE_ID && (
         <>
-          <TextInputBase
-            label={t('pickup.timeLabel')}
-            placeholder={t('pickup.placeholderTime')}
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9:]*"
-            maxLength={5}
-            value={pickupTime}
-            msgError={pickupTimeError}
-            onBlur={() => setIsPickupTimeTouched(true)}
-            onChange={(e) => {
-              setIsPickupTimeTouched(true)
-              setData({ pickupTime: formatTimeInput(e.target.value) })
-            }}
-          />
+          <div className="flex flex-col gap-1">
+            <Text size="base_14" className="text-text-secondary font-normal">
+              {t('pickup.timeLabel')}
+            </Text>
+            <div className="flex items-start gap-[8px]">
+              <div className="flex-1 min-w-0">
+                <InputSelect
+                  placeholder={t('pickup.placeholderHour')}
+                  options={HOUR_OPTIONS}
+                  value={pickupHour || undefined}
+                  onValueChange={handlePickupHourChange}
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <InputSelect
+                  placeholder={t('pickup.placeholderMinute')}
+                  options={MINUTE_OPTIONS}
+                  value={pickupMinute || undefined}
+                  onValueChange={handlePickupMinuteChange}
+                />
+              </div>
+            </div>
+          </div>
           <TextInputBase
             label={t('pickup.addressLabel')}
             placeholder={t('pickup.placeholderAddress')}

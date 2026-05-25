@@ -371,6 +371,8 @@
       "addressLabel": "Địa chỉ đón",
       "noteLabel": "Ghi chú",
       "placeholderTime": "00:00",
+      "placeholderHour": "Giờ",
+      "placeholderMinute": "Phút",
       "placeholderAddress": "Địa chỉ đón",
       "placeholderNote": "Ví dụ: Số chỗ ngồi",
       "invalidTimeFormat": "Vui lòng nhập thời gian hợp lệ theo định dạng HH:mm"
