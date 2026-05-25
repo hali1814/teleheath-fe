@@ -93,6 +93,10 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   const [paymentFailedReason, setPaymentFailedReason] =
     useState<PaymentFailureEventType | null>(null)
   const qrExpiredDialogGateRef = useRef(false)
+  const checkStatusRefetchRef = useRef<
+    | (() => Promise<{ data?: { data?: CheckStatusPaymentResponse } } | undefined>)
+    | null
+  >(null)
   const [remainingMs, setRemainingMs] = useState<number | null>(null)
 
   useEffect(() => {
@@ -142,29 +146,67 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
   useEffect(() => {
     if (!khqr?.expiredAt) return
 
-    const runIfExpired = () => {
-      if (new Date(khqr.expiredAt) <= new Date()) {
-        openQrExpiredDialog()
+    // Trước khi mở popup expired, refetch 1 lần cuối để tránh race khi user vừa
+    // pay xong trên app khác rồi quay lại sau khi expiredAt đã trôi qua —
+    // polling bị tab background tạm dừng nên FE có thể chưa biết status=SUCCESS.
+    const handleExpired = async () => {
+      if (qrExpiredDialogGateRef.current) return
+      try {
+        const result = await checkStatusRefetchRef.current?.()
+        const payload = result?.data?.data
+        if (payload?.status === 'SUCCESS' && payload.appointmentCode) {
+          qrExpiredDialogGateRef.current = true
+          setStopPaymentPoll(true)
+          reset()
+          navigate({
+            to: '/app/book-appointment/success/$appointmentCode',
+            params: { appointmentCode: payload.appointmentCode },
+          })
+          return
+        }
+        if (payload?.eventType) {
+          qrExpiredDialogGateRef.current = true
+          setStopPaymentPoll(true)
+          setPaymentFailedReason(payload.eventType)
+          return
+        }
+      } catch {
+        // ignore — fall through to expired dialog
       }
+      openQrExpiredDialog()
     }
 
-    runIfExpired()
-
     const ms = new Date(khqr.expiredAt).getTime() - Date.now()
-    if (ms <= 0) return
+    if (ms <= 0) {
+      void handleExpired()
+      return
+    }
 
     const timerId = window.setTimeout(() => {
-      openQrExpiredDialog()
+      void handleExpired()
     }, ms)
 
     return () => window.clearTimeout(timerId)
-  }, [khqr?.expiredAt, openQrExpiredDialog])
+  }, [khqr?.expiredAt, openQrExpiredDialog, reset, navigate])
 
   const onCheckStatusSuccess = useCallback(
     ({ data }: { data: CheckStatusPaymentResponse }) => {
       if (!data) return
 
-      // Ưu tiên 1: BE báo 1 trong 3 event_type cần show popup Payment Failed
+      // Ưu tiên 1: thanh toán thành công — kể cả khi đã quá expiredAt vẫn phải
+      // điều hướng sang màn success (BE đã tạo appointment), không hiển thị expired.
+      if (data.status === 'SUCCESS' && data.appointmentCode) {
+        qrExpiredDialogGateRef.current = true
+        setStopPaymentPoll(true)
+        reset()
+        navigate({
+          to: '/app/book-appointment/success/$appointmentCode',
+          params: { appointmentCode: data.appointmentCode },
+        })
+        return
+      }
+
+      // Ưu tiên 2: BE báo 1 trong 3 event_type cần show popup Payment Failed
       // (AMOUNT_MISMATCH, OUT_SLOT, DUPLICATE_CALLBACK) — không chờ expired.
       // Đóng cổng QR Expired để timer setTimeout (chạy độc lập với polling) không
       // mở popup expired chồng lên popup Payment Failed khi tới expiredAt.
@@ -175,20 +217,10 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
         return
       }
 
-      // Ưu tiên 2: QR đã hết hạn theo timer client
+      // Ưu tiên 3: QR đã hết hạn theo timer client
       if (khqr?.expiredAt && new Date(khqr.expiredAt) <= new Date()) {
         openQrExpiredDialog()
         return
-      }
-
-      // Ưu tiên 3: thanh toán thành công
-      if (data.status === 'SUCCESS') {
-        if (!data.appointmentCode) return
-        reset()
-        navigate({
-          to: '/app/book-appointment/success/$appointmentCode',
-          params: { appointmentCode: data.appointmentCode },
-        })
       }
     },
     [khqr?.expiredAt, openQrExpiredDialog, reset, navigate],
@@ -211,7 +243,7 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     }
   }, [khqr?.qrImage, t])
 
-  useCheckStatusPaymentQuery({
+  const { refetch: refetchPaymentStatus } = useCheckStatusPaymentQuery({
     params: { refId: khqr?.refId ?? '' },
     enabled: !!khqr?.refId && !stopPaymentPoll,
     /** Tránh toast lặp mỗi lần poll lỗi */
@@ -224,6 +256,13 @@ export function KhqrPaymentView({ bookingToken }: { bookingToken: string }) {
     },
     onSuccess: onCheckStatusSuccess,
   })
+
+  useEffect(() => {
+    checkStatusRefetchRef.current =
+      refetchPaymentStatus as unknown as () => Promise<{
+        data?: { data?: CheckStatusPaymentResponse }
+      } | undefined>
+  }, [refetchPaymentStatus])
 
   return (
     <>
