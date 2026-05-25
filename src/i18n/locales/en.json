@@ -476,6 +476,7 @@
     "selectedPackageTitle": "Selected Package",
     "paymentMethodsHeading": "Payment Methods",
     "specialtyWithName": "Specialty: {{name}}",
+    "doctorWithName": "Doctor: {{name}}",
     "consultationWithAmount": "Consultation: {{amount}}",
     "addonServices": "Add-on services",
     "addonPriceDisclaimer": "Prices are shown for reference only. Users pay directly to the provider, not through the app.",

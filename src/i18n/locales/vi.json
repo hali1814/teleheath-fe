@@ -476,6 +476,7 @@
     "selectedPackageTitle": "Gói đã chọn",
     "paymentMethodsHeading": "Phương thức thanh toán",
     "specialtyWithName": "Chuyên khoa: {{name}}",
+    "doctorWithName": "Bác sĩ: {{name}}",
     "consultationWithAmount": "Tư vấn: {{amount}}",
     "addonServices": "Dịch vụ bổ sung",
     "addonPriceDisclaimer": "Giá chỉ mang tính tham khảo. Người dùng thanh toán trực tiếp với nhà cung cấp, không qua ứng dụng.",
