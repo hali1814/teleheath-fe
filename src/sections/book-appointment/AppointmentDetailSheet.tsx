@@ -299,6 +299,28 @@ export function AppointmentDetailSheet({
               </Text>
             </div>
           )}
+
+          {bookingType === 'HOSPITAL' && doctor && (
+            <div className="flex items-center gap-[12px] bg-[#F8FAFC] p-[12px] rounded-[8px]">
+              {doctor.avatarUrl ? (
+                <Image
+                  src={doctor.avatarUrl}
+                  alt={doctor.name ?? ''}
+                  className="w-[20px] h-[20px] rounded-full object-cover"
+                />
+              ) : (
+                <Icon
+                  name="user_outline"
+                  className="w-[20px] h-[20px] text-primary"
+                />
+              )}
+              <Text className="flex-1 leading-normal font-medium">
+                {t('appointment:doctorWithName', {
+                  name: doctor.name ?? '',
+                })}
+              </Text>
+            </div>
+          )}
         </div>
       </SheetContent>
     </Sheet>

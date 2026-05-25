@@ -477,6 +477,7 @@
     "selectedPackageTitle": "កញ្ចប់ដែលបានជ្រើសរើស",
     "paymentMethodsHeading": "វិធីសាស្រ្តទូទាត់",
     "specialtyWithName": "ឯកទេស៖ {{name}}",
+    "doctorWithName": "វេជ្ជបណ្ឌិត៖ {{name}}",
     "consultationWithAmount": "ការពិគ្រោះ៖ {{amount}}",
     "addonServices": "សេវាកម្មបន្ថែម",
     "addonPriceDisclaimer": "តម្លៃបង្ហាញសម្រាប់យោងតែប៉ុណ្ណោះ។ អ្នកប្រើប្រាស់បង់ផ្ទាល់ទៅអ្នកផ្តល់សេវា មិនមែនតាមកម្មវិធីទេ។",
