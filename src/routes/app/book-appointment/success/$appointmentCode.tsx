@@ -28,7 +28,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="relative px-[15px]">
+    <div className="relative mt-[60px] px-[15px]">
       <div className="flex flex-col items-center justify-center gap-[16px]">
         <Icon name="booking_success" className="text-white" />
         <div className="flex flex-col items-center justify-center gap-[10px]">
