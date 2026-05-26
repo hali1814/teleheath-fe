@@ -41,7 +41,7 @@ export default function DoctorInfoHeader({
               className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
             >
               <div className="size-[6px] rounded-full bg-muted-foreground" />{' '}
-              {specialty}
+              <div className="flex-1">{specialty}</div>
             </Text>
           ))}
         </div>

@@ -88,7 +88,7 @@ export default function DoctorCard({
                   className="flex items-center gap-[8px] font-normal text-muted-foreground leading-[1.3]"
                 >
                   <div className="size-[4px] rounded-full bg-muted-foreground" />
-                  {specialty}
+                  <div className="flex-1">{specialty}</div>
                 </Text>
               ))}
           </div>
@@ -192,7 +192,7 @@ export default function DoctorCard({
                   className="flex items-center gap-[8px] font-medium text-muted-foreground leading-normal"
                 >
                   <div className="size-[4px] rounded-full bg-muted-foreground" />
-                  {specialty}
+                  <div className="flex-1">{specialty}</div>
                 </Text>
               ))}
           </div>
