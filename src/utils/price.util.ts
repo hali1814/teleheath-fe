@@ -6,5 +6,6 @@ export const formatPrice = (price: number, onlyNumber: boolean = false) => {
     : price.toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD',
+        currencyDisplay: 'narrowSymbol',
       })
 }
