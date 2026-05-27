@@ -122,7 +122,7 @@ function RouteComponent() {
           isPending={bannersPending}
         />
         {/* <PremiumService /> */}
-        <CountryTab />
+        {/* <CountryTab /> */}
       </div>
       <div
         className="flex flex-col gap-[20px] mb-[120px]"
