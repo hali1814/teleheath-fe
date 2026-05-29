@@ -152,6 +152,7 @@
     "deleteAccountConfirmDescription": "Quyền truy cập tài khoản của bạn sẽ bị xóa và bạn sẽ được đăng xuất khỏi thiết bị này. Thông báo đẩy cho tài khoản này sẽ được tắt. Lịch hẹn, thanh toán và hồ sơ y tế cần lưu giữ vì lý do vận hành hoặc pháp lý có thể vẫn được giữ theo chính sách bảo mật.",
     "deleteAccountCancel": "Hủy",
     "deleteAccountConfirm": "Xóa",
+    "deleteAccountFailed": "Không thể xóa tài khoản. Vui lòng thử lại.",
     "logout": "Đăng xuất",
     "logoutConfirmTitle": "Đăng xuất?",
     "logoutConfirmDescription": "Bạn có chắc chắn muốn đăng xuất?",

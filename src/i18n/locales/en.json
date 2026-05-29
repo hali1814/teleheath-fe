@@ -152,6 +152,7 @@
     "deleteAccountConfirmDescription": "Your account access will be deleted and you will be signed out on this device. Push notifications for this account will be turned off. Appointment, payment, and medical records that must be retained for operational or legal reasons may still be kept according to our privacy policy.",
     "deleteAccountCancel": "Cancel",
     "deleteAccountConfirm": "Delete",
+    "deleteAccountFailed": "Could not delete your account. Please try again.",
     "logout": "Log out",
     "logoutConfirmTitle": "Log out?",
     "logoutConfirmDescription": "Are you sure you want to log out?",

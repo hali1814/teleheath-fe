@@ -18,6 +18,7 @@ import effectPng from '#/assets/images/profile/effect.png'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { BottomSheetTranslate } from '#/sections/profile/BottomSheetTranslate'
 import { clearProfile, useProfileStore } from '#/stores/profile'
 import { clearTokens } from '#/stores/token'
@@ -80,6 +81,7 @@ function RouteComponent() {
       setOpenDeleteAccountConfirm(false)
       endNativeSession()
     } catch {
+      toast.error(t('deleteAccountFailed'))
       setIsDeletingAccount(false)
     }
   }
