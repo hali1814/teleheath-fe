@@ -30,11 +30,37 @@ export const Route = createFileRoute('/app/profile/(commonLayout)/')({
   component: RouteComponent,
 })
 
+const DELETE_ACCOUNT_TEST_PHONE = '972999999'
+
+function normalizePhoneForInternalTest(phone?: string | null) {
+  const digits = phone?.replace(/\D/g, '') ?? ''
+  const withoutInternationalPrefix = digits.startsWith('00')
+    ? digits.slice(2)
+    : digits
+  const withoutCountryCode = withoutInternationalPrefix.startsWith('855')
+    ? withoutInternationalPrefix.slice(3)
+    : withoutInternationalPrefix
+  return withoutCountryCode.replace(/^0+/, '')
+}
+
+function canShowDeleteAccountOption(phone?: string | null) {
+  return normalizePhoneForInternalTest(phone) === DELETE_ACCOUNT_TEST_PHONE
+}
+
 function RouteComponent() {
   const { t, i18n } = useTranslation('profile')
   const navigate = useNavigate()
   const [openBottomSheet, setOpenBottomSheet] = useState(false)
   const [openLogoutConfirm, setOpenLogoutConfirm] = useState(false)
+  const [openDeleteAccountConfirm, setOpenDeleteAccountConfirm] =
+    useState(false)
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false)
+
+  const endNativeSession = () => {
+    clearTokens()
+    clearProfile()
+    debounceEndSession()
+  }
 
   const handleLogout = async () => {
     try {
@@ -42,16 +68,29 @@ function RouteComponent() {
     } catch {
       // Native shell will clear local session even if the network is unavailable.
     }
-    clearTokens()
-    clearProfile()
-    debounceEndSession()
+    endNativeSession()
     setOpenLogoutConfirm(false)
   }
+
+  const handleDeleteAccount = async () => {
+    if (isDeletingAccount) return
+    setIsDeletingAccount(true)
+    try {
+      await http.delete<void>('/auth/account')
+      setOpenDeleteAccountConfirm(false)
+      endNativeSession()
+    } catch {
+      setIsDeletingAccount(false)
+    }
+  }
+
   const user = useProfileStore((s) => s.profile)
 
   if (!user?.id) {
     return <RequireLogin />
   }
+
+  const showDeleteAccountOption = canShowDeleteAccountOption(user.phone)
 
   return (
     <div>
@@ -145,6 +184,14 @@ function RouteComponent() {
             onClick={() => setOpenBottomSheet(true)}
           />
 
+          {showDeleteAccountOption ? (
+            <CardNavigate
+              title={t('deleteAccount')}
+              icon="warning"
+              onClick={() => setOpenDeleteAccountConfirm(true)}
+            />
+          ) : null}
+
           <CardNavigate
             title={t('logout')}
             icon="logout"
@@ -176,6 +223,39 @@ function RouteComponent() {
                 onClick={handleLogout}
               >
                 {t('logoutConfirm')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          open={openDeleteAccountConfirm}
+          onOpenChange={setOpenDeleteAccountConfirm}
+        >
+          <DialogContent className="gap-0 rounded-2xl bg-white p-6 max-w-[min(calc(100%-3rem),300px)]">
+            <DialogHeader className="space-y-2 text-center">
+              <DialogTitle className="text-lg font-semibold text-text-primary">
+                {t('deleteAccountConfirmTitle')}
+              </DialogTitle>
+              <DialogDescription className="text-sm text-placeholder-input">
+                {t('deleteAccountConfirmDescription')}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="mt-6 flex-row gap-3 sm:justify-stretch">
+              <Button
+                variant="outline"
+                className="flex-1 rounded-full"
+                disabled={isDeletingAccount}
+                onClick={() => setOpenDeleteAccountConfirm(false)}
+              >
+                {t('deleteAccountCancel')}
+              </Button>
+              <Button
+                className="flex-1 rounded-full bg-secondary"
+                disabled={isDeletingAccount}
+                onClick={handleDeleteAccount}
+              >
+                {t('deleteAccountConfirm')}
               </Button>
             </DialogFooter>
           </DialogContent>
