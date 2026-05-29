@@ -26,6 +26,7 @@ import { debounceEndSession } from '#/services/network/axios.service'
 import { http } from '#/services/network/http-request'
 import { concatAddress, formatDate, getInitialsFromName } from '#/utils'
 import RequireLogin from '#/components/RequireLogin'
+import LoadingBlocking from '#/components/LoadingBlocking'
 
 export const Route = createFileRoute('/app/profile/(commonLayout)/')({
   component: RouteComponent,
@@ -266,6 +267,10 @@ function RouteComponent() {
         <BottomSheetTranslate
           open={openBottomSheet}
           onClose={() => setOpenBottomSheet(false)}
+        />
+
+        <LoadingBlocking
+          isLoading={isDeletingAccount}
         />
       </div>
     </div>
