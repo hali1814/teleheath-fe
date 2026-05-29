@@ -189,7 +189,7 @@ function RouteComponent() {
           {showDeleteAccountOption ? (
             <CardNavigate
               title={t('deleteAccount')}
-              icon="warning"
+              icon="appointment_cancel"
               onClick={() => setOpenDeleteAccountConfirm(true)}
             />
           ) : null}
