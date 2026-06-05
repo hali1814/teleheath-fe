@@ -113,6 +113,12 @@
       },
       "bookNow": "Đặt lịch ngay!"
     },
+    "popupAds": {
+      "tag": "Độc quyền",
+      "title": "Dịch vụ y tế cao cấp tại Việt Nam",
+      "description": "Trải nghiệm dịch vụ chăm sóc sức khỏe đẳng cấp thế giới với các bệnh viện quốc tế và chuyên gia hàng đầu của chúng tôi.",
+      "bookNow": "Đặt lịch ngay"
+    },
     "topHospitals": "Bệnh viện hàng đầu",
     "specialties": "Chuyên khoa",
     "specializedPackages": "Gói dịch vụ chuyên sâu",

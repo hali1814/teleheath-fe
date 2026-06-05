@@ -113,6 +113,12 @@
       },
       "bookNow": "BOOK NOW!"
     },
+    "popupAds": {
+      "tag": "Exclusive",
+      "title": "Premium Medical Services in Vietnam",
+      "description": "Experience world-class healthcare with our top-rated international hospitals and specialists.",
+      "bookNow": "Book now"
+    },
     "topHospitals": "Top Hospitals",
     "specialties": "Specialties",
     "specializedPackages": "Specialized Packages",

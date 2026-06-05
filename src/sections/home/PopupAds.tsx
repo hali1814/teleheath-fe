@@ -3,6 +3,7 @@ import Image from '#/components/image'
 import Modal from '#/components/Modal'
 import Text from '#/components/text'
 import { useNavigate } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 export default function PopupAds({
   isOpen,
@@ -12,6 +13,7 @@ export default function PopupAds({
   onClose: () => void
 }) {
   const navigate = useNavigate()
+  const { t } = useTranslation(['home'])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -41,7 +43,7 @@ export default function PopupAds({
               size="sm_12"
               className="font-medium text-white leading-none uppercase tracking-[3%]"
             >
-              Exclusive
+              {t('popupAds.tag')}
             </Text>
           </div>
         </div>
@@ -51,14 +53,13 @@ export default function PopupAds({
             size="2xl_20"
             className="text-center font-semibold leading-normal"
           >
-            Premium Medical Services in Vietnam
+            {t('popupAds.title')}
           </Text>
           <Text
             size="base_14"
             className="text-center font-normal leading-normal text-muted-foreground"
           >
-            Experience world-class healthcare with our top-rated international
-            hospitals and specialists.
+            {t('popupAds.description')}
           </Text>
 
           <button
@@ -78,7 +79,7 @@ export default function PopupAds({
               size="base_14"
               className="text-center font-semibold text-white leading-[1.2] uppercase"
             >
-              Book now
+              {t('popupAds.bookNow')}
             </Text>
           </button>
         </div>
