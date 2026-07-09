@@ -122,10 +122,28 @@ export function ModalDetailServiceType({
               )}
             </SectionHeading>
 
-            {serviceType.amenities.length > 0 && (
+            {serviceType.amenities?.length > 0 && (
               <SectionHeading>
                 <Text className="font-semibold leading-[1.2] text-[#333333]">
-                  {t('common:amenitiesInCar')}
+                  {t('common:amenitiesInCar', 'Tiện nghi')}
+                </Text>
+                <div className="flex flex-col gap-[8px]">
+                  {serviceType.amenities.map((amenity, index) => (
+                    <div key={index} className="flex items-center gap-[8px]">
+                      {amenity.iconUrl && <img src={amenity.iconUrl} alt={amenity.name} className="w-[16px] h-[16px] object-cover" />}
+                      <Text size="sm_12" className="leading-[1.8] text-muted-foreground">
+                        {amenity.name}
+                      </Text>
+                    </div>
+                  ))}
+                </div>
+              </SectionHeading>
+            )}
+
+            {safeDescriptionHtml && (
+              <SectionHeading>
+                <Text className="font-semibold leading-[1.2] text-[#333333]">
+                  {t('common:description', 'Chi tiết dịch vụ')}
                 </Text>
                 <div
                   className="prose prose-sm max-w-none [&_img]:my-[16px] [&_img]:rounded-[6px]"
