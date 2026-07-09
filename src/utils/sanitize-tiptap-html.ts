@@ -40,7 +40,7 @@ export function sanitizeTipTapHtml(html: string | null | undefined): string {
       'hr',
       'img',
     ],
-    ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'src', 'alt'],
+    ALLOWED_ATTR: ['href', 'target', 'rel', 'class', 'src', 'alt', 'style', 'title', 'width', 'height'],
     ALLOW_DATA_ATTR: false,
   })
 }
