@@ -17,6 +17,7 @@ export interface CheckupTypeDto {
   status: string
   specialtyId: number
   specialtyNameEn: string
+  description?: string
 }
 
 export interface ProvinceDto {

@@ -4,6 +4,11 @@ interface Branch {
   address: string
 }
 
+export interface CheckupTypeEntity {
+  name: string
+  description?: string
+}
+
 export interface Package {
   packageId: number
   imageUrl: string
@@ -14,5 +19,5 @@ export interface Package {
   description: string
   hospitalName: string
   branches: Branch[]
-  checkupTypes: string[]
+  checkupTypes: CheckupTypeEntity[]
 }

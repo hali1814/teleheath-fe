@@ -42,6 +42,9 @@ export const mapApiPackage = (api: ApiPackage): Package => ({
       : [],
   checkupTypes:
     api?.checkupTypes?.length > 0
-      ? api.checkupTypes.map((checkupType) => checkupType.name)
+      ? api.checkupTypes.map((checkupType) => ({
+          name: checkupType.name,
+          description: checkupType.description,
+        }))
       : [],
 })
