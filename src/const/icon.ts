@@ -106,6 +106,8 @@ import AddUserIcon from '#/assets/icons/common/add-user.svg?react'
 import DoctorMaleIcon from '#/assets/icons/common/doctor-male.svg?react'
 import DoctorFemaleIcon from '#/assets/icons/common/doctor-female.svg?react'
 import StarFallIcon from '#/assets/icons/common/star-fall.svg?react'
+// CR-02b: icon phòng cho modal hotel (export từ Figma)
+import RoomIcon from '#/assets/icons/common/room.svg?react'
 
 type IconComponent = FC<SVGProps<SVGSVGElement>>
 
@@ -208,6 +210,7 @@ const ICONS_TEMPLATE = {
   doctor_male: DoctorMaleIcon,
   doctor_female: DoctorFemaleIcon,
   star_fall: StarFallIcon,
+  room: RoomIcon,
 } satisfies Record<string, IconComponent>
 
 export default ICONS_TEMPLATE

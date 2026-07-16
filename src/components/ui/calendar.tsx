@@ -117,18 +117,15 @@ function Calendar({
           defaultClassNames.day,
         ),
         range_start: cn(
-          'relative isolate z-0 rounded-l-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:right-0 after:w-4 after:bg-muted',
+          'rounded-l-(--cell-radius) bg-[#FFF1F0]',
           defaultClassNames.range_start,
         ),
-        range_middle: cn('rounded-none', defaultClassNames.range_middle),
+        range_middle: cn('rounded-none bg-[#FFF1F0]', defaultClassNames.range_middle),
         range_end: cn(
-          'relative isolate z-0 rounded-r-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:left-0 after:w-4 after:bg-muted',
+          'rounded-r-(--cell-radius) bg-[#FFF1F0]',
           defaultClassNames.range_end,
         ),
-        today: cn(
-          'rounded-none bg-transparent text-inherit data-[selected=true]:bg-transparent',
-          defaultClassNames.today,
-        ),
+        today: cn('text-inherit', defaultClassNames.today),
         outside: cn(
           'text-black/40 aria-selected:text-black/40',
           defaultClassNames.outside,
@@ -231,6 +228,10 @@ function CalendarDayButton({
         'text-[#666666] hover:bg-transparent hover:text-[#666666]',
         'data-[selected-single=true]:size-[30px]! data-[selected-single=true]:bg-[#E22A36] data-[selected-single=true]:text-white data-[selected-single=true]:hover:bg-[#E22A36] data-[selected-single=true]:hover:text-white',
         'dark:data-[selected-single=true]:bg-[#E22A36] dark:data-[selected-single=true]:text-white',
+        // CR-02 hotel range picker: 2 đầu range = vòng tròn đỏ, giữa trong suốt trên dải hồng nhạt.
+        'data-[range-start=true]:size-[30px]! data-[range-start=true]:bg-[#E22A36] data-[range-start=true]:text-white data-[range-start=true]:hover:bg-[#E22A36] data-[range-start=true]:hover:text-white',
+        'data-[range-end=true]:size-[30px]! data-[range-end=true]:bg-[#E22A36] data-[range-end=true]:text-white data-[range-end=true]:hover:bg-[#E22A36] data-[range-end=true]:hover:text-white',
+        'data-[range-middle=true]:bg-transparent data-[range-middle=true]:text-[#333333] data-[range-middle=true]:hover:bg-transparent data-[range-middle=true]:hover:text-[#333333]',
         !isSelectedSingle && 'size-[30px]!',
         showTodayDot && 'overflow-visible',
         modifiers.outside && 'text-black/40',

@@ -1,11 +1,14 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
 import Text from '#/components/text'
-import { Checkbox } from '#/components/ui/checkbox'
-import { useBookingStore } from '#/stores/booking-store'
+import { useBookingStore, type SelectedAddon } from '#/stores/booking-store'
+import { DATA_TYPE, isCarDataType, TRIP_TYPE } from '#/const/addon'
 import { ServiceCard } from '../ServiceCard'
+import { First100Banner } from '../First100Banner'
+import { AddonHotelModal } from '../AddonHotelModal'
 import { useGetListAddonServicesByBranchQuery } from '#/services/query/services/list-addon-services-by-branch'
 import { useGetListAddonPartnersByBranchQuery } from '#/services/query/services/list-addon-partners-by-branch'
+import { useGetFirst100BannerQuery } from '#/services/query/promotions/first100-banner'
 import { ModalDetailServiceType } from '../ModalDetailServiceType'
 import type { ServiceType } from '#/types/service'
 import { EmptyState } from '#/sections/search'
@@ -17,10 +20,23 @@ import { Icon } from '#/components/icon'
 export function ServiceStep() {
   const { t } = useTranslation(['book-appointment'])
   const { addonServiceTypes, serviceIds, setData, branch } = useBookingStore()
+  const setAddonQuantity = useBookingStore((s) => s.setAddonQuantity)
+  const setAddonTripType = useBookingStore((s) => s.setAddonTripType)
   const [openDetailService, setOpenDetailService] = useState(false)
   const [selectedService, setSelectedService] = useState<
     ServiceType | undefined
   >(undefined)
+  // CR-02b: modal hotel (chỉ lưu khi Confirm)
+  const [hotelTarget, setHotelTarget] = useState<ServiceType | undefined>(
+    undefined,
+  )
+
+  // CR-02 §3.10: banner First100 — quyết định render + tính discount preview.
+  const { data: bannerRes } = useGetFirst100BannerQuery()
+  const banner = bannerRes?.data
+  useEffect(() => {
+    setData({ first100Banner: banner })
+  }, [banner, setData])
 
   const {
     data: addonServices,
@@ -79,6 +95,14 @@ export function ServiceStep() {
           price: serviceType.price,
           promotionPrice: serviceType.promotionPrice,
           description: serviceType.description,
+          // CR-01/CR-02: 6 field mới
+          dataTypeCode: serviceType.dataTypeCode,
+          maxQuantity: serviceType.maxQuantity,
+          promoEligible: serviceType.promoEligible,
+          originalPrice2: serviceType.originalPrice2,
+          promotionPrice2: serviceType.promotionPrice2,
+          bccsServiceCode: serviceType.bccsServiceCode,
+          bccsServiceCode2: serviceType.bccsServiceCode2,
           addonServiceId: partner.addonServiceId,
           addonServiceName: partner.addonServiceName,
           partnerId: partner.id,
@@ -118,6 +142,29 @@ export function ServiceStep() {
   const handleRefresh = async () => {
     await refetchAddonServices()
     await refetchServiceTypes()
+  }
+
+  // CR-02b: xác nhận modal hotel — 0 phòng = bỏ chọn; ngược lại upsert với rooms.
+  const handleHotelConfirm = (rooms: SelectedAddon['rooms']) => {
+    if (!hotelTarget) return
+    const current = addonServiceTypes ?? []
+    if (!rooms?.length) {
+      setData({
+        addonServiceTypes: current.filter((p) => p.id !== hotelTarget.id),
+      })
+      return
+    }
+    const withoutSameAddon = current.filter(
+      (p) => p.addonServiceId !== hotelTarget.addonServiceId,
+    )
+    const totalNights = rooms.reduce((acc, r) => acc + (r.nights || 0), 0)
+    const selected: SelectedAddon = {
+      ...hotelTarget,
+      quantity: totalNights || 1,
+      tripType: TRIP_TYPE.ONE_WAY,
+      rooms,
+    }
+    setData({ addonServiceTypes: [...withoutSameAddon, selected] })
   }
 
   return (
@@ -168,6 +215,13 @@ export function ServiceStep() {
             ))}
           </div>
 
+          {banner?.show_banner ? (
+            <First100Banner
+              title={banner.title}
+              description={banner.description}
+            />
+          ) : null}
+
           {addonServices?.data
             ?.filter((service) => serviceIds?.includes(service.id))
             .map((service) => (
@@ -192,21 +246,37 @@ export function ServiceStep() {
                                 (item) => item.addonServiceId === service.id,
                               )
                               .map((serviceType) => {
+                                const selectedAddon =
+                                  addonServiceTypes?.find(
+                                    (p) => p.id === serviceType.id,
+                                  )
                                 return (
                                   <ServiceCard
                                     key={`${serviceType.partnerId}-${serviceType.id}`}
                                     service={serviceType}
-                                    selected={
-                                      addonServiceTypes?.some(
-                                        (p) => p.id === serviceType.id,
-                                      ) ?? false
+                                    selected={!!selectedAddon}
+                                    selectedAddon={selectedAddon}
+                                    onQuantityChange={(q) =>
+                                      setAddonQuantity(serviceType.id, q)
+                                    }
+                                    onTripTypeChange={(tt) =>
+                                      setAddonTripType(serviceType.id, tt)
                                     }
                                     onClick={() => {
                                       const current = addonServiceTypes ?? []
+
+                                      // CR-02b: hotel → mở modal (chọn/sửa phòng), lưu khi Confirm
+                                      if (
+                                        serviceType.dataTypeCode ===
+                                        DATA_TYPE.HOTEL
+                                      ) {
+                                        setHotelTarget(serviceType)
+                                        return
+                                      }
+
                                       const already = current.some(
                                         (p) => p.id === serviceType.id,
                                       )
-
                                       if (already) {
                                         setData({
                                           addonServiceTypes: current.filter(
@@ -222,10 +292,21 @@ export function ServiceStep() {
                                           p.addonServiceId !==
                                           serviceType.addonServiceId,
                                       )
+                                      // CR-01/CR-02: gói mặc định quantity=1; xe (01/05) mặc định khứ hồi
+                                      const selected: SelectedAddon = {
+                                        ...serviceType,
+                                        quantity: 1,
+                                        tripType: isCarDataType(
+                                          serviceType.dataTypeCode,
+                                        )
+                                          ? TRIP_TYPE.ROUND_TRIP
+                                          : TRIP_TYPE.ONE_WAY,
+                                        rooms: undefined,
+                                      }
                                       setData({
                                         addonServiceTypes: [
                                           ...withoutSameAddon,
-                                          serviceType,
+                                          selected,
                                         ],
                                       })
                                     }}
@@ -253,6 +334,16 @@ export function ServiceStep() {
           serviceType={selectedService}
           open={openDetailService}
           onOpenChange={setOpenDetailService}
+        />
+        <AddonHotelModal
+          open={!!hotelTarget}
+          onOpenChange={(o) => !o && setHotelTarget(undefined)}
+          initialRooms={
+            hotelTarget
+              ? addonServiceTypes?.find((p) => p.id === hotelTarget.id)?.rooms
+              : undefined
+          }
+          onConfirm={handleHotelConfirm}
         />
       </PullToRefresh>
     </>

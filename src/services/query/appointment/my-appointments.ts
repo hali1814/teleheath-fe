@@ -103,7 +103,12 @@ interface AppointmentService {
   nameVi?: string
   nameKh?: string
   nameEn?: string
+  /** Tổng tiền addon (đã × quantity/số đêm và trừ KM nếu có). */
   price: number
+  /** CR-01: số lượng (xe = số chuyến, hotel = tổng số đêm). */
+  quantity?: number
+  /** CR-02: số tiền giảm; BE ẩn (không trả về) nếu không có giảm. */
+  discountAmount?: number
 }
 
 interface AppointmentConsultationTier {

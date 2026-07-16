@@ -65,10 +65,13 @@ export function ModalDetailServiceType({
           <DialogTitle></DialogTitle>
         </DialogHeader>
 
-        <div className="flex max-h-[90vh] flex-col gap-[32px] overflow-y-auto px-[20px] py-[24px]">
+        <div className="flex max-h-[90vh] flex-col overflow-y-auto px-[20px] py-[24px]">
           <div className="flex items-center justify-between">
-            <Text size="lg_16" className="leading-[1.2] font-semibold">
-              {t('profile:viewDetails')}
+            <Text
+              size="lg_16"
+              className="leading-[1.2] font-semibold text-[#0F172A]"
+            >
+              {serviceType.typeName}
             </Text>
             <Icon
               name="close"
@@ -76,10 +79,11 @@ export function ModalDetailServiceType({
               onClick={() => onOpenChange(false)}
             />
           </div>
-          <div className="flex flex-col gap-[16px]">
+          <div className="mt-[16px] border-t border-[#D0D0D0]" />
+          <div className="mt-[32px] flex flex-col gap-[16px]">
             <Text
               size="lg_16"
-              className="flex-1 text-center leading-[1.2] font-extrabold text-muted-foreground"
+              className="leading-[1.2] font-extrabold text-[#64748B]"
             >
               {serviceType.partnerName}
             </Text>
@@ -88,12 +92,15 @@ export function ModalDetailServiceType({
               <Text className="font-semibold leading-[1.2] text-[#333333]">
                 {t('appointment:address')}
               </Text>
-              <Text
-                size="sm_12"
-                className="leading-[1.8] text-muted-foreground"
-              >
-                {serviceType.partner.address}
-              </Text>
+              <div className="flex gap-[8px]">
+                <span className="leading-[1.8] text-[#64748B]">•</span>
+                <Text
+                  size="sm_12"
+                  className="flex-1 leading-[1.8] text-[#64748B]"
+                >
+                  {serviceType.partner.address}
+                </Text>
+              </div>
             </SectionHeading>
 
             <SectionHeading>

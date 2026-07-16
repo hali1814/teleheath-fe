@@ -39,6 +39,9 @@ export default function SelectedServices({ services }: SelectedServicesProps) {
                 className="font-normal leading-[21px] text-[#64748B]"
               >
                 {service.name}
+                {typeof service.quantity === 'number' && service.quantity > 1
+                  ? ` ×${service.quantity}`
+                  : ''}
               </Text>
               {Number.isFinite(service.price) ? (
                 <Text
@@ -46,6 +49,15 @@ export default function SelectedServices({ services }: SelectedServicesProps) {
                   className="font-medium leading-4 text-text-primary"
                 >
                   {formatPrice(service.price)}
+                </Text>
+              ) : null}
+              {typeof service.discountAmount === 'number' &&
+              service.discountAmount > 0 ? (
+                <Text
+                  size="sm_12"
+                  className="font-medium leading-4 text-[#059669]"
+                >
+                  {`- ${formatPrice(service.discountAmount)}`}
                 </Text>
               ) : null}
             </div>

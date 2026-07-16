@@ -3,6 +3,7 @@ import { useGetDoctorDetailQuery } from '#/services/query/doctor/doctor-detail'
 import { useGetPackageDetailQuery } from '#/services/query/package/package-detail'
 import type { HttpCommonResponse } from '#/services/network/http-request'
 import { useBookingStore } from '#/stores/booking-store'
+import { DATA_TYPE } from '#/const/addon'
 import type { Doctor } from '#/types/doctor'
 import type { Package } from '#/types/package'
 import { useNavigate } from '@tanstack/react-router'
@@ -14,6 +15,7 @@ import { useGetHospitalDetailQuery } from '#/services/query/hospital/hospital-de
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import type { Hospital } from '#/entities/hospitalEntity'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 export default function BookingPage({
   steps,
@@ -23,7 +25,7 @@ export default function BookingPage({
   context: BookingRouteContext
 }) {
   const navigate = useNavigate()
-  const { t, i18n } = useTranslation('book-appointment')
+  const { t, i18n } = useTranslation(['book-appointment', 'appointment'])
   const store = useBookingStore()
   const setData = useBookingStore((s) => s.setData)
   const current = steps[store.step]
@@ -89,6 +91,8 @@ export default function BookingPage({
   })
 
   const { mutate: bookAppointment } = useBookAppointmentMutation({
+    // Tự xử lý lỗi để tách case hết suất KM (không để wrapper toast trùng).
+    isShowError: false,
     onSuccess: ({ data }) => {
       if (!data.bookingToken) {
         navigate({
@@ -101,6 +105,36 @@ export default function BookingPage({
         to: '/app/payment/khqr/$bookingToken',
         params: { bookingToken: data.bookingToken },
       })
+    },
+    onError: (error) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resData = (error as any)?.response?.data
+      const code = resData?.errorCode ?? resData?.code ?? resData?.error
+      const msg = resData?.message ?? (error as Error)?.message
+      // BE trả HTTP 400 + errorCode để phân biệt các case KM (CR-02 §3.7).
+      const is = (c: string) =>
+        code === c || new RegExp(c, 'i').test(String(msg ?? ''))
+
+      // Hết suất KM, hoặc không phải lần đặt đầu tiên → bỏ discount, tính lại giá gốc.
+      if (is('PROMO_QUOTA_EXCEEDED') || is('NOT_FIRST_TIME_BOOKING')) {
+        setData({
+          first100Banner: store.first100Banner
+            ? { ...store.first100Banner, show_banner: false }
+            : undefined,
+        })
+        toast.error(
+          is('NOT_FIRST_TIME_BOOKING')
+            ? t('appointment:promoNotFirstTime')
+            : t('appointment:promoQuotaExceeded'),
+        )
+        return
+      }
+      // Đang treo 1 lịch KM chưa thanh toán → yêu cầu xử lý lịch cũ trước.
+      if (is('PENDING_PROMO_BOOKING')) {
+        toast.error(t('appointment:promoPendingBooking'))
+        return
+      }
+      toast.error(String(msg ?? 'Error'))
     },
   })
 
@@ -164,14 +198,33 @@ export default function BookingPage({
       bookingType,
       patientProfileId: store.patientProfile.id,
       thumbnailUrl: store.thumbnailUrl,
-      notes: store.notes,
+      // CR-02d: ghi chú Review (customer_note) đưa vào field `notes` (BE gộp 1 field — decision #8).
+      // Gửi nguyên văn ghi chú của user, không chèn label; giữ `notes` cũ nếu sau này có set.
+      notes:
+        [store.notes?.trim(), store.customerNote?.trim()]
+          .filter(Boolean)
+          .join('\n') || undefined,
       medicalHistory: store.medicalHistory,
       medicalFileIds: store.medicalFiles
         .filter((x) => x.status === 'success')
         .map((x) => x.fileId)
         .filter((x) => x !== undefined),
       serviceIds: store.serviceIds,
-      addonServiceTypeIds: store.addonServiceTypes?.map((x) => x.id),
+      // CR-01/CR-02: addons[] thay cho mảng ID cũ
+      addons: store.addonServiceTypes?.map((a) => ({
+        addonServiceTypeId: a.id,
+        // hotel: quantity = tổng số đêm; còn lại = quantity đã chọn
+        quantity:
+          a.dataTypeCode === DATA_TYPE.HOTEL && a.rooms?.length
+            ? a.rooms.reduce((acc, r) => acc + (r.nights || 0), 0)
+            : a.quantity,
+        tripType: a.tripType,
+        rooms: a.rooms?.map((r) => ({
+          checkInDate: r.checkInDate,
+          checkOutDate: r.checkOutDate,
+        })),
+      })),
+      expectedPromo: store.feeInfo.discount > 0,
       pickupTime: store.pickupTime,
       pickupAddress: store.pickupAddress,
       pickupNote: store.pickupNote,

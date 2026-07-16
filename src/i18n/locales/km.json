@@ -333,7 +333,18 @@
       "referencePrice": "តម្លៃយោង",
       "distanceFromHospital": "ចម្ងាយពីមន្ទីរពេទ្យ",
       "selectService": "ជ្រើសរើស",
-      "selectedService": "បានជ្រើសរើស"
+      "selectedService": "បានជ្រើសរើស",
+      "roundTrip": "ទៅ​មក",
+      "checkInCheckOut": "ចូល និង ចេញ",
+      "close": "បិទ",
+      "roomIndex": "បន្ទប់ - {{index}}",
+      "fromDateToDate": "ពីថ្ងៃ - ដល់ថ្ងៃ",
+      "selectDates": "ជ្រើសរើសកាលបរិច្ឆេទ",
+      "numberOfNights": "ចំនួនយប់៖ {{nights}}",
+      "bookAdditionalRooms": "កក់បន្ទប់បន្ថែម",
+      "totalRoom": "បន្ទប់សរុប៖",
+      "confirm": "បញ្ជាក់",
+      "removeRoom": "លុបបន្ទប់"
     },
     "stepTitles": {
       "selectSpecialty": "ជ្រើសរើសឯកទេស",
@@ -505,7 +516,17 @@
     "failedToCopyBookingId": "ចម្លងលេខកក់មិនជោគជ័យ",
     "viewMyBooking": "មើលការណាត់ជួបរបស់ខ្ញុំ",
     "goToHomepage": "ទៅកាន់ទំព័រដើម",
-    "selectedHospital": "មន្ទីរពេទ្យដែលបានជ្រើសរើស"
+    "selectedHospital": "មន្ទីរពេទ្យដែលបានជ្រើសរើស",
+    "yourRequestNotes": "សំណើ/កំណត់ចំណាំរបស់អ្នក",
+    "enterYourNote": "បញ្ចូលកំណត់ចំណាំរបស់អ្នក...",
+    "privateCarNoteReminder": "*សូមកត់សម្គាល់កាលបរិច្ឆេទ ម៉ោង និងអាសយដ្ឋានទទួល ព្រោះអ្នកបានកក់សេវាកម្មឡានឯកជន។",
+    "roundTripTicket": "សំបុត្រទៅមកវិញ",
+    "oneWayTicket": "សំបុត្រទៅមួយផ្លូវ",
+    "roomsCount_other": "{{count}} បន្ទប់",
+    "promoQuotaExceeded": "សូមអភ័យទោស កូតាប្រូម៉ូសិន ១០០ដំបូងបានអស់ហើយ។ តម្លៃនឹងត្រូវធ្វើបច្ចុប្បន្នភាពទៅតម្លៃដើម។",
+    "promoNotFirstTime": "ការផ្តល់ជូននេះអនុវត្តតែសម្រាប់ការកក់លើកដំបូងរបស់អ្នកប៉ុណ្ណោះ។ តម្លៃត្រូវបានធ្វើបច្ចុប្បន្នភាពទៅតម្លៃដើម។",
+    "promoPendingBooking": "អ្នកមានការកក់ប្រូម៉ូសិនដែលកំពុងរង់ចាំរួចហើយ។ សូមបញ្ចប់ ឬលុបចោលវាមុននឹងកក់ម្តងទៀត។",
+    "discount": "បញ្ចុះតម្លៃ"
   },
   "search": {
     "tabs": {

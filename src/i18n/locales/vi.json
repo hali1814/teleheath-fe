@@ -332,7 +332,18 @@
       "referencePrice": "Giá tham khảo",
       "distanceFromHospital": "Khoảng cách từ bệnh viện",
       "selectService": "Chọn",
-      "selectedService": "Đã chọn"
+      "selectedService": "Đã chọn",
+      "roundTrip": "Khứ hồi",
+      "checkInCheckOut": "Nhận phòng và trả phòng",
+      "close": "Đóng",
+      "roomIndex": "Phòng - {{index}}",
+      "fromDateToDate": "Từ ngày - Đến ngày",
+      "selectDates": "Chọn ngày",
+      "numberOfNights": "Số đêm: {{nights}}",
+      "bookAdditionalRooms": "Đặt thêm phòng",
+      "totalRoom": "Tổng số phòng:",
+      "confirm": "Xác nhận",
+      "removeRoom": "Xoá phòng"
     },
     "stepTitles": {
       "selectSpecialty": "Chọn chuyên khoa",
@@ -504,7 +515,17 @@
     "failedToCopyBookingId": "Sao chép mã đặt lịch thất bại",
     "viewMyBooking": "Xem lịch đặt của tôi",
     "goToHomepage": "Về trang chủ",
-    "selectedHospital": "Bệnh viện đã chọn"
+    "selectedHospital": "Bệnh viện đã chọn",
+    "yourRequestNotes": "Yêu cầu/ghi chú của bạn",
+    "enterYourNote": "Nhập ghi chú của bạn...",
+    "privateCarNoteReminder": "*Vui lòng ghi rõ ngày, giờ và địa chỉ đón vì bạn đã đặt dịch vụ xe riêng.",
+    "roundTripTicket": "Vé khứ hồi",
+    "oneWayTicket": "Vé một chiều",
+    "roomsCount_other": "{{count}} phòng",
+    "promoQuotaExceeded": "Rất tiếc, 100 suất khuyến mãi đầu tiên đã hết. Hệ thống sẽ cập nhật lại giá gốc.",
+    "promoNotFirstTime": "Ưu đãi chỉ áp dụng cho lần đặt hẹn đầu tiên. Hệ thống đã cập nhật lại giá gốc.",
+    "promoPendingBooking": "Bạn đang có một lịch hẹn khuyến mãi chờ thanh toán. Vui lòng hoàn tất hoặc huỷ lịch đó trước khi đặt lịch mới.",
+    "discount": "Giảm giá"
   },
   "search": {
     "tabs": {

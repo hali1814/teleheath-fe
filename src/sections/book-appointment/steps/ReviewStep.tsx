@@ -3,110 +3,98 @@ import Image from '#/components/image'
 import Text from '#/components/text'
 import type { AppLanguage } from '#/i18n'
 import { cn } from '#/lib/utils'
-import { useBookingStore } from '#/stores/booking-store'
+import {
+  useBookingStore,
+  lineTotalOf,
+  type SelectedAddon,
+} from '#/stores/booking-store'
+import {
+  DATA_TYPE,
+  DEFAULT_MAX_QUANTITY,
+  isCarDataType,
+  TRIP_TYPE,
+} from '#/const/addon'
 import { DATE_TIME_TYPE, formatDate } from '#/utils'
 import { getLocalizedTextByLang } from '#/utils/localized-text.util'
 import { formatPrice } from '#/utils/price.util'
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { ModalDetailService } from '../ModalDetailService'
+import { First100Banner } from '../First100Banner'
 import type { ServiceType } from '#/types/service'
-import TextInputBase from '#/components/input/TextInputBase'
-import InputSelect from '#/components/input/InputSelect'
+import { Textarea } from '#/components/ui/textarea'
 import { AppointmentDetailSheet } from '../AppointmentDetailSheet'
+import { AddonHotelModal } from '../AddonHotelModal'
+import { QuantityStepper } from '../QuantityStepper'
+import { useGetFirst100BannerQuery } from '#/services/query/promotions/first100-banner'
 
-const PICK_UP_SERVICE_ID = 1
-
-const HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => {
-  const v = i.toString().padStart(2, '0')
-  return { label: v, value: v }
-})
-
-const MINUTE_OPTIONS = Array.from({ length: 60 }, (_, i) => {
-  const v = i.toString().padStart(2, '0')
-  return { label: v, value: v }
-})
-
-const splitPickupTime = (value?: string): [string, string] => {
-  if (!value) return ['', '']
-  const [h = '', m = ''] = value.split(':')
-  return [h, m]
-}
-
-const ServiceItem = ({
+/**
+ * 1 dòng add-on trên màn Review (bám Figma 7222:4781):
+ * tên gói + phụ đề chiều đi (xe) + stepper (xe/combo) hoặc "N rooms" ✏️ (hotel) + link Details.
+ */
+const AddonReviewRow = ({
   service,
   onDetailClick,
+  onEditRooms,
 }: {
-  service: ServiceType
+  service: SelectedAddon
   onDetailClick: () => void
+  onEditRooms: () => void
 }) => {
-  const { t } = useTranslation(['book-appointment', 'common'])
-  const { pickupTime, pickupAddress, pickupNote, setData } = useBookingStore()
-  const [pickupHour, pickupMinute] = splitPickupTime(pickupTime)
+  const { t } = useTranslation(['appointment', 'common'])
+  const setAddonQuantity = useBookingStore((s) => s.setAddonQuantity)
 
-  const handlePickupHourChange = (value: string) => {
-    const minute = pickupMinute || '00'
-    setData({ pickupTime: `${value}:${minute}` })
-  }
-
-  const handlePickupMinuteChange = (value: string) => {
-    const hour = pickupHour || '00'
-    setData({ pickupTime: `${hour}:${value}` })
-  }
+  const dataType = service.dataTypeCode
+  const isCar = isCarDataType(dataType)
+  const isCombo = dataType === DATA_TYPE.COMBO
+  const isHotel = dataType === DATA_TYPE.HOTEL
+  const showStepper = isCar || isCombo
+  const roomCount = service.rooms?.length ?? 0
 
   return (
-    <div className="flex flex-col gap-[8px]">
-      <div className="flex items-center justify-between gap-[16px]">
-        <Text className="leading-normal">{service.addonServiceName}</Text>
-        <button
-          className="flex items-center gap-[4px] px-[8px] py-[6px] rounded-[6px] bg-dust-red-1"
-          onClick={onDetailClick}
-        >
-          <Icon name="eye_outline" className="w-[16px] h-[16px] text-primary" />
-          <Text size="sm_12" className="leading-[1.3] font-medium text-primary">
-            {t('common:actions.details')}
+    <div className="flex flex-col gap-[6px]">
+      <div className="flex items-start justify-between gap-[12px]">
+        <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
+          <Text size="base_14" className="leading-normal text-[#1A1C1C]">
+            {service.typeName}
           </Text>
-        </button>
-      </div>
-      {service.id === PICK_UP_SERVICE_ID && (
-        <>
-          <div className="flex flex-col gap-1">
-            <Text size="base_14" className="text-text-secondary font-normal">
-              {t('pickup.timeLabel')}
+          {isCar && (
+            <Text size="sm_12" className="leading-[1.2] text-[#7D8590]/80">
+              {service.tripType === TRIP_TYPE.ROUND_TRIP
+                ? t('appointment:roundTripTicket')
+                : t('appointment:oneWayTicket')}
             </Text>
-            <div className="flex items-start gap-[8px]">
-              <div className="flex-1 min-w-0">
-                <InputSelect
-                  placeholder={t('pickup.placeholderHour')}
-                  options={HOUR_OPTIONS}
-                  value={pickupHour || undefined}
-                  onValueChange={handlePickupHourChange}
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <InputSelect
-                  placeholder={t('pickup.placeholderMinute')}
-                  options={MINUTE_OPTIONS}
-                  value={pickupMinute || undefined}
-                  onValueChange={handlePickupMinuteChange}
-                />
-              </div>
-            </div>
+          )}
+        </div>
+
+        {isHotel ? (
+          <button
+            type="button"
+            className="flex shrink-0 items-center gap-[4px]"
+            onClick={onEditRooms}
+          >
+            <Text size="sm_12" className="leading-[1.2] text-[#64748B]">
+              {t('appointment:roomsCount', { count: roomCount })}
+            </Text>
+            <Icon name="pencil" className="size-[12px] text-[#64748B]" />
+          </button>
+        ) : showStepper ? (
+          <div onClick={(e) => e.stopPropagation()}>
+            <QuantityStepper
+              value={service.quantity}
+              max={service.maxQuantity ?? DEFAULT_MAX_QUANTITY}
+              onChange={(next) => setAddonQuantity(service.id, next)}
+            />
           </div>
-          <TextInputBase
-            label={t('pickup.addressLabel')}
-            placeholder={t('pickup.placeholderAddress')}
-            value={pickupAddress}
-            onChange={(e) => setData({ pickupAddress: e.target.value })}
-          />
-          <TextInputBase
-            label={t('pickup.noteLabel')}
-            placeholder={t('pickup.placeholderNote')}
-            value={pickupNote}
-            onChange={(e) => setData({ pickupNote: e.target.value })}
-          />
-        </>
-      )}
+        ) : null}
+      </div>
+
+      <button type="button" className="self-start" onClick={onDetailClick}>
+        <Text size="sm_12" className="font-medium leading-[1.3] text-primary">
+          {t('common:actions.details')}
+        </Text>
+      </button>
     </div>
   )
 }
@@ -163,6 +151,9 @@ export function ReviewStep() {
   const [selectedService, setSelectedService] = useState<
     ServiceType | undefined
   >(undefined)
+  const [hotelEditTarget, setHotelEditTarget] = useState<
+    SelectedAddon | undefined
+  >(undefined)
   const {
     branch,
     appointmentDate,
@@ -171,15 +162,40 @@ export function ReviewStep() {
     paymentMethod,
     feeInfo,
     addonServiceTypes,
+    customerNote,
+    first100Banner,
     calcFeeInfo,
     setData,
   } = useBookingStore()
+  const setAddonRooms = useBookingStore((s) => s.setAddonRooms)
 
   const consultationFee = branch?.depositFee ?? 0
 
+  const hasPrivateCar = useMemo(
+    () =>
+      (addonServiceTypes ?? []).some(
+        (a) => a.dataTypeCode === DATA_TYPE.PRIVATE_CAR,
+      ),
+    [addonServiceTypes],
+  )
+  const hasAddons = (addonServiceTypes?.length ?? 0) > 0
+
+  // CR-02 §3.10: check chéo banner ở màn Review (gọi lại, không cache).
+  const { data: bannerRes } = useGetFirst100BannerQuery({ staleTime: 0 })
+  const reviewBanner = bannerRes?.data
+  useEffect(() => {
+    if (!reviewBanner) return
+    // Suất KM vừa hết trong lúc user ở Review → bỏ discount + báo.
+    if (!reviewBanner.show_banner && first100Banner?.show_banner) {
+      toast.error(t('appointment:promoQuotaExceeded'))
+    }
+    setData({ first100Banner: reviewBanner })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reviewBanner])
+
   useEffect(() => {
     calcFeeInfo(consultationFee)
-  }, [addonServiceTypes, calcFeeInfo, consultationFee])
+  }, [addonServiceTypes, calcFeeInfo, consultationFee, first100Banner])
 
   const paymentMethods = useMemo(
     () => [
@@ -188,18 +204,33 @@ export function ReviewStep() {
         name: t('paymentMethodName.khqr'),
         logo: '/payment-method/khqr.png',
       },
-      //   {
-      //     id: 2,
-      //     name: t('paymentMethodName.emoney'),
-      //     logo: '/payment-method/e-money.png',
-      //   },
-      //   {
-      //     id: 3,
-      //     name: t('paymentMethodName.aba'),
-      //     logo: '/payment-method/aba-bank.png',
-      //   },
     ],
     [t],
+  )
+
+  // CR-02d: ô ghi chú + dòng nhắc xe riêng (bám Figma: nằm trong card add-on).
+  const renderNotes = (withDivider: boolean) => (
+    <>
+      {withDivider && (
+        <div className="border-t border-dashed border-[#D0D0D0]" />
+      )}
+      <div className="flex flex-col gap-[8px]">
+        <Text size="sm_12" className="leading-[1.5] text-[#64748B]">
+          {t('appointment:yourRequestNotes')}
+        </Text>
+        <Textarea
+          value={customerNote ?? ''}
+          onChange={(e) => setData({ customerNote: e.target.value })}
+          placeholder={t('appointment:enterYourNote')}
+          className="min-h-[96px] rounded-[6px] border-[#D0D0D0] p-[12px] placeholder:text-[#7D8590]/80"
+        />
+        {hasPrivateCar && (
+          <Text size="sm_12" className="italic leading-[1.5] text-[#2F54EB]">
+            {t('appointment:privateCarNoteReminder')}
+          </Text>
+        )}
+      </div>
+    </>
   )
 
   return (
@@ -207,7 +238,10 @@ export function ReviewStep() {
       <div className="flex flex-col gap-[16px] px-[16px]">
         <div className="flex flex-col gap-[16px] p-[16px] rounded-[16px] bg-white">
           <div className="flex items-center justify-between gap-[12px]">
-            <Text size="lg_16" className="leading-[1.2] font-semibold">
+            <Text
+              size="lg_16"
+              className="leading-[1.2] font-semibold text-[#0F172A]"
+            >
               {t('appointment:appointmentInformation')}
             </Text>
             <button
@@ -286,45 +320,51 @@ export function ReviewStep() {
           </div>
         </div>
 
-
-        {addonServiceTypes && addonServiceTypes.length > 0 && (
+        {/* CR-01/CR-02: Add-on services + ô ghi chú (1 card, bám Figma) */}
+        {hasAddons ? (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
-            <Text size="lg_16" className="leading-[1.2] font-semibold">
+            <Text
+              size="lg_16"
+              className="leading-[1.2] font-semibold text-[#0F172A]"
+            >
               {t('appointment:addonServices')}
             </Text>
-            {/* <div className="flex items-center gap-[8px] px-[10px] py-[6px] rounded-[8px] bg-[#F0B13312]">
-              <Icon
-                name="warning"
-                className="w-[16px] h-[16px] text-[#F0B133]"
-              />
-              <Text
-                size="sm_12"
-                className="flex-1 leading-[1.3] text-[#FB9324]"
-              >
-                {t('appointment:addonPriceDisclaimer')}
-              </Text>
-            </div> */}
             {addonServiceTypes?.map((service, index) => (
-              <>
-                <ServiceItem
-                  key={service.id}
+              <Fragment key={service.id}>
+                <AddonReviewRow
                   service={service}
                   onDetailClick={() => {
                     setSelectedService(service)
                     setOpenDetailService(true)
                   }}
+                  onEditRooms={() => setHotelEditTarget(service)}
                 />
-                {index < addonServiceTypes.length - 1 && (
+                {index < (addonServiceTypes?.length ?? 0) - 1 && (
                   <div className="h-[0.5px] bg-[#E6E6E6]" />
                 )}
-              </>
+              </Fragment>
             ))}
+            {renderNotes(true)}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-[12px] p-[20px] rounded-[16px] bg-white">
+            {renderNotes(false)}
           </div>
         )}
 
+        {first100Banner?.show_banner ? (
+          <First100Banner
+            title={first100Banner.title}
+            description={first100Banner.description}
+          />
+        ) : null}
+
         {(consultationFee > 0 || feeInfo.serviceFee > 0) && (
           <div className="flex flex-col gap-[16px] p-[20px] rounded-[16px] bg-white">
-            <Text size="lg_16" className="font-semibold leading-[1.2]">
+            <Text
+              size="lg_16"
+              className="font-semibold leading-[1.2] text-[#0F172A]"
+            >
               {t('appointment:paymentDetails')}
             </Text>
             {feeInfo.consultationFee > 0 && (
@@ -340,15 +380,30 @@ export function ReviewStep() {
             {addonServiceTypes &&
               addonServiceTypes?.length > 0 &&
               addonServiceTypes.map((service) => (
-                <div className="flex items-center justify-between">
+                <div
+                  key={service.id}
+                  className="flex items-center justify-between"
+                >
                   <Text className="leading-normal text-muted-foreground">
-                    {service.addonServiceName}
+                    {service.typeName}
                   </Text>
                   <Text className="leading-normal font-medium text-[#333333]">
-                    {formatPrice(service.promotionPrice ?? service.price)}
+                    {formatPrice(lineTotalOf(service))}
                   </Text>
                 </div>
               ))}
+
+            {/* CR-02: dòng giảm giá First100 (xanh, bám Figma) */}
+            {feeInfo.discount > 0 && (
+              <div className="flex items-center justify-between">
+                <Text className="leading-normal font-medium text-[#16A34A]">
+                  {t('appointment:discount')}
+                </Text>
+                <Text className="leading-normal font-medium text-[#237804]">
+                  {`- ${formatPrice(feeInfo.discount)}`}
+                </Text>
+              </div>
+            )}
 
             <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-[16px]">
               <Text
@@ -369,7 +424,10 @@ export function ReviewStep() {
 
         {feeInfo.totalAmount > 0 && (
           <div className="flex flex-col gap-[16px] p-[16px] rounded-[12px] bg-white">
-            <Text size="lg_16" className="font-semibold leading-[1.2]">
+            <Text
+              size="lg_16"
+              className="font-semibold leading-[1.2] text-[#0F172A]"
+            >
               {t('appointment:paymentMethodsHeading')}
             </Text>
             {paymentMethods.map((method) => (
@@ -392,6 +450,16 @@ export function ReviewStep() {
       <AppointmentDetailSheet
         open={openAppointmentDetail}
         onOpenChange={setOpenAppointmentDetail}
+      />
+      <AddonHotelModal
+        open={!!hotelEditTarget}
+        onOpenChange={(o) => !o && setHotelEditTarget(undefined)}
+        initialRooms={hotelEditTarget?.rooms}
+        onConfirm={(rooms) => {
+          if (hotelEditTarget && rooms?.length) {
+            setAddonRooms(hotelEditTarget.id, rooms)
+          }
+        }}
       />
     </>
   )

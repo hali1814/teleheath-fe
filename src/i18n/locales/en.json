@@ -332,7 +332,18 @@
       "referencePrice": "Reference price",
       "distanceFromHospital": "Distance from hospital",
       "selectService": "Select",
-      "selectedService": "Selected"
+      "selectedService": "Selected",
+      "roundTrip": "Round Trip",
+      "checkInCheckOut": "Check-in and check-out",
+      "close": "Close",
+      "roomIndex": "Room - {{index}}",
+      "fromDateToDate": "From Date - To Date",
+      "selectDates": "Select dates",
+      "numberOfNights": "Number of nights: {{nights}}",
+      "bookAdditionalRooms": "Book additional rooms",
+      "totalRoom": "Total room:",
+      "confirm": "Confirm",
+      "removeRoom": "Remove room"
     },
     "stepTitles": {
       "selectSpecialty": "Select Specialty",
@@ -504,7 +515,18 @@
     "failedToCopyBookingId": "Failed to copy Booking ID",
     "viewMyBooking": "View my booking",
     "goToHomepage": "Go to Homepage",
-    "selectedHospital": "Selected hospital"
+    "selectedHospital": "Selected hospital",
+    "yourRequestNotes": "Your request/notes",
+    "enterYourNote": "Enter your note...",
+    "privateCarNoteReminder": "*Please note the date, time, and pickup address, as you have booked a private car service.",
+    "roundTripTicket": "Round trip ticket",
+    "oneWayTicket": "One way ticket",
+    "roomsCount_one": "{{count}} room",
+    "roomsCount_other": "{{count}} rooms",
+    "promoQuotaExceeded": "Sorry, the first 100 promotional slots have run out. Prices will be updated to the original.",
+    "promoNotFirstTime": "This offer applies only to your first booking. Prices have been updated to the original.",
+    "promoPendingBooking": "You already have a pending promotional booking. Please complete or cancel it before booking another.",
+    "discount": "Discount"
   },
   "search": {
     "tabs": {

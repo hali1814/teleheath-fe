@@ -1,30 +1,66 @@
 import { Icon } from '#/components/icon'
 import Image from '#/components/image'
 import Text from '#/components/text'
+import { Switch } from '#/components/ui/switch'
 import { cn } from '#/lib/utils'
 import type { Amenity, ServiceType } from '#/types/service'
+import type { SelectedAddon } from '#/stores/booking-store'
+import {
+  DATA_TYPE,
+  DEFAULT_MAX_QUANTITY,
+  isCarDataType,
+  TRIP_TYPE,
+} from '#/const/addon'
 import { formatPrice } from '#/utils/price.util'
 import { useTranslation } from 'react-i18next'
+import { QuantityStepper } from './QuantityStepper'
 
 export const ServiceCard = ({
   service,
   selected,
+  selectedAddon,
   disabled = false,
   onClick,
   onDetailClick,
+  onQuantityChange,
+  onTripTypeChange,
 }: {
   service: ServiceType
   selected: boolean
+  /** Bản ghi đã chọn (kèm quantity/tripType) — có khi `selected`. */
+  selectedAddon?: SelectedAddon
   disabled?: boolean
   onClick: () => void
   onDetailClick: () => void
+  onQuantityChange?: (next: number) => void
+  onTripTypeChange?: (next: 1 | 2) => void
 }) => {
   const { t } = useTranslation(['book-appointment'])
   const { typeName, originalPrice, promotionPrice, price, amenities, isBest } =
     service
 
+  const dataTypeCode = service.dataTypeCode
+  const isCar = isCarDataType(dataTypeCode)
+  const isCombo = dataTypeCode === DATA_TYPE.COMBO
+  const tripType = selectedAddon?.tripType ?? TRIP_TYPE.ROUND_TRIP
+  const quantity = selectedAddon?.quantity ?? 1
+  const maxQuantity = service.maxQuantity ?? DEFAULT_MAX_QUANTITY
+
+  // CR-02: giá vé xe đổi theo toggle Round Trip (2W dùng promotionPrice2>0 → originalPrice2).
+  const carUnitPrice =
+    tripType === TRIP_TYPE.ROUND_TRIP
+      ? service.promotionPrice2 && service.promotionPrice2 > 0
+        ? service.promotionPrice2
+        : (service.originalPrice2 ?? service.price)
+      : service.promotionPrice && service.promotionPrice > 0
+        ? service.promotionPrice
+        : service.price
+
   const hasActiveDiscount =
     promotionPrice != null && originalPrice > promotionPrice
+
+  // Hiển thị stepper: xe (01/05) & combo (03). Phiên dịch/hotel không có stepper ở card.
+  const showStepper = isCar || isCombo
 
   return (
     <div
@@ -67,7 +103,17 @@ export const ServiceCard = ({
               <Text size="xs_10" className="leading-[14px] text-[#475569]">
                 {t('serviceStep.referencePrice')}
               </Text>
-              {hasActiveDiscount ? (
+              {isCar ? (
+                // CR-02: vé xe hiển thị 1 giá hiệu lực (đổi theo toggle Round Trip)
+                <Text
+                  size="lg_16"
+                  className="leading-[22px] font-medium text-[#EC5B13]"
+                >
+                  {carUnitPrice && carUnitPrice !== 0
+                    ? formatPrice(carUnitPrice)
+                    : 'Contact later'}
+                </Text>
+              ) : hasActiveDiscount ? (
                 <div className="flex flex-wrap items-center gap-x-[8px] gap-y-[4px]">
                   <Text
                     size="lg_16"
@@ -109,6 +155,36 @@ export const ServiceCard = ({
               </Text>
             </div>
           )}
+
+          {/* CR-02: toggle Round Trip cho vé xe (01/05) */}
+          {selected && isCar && (
+            <div
+              className="flex items-center gap-[8px]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Switch
+                className="data-checked:bg-[#388E3C]"
+                checked={tripType === TRIP_TYPE.ROUND_TRIP}
+                onCheckedChange={(checked) =>
+                  onTripTypeChange?.(
+                    checked ? TRIP_TYPE.ROUND_TRIP : TRIP_TYPE.ONE_WAY,
+                  )
+                }
+              />
+              <Text size="sm_12" className="leading-[1.2] font-medium">
+                {t('serviceStep.roundTrip')}
+              </Text>
+            </div>
+          )}
+
+          {/* CR-01: stepper số lượng cho xe (01/05) & combo (03) */}
+          {selected && showStepper && (
+            <QuantityStepper
+              value={quantity}
+              max={maxQuantity}
+              onChange={(next) => onQuantityChange?.(next)}
+            />
+          )}
         </div>
         <button
           className={cn(
@@ -146,7 +222,7 @@ export const ServiceCard = ({
       )}
       {selected && (
         <div
-          className="absolute -right-[0.5px] -top-[0.5px] w-[55px] h-[33px] [clip-path:polygon(100%_0,0_0,100%_100%)] 
+          className="absolute -right-[0.5px] -top-[0.5px] w-[55px] h-[33px] [clip-path:polygon(100%_0,0_0,100%_100%)]
         bg-primary flex items-start justify-end p-[6px] rounded-tr-[12px]"
         >
           <Icon name="check" className="size-[12px] text-white" />

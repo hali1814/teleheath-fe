@@ -27,6 +27,14 @@ export interface AddonPartnerServiceType {
   promotionPrice: number
   description: string
   amenities: AddonPartnerAmenity[]
+  /** CR-01/CR-02 — 6 field mới (BE bổ sung; optional để không vỡ khi BE chưa lên). */
+  dataTypeCode?: string
+  maxQuantity?: number | null
+  promoEligible?: boolean
+  originalPrice2?: number
+  promotionPrice2?: number
+  bccsServiceCode?: string
+  bccsServiceCode2?: string
 }
 
 export interface AddonPartnerByBranchResponse {
