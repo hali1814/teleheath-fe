@@ -1,8 +1,22 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import { createPortal } from 'react-dom'
 
 import Text from '#/components/text'
-import { useBookingStore, type SelectedAddon } from '#/stores/booking-store'
+import {
+  useBookingStore,
+  lineTotalOf,
+  type SelectedAddon,
+} from '#/stores/booking-store'
+import { formatPrice } from '#/utils/price.util'
 import { DATA_TYPE, isCarDataType, TRIP_TYPE } from '#/const/addon'
+import { FooterSlotContext } from '../StepLayout'
 import { ServiceCard } from '../ServiceCard'
 import { First100Banner } from '../First100Banner'
 import { AddonHotelModal } from '../AddonHotelModal'
@@ -19,6 +33,7 @@ import { Icon } from '#/components/icon'
 
 export function ServiceStep() {
   const { t } = useTranslation(['book-appointment'])
+  const footerSlot = useContext(FooterSlotContext)
   const { addonServiceTypes, serviceIds, setData, branch } = useBookingStore()
   const setAddonQuantity = useBookingStore((s) => s.setAddonQuantity)
   const setAddonTripType = useBookingStore((s) => s.setAddonTripType)
@@ -359,6 +374,39 @@ export function ServiceStep() {
           onConfirm={handleHotelConfirm}
         />
       </PullToRefresh>
+
+      {/* CR-01/02: tổng kết dịch vụ đã chọn — ghim chung panel với Back/Continue */}
+      {footerSlot && (addonServiceTypes?.length ?? 0) > 0
+        ? createPortal(
+            <div className="max-h-[38vh] overflow-y-auto border-t border-[#E2E2E2] px-[16px] pt-[12px]">
+              <div className="flex flex-col gap-[12px]">
+                {addonServiceTypes?.map((service) => (
+                  <div
+                    key={service.id}
+                    className="flex items-start justify-between gap-[12px]"
+                  >
+                    <Text
+                      size="base_14"
+                      className="leading-normal text-[#1A1C1C]"
+                    >
+                      {service.typeName}
+                      <span className="ml-[8px] text-[#94A3B8]">
+                        ×{service.quantity ?? 1}
+                      </span>
+                    </Text>
+                    <Text
+                      size="base_14"
+                      className="shrink-0 leading-normal text-[#1A1C1C]"
+                    >
+                      {formatPrice(lineTotalOf(service))}
+                    </Text>
+                  </div>
+                ))}
+              </div>
+            </div>,
+            footerSlot,
+          )
+        : null}
     </>
   )
 }

@@ -61,11 +61,13 @@ export function ModalDetailService({
 
         <div className="flex max-h-[min(60vh,520px)] flex-col overflow-y-auto px-[20px] py-[24px]">
           <div className="flex items-center justify-between">
+            {/* BA: title lấy TÊN SERVICE (addonServiceName, vd "Pick-up & Transport"),
+                không phải typeName (hay bị = tên hãng xe / tên hotel trong data). */}
             <Text
               size="lg_16"
               className="leading-[1.2] font-semibold text-[#0F172A]"
             >
-              {serviceType.typeName}
+              {serviceType.addonServiceName}
             </Text>
             <Icon
               name="close"

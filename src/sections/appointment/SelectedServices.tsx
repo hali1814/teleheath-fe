@@ -25,7 +25,18 @@ export default function SelectedServices({ services }: SelectedServicesProps) {
       </Text>
 
       <div className="mt-4 flex flex-col gap-4">
-        {services.map((service, index) => (
+        {services.map((service, index) => {
+          // Màn lịch sử hiển thị ĐƠN GIÁ lúc mua (snapshot), không phải giá tổng.
+          // BE trả price = tổng đã trừ KM (unit×qty − discount) từ appointment_addon (đã freeze
+          // lúc booking); đơn giá = (price + discount) / quantity → catalog đổi giá sau KHÔNG ảnh hưởng.
+          const qty =
+            typeof service.quantity === 'number' && service.quantity > 0
+              ? service.quantity
+              : 1
+          const unitPrice = Number.isFinite(service.price)
+            ? (service.price + (service.discountAmount ?? 0)) / qty
+            : NaN
+          return (
           <div
             key={`${service.id}-${index}-${service.name}`}
             className="flex items-center gap-4"
@@ -43,12 +54,12 @@ export default function SelectedServices({ services }: SelectedServicesProps) {
                   ? ` ×${service.quantity}`
                   : ''}
               </Text>
-              {Number.isFinite(service.price) ? (
+              {Number.isFinite(unitPrice) ? (
                 <Text
                   size="sm_12"
                   className="font-medium leading-4 text-text-primary"
                 >
-                  {formatPrice(service.price)}
+                  {formatPrice(unitPrice)}
                 </Text>
               ) : null}
               {typeof service.discountAmount === 'number' &&
@@ -62,7 +73,8 @@ export default function SelectedServices({ services }: SelectedServicesProps) {
               ) : null}
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

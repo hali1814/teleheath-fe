@@ -50,15 +50,18 @@ export const ServiceCard = ({
   const quantity = selectedAddon?.quantity ?? 1
   const maxQuantity = service.maxQuantity ?? DEFAULT_MAX_QUANTITY
 
-  // CR-02: giá vé xe đổi theo toggle Round Trip (2W dùng promotionPrice2>0 → originalPrice2).
-  const carUnitPrice =
-    tripType === TRIP_TYPE.ROUND_TRIP
-      ? service.promotionPrice2 && service.promotionPrice2 > 0
-        ? service.promotionPrice2
-        : (service.originalPrice2 ?? service.price)
-      : service.promotionPrice && service.promotionPrice > 0
-        ? service.promotionPrice
-        : service.price
+  // CR-02 + BA: giá vé xe theo từng chiều — promotion là promotion, gốc là gốc (BE trả sao hiện vậy).
+  //   one way   → gốc = price,                    promo = promotionPrice
+  //   round trip→ gốc = originalPrice2 (↩ price),  promo = promotionPrice2
+  // Chỉ coi là KM (promo + gốc gạch ngang) khi có promo và promo < gốc; ngược lại chỉ hiện gốc.
+  const isRoundTrip = tripType === TRIP_TYPE.ROUND_TRIP
+  const carOriginal = isRoundTrip ? service.originalPrice2 : service.price
+  const carPromo = isRoundTrip ? service.promotionPrice2 : service.promotionPrice
+  const carHasDiscount =
+    carPromo != null &&
+    carPromo > 0 &&
+    carOriginal != null &&
+    carOriginal > carPromo
 
   const hasActiveDiscount =
     promotionPrice != null && originalPrice > promotionPrice
@@ -108,15 +111,32 @@ export const ServiceCard = ({
                 {t('serviceStep.referencePrice')}
               </Text>
               {isCar ? (
-                // CR-02: vé xe hiển thị 1 giá hiệu lực (đổi theo toggle Round Trip)
-                <Text
-                  size="lg_16"
-                  className="leading-[22px] font-medium text-[#EC5B13]"
-                >
-                  {carUnitPrice && carUnitPrice !== 0
-                    ? formatPrice(carUnitPrice)
-                    : 'Contact later'}
-                </Text>
+                // CR-02: vé xe — có KM (promo < gốc): promo + gốc gạch ngang; ngược lại: chỉ gốc
+                carHasDiscount ? (
+                  <div className="flex flex-wrap items-center gap-x-[8px] gap-y-[4px]">
+                    <Text
+                      size="lg_16"
+                      className="leading-[22px] font-medium text-[#EC5B13]"
+                    >
+                      {formatPrice(carPromo)}
+                    </Text>
+                    <Text
+                      size="lg_16"
+                      className="leading-[22px] font-medium text-muted-foreground line-through"
+                    >
+                      {formatPrice(carOriginal)}
+                    </Text>
+                  </div>
+                ) : (
+                  <Text
+                    size="lg_16"
+                    className="leading-[22px] font-medium text-[#EC5B13]"
+                  >
+                    {carOriginal && carOriginal !== 0
+                      ? formatPrice(carOriginal)
+                      : 'Contact later'}
+                  </Text>
+                )
               ) : hasActiveDiscount ? (
                 <div className="flex flex-wrap items-center gap-x-[8px] gap-y-[4px]">
                   <Text
