@@ -262,21 +262,34 @@ export function ServiceStep() {
                                     onTripTypeChange={(tt) =>
                                       setAddonTripType(serviceType.id, tt)
                                     }
+                                    onEditClick={() =>
+                                      setHotelTarget(serviceType)
+                                    }
                                     onClick={() => {
                                       const current = addonServiceTypes ?? []
-
-                                      // CR-02b: hotel → mở modal (chọn/sửa phòng), lưu khi Confirm
-                                      if (
-                                        serviceType.dataTypeCode ===
-                                        DATA_TYPE.HOTEL
-                                      ) {
-                                        setHotelTarget(serviceType)
-                                        return
-                                      }
 
                                       const already = current.some(
                                         (p) => p.id === serviceType.id,
                                       )
+
+                                      // CR-02b: hotel — nút "Selected" bỏ chọn như các type khác;
+                                      // khi chưa chọn thì mở bottom modal (chọn phòng/ngày, lưu khi Confirm).
+                                      if (
+                                        serviceType.dataTypeCode ===
+                                        DATA_TYPE.HOTEL
+                                      ) {
+                                        if (already) {
+                                          setData({
+                                            addonServiceTypes: current.filter(
+                                              (p) => p.id !== serviceType.id,
+                                            ),
+                                          })
+                                        } else {
+                                          setHotelTarget(serviceType)
+                                        }
+                                        return
+                                      }
+
                                       if (already) {
                                         setData({
                                           addonServiceTypes: current.filter(

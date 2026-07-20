@@ -22,6 +22,7 @@ export const ServiceCard = ({
   disabled = false,
   onClick,
   onDetailClick,
+  onEditClick,
   onQuantityChange,
   onTripTypeChange,
 }: {
@@ -32,6 +33,8 @@ export const ServiceCard = ({
   disabled?: boolean
   onClick: () => void
   onDetailClick: () => void
+  /** CR-02: hotel đã chọn → link "Edit your selection" mở lại bottom modal. */
+  onEditClick?: () => void
   onQuantityChange?: (next: number) => void
   onTripTypeChange?: (next: 1 | 2) => void
 }) => {
@@ -42,6 +45,7 @@ export const ServiceCard = ({
   const dataTypeCode = service.dataTypeCode
   const isCar = isCarDataType(dataTypeCode)
   const isCombo = dataTypeCode === DATA_TYPE.COMBO
+  const isHotel = dataTypeCode === DATA_TYPE.HOTEL
   const tripType = selectedAddon?.tripType ?? TRIP_TYPE.ROUND_TRIP
   const quantity = selectedAddon?.quantity ?? 1
   const maxQuantity = service.maxQuantity ?? DEFAULT_MAX_QUANTITY
@@ -186,6 +190,24 @@ export const ServiceCard = ({
             />
           )}
         </div>
+        {/* CR-02: hotel đã chọn → link Edit ở phía trên nút, mở lại bottom modal để sửa */}
+        {selected && isHotel && (
+          <button
+            type="button"
+            className="self-center"
+            onClick={(e) => {
+              e.stopPropagation()
+              onEditClick?.()
+            }}
+          >
+            <Text
+              size="sm_12"
+              className="leading-[1.3] font-medium text-[#475569] underline"
+            >
+              {t('serviceStep.editYourSelection')}
+            </Text>
+          </button>
+        )}
         <button
           className={cn(
             'w-full flex items-center justify-center gap-[8px] h-[28px] bg-dust-red-1 rounded-[6px]',

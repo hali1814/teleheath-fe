@@ -343,7 +343,8 @@
       "bookAdditionalRooms": "Đặt thêm phòng",
       "totalRoom": "Tổng số phòng:",
       "confirm": "Xác nhận",
-      "removeRoom": "Xoá phòng"
+      "removeRoom": "Xoá phòng",
+      "editYourSelection": "Chỉnh sửa lựa chọn"
     },
     "stepTitles": {
       "selectSpecialty": "Chọn chuyên khoa",

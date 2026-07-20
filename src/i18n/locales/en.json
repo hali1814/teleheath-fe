@@ -343,7 +343,8 @@
       "bookAdditionalRooms": "Book additional rooms",
       "totalRoom": "Total room:",
       "confirm": "Confirm",
-      "removeRoom": "Remove room"
+      "removeRoom": "Remove room",
+      "editYourSelection": "Edit your selection"
     },
     "stepTitles": {
       "selectSpecialty": "Select Specialty",

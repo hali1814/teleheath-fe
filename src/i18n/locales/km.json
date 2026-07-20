@@ -344,7 +344,8 @@
       "bookAdditionalRooms": "កក់បន្ទប់បន្ថែម",
       "totalRoom": "បន្ទប់សរុប៖",
       "confirm": "បញ្ជាក់",
-      "removeRoom": "លុបបន្ទប់"
+      "removeRoom": "លុបបន្ទប់",
+      "editYourSelection": "កែសម្រួលការជ្រើសរើសរបស់អ្នក"
     },
     "stepTitles": {
       "selectSpecialty": "ជ្រើសរើសឯកទេស",
