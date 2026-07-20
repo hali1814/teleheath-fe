@@ -53,13 +53,14 @@ export const ServiceCard = ({
   // CR-02 + BA: giá vé xe theo từng chiều — promotion là promotion, gốc là gốc (BE trả sao hiện vậy).
   //   one way   → gốc = price,                    promo = promotionPrice
   //   round trip→ gốc = originalPrice2 (↩ price),  promo = promotionPrice2
-  // Chỉ coi là KM (promo + gốc gạch ngang) khi có promo và promo < gốc; ngược lại chỉ hiện gốc.
+  // Coi là KM khi có promo (>= 0, KM không có số âm) và promo < gốc; ngược lại chỉ hiện gốc.
+  // promo = 0 là KM hợp lệ (miễn phí) → vẫn hiện $0 + gốc gạch ngang.
   const isRoundTrip = tripType === TRIP_TYPE.ROUND_TRIP
   const carOriginal = isRoundTrip ? service.originalPrice2 : service.price
   const carPromo = isRoundTrip ? service.promotionPrice2 : service.promotionPrice
   const carHasDiscount =
     carPromo != null &&
-    carPromo > 0 &&
+    carPromo >= 0 &&
     carOriginal != null &&
     carOriginal > carPromo
 

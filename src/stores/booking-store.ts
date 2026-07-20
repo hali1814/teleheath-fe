@@ -42,14 +42,20 @@ const clampQuantity = (qty: number, max?: number | null): number => {
   return Math.min(Math.max(1, Math.trunc(qty || 1)), ceiling)
 }
 
-/** Đơn giá 1 đơn vị theo tripType (xe: 2W dùng promotionPrice2>0 → originalPrice2). */
+/**
+ * Đơn giá 1 đơn vị theo tripType. KM hợp lệ khi >= 0 (promo=0 = miễn phí, không có số âm),
+ * khớp với BE AddonPriceUtil.effectivePrice để tổng FE == tổng QR.
+ * Phân biệt "chưa cấu hình" (null/undefined → dùng gốc) với "KM = 0" (dùng 0).
+ */
 const unitPriceOf = (a: SelectedAddon): number => {
   if (isCarDataType(a.dataTypeCode) && a.tripType === TRIP_TYPE.ROUND_TRIP) {
-    return a.promotionPrice2 && a.promotionPrice2 > 0
+    return a.promotionPrice2 != null && a.promotionPrice2 >= 0
       ? a.promotionPrice2
       : (a.originalPrice2 ?? a.price)
   }
-  return a.promotionPrice && a.promotionPrice > 0 ? a.promotionPrice : a.price
+  return a.promotionPrice != null && a.promotionPrice >= 0
+    ? a.promotionPrice
+    : a.price
 }
 
 /** Thành tiền 1 dòng add-on (hotel = Σ nights×đơn giá; còn lại = đơn giá×quantity). */
